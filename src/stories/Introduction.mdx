@@ -1,0 +1,211 @@
+import { Meta } from '@storybook/blocks';
+import Code from './assets/code-brackets.svg';
+import Colors from './assets/colors.svg';
+import Comments from './assets/comments.svg';
+import Direction from './assets/direction.svg';
+import Flow from './assets/flow.svg';
+import Plugin from './assets/plugin.svg';
+import Repo from './assets/repo.svg';
+import StackAlt from './assets/stackalt.svg';
+
+<Meta title="General/Introduction" />
+
+<style>
+  {`
+    .subheading {
+      --mediumdark: '#999999';
+      font-weight: 700;
+      font-size: 13px;
+      color: #999;
+      letter-spacing: 6px;
+      line-height: 24px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      margin-top: 40px;
+    }
+
+    .link-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      row-gap: 10px;
+    }
+
+    @media (min-width: 620px) {
+      .link-list {
+        row-gap: 20px;
+        column-gap: 20px;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media all and (-ms-high-contrast:none) {
+    .link-list {
+        display: -ms-grid;
+        -ms-grid-columns: 1fr 1fr;
+        -ms-grid-rows: 1fr 1fr;
+      }
+    }
+
+    .link-item {
+      display: block;
+      padding: 20px;
+      border: 1px solid #00000010;
+      border-radius: 5px;
+      transition: background 150ms ease-out, border 150ms ease-out, transform 150ms ease-out;
+      color: #333333;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .link-item:hover {
+      border-color: #1EA7FD50;
+      transform: translate3d(0, -3px, 0);
+      box-shadow: rgba(0, 0, 0, 0.08) 0 3px 10px 0;
+    }
+
+    .link-item:active {
+      border-color: #1EA7FD;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .link-item strong {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .link-item img {
+      height: 40px;
+      width: 40px;
+      margin-right: 15px;
+      flex: none;
+    }
+
+    .link-item span,
+    .link-item p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .tip {
+      display: inline-block;
+      border-radius: 1em;
+      font-size: 11px;
+      line-height: 12px;
+      font-weight: 700;
+      background: #E7FDD8;
+      color: #66BF3C;
+      padding: 4px 12px;
+      margin-right: 10px;
+      vertical-align: top;
+    }
+
+    .tip-wrapper {
+      font-size: 13px;
+      line-height: 20px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .tip-wrapper code {
+      font-size: 12px;
+      display: inline-block;
+    }
+  `}
+</style>
+
+# Welcome to Constructor.io's PLP UI
+
+Integration with Constructor's APIs has never been easier with **comprehensive components** that take care of both the tracking and results retrieval, 
+allowing you to focus on developing your own unique site experience.
+
+For even more granular control, try out our extensive **hooks** that abstract away state management and the underlying logic required to integrate Constructor.
+Explore our `hooks` sandbox to familiarize yourself with the limitless possibilities.
+
+<div className="subheading">Components</div>
+
+<div className="link-list">
+  <a
+    className="link-item"
+    href="https://storybook.js.org/docs/react/addons/addon-types"
+    target="_blank"
+  >
+    <img src={Plugin} alt="plugin" />
+    <span>
+      <strong>CioPlp</strong>
+      An all-in-one component for all your product listing pages
+    </span>
+  </a>
+  <a
+    className="link-item"
+    href="https://storybook.js.org/docs/react/configure/webpack"
+    target="_blank"
+  >
+    <img src={StackAlt} alt="Build" />
+    <span>
+      <strong>Product Card</strong>
+      Customize your product cards to enhance user experience
+    </span>
+  </a>
+  <a
+    className="link-item"
+    href="https://storybook.js.org/docs/react/configure/styling-and-css"
+    target="_blank"
+  >
+    <img src={Colors} alt="colors" />
+    <span>
+      <strong>Filters</strong>
+      Personalize your filters
+    </span>
+  </a>
+  <a
+    className="link-item"
+    href="https://storybook.js.org/docs/react/get-started/setup#configure-storybook-for-your-stack"
+    target="_blank"
+  >
+    <img src={Flow} alt="flow" />
+    <span>
+      <strong>Pagination</strong>
+      Pages and what not
+    </span>
+  </a>
+</div>
+
+<div className="subheading">Hooks</div>
+
+<div className="link-list">
+  <a className="link-item" href="https://storybook.js.org/docs" target="_blank">
+    <img src={Repo} alt="repo" />
+    <span>
+      <strong>usePlpState</strong>
+      Hook into everything
+    </span>
+  </a>
+  <a className="link-item" href="https://storybook.js.org/tutorials/" target="_blank">
+    <img src={Direction} alt="direction" />
+    <span>
+      <strong>useCioProductCard</strong>
+      Product Card things
+    </span>
+  </a>
+  <a className="link-item" href="https://github.com/storybookjs/storybook" target="_blank">
+    <img src={Code} alt="code" />
+    <span>
+      <strong>useCioFilters</strong>
+      Filter Things
+    </span>
+  </a>
+  <a className="link-item" href="https://discord.gg/storybook" target="_blank">
+    <img src={Comments} alt="comments" />
+    <span>
+      <strong>useCioPagination</strong>
+      Pagination Things
+    </span>
+  </a>
+</div>
+
+<div className="tip-wrapper">
+  <span className="tip">Tip</span>Having trouble with a unique use case? Contact your friendly Integration Engineers for support!
+</div>

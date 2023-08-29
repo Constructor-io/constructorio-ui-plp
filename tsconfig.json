@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "removeComments": false,
+    "jsx": "react",
+    "target": "esnext",
+    "outDir": "lib/mjs",
+    "declaration": true,
+    "declarationDir": "lib/types",
+    "strict": true,
+    "module": "esnext",
+    "noEmitOnError": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "importHelpers": true
+  },
+  "lib": ["dom"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "lib", "storybook-static", ".storybook"]
+}
