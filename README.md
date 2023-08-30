@@ -6,7 +6,7 @@
 
 A UI Library that provides React components to manage the fetching and rendering logic for [Search](https://constructor.io/products/search/) & [Browse](https://constructor.io/products/browse/) pages powered by Constructor.io. Typescript support is available.
 
-Our (Storybook Docs)[https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/general-introduction--documentation] are the best place to explore the behavior and the available configuration options for this UI Library.
+Our [Storybook Docs](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/general-introduction--documentation) are the best place to explore the behavior and the available configuration options for this UI Library.
 
 ## Installation
 
