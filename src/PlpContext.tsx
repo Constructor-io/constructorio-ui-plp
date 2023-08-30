@@ -1,11 +1,4 @@
-import React, {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import React, { PropsWithChildren, createContext, useContext, useMemo, useState } from 'react';
 import useCioClient from './hooks/useCioClient';
 import { PlpContext } from './types';
 
@@ -19,21 +12,14 @@ export function usePlpState() {
   return useContext(plpContext);
 }
 
-// const defaultState = {};
-
-// function stateReducer(state, action) {
-//   const { payload } = action;
-//   return {};
-// }
-
 export function PlpContextProvider(props: PropsWithChildren<{ apiKey: string }>) {
   const { apiKey, children } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
   // More states
 
-  // const [states, dispatch] = useReducer(stateReducer, {});
   const cioClient = useCioClient(apiKey);
 
+  // To Consider: Splitting the context into separate layers
   // Global Configurations
   // Api Results
   // User activity
