@@ -14,9 +14,10 @@ interface UseCioClientExampleProps {
   apiKey?: string;
 }
 
+// Note Description here will be translated into the story description
 /**
- * Primary UI component for user interaction
- * Default values here will be reflected in the interface table
+ * A React Hook to obtain a Constructor.io Client from our
+ *  JavaScript SDK, allowing you to make Search, Browse & Tracking requests
  */
 export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps) {
   const cioClient = useCioClient(apiKey || DEMO_API_KEY);

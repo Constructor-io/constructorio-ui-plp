@@ -32,6 +32,10 @@ interface ProductCardExampleProps {
   onClick?: () => void;
 }
 
+// Note Description here will be parsed into the story description
+/**
+ * A Product Card UI Component
+ */
 export default function ProductCardExample({
   primary = false,
   size = 'medium',

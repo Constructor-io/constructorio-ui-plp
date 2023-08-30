@@ -1,2 +1,7 @@
+# Pertaining to Development
 node_modules
 .vscode
+
+# Pertaining to Building/Deployment
+dist
+lib

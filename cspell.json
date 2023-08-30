@@ -1,0 +1,21 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "allowCompoundWords": false,
+  "dictionaries": ["en_US", "html", "css"],
+  "ignorePaths": ["lib", "docs"],
+  "flagWords": [],
+  "words": [
+    "key_wJSdZSiesX5hiVLt",
+    "constructorio",
+    "Combobox",
+    "searchandizing",
+    "testid",
+    "subcomponents",
+    "Dont",
+    "Chemex",
+    "autodocs",
+    "Favorited",
+    "favorited"
+  ]
+}
