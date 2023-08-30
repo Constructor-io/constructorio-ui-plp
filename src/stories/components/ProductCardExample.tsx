@@ -11,25 +11,13 @@ import './button.css';
  */
 interface ProductCardExampleProps {
   /**
-   * Is this the principal call to action on the page?
-   */
-  primary?: boolean;
-  /**
    * What background color to use
    */
   backgroundColor?: string;
   /**
-   * How large should the button be?
-   */
-  size?: 'small' | 'medium' | 'large' | 'extra';
-  /**
    * Button contents
    */
   label: string;
-  /**
-   * Optional click handler
-   */
-  onClick?: () => void;
 }
 
 // Note Description here will be parsed into the story description
@@ -37,15 +25,13 @@ interface ProductCardExampleProps {
  * A Product Card UI Component
  */
 export default function ProductCardExample({
-  primary = false,
-  size = 'medium',
   backgroundColor,
   label,
   ...props
 }: ProductCardExampleProps) {
   return (
     <PlpContextProvider apiKey={DEMO_API_KEY}>
-      <ProductCard />
+      <ProductCard {...props} />
     </PlpContextProvider>
   );
 }
