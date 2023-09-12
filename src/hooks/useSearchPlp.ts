@@ -5,7 +5,6 @@ import { usePlpState } from '../PlpContext';
 import { transformSearchResponse } from '../transformers';
 import { PlpSearchResponse } from '../types';
 
-export type UseCioPlpHook = { cioClient: ConstructorIOClient };
 export type UseSearchPlpConfigs = {
   cioClient?: ConstructorIOClient;
   searchParams?: SearchParameters;
