@@ -51,7 +51,7 @@ function SearchResults({ query, configs }: { query: string; configs?: UseSearchP
   );
 }
 
-// Note Description here will be translated into the story description
+// Note: Description here will be translated into the story description
 /**
  * A React Hook to retrieve search results using Constructor.
  */
