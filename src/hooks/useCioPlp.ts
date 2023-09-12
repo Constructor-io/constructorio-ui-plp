@@ -1,5 +1,7 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
+import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useCioClient from './useCioClient';
+import useSearchPlp from './useSearchPlp';
 
 export type CioPlpConfigs = { apiKey?: string };
 export type UseCioPlpHook = { cioClient: ConstructorIOClient };
@@ -13,9 +15,12 @@ const useCioPlp: UseCioPlp = (configs) => {
   }
 
   const cioClient = useCioClient(apiKey);
+  const useCustomSearchPlp = (query: string, searchParams: SearchParameters) =>
+    useSearchPlp(query, { cioClient, searchParams });
 
   return {
     cioClient,
+    useSearchPlp: useCustomSearchPlp,
   };
 };
 
