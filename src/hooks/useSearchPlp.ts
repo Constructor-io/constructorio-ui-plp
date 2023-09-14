@@ -10,6 +10,13 @@ export type UseSearchPlpConfigs = {
   searchParams?: SearchParameters;
 };
 
+/**
+ * A React Hook to call to utilize Constructor.io Search
+ * @param query Search Query
+ * @param configs A configuration object
+ * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the PlpContextProvider.
+ * @param configs.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
+ */
 export default function useSearchPlp(
   query: string,
   configs: UseSearchPlpConfigs = {},
