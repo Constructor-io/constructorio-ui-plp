@@ -18,6 +18,7 @@ const useCioClient: UseCioClient = (apiKey, options?) => {
       new ConstructorIOClient({
         apiKey,
         sendTrackingEvents: true,
+        version: 'cio-ui-plp',
         ...options,
       }),
     [apiKey, options],
