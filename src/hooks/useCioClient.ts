@@ -1,6 +1,7 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { ConstructorClientOptions } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useMemo } from 'react';
+import { version as packageVersion } from '../../package.json';
 
 export type CioClientConfig = { apiKey?: string };
 type UseCioClient = (
@@ -18,7 +19,7 @@ const useCioClient: UseCioClient = (apiKey, options?) => {
       new ConstructorIOClient({
         apiKey,
         sendTrackingEvents: true,
-        version: 'cio-ui-plp',
+        version: `cio-ui-plp-${packageVersion}`,
         ...options,
       }),
     [apiKey, options],
