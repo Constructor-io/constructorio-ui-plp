@@ -15,10 +15,9 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
-    "importHelpers": true,
-    "resolveJsonModule": true
+    "importHelpers": true
   },
   "lib": ["dom"],
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "generateVersion.js"],
   "exclude": ["node_modules", "lib", "storybook-static", ".storybook"]
 }
