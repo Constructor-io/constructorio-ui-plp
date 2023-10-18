@@ -6,7 +6,7 @@ import version from '../version';
 export type CioClientConfig = { apiKey?: string };
 type UseCioClient = (
   apiKey: string,
-  options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>,
+  options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>,
 ) => ConstructorIOClient | never;
 
 const useCioClient: UseCioClient = (apiKey, options?) => {
