@@ -3,6 +3,7 @@ import useCioClient from './hooks/useCioClient';
 import { PlpContext } from './types';
 
 const plpContext = createContext<PlpContext | null>(null);
+plpContext.displayName = 'PlpContext';
 
 /**
  * React Hook to access state provided by PlpContextProvider.

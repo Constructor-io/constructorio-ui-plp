@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import UseSearchPlpExample, {
-  useSearchPlpExampleCode,
-  useSearchPlpFeaturedCode,
-} from './UseSearchPlpExample';
+import UseSearchResultsExample, { useSearchResultsExampleCode } from './UseSearchResultsExample';
 
 const meta = {
-  title: 'Hooks/UseSearchPlp',
-  component: UseSearchPlpExample,
+  title: 'Hooks/UseSearchResults',
+  component: UseSearchResultsExample,
   argTypes: {
     configs: { control: false },
     cioClient: { name: 'configs.cioClient', control: false },
@@ -17,22 +14,17 @@ const meta = {
     layout: 'centered',
     docs: {
       source: {
-        code: useSearchPlpExampleCode,
+        code: useSearchResultsExampleCode,
         language: 'jsx',
         format: true,
         type: 'code',
-      },
-      description: {
-        story: useSearchPlpFeaturedCode,
       },
       controls: {
         sort: 'requiredFirst',
       },
     },
   },
-  // eslint-disable-next-line @cspell/spellchecker
-  tags: ['autodocs'],
-} satisfies Meta<typeof UseSearchPlpExample>;
+} satisfies Meta<typeof UseSearchResultsExample>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

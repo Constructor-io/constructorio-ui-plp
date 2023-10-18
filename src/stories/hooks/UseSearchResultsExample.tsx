@@ -1,16 +1,11 @@
 import React, { useMemo } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import useSearchPlp, { UseSearchPlpConfigs } from '../../hooks/useSearchPlp';
+import useSearchResults, { UseSearchResultsConfigs } from '../../hooks/useSearchResults';
 import { PlpContextProvider } from '../../PlpContext';
 import { DEMO_API_KEY } from '../../constants';
 
-/**
- * This interface will be rendered as a table in Storybook
- * Attribute-level comments will be rendered as part of the "description" column
- * Attribute-types determine the type of control: boolean = toggle, string = text input, enum = select
- */
-interface UseCioClientExampleProps {
+export interface UseCioClientExampleProps {
   /**
    * Search Query
    */
@@ -18,7 +13,7 @@ interface UseCioClientExampleProps {
   /**
    * Configuration object for the hook
    */
-  configs?: UseSearchPlpConfigs;
+  configs?: UseSearchResultsConfigs;
   /**
    * ConstructorIO Client created using the hook: useCioClient. Optional if called within PLP Context.
    */
@@ -30,8 +25,8 @@ interface UseCioClientExampleProps {
 }
 
 // A simple React Component to showcase use with PlpContext
-function SearchResults({ query, configs }: { query: string; configs?: UseSearchPlpConfigs }) {
-  const searchResults = useSearchPlp(query, configs);
+function SearchResults({ query, configs }: { query: string; configs?: UseSearchResultsConfigs }) {
+  const searchResults = useSearchResults(query, configs);
 
   return (
     <>
@@ -51,11 +46,10 @@ function SearchResults({ query, configs }: { query: string; configs?: UseSearchP
   );
 }
 
-// Note: Description here will be translated into the story description
 /**
  * A React Hook to retrieve search results using Constructor.
  */
-export default function UseSearchPlpExample({
+export default function UseSearchResultsExample({
   query,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   configs,
@@ -63,11 +57,14 @@ export default function UseSearchPlpExample({
   cioClient,
   searchParams,
 }: UseCioClientExampleProps) {
-  const storybookConfigs: UseSearchPlpConfigs = useMemo(() => ({ searchParams }), [searchParams]);
+  const storybookConfigs: UseSearchResultsConfigs = useMemo(
+    () => ({ searchParams }),
+    [searchParams],
+  );
 
   return (
     <>
-      <h1>useSearchPlp</h1>
+      <h1>useSearchResults</h1>
       <p>This hook returns an object with the following properties:</p>
       <PlpContextProvider apiKey={DEMO_API_KEY}>
         <SearchResults query={query} configs={storybookConfigs} />
@@ -76,49 +73,17 @@ export default function UseSearchPlpExample({
   );
 }
 
-export const useSearchPlpFeaturedCode = `
-## Usage with useCioClient
-
-\`\`\`jsx
-function myApp() {
-  const cioClient = useCioClient(MY_API_KEY)
-  const searchResults = useSearchPlp(query, { cioClient });
-  ...
-}
-\`\`\`
-
-## Usage with PlpContextProvider
-
-\`\`\`jsx
-function SearchResults({ query }) {
-  const searchResults = useSearchPlp(query);
-  ...
-}
-
-function myApp() {
-  ...
-  return (
-    <>
-    <PlpContextProvider apiKey={MY_API_KEY}>
-      <SearchResults query={query} />
-    </PlpContextProvider>
-    </>
-  )
-}
-\`\`\`
-`;
-
-export const useSearchPlpExampleCode = `
+export const useSearchResultsExampleCode = `
 import React from 'react';
 import { PlpContextProvider } from '../../PlpContext';
-import useSearchPlp from '../../hooks/useSearchPlp';
+import useSearchResults from '../../hooks/useSearchResults';
 
 const apiKey = 'MY_API_KEY'
 
-// A simple React Component to showcase useSearchPlp with PlpContextProvider
+// A simple React Component to showcase useSearchResults with PlpContextProvider
 function SearchResults({ query }) {
   const searchParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-  const searchResults = useSearchPlp(query, { searchParams });
+  const searchResults = useSearchResults(query, { searchParams });
 
   return (
     <>
@@ -139,12 +104,12 @@ function SearchResults({ query }) {
 }
 
 // Main Component
-function UseSearchPlpExample() {
+function useSearchResultsExample() {
   const [query] = useState('water')
 
   return (
     <>
-      <h1>useSearchPlp</h1>
+      <h1>useSearchResults</h1>
       <p>This hook returns an object with the following properties:</p>
       <PlpContextProvider apiKey={MY_API_KEY}>
         <SearchResults query={query} />
