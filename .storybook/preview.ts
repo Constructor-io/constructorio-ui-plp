@@ -9,6 +9,12 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        ignoreSelector: '.docs-story h2, .docs-story h3'
+      }
+    },
   },
 };
 
