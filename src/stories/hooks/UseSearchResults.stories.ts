@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import UseSearchResultsExample, { useSearchResultsExampleCode } from './UseSearchResultsExample';
+import UseSearchResultsExample from './UseSearchResultsExample';
 
 const meta = {
   title: 'Hooks/UseSearchResults',
@@ -13,12 +13,6 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      source: {
-        code: useSearchResultsExampleCode,
-        language: 'jsx',
-        format: true,
-        type: 'code',
-      },
       controls: {
         sort: 'requiredFirst',
       },
