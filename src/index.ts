@@ -1,5 +1,6 @@
 // Hooks
 export { default as useCioPlp } from './hooks/useCioPlp';
+export { default as useSearchResults } from './hooks/useSearchResults';
 export { default as useCioClient } from './hooks/useCioClient';
 
 // Components

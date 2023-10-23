@@ -1,7 +1,14 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { ConstructorClientOptions } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  ConstructorClientOptions,
+  Facet,
+  Group,
+  Result,
+  SearchResponse,
+  SortOption,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -15,6 +22,18 @@ export interface PrimaryColorStyles {
   '--primary-color-h': string;
   '--primary-color-s': string;
   '--primary-color-l': string;
+}
+
+// Transformed API Responses
+export interface PlpSearchResponse {
+  resultId: string;
+  totalNumResults: number;
+  results: Array<Result>;
+  facets: Array<Facet>;
+  groups: Array<Group>;
+  sortOptions: Array<SortOption>;
+  refinedContent: Record<string, any>[];
+  rawResponse: SearchResponse;
 }
 
 // Type Extenders
