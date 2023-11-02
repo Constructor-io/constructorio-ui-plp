@@ -2,7 +2,7 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { usePlpState } from '../PlpContext';
-import { transformSearchResponse } from '../transformers';
+import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchResponse } from '../types';
 
 export type UseSearchResultsConfigs = {
