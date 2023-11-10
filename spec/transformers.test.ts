@@ -2,7 +2,7 @@ import testItem from './local_examples/item.json';
 import { transformResultItem } from '../src/utils/transformers';
 import { ApiItem } from '../src/types';
 
-describe('Testing Component: ProductCard', () => {
+describe('Testing Transformers: transformResultItem', () => {
   test('Should return all base properties as camelCased properties', () => {
     const apiItem = testItem as ApiItem;
     const item = transformResultItem(apiItem);
