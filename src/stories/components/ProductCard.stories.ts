@@ -9,8 +9,6 @@ const meta = {
   component: ProductCardExample,
   argTypes: {
     cioClient: { control: false },
-    contentSlot: { control: false },
-    imageSlot: { control: false },
   },
   parameters: {
     layout: 'centered',

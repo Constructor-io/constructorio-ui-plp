@@ -9,8 +9,6 @@ import { IncludeRenderProps, Item } from '../../types';
 export interface ProductCardProps {
   item: Item;
   cioClient?: ConstructorIO;
-  imageSlot?: React.ReactNode;
-  contentSlot?: React.ReactNode;
   formatPrice?: (price: number) => string;
   getPrice?: (item: Item) => number;
   onAddToCart?: (event: React.MouseEvent, item: Item) => void;
@@ -23,8 +21,6 @@ export interface ProductCardProps {
 export function ProductCardComponent(props: Omit<ProductCardProps, 'cioClient'>) {
   const {
     item,
-    imageSlot,
-    contentSlot,
     formatPrice = defaultFormatPrice,
     getPrice = defaultGetPrice,
     onAddToCart = () => {},
@@ -33,23 +29,20 @@ export function ProductCardComponent(props: Omit<ProductCardProps, 'cioClient'>)
 
   return (
     <a className='cio-product-card' href={item.url} onClick={(e) => onClick(e, item)}>
-      {imageSlot || (
-        <div className='cio-image-container'>
-          <img alt={item.itemName} src={item.imageUrl} className='cio-image' />
+      <div className='cio-image-container'>
+        <img alt={item.itemName} src={item.imageUrl} className='cio-image' />
+      </div>
+
+      <div className='cio-content'>
+        <div className='cio-item-price'>{formatPrice(getPrice(item))}</div>
+        <div className='cio-item-name'>{item.itemName}</div>
+        <div className='cio-item-swatches'>Here lie the swatches</div>
+        <div>
+          <button type='button' onClick={(e) => onAddToCart(e, item)}>
+            Add to Cart
+          </button>
         </div>
-      )}
-      {contentSlot || (
-        <div className='cio-content'>
-          <div className='cio-item-price'>{formatPrice(getPrice(item))}</div>
-          <div className='cio-item-name'>{item.itemName}</div>
-          <div className='cio-item-swatches'>Here lie the swatches</div>
-          <div>
-            <button type='button' onClick={(e) => onAddToCart(e, item)}>
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      )}
+      </div>
     </a>
   );
 }

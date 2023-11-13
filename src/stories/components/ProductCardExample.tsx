@@ -20,14 +20,6 @@ interface ProductCardExampleProps {
    */
   item: Item;
   /**
-   * Slot to pass in arbitrary React Node in the image slot.
-   */
-  imageSlot?: React.ReactNode;
-  /**
-   * Slot to pass in arbitrary React Node in the content slot.
-   */
-  contentSlot?: React.ReactNode;
-  /**
    * Function to format the price. Defaults to "$0.00".
    * Can also be set globally at the PlpContext level.
    */
