@@ -166,4 +166,19 @@ describe('Testing Component: ProductCard', () => {
     expect(componentOnAddToCart).toHaveBeenCalledTimes(1);
     expect(contextOnAddToCart).toHaveBeenCalledTimes(0);
   });
+
+  test('Should render renderProps argument', () => {
+    render(
+      <PlpContextProvider apiKey={DEMO_API_KEY}>
+        <ProductCard item={transformResultItem(testItem)}>
+          {(props) => (
+            // Custom Rendered Price
+            <div>My Rendered Price: {props.formatPrice(props.getPrice(props.item))}</div>
+          )}
+        </ProductCard>
+      </PlpContextProvider>,
+    );
+
+    screen.getByText('My Rendered Price: $79.00');
+  });
 });

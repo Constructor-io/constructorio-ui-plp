@@ -81,3 +81,4 @@ export interface PlpSearchResponse {
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
+export type IncludeRenderProps<P> = P & { children?: (props: P) => ReactNode };

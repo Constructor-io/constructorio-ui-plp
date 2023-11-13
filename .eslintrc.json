@@ -49,6 +49,7 @@
     "complexity": ["error", 20],
     "@cspell/spellchecker": ["error"],
     "react/jsx-props-no-spreading": "off",
+    "react/jsx-no-useless-fragment": [2, { "allowExpressions": true }],
     "import/no-extraneous-dependencies": [
       "error",
       {

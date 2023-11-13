@@ -4,7 +4,7 @@ import { usePlpState } from '../../PlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import { getPrice as defaultGetPrice } from '../../utils/getters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
-import { Item } from '../../types';
+import { IncludeRenderProps, Item } from '../../types';
 
 export interface ProductCardProps {
   item: Item;
@@ -57,13 +57,14 @@ export function ProductCardComponent(props: Omit<ProductCardProps, 'cioClient'>)
 /**
  * ProductCard component that has ConstructorIO tracking in-built.
  */
-export default function ProductCard(props: ProductCardProps) {
+export default function ProductCard(props: IncludeRenderProps<ProductCardProps>) {
   const {
     cioClient,
     formatPrice: localFormatPrice,
     getPrice: localGetPrice,
     onAddToCart: localOnAddToCart,
     onClick: localOnClick,
+    children = (modifiedProps) => <ProductCardComponent {...modifiedProps} />,
     ...otherProps
   } = props;
 
@@ -77,20 +78,18 @@ export default function ProductCard(props: ProductCardProps) {
 
   const getPrice = localGetPrice || state?.getters.getPrice || defaultGetPrice;
   const formatPrice = localFormatPrice || state?.formatters.formatPrice || defaultFormatPrice;
-  const addToCart = useOnAddToCart(
+  const onAddToCart = useOnAddToCart(
     client,
     getPrice,
-    localOnAddToCart || state?.callbacks.onAddToCart || (() => {}),
+    localOnAddToCart || state?.callbacks.onAddToCart,
   );
-  const clickHandler = localOnClick || state?.callbacks.onProductCardClick || (() => {});
+  const onClick = localOnClick || state?.callbacks.onProductCardClick || (() => {});
 
   return (
-    <ProductCardComponent
-      getPrice={getPrice}
-      formatPrice={formatPrice}
-      onAddToCart={addToCart}
-      onClick={clickHandler}
-      {...otherProps}
-    />
+    <>
+      {typeof children === 'function'
+        ? children({ ...otherProps, getPrice, formatPrice, onAddToCart, onClick })
+        : null}
+    </>
   );
 }
