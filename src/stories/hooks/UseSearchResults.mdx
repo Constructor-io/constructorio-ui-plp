@@ -11,7 +11,7 @@ A React Hook to retrieve search results using Constructor.
 ```jsx
 function myApp() {
   const cioClient = useCioClient(MY_API_KEY)
-  const searchResults = useSearchResults(query, { cioClient });
+  const {searchResults} = useSearchResults(query, { cioClient });
   ...
 }
 ```
@@ -19,7 +19,7 @@ function myApp() {
 ## Usage with PlpContextProvider
 ```jsx
 function SearchResults({ query }) {
-  const searchResults = useSearchResults(query);
+  const {searchResults} = useSearchResults(query);
   ...
 }
 
@@ -56,7 +56,7 @@ This is an example of how you might utilize the `useSearchResults` hook in tande
   // A simple React Component to showcase useSearchResults with PlpContextProvider
   function SearchResults({ query }) {
     const searchParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-    const searchResults = useSearchResults(query, { searchParams });
+    const {searchResults} = useSearchResults(query, { searchParams });
 
     return (
       <>

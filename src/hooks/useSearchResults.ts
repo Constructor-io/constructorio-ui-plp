@@ -1,13 +1,18 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { usePlpState } from '../PlpContext';
 import { transformSearchResponse } from '../transformers';
 import { PlpSearchResponse } from '../types';
 
 export type UseSearchResultsConfigs = {
-  cioClient?: ConstructorIOClient;
+  cioClient?: ConstructorIOClient | null;
   searchParams?: SearchParameters;
+};
+
+export type UseSearchResultsReturn = {
+  searchResults: PlpSearchResponse | null;
+  handleSubmit: () => void;
 };
 
 /**
@@ -20,21 +25,21 @@ export type UseSearchResultsConfigs = {
 export default function useSearchResults(
   query: string,
   configs: UseSearchResultsConfigs = {},
-): PlpSearchResponse | null {
+): UseSearchResultsReturn {
   const { cioClient, searchParams } = configs;
   const state = usePlpState();
-  const client = cioClient || state?.cioClient;
+  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
 
+  const client = cioClient || state?.cioClient;
   if (!client) {
     throw new Error('CioClient required');
   }
 
-  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-  useEffect(() => {
+  const handleSubmit = () => {
     client.search
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));
-  }, [client, query, searchParams]);
+  };
 
-  return searchResponse;
+  return { searchResults: searchResponse, handleSubmit };
 }
