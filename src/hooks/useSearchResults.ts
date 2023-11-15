@@ -1,6 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePlpState } from '../PlpContext';
 import { transformSearchResponse } from '../transformers';
 import { PlpSearchResponse } from '../types';
@@ -40,6 +40,16 @@ export default function useSearchResults(
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   };
+
+  // Get search results for initial query if there is one if not don't ever run this effect again
+  useEffect(() => {
+    if (query) {
+      client.search
+        .getSearchResults(query, searchParams)
+        .then((res) => setSearchResponse(transformSearchResponse(res)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { searchResults: searchResponse, handleSubmit };
 }
