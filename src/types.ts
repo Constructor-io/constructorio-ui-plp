@@ -9,6 +9,7 @@ import {
   SearchResponse,
   SortOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import usePagination from './hooks/usePagination';
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -35,6 +36,8 @@ export interface PlpSearchResponse {
   refinedContent: Record<string, any>[];
   rawResponse: SearchResponse;
 }
+
+export type PaginationProps = ReturnType<typeof usePagination>;
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };

@@ -3,7 +3,7 @@ import { SearchParameters } from '@constructor-io/constructorio-client-javascrip
 import { useState, useEffect } from 'react';
 import { usePlpState } from '../PlpContext';
 import { transformSearchResponse } from '../transformers';
-import { PlpSearchResponse } from '../types';
+import { PaginationProps, PlpSearchResponse } from '../types';
 import usePagination from './usePagination';
 
 export type UseSearchResultsConfigs = {
@@ -14,7 +14,7 @@ export type UseSearchResultsConfigs = {
 export type UseSearchResultsReturn = {
   searchResults: PlpSearchResponse | null;
   handleSubmit: () => void;
-  pagination: ReturnType<typeof usePagination>;
+  pagination: PaginationProps;
 };
 
 /**
