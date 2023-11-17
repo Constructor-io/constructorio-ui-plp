@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DEMO_API_KEY } from '../../constants';
 import useCioClient from '../../hooks/useCioClient';
+import useSearchResults from '../../hooks/useSearchResults';
 
 /**
  * This interface will be rendered as a table in Storybook
@@ -21,35 +22,55 @@ interface UseCioClientExampleProps {
  */
 export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps) {
   const cioClient = useCioClient(apiKey || DEMO_API_KEY);
-  const [results, setResults] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { searchResults, handleSubmit, pagination } = useSearchResults(searchQuery, {
+    cioClient,
+    searchParams: { resultsPerPage: 2, page: 1 },
+  });
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  const runSearch = async () => {
-    const res = await cioClient.search.getSearchResults(searchQuery || '');
-    setResults(res.response.results);
-  };
-
   return (
     <>
       <h1>Search Results as JSON</h1>
-      <input
-        type='text'
-        name='searchBox'
-        id='searchBox'
-        placeholder='Search query'
-        value={searchQuery}
-        onChange={onInputHandler}
-      />
-      <div>{JSON.stringify(results)}</div>
       <div>
-        <button type='button' onClick={runSearch}>
+        <input
+          type='text'
+          name='searchBox'
+          id='searchBox'
+          placeholder='Search query'
+          value={searchQuery}
+          onChange={onInputHandler}
+        />
+      </div>
+
+      <div>
+        <button type='button' onClick={handleSubmit}>
           Search
         </button>
       </div>
+      {searchResults?.results.length && (
+        <div>
+          <ul>{searchResults?.results.map((result) => <li>{result.value}</li>)}</ul>
+          <div>Current Page: {pagination.currentPage}</div>
+          <div>Total: {pagination.totalPages}</div>
+          <button onClick={() => pagination.prevPage()} type='button'>
+            Previous
+          </button>
+
+          {pagination.pages.slice(0, 10).map((page) => (
+            <button onClick={() => pagination.goToPage(page)} type='button'>
+              {page}
+            </button>
+          ))}
+          <button onClick={() => pagination.nextPage()} type='button'>
+            Next
+          </button>
+        </div>
+      )}
     </>
   );
 }
