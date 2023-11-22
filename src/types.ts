@@ -81,4 +81,11 @@ export interface PlpSearchResponse {
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
-export type IncludeRenderProps<P> = P & { children?: (props: P) => ReactNode };
+/**
+ * Composes a type for a component that accepts
+ * - Props P,
+ * - renderProp function that takes in the union of P and the DerivedProps as arguments
+ */
+export type IncludeRenderProps<P, DerivedProps> = P & {
+  children?: (props: P & DerivedProps) => ReactNode;
+};

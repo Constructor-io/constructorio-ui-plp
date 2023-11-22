@@ -6,11 +6,7 @@ export * from './hooks/callbacks';
 
 // Components
 export { default as CioPlp } from './components/CioPlp';
-export {
-  default as ProductCard,
-  ProductCardComponent,
-  ProductCardProps,
-} from './components/ProductCard';
+export { default as ProductCard, ProductCardProps } from './components/ProductCard';
 
 export { PlpContextProvider, usePlpState } from './PlpContext';
 export * from './types';
