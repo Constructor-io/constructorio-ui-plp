@@ -2,14 +2,16 @@ import { SearchResponse } from '@constructor-io/constructorio-client-javascript/
 import { PlpSearchResponse, Item, ApiItem } from '../types';
 
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
-  const otherMetadataFields: any = { ...item.data };
-  delete otherMetadataFields.id;
-  delete otherMetadataFields.url;
-  delete otherMetadataFields.image_url;
-  delete otherMetadataFields.group_ids;
-  delete otherMetadataFields.description;
-  delete otherMetadataFields.facets;
-  delete otherMetadataFields.variation_id;
+  const {
+    id: itemId,
+    url,
+    image_url: imageUrl,
+    group_ids: groupIds,
+    description,
+    facets,
+    variation_id: variationId,
+    ...otherMetadataFields
+  }: any = item.data;
 
   const transformedItem: Item = {
     matchedTerms: item.matched_terms,
@@ -20,13 +22,13 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
     variationsMap: item.variations_map,
 
     // Flatten the data object
-    itemId: item.data.id,
-    url: item.data.url,
-    imageUrl: item.data.image_url,
-    groupIds: item.data.group_ids,
-    description: item.data.description,
-    facets: item.data.facets,
-    variationId: item.data.variation_id,
+    itemId,
+    url,
+    imageUrl,
+    groupIds,
+    description,
+    facets,
+    variationId,
     rawResponse: includeRaw ? item : undefined,
 
     // Remaining unmapped metadata fields
