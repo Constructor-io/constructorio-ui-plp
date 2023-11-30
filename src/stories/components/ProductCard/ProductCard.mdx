@@ -1,5 +1,4 @@
-import { Meta, Canvas, Story, Controls, Source, ArgTypes } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
 import meta, { Primary } from './ProductCard.stories';
 
 <Meta of={meta} />
@@ -59,7 +58,7 @@ function myApp() {
 ## Working Example
 This is an example of how the `ProductCard` might look like.
 
-<Canvas withSource="none">
+<Canvas sourceState="none">
   <Story of={Primary} />
 </Canvas>
 
