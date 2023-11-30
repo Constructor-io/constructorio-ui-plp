@@ -1,0 +1,91 @@
+import { Meta, Canvas, Story, Controls, Source, ArgTypes } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
+import meta, { Primary } from './ProductCard.stories';
+
+<Meta of={meta} />
+
+# `ProductCard`
+A Component to manage Product Card Interactions.
+
+## Basic Usage
+The Product Card component comes bundled with Constructor.io tracking and default rendering built-in.
+```jsx
+import { useCioClient, ProductCard, PlpContextProvider } from '@constructor-io/constructorio-ui-plp'
+
+function myApp() {
+  ...
+  
+  return (
+    <PlpContextProvider apiKey={YOUR_API_KEY}>
+      <ProductCard item={item} />
+    </PlpContextProvider>
+  )
+}
+```
+
+## Using RenderProps
+If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+```jsx
+import { ProductCardComponent, useOnAddToCart, useOnProductCardClick } from '@constructor-io/constructorio-ui-plp'
+
+function myApp() {
+  const myCustomAddToCart = () => console.log('Added to cart')
+  const myCustomProductCardClick = () => console.log('Product Card Clicked')
+  const myCustomCallbacks = { myCustomAddToCart, myCustomProductCardClick }
+  ...
+  
+  return (
+    <PlpContextProvider apiKey={YOUR_API_KEY} callbacks={myCustomCallbacks}>
+      <ProductCard>
+        {(props) => {
+          const { onClick, formatPrice, getPrice, onAddToCart, item } = props
+          const price = getPrice(item)
+
+          return (
+            <div class="cio-product-card" onClick={(e) => onClick(e, item)}>
+              <div class="title">{item.itemName}</div>
+              <div class="price">{formatPrice(price)}</div>
+              <button type="button" onClick={(e) => onAddToCart(e, item)}>Add To Cart</button>
+            </div>
+          )
+        }}
+      </ProductCard>
+    </PlpContextProvider>
+  )
+}
+```
+
+
+## Working Example
+This is an example of how the `ProductCard` might look like.
+
+<Canvas withSource="none">
+  <Story of={Primary} />
+</Canvas>
+
+<Controls of={Primary} />
+
+### Working Example - Source Code 
+```jsx
+  import React from 'react';
+  import { PlpContextProvider, ProductCard } from '@constructor-io/constructorio-ui-plp';
+
+  const apiKey = 'MY_API_KEY'
+
+
+  function ProductCardExample() {
+    const items = ... // Items retrieved, transformed
+
+    return (
+      <>
+        <PlpContextProvider apiKey={MY_API_KEY}>
+          {
+            items.map((item) => (
+              <ProductCard item={item} />
+            ))
+          }
+        </PlpContextProvider>
+      </>
+    );
+  }
+```

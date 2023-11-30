@@ -1,41 +1,62 @@
 import React from 'react';
-import { usePlpState } from '../../PlpContext';
+import { usePlpContext } from '../../PlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
+import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
 import { getPrice as defaultGetPrice } from '../../utils/getters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
 import { IncludeRenderProps, Item } from '../../types';
 
-export interface ProductCardProps {
+interface Props {
+  /**
+   * Constructor's Transformed API Item Object.
+   */
   item: Item;
 }
+
 /**
  * Props that will be passed to the renderProps function
  */
-export interface ProductCardDerivedProps extends ProductCardProps {
+export interface ProductCardRenderProps extends ProductCardProps {
+  /**
+   * Function to format the price. Defaults to "$0.00".
+   * Set globally at the PlpContext level.
+   */
   formatPrice: (price: number) => string;
+  /**
+   * Function to retrieve the price. Defaults to `item.data.price`.
+   * Set globally at the PlpContext level.
+   */
   getPrice: (item: Item) => number;
+  /**
+   * Callback to run on add-to-cart event.
+   * Set globally at the PlpContext level.
+   */
   onAddToCart: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Click.
+   * Set globally at the PlpContext level.
+   */
   onClick: (event: React.MouseEvent, item: Item) => void;
 }
 
+export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>;
+
 /**
- * ProductCard component that has ConstructorIO tracking in-built.
+ * ProductCard component that has ConstructorIO tracking built-in.
  */
-export default function ProductCard(
-  props: IncludeRenderProps<ProductCardProps, ProductCardDerivedProps>,
-) {
+export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
 
-  const state = usePlpState();
+  const state = usePlpContext();
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlpContextProvider.');
   }
 
-  const client = state?.cioClient;
-  const getPrice = state?.getters.getPrice || defaultGetPrice;
-  const formatPrice = state?.formatters.formatPrice || defaultFormatPrice;
-  const onAddToCart = useOnAddToCart(client, getPrice, state?.callbacks.onAddToCart);
-  const onClick = state?.callbacks.onProductCardClick || (() => {});
+  const client = state.cioClient;
+  const getPrice = state.getters.getPrice || defaultGetPrice;
+  const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
+  const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
+  const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
   return (
     <>

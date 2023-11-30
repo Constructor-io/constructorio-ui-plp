@@ -1,0 +1,23 @@
+import { Meta, Canvas, Story, Controls, Source, ArgTypes } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
+import meta, { Primary } from './ProductCard.stories';
+
+<Meta of={meta} />
+
+# ProductCard Props
+A Component to manage Product Card Interactions.
+ 
+<ArgTypes />
+
+# Props passed to Render Props
+The Product Card component composes a series of props that will be passed to any render props function used.
+
+  | props             | type                 | description|
+  | :-----------------| :--------------------| :--------- |
+  | item              | `Item`               | Item to be rendered as the Product Card. |
+  | formatPrice       | `function(price: number) => string` | Function to format the price. Defaults to "$0.00". Set globally at the PlpContext level. |
+  | getPrice          | `function(item: Item) => number` | Function to retrieve the price. Defaults to `item.data.price`. Set globally at the PlpContext level. |
+  | onAddToCart       | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on add-to-cart event. Set globally at the PlpContext level. |
+  | onClick           | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on Product Card Click. Set globally at the PlpContext level. |
+
+

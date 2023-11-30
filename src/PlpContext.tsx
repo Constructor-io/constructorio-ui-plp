@@ -11,7 +11,7 @@ plpContext.displayName = 'PlpContext';
  * React Hook to access state provided by PlpContextProvider.
  * Note: Should only be used by components nested under a PlpContextProvider
  */
-export function usePlpState() {
+export function usePlpContext() {
   return useContext(plpContext);
 }
 

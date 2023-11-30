@@ -1,7 +1,7 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
-import { usePlpState } from '../PlpContext';
+import { usePlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchResponse } from '../types';
 
@@ -22,7 +22,7 @@ export default function useSearchResults(
   configs: UseSearchResultsConfigs = {},
 ): PlpSearchResponse | null {
   const { cioClient, searchParams } = configs;
-  const state = usePlpState();
+  const state = usePlpContext();
   const client = cioClient || state?.cioClient;
 
   if (!client) {
