@@ -44,13 +44,20 @@ export interface PrimaryColorStyles {
 // Transformed API Responses
 export type ApiItem = MakeOptional<Result, 'variations | variations_map'>;
 
+export type Variation = Omit<
+  Item,
+  'variations | matchedTerms | isSlotted | labels | variationsMap'
+>;
+
+export type VariationsMap = Record<string, any> | Record<string, any>[];
+
 export interface Item {
   matchedTerms: Array<string>;
   isSlotted: boolean;
   labels: Record<string, unknown>;
   itemName: string;
-  variations?: Omit<Item, 'variations | matchedTerms | isSlotted | labels | variationsMap'>[];
-  variationsMap?: Record<string, any> | Record<string, any>[];
+  variations?: Variation[];
+  variationsMap?: VariationsMap;
 
   // Flattened Data Object
   itemId: string;
