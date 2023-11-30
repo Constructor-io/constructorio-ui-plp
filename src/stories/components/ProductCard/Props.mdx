@@ -18,18 +18,16 @@ import meta from './ProductCard.stories';
   | groups            | `ApiGroup[]`           | Array of group objects laying out the associated groups hierarchy  |
   | facets            | `any[]`                | Array of the item facets/filters |
   | variationId       | `string`               | The rolled up variation ID      |
-  | variations        | `Variation[]`          | Array of variations of the item |
-  | isSlotted         | `Boolean`              | Whether the item has a slotting rule or not |
-  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in variations_map parameter (https://docs.constructor.io/rest_api/variations_mapping/#aggregations-explained)  |
-  | data              | `Record<string, any>`  | Data object containing you custom defined metadata fields |
-
-
+  | isSlotted         | `Boolean`              | Whether the item has a slotting rule applied to it or not |
+  | variations        | `Variation[]`          | Array of variations of the item. Null if variationsMap exists. |
+  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the variations_map parameter. Null if variations exists. (https://docs.constructor.io/rest_api/variations_mapping/#aggregations-explained)  |
+  | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
 
 
 ## Render function accessible Props
 The ProductCard component uses the render props pattern to expose various properties (props),
 allowing developers to customize how product cards are displayed.
-These props enable access to product data and actions,
+These props enable access to both item data and related methods,
 facilitating flexible and dynamic rendering.
 
 ```jsx  
