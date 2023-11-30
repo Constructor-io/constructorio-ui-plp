@@ -2,13 +2,13 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductCard from '../src/components/ProductCard';
-import { PlpContextProvider } from '../src/PlpContext';
+import { CioPlpContext } from '../src/PlpContext';
 import { DEMO_API_KEY } from '../src/constants';
 import testItem from './local_examples/item.json';
 import { transformResultItem } from '../src/utils/transformers';
 
 describe('Testing Component: ProductCard', () => {
-  test('Should throw error if used outside the PlpContextProvider', () => {
+  test('Should throw error if used outside the CioPlpContext', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
     expect(() => render(<ProductCard />)).toThrow();
@@ -20,9 +20,9 @@ describe('Testing Component: ProductCard', () => {
     spy.mockImplementation(() => {});
     expect(() =>
       render(
-        <PlpContextProvider apiKey={DEMO_API_KEY}>
+        <CioPlpContext apiKey={DEMO_API_KEY}>
           <ProductCard />
-        </PlpContextProvider>,
+        </CioPlpContext>,
       ),
     ).toThrow();
     spy.mockRestore();
@@ -30,9 +30,9 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render default price formatting if not overridden', () => {
     render(
-      <PlpContextProvider apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)} />
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
     screen.getByText('$79.00');
   });
@@ -40,9 +40,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should render custom price formatting if overridden at the PlpContext level', () => {
     const contextPriceFormatter = (price) => `USD$${price.toFixed(2)}`;
     render(
-      <PlpContextProvider apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
     screen.getByText('USD$79.00');
   });
@@ -50,9 +50,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should retrieve custom price if overridden at the PlpContext level', () => {
     const contextPriceGetter = (item) => item.data.altPrice;
     render(
-      <PlpContextProvider apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
     screen.getByText('$69.00');
   });
@@ -60,11 +60,11 @@ describe('Testing Component: ProductCard', () => {
   test('Should run custom onclick handler if overridden at the PlpContext level', () => {
     const contextOnClickHandler = jest.fn();
     render(
-      <PlpContextProvider
+      <CioPlpContext
         apiKey={DEMO_API_KEY}
         callbacks={{ onProductCardClick: contextOnClickHandler }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
     // Click the title
     fireEvent.click(screen.getByText('Jersey Riviera Shirt (Park Bench Dot)'));
@@ -86,9 +86,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should run custom onAddToCart handler if overridden at the PlpContext level', () => {
     const contextOnAddToCart = jest.fn();
     render(
-      <PlpContextProvider apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
@@ -97,14 +97,14 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render renderProps argument', () => {
     render(
-      <PlpContextProvider apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price
             <div>My Rendered Price: {props.formatPrice(props.getPrice(props.item))}</div>
           )}
         </ProductCard>
-      </PlpContextProvider>,
+      </CioPlpContext>,
     );
 
     screen.getByText('My Rendered Price: $79.00');

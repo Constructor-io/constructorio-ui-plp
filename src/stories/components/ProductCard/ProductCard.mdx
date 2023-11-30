@@ -10,15 +10,15 @@ A Component to manage Product Card Interactions.
 ## Basic Usage
 The Product Card component comes bundled with Constructor.io tracking and default rendering built-in.
 ```jsx
-import { useCioClient, ProductCard, PlpContextProvider } from '@constructor-io/constructorio-ui-plp'
+import { useCioClient, ProductCard, CioPlpContext } from '@constructor-io/constructorio-ui-plp'
 
 function myApp() {
   ...
   
   return (
-    <PlpContextProvider apiKey={YOUR_API_KEY}>
+    <CioPlpContext apiKey={YOUR_API_KEY}>
       <ProductCard item={item} />
-    </PlpContextProvider>
+    </CioPlpContext>
   )
 }
 ```
@@ -35,7 +35,7 @@ function myApp() {
   ...
   
   return (
-    <PlpContextProvider apiKey={YOUR_API_KEY} callbacks={myCustomCallbacks}>
+    <CioPlpContext apiKey={YOUR_API_KEY} callbacks={myCustomCallbacks}>
       <ProductCard>
         {(props) => {
           const { onClick, formatPrice, getPrice, onAddToCart, item } = props
@@ -50,7 +50,7 @@ function myApp() {
           )
         }}
       </ProductCard>
-    </PlpContextProvider>
+    </CioPlpContext>
   )
 }
 ```
@@ -68,7 +68,7 @@ This is an example of how the `ProductCard` might look like.
 ### Working Example - Source Code 
 ```jsx
   import React from 'react';
-  import { PlpContextProvider, ProductCard } from '@constructor-io/constructorio-ui-plp';
+  import { CioPlpContext, ProductCard } from '@constructor-io/constructorio-ui-plp';
 
   const apiKey = 'MY_API_KEY'
 
@@ -78,13 +78,13 @@ This is an example of how the `ProductCard` might look like.
 
     return (
       <>
-        <PlpContextProvider apiKey={MY_API_KEY}>
+        <CioPlpContext apiKey={MY_API_KEY}>
           {
             items.map((item) => (
               <ProductCard item={item} />
             ))
           }
-        </PlpContextProvider>
+        </CioPlpContext>
       </>
     );
   }
