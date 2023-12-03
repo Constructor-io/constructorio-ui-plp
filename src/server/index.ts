@@ -20,7 +20,8 @@ import {
   QueryParamMapping,
 } from './utils';
 
-// Call on the server side to get search results
+// Call on the server side to get search results (generic not Next.js specific nor Remix specific)
+// Might be unnecessary and removed later
 export async function getServerSearchResults(
   request: Request | IncomingMessage | NextRequest,
   searchParameters: SearchParameters,
@@ -38,10 +39,16 @@ export async function getServerSearchResults(
     userParameters,
   );
 
+  // Todo dehydrate state here if we want to pass it to the client side and then rehydrate it
+  // basically (serialize data so it can be sent over http to the server)
+  // (this is handled automatically by Remix and Next.js) look withSearchGetServerSideProps and withSearchRemixLoader
   return {
     props: {
-      initialSearchResults: searchResults,
-      userParameters,
+      cioPlpClient: {
+        initialSearchResults: searchResults,
+        userParameters,
+        cioConfig,
+      },
     },
   };
 }
@@ -88,8 +95,11 @@ export function withSearchGetServerSideProps(
     return {
       props: {
         ...props,
-        initialSearchResults: searchResults,
-        userParameters,
+        cioPlpClient: {
+          initialSearchResults: searchResults,
+          userParameters,
+          cioConfig,
+        },
       },
     };
   };
@@ -130,5 +140,12 @@ export const withSearchRemixLoader =
     );
 
     const additionalData = customLoader ? await customLoader(args, searchResults) : {};
-    return { ...additionalData, searchResults, userParameters };
+    return {
+      ...additionalData,
+      cioPlpClient: {
+        initialSearchResults: searchResults,
+        userParameters,
+        cioConfig,
+      },
+    };
   };
