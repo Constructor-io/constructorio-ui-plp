@@ -4,7 +4,7 @@ import { IncomingHttpHeaders, IncomingMessage } from 'http';
 import { Nullable } from '../types';
 
 // getHeaderValue is a helper function to get a header value from a Fetch API Request (Remix.js)
-// ...or Node.js http.IncomingMessage (Next.js)
+// ...or Node.js http.IncomingHttpHeaders (Next.js)
 function getHeaderValue(headers: Headers | IncomingHttpHeaders, key: string) {
   if (headers instanceof Headers) {
     // Fetch API's Headers interface (e.g. in Remix.js)
