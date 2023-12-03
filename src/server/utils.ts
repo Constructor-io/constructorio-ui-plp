@@ -44,11 +44,11 @@ export type NextRequest = IncomingMessage & {
   }>;
 };
 
-// Type of request is either native Fetch API Request (Remix) or Node.js http.IncomingMessage (Next.js)
+// Type of request is either native Fetch API `Request`[Remix] or Node.js `http.IncomingMessage` [Next.js]
 /**
- * Request native Fetch API Request (Remix)
- * IncomingMessage Node.js http.IncomingMessage
- * NextRequest (IncomingMessage & cookies) built on top of Node.js http.IncomingMessage and added to it cookies
+ * `Request` -> native Fetch API Request (Remix)
+ * `IncomingMessage` -> Node.js http.IncomingMessage
+ * `NextRequest` -> (IncomingMessage & cookies) built on top of Node.js http.IncomingMessage and added to it cookies
  */
 export function getUserParameters(request: Request | IncomingMessage | NextRequest) {
   const { headers } = request;

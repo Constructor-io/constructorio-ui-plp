@@ -4,6 +4,7 @@ import { SearchParameters } from '@constructor-io/constructorio-client-javascrip
 import useSearchResults, { UseSearchResultsConfigs } from '../../hooks/useSearchResults';
 import { PlpContextProvider } from '../../PlpContext';
 import { DEMO_API_KEY } from '../../constants';
+import { Nullable } from '../../types';
 
 export interface UseCioClientExampleProps {
   /**
@@ -17,7 +18,7 @@ export interface UseCioClientExampleProps {
   /**
    * ConstructorIO Client created using the hook: useCioClient. Optional if called within PLP Context.
    */
-  cioClient: ConstructorIOClient;
+  cioClient: Nullable<ConstructorIOClient>;
   /**
    * Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
    */
