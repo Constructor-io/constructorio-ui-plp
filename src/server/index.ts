@@ -2,14 +2,23 @@ import ConstructorIONode from '@constructor-io/constructorio-node';
 import {
   ConstructorClientOptions,
   SearchParameters,
+  SearchResponse,
 } from '@constructor-io/constructorio-node/src/types/index';
 import { IncomingMessage } from 'http';
+import qs from 'qs';
 import {
   GetServerSidePropsContext,
   GetServerSideProps,
   DataFunctionArgs,
 } from '../types/libraries';
-import { getUserParameters, NextRequest } from './utils';
+import {
+  getUserParameters,
+  NextRequest,
+  getQueryParamsFromUrl,
+  transformQueryParams,
+  defaultQueryParamMapping,
+  QueryParamMapping,
+} from './utils';
 
 // Call on the server side to get search results
 export async function getServerSearchResults(
@@ -50,20 +59,27 @@ export async function getServerSearchResults(
   );
 */
 export function withSearchGetServerSideProps(
-  query: string,
-  searchParameters: SearchParameters,
   cioConfig: ConstructorClientOptions,
   getServerSidePropsFunc: GetServerSideProps,
+  queryParamMapping: QueryParamMapping = defaultQueryParamMapping,
 ) {
   return async (context: GetServerSidePropsContext) => {
     const cioNode = new ConstructorIONode({
       ...cioConfig,
     });
+    const { req } = context;
 
-    const userParameters = getUserParameters(context.req);
+    // didn't use Next's `query` since it won't pare nested query strings as `qs` would for foo[bar]=a
+    const url = new URL(req.url!);
+    const queryString = url.search?.slice(1); // This removes the leading '?'
+    const customerParams = qs.parse(queryString);
+
+    const searchParameters = transformQueryParams(customerParams, queryParamMapping);
+
+    const userParameters = getUserParameters(req);
 
     const searchResults = await cioNode.search.getSearchResults(
-      query,
+      searchParameters.query,
       searchParameters,
       userParameters,
     );
@@ -91,22 +107,25 @@ export function withSearchGetServerSideProps(
 */
 export const withSearchRemixLoader =
   (
-    customLoader,
-    query: string,
-    searchParameters: SearchParameters,
+    customLoader: (args: DataFunctionArgs, searchResults: SearchResponse) => Promise<any>,
     cioConfig: ConstructorClientOptions,
+    queryParamMapping: QueryParamMapping = defaultQueryParamMapping,
   ) =>
   async (args: DataFunctionArgs) => {
-    const { request, params, context } = args;
+    const { request } = args;
     const cioNode = new ConstructorIONode({
       ...cioConfig,
     });
 
+    const customerParams = getQueryParamsFromUrl(request.url);
+
+    const transformedQueryParams = transformQueryParams(customerParams, queryParamMapping);
+
     const userParameters = getUserParameters(request);
 
     const searchResults = await cioNode.search.getSearchResults(
-      query,
-      searchParameters,
+      transformedQueryParams.query,
+      transformedQueryParams,
       userParameters,
     );
 

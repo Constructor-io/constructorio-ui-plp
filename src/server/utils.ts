@@ -1,6 +1,10 @@
 import { parse } from 'cookie';
-import { UserParameters } from '@constructor-io/constructorio-node/src/types/index';
+import {
+  UserParameters,
+  SearchParameters,
+} from '@constructor-io/constructorio-node/src/types/index';
 import { IncomingHttpHeaders, IncomingMessage } from 'http';
+import qs from 'qs';
 import { Nullable } from '../types';
 
 // getHeaderValue is a helper function to get a header value from a Fetch API Request (Remix.js)
@@ -90,4 +94,65 @@ export function getUserParameters(request: Request | IncomingMessage | NextReque
   }
 
   return userParameters;
+}
+
+/*
+ * Creates a query parameters object from the given url or current window location
+ */
+export function getQueryParamsFromUrl(url: string) {
+  const urlObject = new URL(url);
+  const queryString = urlObject.search?.slice(1); // This removes the leading '?'
+
+  if (!queryString) return {};
+
+  return qs.parse(queryString);
+}
+
+export type QueryParamMapping = {
+  [P in keyof SearchParameters]?: string;
+} & {
+  query?: string;
+};
+
+// Creating the mapping
+export const defaultQueryParamMapping: QueryParamMapping = {
+  query: 'q',
+  page: 'page',
+  offset: 'offset',
+  resultsPerPage: 'resultsPerPage',
+  filters: 'filters',
+  sortBy: 'sortBy',
+  sortOrder: 'sortOrder',
+  section: 'section',
+  fmtOptions: 'fmtOptions',
+  preFilterExpression: 'preFilterExpression',
+  hiddenFields: 'hiddenFields',
+  hiddenFacets: 'hiddenFacets',
+  variationsMap: 'variationsMap',
+  qsParam: 'qsParam',
+};
+
+// Function takes a customer parameters object and returns a transformed SearchParameters object
+export function transformQueryParams(
+  customerParams: Record<string, any>,
+  queryParamMapping: QueryParamMapping = defaultQueryParamMapping,
+): SearchParameters & { query: string } {
+  const transformed: Partial<SearchParameters> = {};
+
+  // Each key in the queryParamMapping object is a search parameter key
+  Object.entries(queryParamMapping).forEach(([searchParamKey, queryKey]) => {
+    if (customerParams[queryKey] !== undefined) {
+      let value = customerParams[queryKey];
+
+      // Simple type conversions
+      if (['page', 'offset', 'resultsPerPage'].includes(searchParamKey)) {
+        value = Number(value);
+      }
+      // Todo: support other props type conversions (filters, sortBy, sortOrder, etc.)
+
+      transformed[searchParamKey] = value;
+    }
+  });
+
+  return transformed as SearchParameters & { query: string };
 }

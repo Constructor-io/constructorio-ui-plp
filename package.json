@@ -111,6 +111,7 @@
     "webpack": "^5.75.0"
   },
   "dependencies": {
-    "cookie": "^0.6.0"
+    "cookie": "^0.6.0",
+    "qs": "^6.11.2"
   }
 }
