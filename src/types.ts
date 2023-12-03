@@ -11,7 +11,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
+export type CioClientOptions = ConstructorClientOptions;
 
 export interface Getters {
   getPrice: (item: Item) => number;
@@ -27,8 +27,8 @@ export interface Callbacks {
 }
 
 export interface PlpContext {
-  cioClient: ConstructorIOClient;
-  cioClientOptions: CioClientOptions;
+  cioClient: Nullable<ConstructorIOClient>;
+  cioClientOptions?: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   getters: Getters;
   formatters: Formatters;
@@ -96,3 +96,5 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
 export type IncludeRenderProps<P, RenderProps> = P & {
   children?: (props: RenderProps) => ReactNode;
 };
+
+export type Nullable<T> = T | null;

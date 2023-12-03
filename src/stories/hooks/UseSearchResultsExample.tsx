@@ -17,7 +17,7 @@ export interface UseCioClientExampleProps {
   /**
    * ConstructorIO Client created using the hook: useCioClient. Optional if called within PLP Context.
    */
-  cioClient?: ConstructorIOClient;
+  cioClient: ConstructorIOClient;
   /**
    * Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
    */
@@ -25,7 +25,7 @@ export interface UseCioClientExampleProps {
 }
 
 // A simple React Component to showcase use with PlpContext
-function SearchResults({ query, configs }: { query: string; configs?: UseSearchResultsConfigs }) {
+function SearchResults({ query, configs }: { query: string; configs: UseSearchResultsConfigs }) {
   const searchResults = useSearchResults(query, configs);
 
   return (
@@ -58,8 +58,8 @@ export default function UseSearchResultsExample({
   searchParams,
 }: UseCioClientExampleProps) {
   const storybookConfigs: UseSearchResultsConfigs = useMemo(
-    () => ({ searchParams }),
-    [searchParams],
+    () => ({ searchParams, cioClient, configs }),
+    [searchParams, cioClient, configs],
   );
 
   return (

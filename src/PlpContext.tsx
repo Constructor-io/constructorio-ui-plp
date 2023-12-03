@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, createContext, useContext, useMemo, useState } from 'react';
+import { ConstructorClientOptions } from '@constructor-io/constructorio-node/src/types/index';
 import useCioClient from './hooks/useCioClient';
 import * as defaultGetters from './utils/getters';
 import * as defaultFormatters from './utils/formatters';
@@ -24,10 +25,10 @@ export function PlpContextProvider(
   }>,
 ) {
   const { apiKey, formatters, callbacks, getters, children } = props;
-  const [cioClientOptions, setCioClientOptions] = useState({});
+  const [cioClientOptions, setCioClientOptions] = useState<ConstructorClientOptions>();
   // More states
 
-  const cioClient = useCioClient(apiKey);
+  const cioClient = useCioClient({ apiKey });
 
   // To Consider: Splitting the context into separate layers
   // Global Configurations

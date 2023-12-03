@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
-import { Item } from '../../types';
+import { Nullable, Item } from '../../types';
 
 export default function useOnAddToCart(
-  cioClient: ConstructorIO,
+  cioClient: Nullable<ConstructorIO>,
   getPrice: (item: Item) => number,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
@@ -14,7 +14,7 @@ export default function useOnAddToCart(
       const revenue = getPrice(item);
 
       // TODO: Obtain the search term, if it exists - CSL3018
-      cioClient.tracker.trackConversion(undefined, {
+      cioClient?.tracker.trackConversion(undefined, {
         itemId,
         itemName,
         variationId,

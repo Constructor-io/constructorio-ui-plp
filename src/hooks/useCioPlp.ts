@@ -1,12 +1,15 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  SearchParameters,
+  ConstructorClientOptions,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { Nullable } from '../types';
 import useCioClient from './useCioClient';
 import useSearchResults from './useSearchResults';
 
-export type CioPlpConfigs = { apiKey?: string };
-export type UseCioPlpHook = { cioClient: ConstructorIOClient };
+export type UseCioPlpHook = { cioClient: Nullable<ConstructorIOClient> };
 
-type UseCioPlp = (configs: CioPlpConfigs) => UseCioPlpHook;
+type UseCioPlp = (configs: ConstructorClientOptions) => UseCioPlpHook;
 
 const useCioPlp: UseCioPlp = (configs) => {
   const { apiKey } = configs;
@@ -14,7 +17,7 @@ const useCioPlp: UseCioPlp = (configs) => {
     throw new Error('Api Key required');
   }
 
-  const cioClient = useCioClient(apiKey);
+  const cioClient = useCioClient(configs);
   const useCustomSearchResults = (query: string, searchParams: SearchParameters) =>
     useSearchResults(query, { cioClient, searchParams });
 

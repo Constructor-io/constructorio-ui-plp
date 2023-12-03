@@ -46,3 +46,7 @@ export function getPreferredColorScheme() {
   }
   return colorScheme;
 }
+
+export function isClient() {
+  return typeof window === 'object';
+}

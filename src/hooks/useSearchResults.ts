@@ -3,10 +3,10 @@ import { SearchParameters } from '@constructor-io/constructorio-client-javascrip
 import { useEffect, useState } from 'react';
 import { usePlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
-import { PlpSearchResponse } from '../types';
+import { PlpSearchResponse, Nullable } from '../types';
 
 export type UseSearchResultsConfigs = {
-  cioClient?: ConstructorIOClient;
+  cioClient: Nullable<ConstructorIOClient>;
   searchParams?: SearchParameters;
 };
 
@@ -19,18 +19,19 @@ export type UseSearchResultsConfigs = {
  */
 export default function useSearchResults(
   query: string,
-  configs: UseSearchResultsConfigs = {},
+  configs: UseSearchResultsConfigs,
 ): PlpSearchResponse | null {
   const { cioClient, searchParams } = configs;
   const state = usePlpContext();
   const client = cioClient || state?.cioClient;
 
-  if (!client) {
-    throw new Error('CioClient required');
-  }
-
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
   useEffect(() => {
+    // This should be checked only on the client side. It's ok for the server to not have a client.
+    if (!client) {
+      throw new Error('CioClient required');
+    }
+
     client.search
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));

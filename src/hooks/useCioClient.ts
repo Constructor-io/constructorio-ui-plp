@@ -1,30 +1,32 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { ConstructorClientOptions } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import version from '../version';
+import { Nullable } from '../types';
 
-export type CioClientConfig = { apiKey?: string };
-type UseCioClient = (
-  apiKey: string,
-  options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>,
-) => ConstructorIOClient | never;
+type UseCioClient = (cioConfig?: ConstructorClientOptions) => Nullable<ConstructorIOClient> | never;
 
-const useCioClient: UseCioClient = (apiKey, options?) => {
+const useCioClient: UseCioClient = (cioConfig) => {
+  const apiKey = cioConfig?.apiKey;
   if (!apiKey) {
     throw new Error('Api Key required');
   }
 
-  const memoizedCioClient = useMemo(
-    () =>
+  // On the server ConstructorIOClient will be null
+  const [cioClient, setCioClient] = useState<ConstructorIOClient | null>(null);
+
+  // Insures that the javascript ConstructorIOClient is only created on the client side and never on the server side
+  useEffect(() => {
+    setCioClient(
       new ConstructorIOClient({
-        apiKey,
         sendTrackingEvents: true,
         version: `cio-ui-plp-${version}`,
-        ...options,
+        ...cioConfig,
       }),
-    [apiKey, options],
-  );
-  return memoizedCioClient!;
+    );
+  }, [cioConfig]);
+
+  return cioClient;
 };
 
 export default useCioClient;
