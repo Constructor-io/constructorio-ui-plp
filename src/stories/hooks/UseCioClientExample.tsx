@@ -63,7 +63,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
 
           {pagination.pages.slice(0, 10).map((page) => (
             <button onClick={() => pagination.goToPage(page)} type='button'>
-              {page}
+              {page === -1 ? '...' : page}
             </button>
           ))}
           <button onClick={() => pagination.nextPage()} type='button'>

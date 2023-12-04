@@ -32,7 +32,11 @@ export default function useSearchResults(
   const state = usePlpState();
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
 
-  const pagination = usePagination(searchResponse?.totalNumResults || 0);
+  const totalPages = Math.ceil(
+    (searchResponse?.totalNumResults || 0) /
+      (searchResponse?.rawResponse.request.num_results_per_page || 10),
+  );
+  const pagination = usePagination(totalPages || 0);
 
   const client = cioClient || state?.cioClient;
   if (!client) {
