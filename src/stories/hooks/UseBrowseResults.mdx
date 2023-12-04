@@ -1,0 +1,93 @@
+import { Meta, Canvas, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
+import meta, { Primary } from './UseBrowseResults.stories';
+
+<Meta of={meta} />
+
+# `UseBrowseResults`
+A React Hook to retrieve browse results using Constructor.
+
+## Usage with useCioClient
+```jsx
+function myApp() {
+  const cioClient = useCioClient(MY_API_KEY)
+  const browseResults = useBrowseResults(filterName, filterValue, {cioClient});
+  ...
+}
+```
+
+## Usage with PlpContextProvider
+```jsx
+function BrowseResults({ filterName, filterValue }) {
+  const browseResults = useBrowseResults(filterName, filterValue);
+  ...
+}
+
+function myApp() {
+  ...
+  return (
+    <>
+    <PlpContextProvider apiKey={MY_API_KEY}>
+      <BrowseResults filterName={filterName} fiterValue={filterValue} />
+    </PlpContextProvider>
+    </>
+  )
+}
+```
+
+
+## Working Example
+This is an example of how you might utilize the `useBrowseResults` hook in tandem with the `PlpContextProvider` to retrieve browse results.
+
+<Canvas withSource="none">
+  <Story of={Primary} />
+</Canvas>
+
+<Controls of={Primary} />
+
+### Working Example - Source Code 
+```jsx
+  import React from 'react';
+  import { PlpContextProvider } from '../../PlpContext';
+  import useBrowseResults from '../../hooks/useBrowseResults';
+
+  const apiKey = 'MY_API_KEY'
+
+  // A simple React Component to showcase useBrowseResults with PlpContextProvider
+  function BrowseResults({ query }) {
+    const browseParams = useMemo(() => ({ resultsPerPage: 2 }), []);
+    const browseResults = useBrowseResults(filterName, filterValue, { browseParams });
+
+    return (
+      <>
+        <h2>Result Id </h2>
+        <div>{JSON.stringify(browseResults?.resultId)}</div>
+        <h2>Total Number of Results </h2>
+        <div>{JSON.stringify(browseResults?.totalNumResults)}</div>
+        <h2>Array of Groups</h2>
+        <div>{JSON.stringify(browseResults?.groups)}</div>
+        <h2>Array of Facets</h2>
+        <div>{JSON.stringify(browseResults?.facets)}</div>
+        <h2>Array of Sort Options</h2>
+        <div>{JSON.stringify(browseResults?.sortOptions)}</div>
+        <h2>Array of Results</h2>
+        <div>{JSON.stringify(browseResults?.results)}</div>
+      </>
+    );
+  }
+
+  // Main Component
+  function useBrowseResultsExample() {
+    const [filterValue] = useState('this-is-a-fake-group_as_recommended-by-constructor')
+
+    return (
+      <>
+        <h1>useBrowsesResults</h1>
+        <p>This hook returns an object with the following properties:</p>
+        <PlpContextProvider apiKey={MY_API_KEY}>
+          <BrowseResults filterName={"group_id"} filterValue={filterValue} />
+        </PlpContextProvider>
+      </>
+    );
+  }
+```
