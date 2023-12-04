@@ -9,7 +9,7 @@ import { Nullable } from '../types';
 
 // getHeaderValue is a helper function to get a header value from a Fetch API Request (Remix.js)
 // ...or Node.js http.IncomingHttpHeaders (Next.js)
-function getHeaderValue(headers: Headers | IncomingHttpHeaders, key: string) {
+export function getHeaderValue(headers: Headers | IncomingHttpHeaders, key: string) {
   if (headers instanceof Headers) {
     // Fetch API's Headers interface (e.g. in Remix.js)
     return headers.get(key);
@@ -81,9 +81,12 @@ export function getUserParameters(request: Request | IncomingMessage | NextReque
   const userIp = getUserIp(request);
 
   const userParameters: UserParameters = {
-    sessionId: Number(ConstructorioIDSessionId),
     clientId: ConstructorioIDClientId,
   };
+
+  if (ConstructorioIDSessionId) {
+    userParameters.sessionId = Number(ConstructorioIDSessionId);
+  }
 
   if (userAgent) {
     userParameters.userAgent = userAgent as string;
