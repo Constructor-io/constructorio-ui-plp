@@ -1,0 +1,54 @@
+import { renderHook, waitFor } from '@testing-library/react';
+import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
+import useSearchResults from '../src/hooks/useSearchResults';
+import { DEMO_API_KEY } from '../src/constants';
+
+describe('Testing Hook: useSearchResults', () => {
+  const ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
+
+  test('Should return a PlpSearchResponse Object', async () => {
+    const { result } = renderHook(
+      () => useSearchResults('linen', { cioClient: ConstructorIO }),
+      {},
+    );
+    await waitFor(() => {
+      const response = result?.current;
+      expect(response?.resultId).not.toBeUndefined();
+      expect(response?.totalNumResults).not.toBeUndefined();
+      expect(response?.refinedContent).not.toBeUndefined();
+      expect(response?.groups).not.toBeUndefined();
+      expect(response?.results?.length).not.toBeUndefined();
+      expect(response?.facets?.length).not.toBeUndefined();
+      expect(response?.sortOptions?.length).not.toBeUndefined();
+      expect(response?.rawResponse).not.toBeUndefined();
+    });
+  });
+
+  test('Should pass along parameters properly', async () => {
+    const filters = { Color: ['Phantom Ink'] };
+    const page = 2;
+    const resultsPerPage = 100;
+    const { result } = renderHook(
+      () =>
+        useSearchResults('Linen', {
+          cioClient: ConstructorIO,
+          searchParams: { page, filters, resultsPerPage },
+        }),
+      {},
+    );
+
+    await waitFor(() => {
+      const response = result?.current;
+      expect(response?.rawResponse?.request?.filters).toEqual(filters);
+      expect(response?.rawResponse?.request?.page).toEqual(page);
+      expect(response?.rawResponse?.request?.num_results_per_page).toEqual(resultsPerPage);
+    });
+  });
+
+  test('Should throw error if client is not available', () => {
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+    expect(() => renderHook(() => useSearchResults('item', {}), {})).toThrow();
+    spy.mockRestore();
+  });
+});
