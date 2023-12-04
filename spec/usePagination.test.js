@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import usePagination from '../src/hooks/usePagination'; // Assume your hook is exported from here
+import usePagination from '../src/hooks/usePagination';
 
 describe('usePagination', () => {
   it('should initialize with the first page', () => {
