@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 const usePagination = (totalPages: number, windowSize = 5) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const goToPage = (page) => {
+  const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
