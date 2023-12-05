@@ -79,6 +79,14 @@ export interface Item {
   rawResponse?: ApiItem;
 }
 
+export interface SwatchItem {
+  url?: string;
+  imageUrl?: string;
+  previewImageUrl?: string;
+  previewHexCode?: string;
+  variationId?: string;
+}
+
 export interface PlpSearchResponse {
   resultId: string;
   totalNumResults: number;
