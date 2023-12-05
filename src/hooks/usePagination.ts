@@ -27,13 +27,14 @@ const usePagination = (totalPages: number, windowSize = 5) => {
     let endPage: number;
 
     if (totalPages <= windowSize) {
-      // less than windowSize total pages so show all
+      // fewer than windowSize total pages so show all
       startPage = 1;
       endPage = totalPages;
     } else {
       // more than windowSize total pages so calculate start and end pages
       const maxPagesBeforeCurrentPage = Math.floor(windowSize / 2);
       const maxPagesAfterCurrentPage = Math.ceil(windowSize / 2) - 1;
+
       if (currentPage <= maxPagesBeforeCurrentPage) {
         // near the start
         startPage = 1;
@@ -52,6 +53,7 @@ const usePagination = (totalPages: number, windowSize = 5) => {
     // add start page and end page to the array if they are not included
     if (startPage > 1) {
       pagesArray.push(1);
+
       if (startPage > 2) {
         pagesArray.push(-1); // -1 indicates a break (e.g., to show "...")
       }
