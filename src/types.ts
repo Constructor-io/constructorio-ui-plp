@@ -8,6 +8,7 @@ import {
   Result,
   SearchResponse,
   SortOption,
+  GetBrowseResultsResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 // eslint-disable-next-line import/no-cycle
 import usePagination from './components/Pagination/usePagination';
@@ -90,6 +91,16 @@ export interface PlpSearchResponse {
 }
 
 export type PaginationProps = ReturnType<typeof usePagination>;
+export interface PlpBrowseResponse {
+  resultId: string;
+  totalNumResults: number;
+  results: Array<Item>;
+  facets: Array<Facet>;
+  groups: Array<ApiGroup>;
+  sortOptions: Array<SortOption>;
+  refinedContent: Record<string, any>[];
+  rawResponse: GetBrowseResultsResponse;
+}
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
