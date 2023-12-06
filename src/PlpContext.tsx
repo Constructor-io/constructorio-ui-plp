@@ -8,14 +8,14 @@ const plpContext = createContext<PlpContext | null>(null);
 plpContext.displayName = 'PlpContext';
 
 /**
- * React Hook to access state provided by PlpContextProvider.
- * Note: Should only be used by components nested under a PlpContextProvider
+ * React Hook to access state provided by CioPlpContext.
+ * Note: Should only be used by components nested under a CioPlpContext
  */
-export function usePlpContext() {
+export function useCioPlpContext() {
   return useContext(plpContext);
 }
 
-export function PlpContextProvider(
+export function CioPlpContext(
   props: PropsWithChildren<{
     apiKey: string;
     formatters?: Formatters;
