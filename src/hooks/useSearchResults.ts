@@ -29,17 +29,12 @@ export default function useSearchResults(
   configs: UseSearchResultsConfigs = {},
 ): UseSearchResultsReturn {
   const { cioClient, searchParams } = configs;
-<<<<<<< Updated upstream
-=======
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
->>>>>>> Stashed changes
 
-  const state = usePlpContext();
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
   const pagination = usePagination(searchResponse);
 
-  const client = cioClient || state?.cioClient;
   if (!client) {
     throw new Error('CioClient required');
   }
