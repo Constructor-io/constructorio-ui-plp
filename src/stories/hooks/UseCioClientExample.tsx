@@ -24,7 +24,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
   const cioClient = useCioClient(apiKey || DEMO_API_KEY);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { searchResults, handleSubmit, pagination } = useSearchResults(searchQuery, {
+  const { searchResults, handleSubmit } = useSearchResults(searchQuery, {
     cioClient,
     searchParams: { resultsPerPage: 2, page: 1 },
   });
@@ -55,20 +55,6 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
       {searchResults?.results.length && (
         <div>
           <ul>{searchResults?.results.map((result) => <li>{result.itemName}</li>)}</ul>
-          <div>Current Page: {pagination.currentPage}</div>
-          <div>Total: {pagination.totalPages}</div>
-          <button onClick={() => pagination.prevPage()} type='button'>
-            Previous
-          </button>
-
-          {pagination.pages.slice(0, 10).map((page) => (
-            <button onClick={() => pagination.goToPage(page)} type='button'>
-              {page === -1 ? '...' : page}
-            </button>
-          ))}
-          <button onClick={() => pagination.nextPage()} type='button'>
-            Next
-          </button>
         </div>
       )}
     </>
