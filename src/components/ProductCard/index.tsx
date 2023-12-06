@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCioPlpContext } from '../../PlpContext';
+import { usePlpContext } from '../../PlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
 import { getPrice as defaultGetPrice } from '../../utils/getters';
@@ -47,9 +47,9 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
 
-  const state = useCioPlpContext();
+  const state = usePlpContext();
   if (!state) {
-    throw new Error('This component is meant to be used within the CioPlpContext.');
+    throw new Error('This component is meant to be used within the CioPlpContextProvider.');
   }
 
   const client = state.cioClient;
