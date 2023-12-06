@@ -60,3 +60,4 @@ export interface PaginationObject {
    *  [1, 2, 3, 4, ..., 10] */
   pages: number[];
 }
+```
