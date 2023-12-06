@@ -1,44 +1,30 @@
-import React from 'react';
-import type { ReactNode } from 'react';
-import ConstructorIOClient, { Nullable } from '@constructor-io/constructorio-client-javascript';
-import {
-  ConstructorClientOptions,
-  Facet,
-  Group,
-  Result,
-  SearchResponse,
-  SortOption,
-} from '@constructor-io/constructorio-client-javascript/lib/types';
+# Pull Request Checklist
 
-export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
+Before you submit a pull request, please make sure you have to following:
 
-export interface PlpContext {
-  cioClient: ConstructorIOClient;
-  cioClientOptions: CioClientOptions;
-  setCioClientOptions: React.Dispatch<CioClientOptions>;
-}
+- [ ] I have added or updated TypeScript types for my changes, ensuring they are compatible with the existing codebase.
+- [ ] I have added JSDoc comments to my TypeScript definitions for improved documentation.
+- [ ] I have added tests that prove my fix is effective or that my feature works.
+- [ ] I have added any necessary documentation (if appropriate).
+- [ ] I have made sure my PR is up-to-date with the main branch.
+- [ ] I have checked to ensure there aren't other open [Pull Requests](https://github.com/[username]/[repository]/pulls) for the same update/change.
 
-export interface PrimaryColorStyles {
-  '--primary-color-h': string;
-  '--primary-color-s': string;
-  '--primary-color-l': string;
-}
+# PR Type
+What kind of change does this PR introduce?
 
-// Transformed API Responses
-export interface PlpSearchResponse {
-  resultId: string;
-  totalNumResults: number;
-  results: Array<Result>;
-  facets: Array<Facet>;
-  groups: Array<Group>;
-  sortOptions: Array<SortOption>;
-  refinedContent: Record<string, any>[];
-  rawResponse: SearchResponse;
-}
+- [ ] Bugfix
+- [ ] Feature
+- [ ] Code style update (formatting, local variables)
+- [ ] Refactoring (no functional changes, no API changes)
+- [ ] Documentation content changes
+- [ ] TypeScript type definitions update
+- [ ] Other... Please describe:
 
-// Type Extenders
-export type PropsWithChildren<P> = P & { children?: ReactNode };
+# TypeScript Type Definitions and Documentation
 
+Ensure that all new code has TypeScript type definitions with JSDoc comments. Here is an example of how they should look:
+
+```typescript
 /**
  * Represents a function that handles pagination logic.
  * @param searchResponse - The search response data.
@@ -48,7 +34,7 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
 export type UsePagination = (
   searchResponse: Nullable<PlpSearchResponse>,
   windowSize?: number,
-) => {
+): {
   // represents the current page number in the pagination
   // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
   currentPage: number;
