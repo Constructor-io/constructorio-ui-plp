@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchResponse } from '../types';
+import usePagination from './usePagination';
 
 export type UseSearchResultsConfigs = {
   cioClient?: ConstructorIOClient | null;
@@ -13,6 +14,7 @@ export type UseSearchResultsConfigs = {
 export type UseSearchResultsReturn = {
   searchResults: PlpSearchResponse | null;
   handleSubmit: () => void;
+  pagination: ReturnType<typeof usePagination>;
 };
 
 /**
@@ -30,6 +32,7 @@ export default function useSearchResults(
 
   const state = usePlpContext();
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
+  const pagination = usePagination(searchResponse);
 
   const client = cioClient || state?.cioClient;
   if (!client) {
@@ -38,7 +41,7 @@ export default function useSearchResults(
 
   const handleSubmit = () => {
     client.search
-      .getSearchResults(query, searchParams)
+      .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   };
 
@@ -46,11 +49,11 @@ export default function useSearchResults(
   useEffect(() => {
     if (query) {
       client.search
-        .getSearchResults(query, searchParams)
+        .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
         .then((res) => setSearchResponse(transformSearchResponse(res)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pagination.currentPage]);
 
-  return { searchResults: searchResponse, handleSubmit };
+  return { searchResults: searchResponse, handleSubmit, pagination };
 }
