@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationProps, PlpSearchResponse } from '../types';
-import usePagination from './usePagination';
+import usePagination from '../components/Pagination/usePagination';
 
 export type UseSearchResultsConfigs = {
   cioClient?: ConstructorIOClient | null;
@@ -33,7 +33,10 @@ export default function useSearchResults(
   const client = cioClient || state?.cioClient;
 
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-  const pagination = usePagination(searchResponse);
+  const pagination = usePagination({
+    totalNumResults: searchResponse?.totalNumResults,
+    resultsPerPage: searchResponse?.numResultsPerPage,
+  });
 
   if (!client) {
     throw new Error('CioClient required');

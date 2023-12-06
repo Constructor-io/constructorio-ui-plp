@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { DEMO_API_KEY } from '../../constants';
 import useCioClient from '../../hooks/useCioClient';
 import useSearchResults from '../../hooks/useSearchResults';
-import Pagination from '../components/Pagination/Pagination';
 
 /**
  * This interface will be rendered as a table in Storybook

@@ -1,6 +1,8 @@
 import React from 'react';
-import { PaginationProps } from '../../../types';
+import { PaginationProps } from '../../types';
 
+// Todo:
+//   Pagination component should get PaginationProps from context and accept configuration props same as usePagination
 export default function Pagination(props: { pagination: PaginationProps }) {
   const { pagination } = props;
   return (

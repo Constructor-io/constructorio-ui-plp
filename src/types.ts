@@ -8,9 +8,9 @@ import {
   Result,
   SearchResponse,
   SortOption,
-  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import usePagination from './hooks/usePagination';
+// eslint-disable-next-line import/no-cycle
+import usePagination from './components/Pagination/usePagination';
 import { MakeOptional } from './utils/typeHelpers';
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
@@ -80,6 +80,7 @@ export interface Item {
 export interface PlpSearchResponse {
   resultId: string;
   totalNumResults: number;
+  numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
@@ -107,23 +108,25 @@ export type IncludeRenderProps<P, RenderProps> = P & {
  * @param windowSize - The number of pages to display in the pagination window.
  * @returns An object containing pagination information and methods.
  */
-export type UsePagination = (
-  searchResponse: Nullable<PlpSearchResponse>,
-  windowSize?: number,
-) => PaginationObject;
+export type UsePaginationProps = {
+  totalNumResults?: number;
+  resultsPerPage?: number;
+  windowSize?: number;
+};
+export type UsePagination = (props: UsePaginationProps) => PaginationObject;
 
 export interface PaginationObject {
-  // represents the current page number in the pagination
+  // Represents the current page number in the pagination
   // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
   currentPage: number;
 
   // Allows you to navigate to a specific page and takes a page number as an argument
   goToPage: (page: number) => void;
 
-  // navigate to the next page. Used to implement "Next" button in a pagination control.
+  // Navigate to the next page. Used to implement "Next" button in a pagination control.
   nextPage: () => void;
 
-  // navigate to the previous page. Used to implement "Previous" button in a pagination control.
+  // Navigate to the previous page. Used to implement "Previous" button in a pagination control.
   prevPage: () => void;
 
   // The total number of pages available in the pagination object
