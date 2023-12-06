@@ -32,6 +32,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
+  console.log(searchResults);
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
       </div>
       {searchResults?.results.length && (
         <div>
-          <ul>{searchResults?.results.map((result) => <li>{result.value}</li>)}</ul>
+          <ul>{searchResults?.results.map((result) => <li>{result.itemName}</li>)}</ul>
           <div>Current Page: {pagination.currentPage}</div>
           <div>Total: {pagination.totalPages}</div>
           <button onClick={() => pagination.prevPage()} type='button'>

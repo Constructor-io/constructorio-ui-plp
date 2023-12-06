@@ -26,10 +26,26 @@ import CioPlp from '@constructor-io/constructorio-ui-plp';
 function YourComponent() {
   return (
     <div>
-      <CioPlp apiKey='key_wJSdZSiesX5hiVLt' />
+      <CioPlp apiKey='key_M57QS8SMPdLdLx4x' />
     </div>
   );
 }
+```
+
+### Using the Javascript Bundle
+
+This is a framework agnostic method that can be used in any JavaScript project. The `CioPlp` function provides a simple interface to inject an entire PLP UI into the provided `selector`.
+In addition to [PLP component props](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/plp-component--docs), this function also accepts `selector` and `includeCSS`.
+
+```js
+import CioPlp from '@constructor-io/constructorio-ui-plp/constructorio-ui-plp-bundled';
+
+CioPlp({
+  selector: '#plp-container',
+  includeCSS: true, // Include the default CSS styles. Defaults to true.
+  apiKey: 'key_M57QS8SMPdLdLx4x',
+  // ... additional arguments
+});
 ```
 
 ## Custom Styling
