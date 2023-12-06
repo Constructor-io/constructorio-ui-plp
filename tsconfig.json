@@ -2,6 +2,7 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "removeComments": false,
     "jsx": "react",
     "target": "esnext",
@@ -19,5 +20,5 @@
   },
   "lib": ["dom"],
   "include": ["src/**/*.ts", "generateVersion.js"],
-  "exclude": ["node_modules", "lib", "storybook-static", ".storybook"]
+  "exclude": ["src/stories/**", "node_modules", "lib", "storybook-static", ".storybook"]
 }
