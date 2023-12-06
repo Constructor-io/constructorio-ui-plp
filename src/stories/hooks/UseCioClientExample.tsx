@@ -32,7 +32,6 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
-  console.log(searchResults);
 
   return (
     <>
