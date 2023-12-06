@@ -6,8 +6,13 @@ import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchResponse } from '../types';
 
 export type UseSearchResultsConfigs = {
-  cioClient?: ConstructorIOClient;
+  cioClient?: ConstructorIOClient | null;
   searchParams?: SearchParameters;
+};
+
+export type UseSearchResultsReturn = {
+  searchResults: PlpSearchResponse | null;
+  handleSubmit: () => void;
 };
 
 /**
@@ -20,21 +25,32 @@ export type UseSearchResultsConfigs = {
 export default function useSearchResults(
   query: string,
   configs: UseSearchResultsConfigs = {},
-): PlpSearchResponse | null {
+): UseSearchResultsReturn {
   const { cioClient, searchParams } = configs;
-  const state = usePlpContext();
-  const client = cioClient || state?.cioClient;
 
+  const state = usePlpContext();
+  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
+
+  const client = cioClient || state?.cioClient;
   if (!client) {
     throw new Error('CioClient required');
   }
 
-  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-  useEffect(() => {
+  const handleSubmit = () => {
     client.search
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));
-  }, [client, query, searchParams]);
+  };
 
-  return searchResponse;
+  // Get search results for initial query if there is one if not don't ever run this effect again
+  useEffect(() => {
+    if (query) {
+      client.search
+        .getSearchResults(query, searchParams)
+        .then((res) => setSearchResponse(transformSearchResponse(res)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { searchResults: searchResponse, handleSubmit };
 }

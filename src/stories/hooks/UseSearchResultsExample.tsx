@@ -26,7 +26,7 @@ export interface UseCioClientExampleProps {
 
 // A simple React Component to showcase use with PlpContext
 function SearchResults({ query, configs }: { query: string; configs?: UseSearchResultsConfigs }) {
-  const searchResults = useSearchResults(query, configs);
+  const { searchResults } = useSearchResults(query, configs);
 
   return (
     <>
