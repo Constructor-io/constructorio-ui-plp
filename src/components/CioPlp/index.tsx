@@ -1,8 +1,8 @@
 import React from 'react';
-import { usePlpState } from '../../PlpContext';
+import { useCioPlpContext } from '../../PlpContext';
 
 export default function CioPlp() {
-  const state = usePlpState();
+  const state = useCioPlpContext();
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { PaginationProps } from '../../../types';
 
 export default function Pagination(props: { pagination: PaginationProps }) {
@@ -11,7 +11,7 @@ export default function Pagination(props: { pagination: PaginationProps }) {
         Previous
       </button>
 
-      {pagination.pages.slice(0, 10).map((page) => (
+      {pagination.pages.map((page) => (
         <button onClick={() => pagination.goToPage(page)} type='button'>
           {page}
         </button>

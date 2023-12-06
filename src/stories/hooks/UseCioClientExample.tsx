@@ -55,24 +55,21 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
       </div>
       {searchResults?.results.length && (
         <div>
-          <ul>{searchResults?.results.map((result) => <li>{result.value}</li>)}</ul>
-          {/* Pagination */}
-          <div>
-            <div>Current Page: {pagination.currentPage}</div>
-            <div>Total: {pagination.totalPages}</div>
-            <button onClick={() => pagination.prevPage()} type='button'>
-              Previous
-            </button>
+          <ul>{searchResults?.results.map((result) => <li>{result.itemName}</li>)}</ul>
+          <div>Current Page: {pagination.currentPage}</div>
+          <div>Total: {pagination.totalPages}</div>
+          <button onClick={() => pagination.prevPage()} type='button'>
+            Previous
+          </button>
 
-            {pagination.pages.slice(0, 10).map((page) => (
-              <button onClick={() => pagination.goToPage(page)} type='button'>
-                {page}
-              </button>
-            ))}
-            <button onClick={() => pagination.nextPage()} type='button'>
-              Next
+          {pagination.pages.slice(0, 10).map((page) => (
+            <button onClick={() => pagination.goToPage(page)} type='button'>
+              {page === -1 ? '...' : page}
             </button>
-          </div>
+          ))}
+          <button onClick={() => pagination.nextPage()} type='button'>
+            Next
+          </button>
         </div>
       )}
     </>

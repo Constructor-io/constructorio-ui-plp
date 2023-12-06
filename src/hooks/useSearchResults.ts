@@ -1,8 +1,8 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useState, useEffect } from 'react';
-import { usePlpState } from '../PlpContext';
-import { transformSearchResponse } from '../transformers';
+import { useEffect, useState } from 'react';
+import { useCioPlpContext } from '../PlpContext';
+import { transformSearchResponse } from '../utils/transformers';
 import { PaginationProps, PlpSearchResponse } from '../types';
 import usePagination from './usePagination';
 
@@ -21,7 +21,7 @@ export type UseSearchResultsReturn = {
  * A React Hook to call to utilize Constructor.io Search
  * @param query Search Query
  * @param configs A configuration object
- * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the PlpContextProvider.
+ * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlpContext.
  * @param configs.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
  */
 export default function useSearchResults(
@@ -29,12 +29,12 @@ export default function useSearchResults(
   configs: UseSearchResultsConfigs = {},
 ): UseSearchResultsReturn {
   const { cioClient, searchParams } = configs;
-  const state = usePlpState();
-  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-
-  const pagination = usePagination(searchResponse?.totalNumResults || 0);
-
+  const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
+
+  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
+  const pagination = usePagination(searchResponse);
+
   if (!client) {
     throw new Error('CioClient required');
   }
