@@ -1,6 +1,7 @@
 // Hooks
 export { default as useCioPlp } from './hooks/useCioPlp';
 export { default as useSearchResults } from './hooks/useSearchResults';
+export { default as useBrowseResults } from './hooks/useBrowseResults';
 export { default as useCioClient } from './hooks/useCioClient';
 export * from './hooks/callbacks';
 

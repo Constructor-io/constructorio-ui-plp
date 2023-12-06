@@ -8,6 +8,7 @@ import {
   Result,
   SearchResponse,
   SortOption,
+  GetBrowseResultsResponse,
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
@@ -85,6 +86,17 @@ export interface PlpSearchResponse {
   sortOptions: Array<SortOption>;
   refinedContent: Record<string, any>[];
   rawResponse: SearchResponse;
+}
+
+export interface PlpBrowseResponse {
+  resultId: string;
+  totalNumResults: number;
+  results: Array<Item>;
+  facets: Array<Facet>;
+  groups: Array<ApiGroup>;
+  sortOptions: Array<SortOption>;
+  refinedContent: Record<string, any>[];
+  rawResponse: GetBrowseResultsResponse;
 }
 
 // Type Extenders

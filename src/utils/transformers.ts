@@ -1,5 +1,8 @@
-import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { PlpSearchResponse, Item, ApiItem } from '../types';
+import {
+  GetBrowseResultsResponse,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { PlpSearchResponse, Item, ApiItem, PlpBrowseResponse } from '../types';
 
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {
@@ -49,4 +52,17 @@ export function transformSearchResponse(res: SearchResponse) {
     refinedContent: res.response.refined_content,
     rawResponse: res,
   } as PlpSearchResponse;
+}
+
+export function transformBrowseResponse(res: GetBrowseResultsResponse) {
+  return {
+    resultId: res.result_id,
+    totalNumResults: res.response!.total_num_results,
+    results: res.response!.results!.map((result) => transformResultItem(result, false)),
+    facets: res.response!.facets,
+    groups: res.response!.groups,
+    sortOptions: res.response!.sort_options,
+    refinedContent: res.response!.refined_content,
+    rawResponse: res,
+  } as PlpBrowseResponse;
 }
