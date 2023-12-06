@@ -31,12 +31,7 @@ export default function useSearchResults(
   const { cioClient, searchParams } = configs;
   const state = usePlpState();
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-
-  const totalPages = Math.ceil(
-    (searchResponse?.totalNumResults || 0) /
-      (searchResponse?.rawResponse.request.num_results_per_page || 10),
-  );
-  const pagination = usePagination(totalPages || 0);
+  const pagination = usePagination(searchResponse);
 
   const client = cioClient || state?.cioClient;
   if (!client) {
