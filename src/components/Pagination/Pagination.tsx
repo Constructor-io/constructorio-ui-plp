@@ -1,5 +1,5 @@
 import React from 'react';
-import { IncludeRenderProps, PaginationObject, PaginationProps } from '../../types';
+import { IncludeRenderProps, PaginationObject } from '../../types';
 
 type PaginationWithRenderProps = IncludeRenderProps<
   { pagination: PaginationObject },
