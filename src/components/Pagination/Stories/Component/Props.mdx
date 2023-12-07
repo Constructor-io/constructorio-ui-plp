@@ -1,13 +1,16 @@
-import { Meta, Canvas, Controls } from '@storybook/blocks';
+import { Meta, ArgTypes } from '@storybook/blocks';
+import Pagination from '../../Pagination';
 import * as PaginationStories from './Pagination.stories';
 
 <Meta of={PaginationStories} />
 
-# usePagination
-Hook takes Constructor API response (search/browse/collections) as a parameter and return `pagination` Object containing state and controls.
+## Props
 
-## Returns
+<ArgTypes of={Pagination} />
 
+{/* Todo: this should be internal and passed to the component via Context. Customers don't need to be passing it */}
+{/* Will be added in a follow up PR when PLP grid get implemented */}
+{/* Will take same props as usePagination hook */}
 `pagination`
   | property          | type                     | description|
   | :-----------------| -------------------------| :--------- |
@@ -18,15 +21,3 @@ Hook takes Constructor API response (search/browse/collections) as a parameter a
   | totalPages        | `number`                 | The total number of pages available in the pagination object |
   | pages             | `number[]`               | Returns an array of numbers [1,2,3,4,-1,10] <br/> `1,10` are first and last page <br/> `-1` indicates a break (e.g., to show "...") <br/> [1, 2, 3, 4, ..., 10]  |
 
-## Code Example
-  ```jsx
-  const { pagination } = usePagination({
-    totalNumResults: 100,
-    resultsPerPage: 10,
-    windowSize: 5
-  });
-  ```
-<Canvas of={PaginationStories.Primary} />
-
-## Controls
-<Controls />

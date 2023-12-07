@@ -1,26 +1,45 @@
 import React from 'react';
-import { PaginationProps } from '../../types';
+import { IncludeRenderProps, PaginationObject, PaginationProps } from '../../types';
+
+type PaginationWithRenderProps = IncludeRenderProps<
+  { pagination: PaginationObject },
+  PaginationObject
+>;
 
 // Todo:
 //   Pagination component should get PaginationProps from context and accept configuration props same as usePagination
-export default function Pagination(props: { pagination: PaginationProps }) {
-  const { pagination } = props;
+export default function Pagination(props: PaginationWithRenderProps) {
+  const { pagination, children } = props;
+  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = pagination;
   return (
-    <div>
-      <div>Current Page: {pagination.currentPage}</div>
-      <div>Total: {pagination.totalPages}</div>
-      <button onClick={() => pagination.prevPage()} type='button'>
-        Previous
-      </button>
+    <>
+      {typeof children === 'function' ? (
+        children({
+          currentPage,
+          goToPage,
+          nextPage,
+          pages,
+          prevPage,
+          totalPages,
+        })
+      ) : (
+        <div>
+          <div>Current Page: {currentPage}</div>
+          <div>Total: {totalPages}</div>
+          <button onClick={() => prevPage()} type='button'>
+            Previous
+          </button>
 
-      {pagination.pages.map((page) => (
-        <button onClick={() => pagination.goToPage(page)} type='button'>
-          {page}
-        </button>
-      ))}
-      <button onClick={() => pagination.nextPage()} type='button'>
-        Next
-      </button>
-    </div>
+          {pages.map((page) => (
+            <button onClick={() => goToPage(page)} type='button'>
+              {page}
+            </button>
+          ))}
+          <button onClick={() => nextPage()} type='button'>
+            Next
+          </button>
+        </div>
+      )}
+    </>
   );
 }

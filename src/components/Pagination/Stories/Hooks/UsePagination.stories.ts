@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PaginationExample from './PaginationExample';
+import UsePaginationExample from './UsePaginationExample';
 
 const meta = {
-  title: 'Components/Pagination',
-  component: PaginationExample,
+  title: 'Hooks/UsePagination',
+  component: UsePaginationExample,
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof PaginationExample>;
+} satisfies Meta<typeof UsePaginationExample>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
