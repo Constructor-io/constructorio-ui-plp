@@ -55,8 +55,16 @@ export default function ProductCard(props: ProductCardProps) {
   const client = state.cioClient;
   const getPrice = state.getters.getPrice || defaultGetPrice;
   const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
-  const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
-  const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
+  const onAddToCart = useOnAddToCart({
+    cioClient: client,
+    searchTerm: 'TERM_UNKNOWN',
+    getPrice,
+    callback: state.callbacks.onAddToCart,
+  });
+  const onClick = useOnProductCardClick({
+    cioClient: client,
+    callback: state.callbacks.onProductCardClick,
+  });
 
   return (
     <>

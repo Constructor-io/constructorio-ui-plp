@@ -1,30 +1,50 @@
-/* eslint-disable max-len */
 import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { Item } from '../../types';
 
-export default function useOnProductCardClick(
-  cioClient: ConstructorIO,
-  callback?: (event: React.MouseEvent, item: Item) => void,
-) {
+interface UseOnProductCardClickProps {
+  cioClient: ConstructorIO;
+  callback?: (event: React.MouseEvent, item: Item) => void;
+  searchTerm?: string;
+  filterName?: string;
+  filterValue?: string;
+}
+
+export default function useOnProductCardClick({
+  cioClient,
+  callback,
+  searchTerm = '',
+  filterName = '',
+  filterValue = '',
+}: UseOnProductCardClickProps) {
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
-      // TODO: Identify if Search & Browse, and call the right method - CSL3018
-      // TODO: Obtain the search term - CSL3018
       const { itemName, itemId, variationId } = item;
 
-      cioClient.tracker.trackSearchResultClick('', {
-        itemId,
-        itemName,
-        variationId,
-        section: 'Products',
-      });
+      if (searchTerm) {
+        // Track search result click
+        cioClient.tracker.trackSearchResultClick(searchTerm, {
+          itemId,
+          itemName,
+          variationId,
+          section: 'Products',
+        });
+      } else {
+        // Track browse result click
+        cioClient.tracker.trackBrowseResultClick({
+          itemId,
+          variationId,
+          section: 'Products',
+          filterName,
+          filterValue,
+        });
+      }
 
       if (callback) callback(event, item);
 
       event.preventDefault();
       event.stopPropagation();
     },
-    [callback, cioClient],
+    [filterName, filterValue, searchTerm, callback, cioClient],
   );
 }

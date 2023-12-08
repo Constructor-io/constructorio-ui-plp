@@ -1,20 +1,26 @@
-/* eslint-disable max-len */
 import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { Item } from '../../types';
 
-export default function useOnAddToCart(
-  cioClient: ConstructorIO,
-  getPrice: (item: Item) => number,
-  callback?: (event: React.MouseEvent, item: Item) => void,
-) {
+interface UseOnAddToCartProps {
+  cioClient: ConstructorIO;
+  getPrice: (item: Item) => number;
+  callback?: (event: React.MouseEvent, item: Item) => void;
+  searchTerm?: string;
+}
+
+export default function useOnAddToCart({
+  cioClient,
+  getPrice,
+  callback,
+  searchTerm = 'TERM_UNKNOWN',
+}: UseOnAddToCartProps) {
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
       const { itemId, itemName, variationId } = item;
       const revenue = getPrice(item);
 
-      // TODO: Obtain the search term, if it exists - CSL3018
-      cioClient.tracker.trackConversion(undefined, {
+      cioClient.tracker.trackConversion(searchTerm, {
         itemId,
         itemName,
         variationId,
@@ -27,6 +33,6 @@ export default function useOnAddToCart(
       event.preventDefault();
       event.stopPropagation();
     },
-    [callback, getPrice, cioClient],
+    [searchTerm, callback, getPrice, cioClient],
   );
 }
