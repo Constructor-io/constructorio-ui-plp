@@ -14,7 +14,7 @@ export default function useOnAddToCart({
   cioClient,
   getPrice,
   callback,
-  searchTerm = 'TERM_UNKNOWN',
+  searchTerm = '',
   section = 'Products',
 }: UseOnAddToCartProps) {
   return useCallback(

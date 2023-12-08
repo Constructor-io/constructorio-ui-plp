@@ -57,7 +57,6 @@ export default function ProductCard(props: ProductCardProps) {
   const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
   const onAddToCart = useOnAddToCart({
     cioClient: client,
-    searchTerm: 'TERM_UNKNOWN',
     getPrice,
     callback: state.callbacks.onAddToCart,
   });
