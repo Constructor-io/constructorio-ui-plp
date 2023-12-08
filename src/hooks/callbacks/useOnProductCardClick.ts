@@ -8,6 +8,7 @@ interface UseOnProductCardClickProps {
   searchTerm?: string;
   filterName?: string;
   filterValue?: string;
+  section?: string;
 }
 
 export default function useOnProductCardClick({
@@ -16,6 +17,7 @@ export default function useOnProductCardClick({
   searchTerm = '',
   filterName = '',
   filterValue = '',
+  section = 'Products',
 }: UseOnProductCardClickProps) {
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
@@ -27,14 +29,14 @@ export default function useOnProductCardClick({
           itemId,
           itemName,
           variationId,
-          section: 'Products',
+          section,
         });
       } else {
         // Track browse result click
         cioClient.tracker.trackBrowseResultClick({
           itemId,
           variationId,
-          section: 'Products',
+          section,
           filterName,
           filterValue,
         });
@@ -45,6 +47,6 @@ export default function useOnProductCardClick({
       event.preventDefault();
       event.stopPropagation();
     },
-    [filterName, filterValue, searchTerm, callback, cioClient],
+    [filterName, filterValue, searchTerm, section, callback, cioClient],
   );
 }

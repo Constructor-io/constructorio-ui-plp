@@ -7,6 +7,7 @@ interface UseOnAddToCartProps {
   getPrice: (item: Item) => number;
   callback?: (event: React.MouseEvent, item: Item) => void;
   searchTerm?: string;
+  section?: string;
 }
 
 export default function useOnAddToCart({
@@ -14,6 +15,7 @@ export default function useOnAddToCart({
   getPrice,
   callback,
   searchTerm = 'TERM_UNKNOWN',
+  section = 'Products',
 }: UseOnAddToCartProps) {
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
@@ -25,7 +27,7 @@ export default function useOnAddToCart({
         itemName,
         variationId,
         revenue,
-        section: 'Products',
+        section,
       });
 
       if (callback) callback(event, item);
@@ -33,6 +35,6 @@ export default function useOnAddToCart({
       event.preventDefault();
       event.stopPropagation();
     },
-    [searchTerm, callback, getPrice, cioClient],
+    [searchTerm, section, callback, getPrice, cioClient],
   );
 }
