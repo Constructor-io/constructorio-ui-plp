@@ -10,7 +10,7 @@ export default function useOnProductCardClick(
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
   return useCallback(
-    (event: React.MouseEvent, item: Item) => {
+    (event: React.MouseEvent, item: Item, selectedVariationId?: string) => {
       // TODO: Identify if Search & Browse, and call the right method - CSL3018
       // TODO: Obtain the search term - CSL3018
       const { itemName, itemId, variationId } = item;
@@ -19,7 +19,7 @@ export default function useOnProductCardClick(
         cioClient.tracker.trackSearchResultClick('', {
           itemId,
           itemName,
-          variationId,
+          variationId: selectedVariationId || variationId,
           section: 'Products',
         });
       }

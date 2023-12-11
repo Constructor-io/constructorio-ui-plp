@@ -2,9 +2,11 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
-import { getPrice as defaultGetPrice, getSwatches } from '../../utils/getters';
+import { getPrice as defaultGetPrice } from '../../utils/getters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
 import { IncludeRenderProps, Item } from '../../types';
+import ProductSwatch from '../ProductSwatch/ProductSwatch';
+import useProductSwatch from '../ProductSwatch/useProductSwatch';
 
 interface Props {
   /**
@@ -47,7 +49,9 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
 
+  const productSwatch = useProductSwatch({ item });
   const state = useCioPlpContext();
+
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
   }
@@ -57,32 +61,41 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   const client = state.cioClient;
-  if (client) {
-    useOnAddToCart(client, getPrice, state?.callbacks.onAddToCart);
-  }
   const getPrice = state.getters.getPrice || defaultGetPrice;
   const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
   const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
-  console.log(getSwatches(item));
+  const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
+  const itemPrice =
+    formatPrice(productSwatch?.selectedVariation?.price) || formatPrice(getPrice(item));
+  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
+  const itemUrl = productSwatch?.selectedVariation?.url || item.url;
 
   return (
     <>
       {typeof children === 'function' ? (
         children({ item, getPrice, formatPrice, onAddToCart, onClick })
       ) : (
-        <a className='cio-product-card' href={item.url} onClick={(e) => onClick(e, item)}>
+        <a
+          className='cio-product-card'
+          href={itemUrl}
+          onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
           <div className='cio-image-container'>
-            <img alt={item.itemName} src={item.imageUrl} className='cio-image' />
+            <img alt={itemName} src={itemImageUrl} className='cio-image' />
           </div>
 
           <div className='cio-content'>
-            <div className='cio-item-price'>{formatPrice(getPrice(item))}</div>
-            <div className='cio-item-name'>{item.itemName}</div>
+            <div className='cio-item-price'>{itemPrice}</div>
+            <div className='cio-item-name'>{itemName}</div>
             <div className='cio-item-swatches'>Here lie the swatches</div>
+            <ProductSwatch swatch={productSwatch} />
             <div>
-              <button type='button' onClick={(e) => onAddToCart(e, item)}>
+              <button
+                type='button'
+                onClick={(e) =>
+                  onAddToCart(e, item, productSwatch?.selectedVariation?.variationId)
+                }>
                 Add to Cart
               </button>
             </div>

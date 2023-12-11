@@ -11,7 +11,7 @@ export default function useOnAddToCart(
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
   return useCallback(
-    (event: React.MouseEvent, item: Item) => {
+    (event: React.MouseEvent, item: Item, selectedVariationId?: string) => {
       const { itemId, itemName, variationId } = item;
       const revenue = getPrice(item);
 
@@ -20,7 +20,7 @@ export default function useOnAddToCart(
         cioClient.tracker.trackConversion(undefined, {
           itemId,
           itemName,
-          variationId,
+          variationId: selectedVariationId || variationId,
           revenue,
           section: 'Products',
         });

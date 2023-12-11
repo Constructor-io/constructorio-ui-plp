@@ -19,10 +19,11 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface Getters {
   getPrice: (item: Item) => number;
+  getSwatches: (item: Item) => [SwatchItem];
 }
 
 export interface Formatters {
-  formatPrice: (price: number) => string;
+  formatPrice: (price?: number) => string;
 }
 
 export interface Callbacks {
@@ -81,9 +82,11 @@ export interface Item {
 
 export interface SwatchItem {
   url?: string;
+  itemName?: string;
   imageUrl?: string;
   previewImageUrl?: string;
   previewHexCode?: string;
+  price?: number;
   variationId?: string;
 }
 

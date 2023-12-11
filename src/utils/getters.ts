@@ -7,8 +7,12 @@ export function getPrice(item: Item): number {
 
 export function getSwatches(item: Item): [SwatchItem] {
   return item?.variations?.map((variation) => ({
+    itemName: variation?.value,
     url: variation?.data?.url,
     imageUrl: variation?.data?.image_url,
     variationId: variation?.data?.variation_id,
+    price: getPrice(variation),
+    previewImageUrl: variation?.data?.image_url,
+    previewHexCode: variation?.data?.swatchHex,
   }));
 }
