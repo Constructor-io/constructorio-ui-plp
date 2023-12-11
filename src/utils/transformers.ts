@@ -4,7 +4,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { PlpSearchResponse, Item, ApiItem, PlpBrowseResponse } from '../types';
 
-// TODO: trasnform variations as well
+// TODO: transform variations as well
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {
     id: itemId,
