@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import StoryVariations from './StoryVariations';
 
 export interface IStoryPreviewProps {
@@ -11,7 +11,7 @@ export default function StoryPreview(props: IStoryPreviewProps) {
     <div className='story-preview'>
       <h1 className='story-title'>Primary</h1>
       <div className='box'>
-        <div className='cio-quiz'>
+        <div className='cio-plp'>
           <Component />
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-// eslint-disable-next-line import/no-cycle
 import { UsePagination } from '../../types';
 
 const usePagination: UsePagination = ({ totalNumResults, resultsPerPage, windowSize = 5 }) => {

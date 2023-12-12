@@ -10,8 +10,6 @@ import {
   SortOption,
   GetBrowseResultsResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-// eslint-disable-next-line import/no-cycle
-import usePagination from './components/Pagination/usePagination';
 import { MakeOptional } from './utils/typeHelpers';
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
@@ -90,7 +88,7 @@ export interface PlpSearchResponse {
   rawResponse: SearchResponse;
 }
 
-export type PaginationProps = ReturnType<typeof usePagination>;
+export type PaginationProps = PaginationObject;
 export interface PlpBrowseResponse {
   resultId: string;
   totalNumResults: number;

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import * as React from 'react';
+import React from 'react';
 import StoryBox from './StoryBox';
 import StoryBoxWrapper from './StoryBoxWrapper';
 
@@ -15,7 +15,7 @@ export default function StoryVariations(props: IStoryVariationsProps) {
       <div className='story-variations'>
         <StoryBoxWrapper title='Small Mobile 📱'>
           <StoryBox key='small-mobile' size='small-mobile'>
-            <div className='cio-quiz'>
+            <div className='cio-plp'>
               <Component />
             </div>
           </StoryBox>
@@ -23,7 +23,7 @@ export default function StoryVariations(props: IStoryVariationsProps) {
 
         <StoryBoxWrapper title='Mobile 📱'>
           <StoryBox key='mobile' size='mobile'>
-            <div className='cio-quiz'>
+            <div className='cio-plp'>
               <Component />
             </div>
           </StoryBox>
@@ -31,7 +31,7 @@ export default function StoryVariations(props: IStoryVariationsProps) {
 
         <StoryBoxWrapper title='Small Tablet 📔'>
           <StoryBox key='small-tablet' size='small-tablet'>
-            <div className='cio-quiz'>
+            <div className='cio-plp'>
               <Component />
             </div>
           </StoryBox>
@@ -39,7 +39,7 @@ export default function StoryVariations(props: IStoryVariationsProps) {
 
         <StoryBoxWrapper title='Big Tablet 📔'>
           <StoryBox key='big-tablet' size='big-tablet'>
-            <div className='cio-quiz'>
+            <div className='cio-plp'>
               <Component />
             </div>
           </StoryBox>
@@ -47,7 +47,7 @@ export default function StoryVariations(props: IStoryVariationsProps) {
 
         <StoryBoxWrapper title='Desktop 🖥️'>
           <StoryBox key='desktop' size='desktop'>
-            <div className='cio-quiz'>
+            <div className='cio-plp'>
               <Component />
             </div>
           </StoryBox>

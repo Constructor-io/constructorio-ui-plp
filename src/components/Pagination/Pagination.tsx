@@ -24,15 +24,13 @@ export default function Pagination(props: PaginationWithRenderProps) {
         })
       ) : (
         <div>
-          <div>Current Page: {currentPage}</div>
-          <div>Total: {totalPages}</div>
           <button onClick={() => prevPage()} type='button'>
             Previous
           </button>
 
           {pages.map((page) => (
             <button onClick={() => goToPage(page)} type='button'>
-              {page}
+              {page === -1 ? <span>...</span> : page}
             </button>
           ))}
           <button onClick={() => nextPage()} type='button'>
