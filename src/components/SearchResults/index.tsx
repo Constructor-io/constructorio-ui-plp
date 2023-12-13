@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript';
-import useSearchResults, { UseSearchResultsConfigs } from '../../hooks/useSearchResults';
+import useSearchResults from '../../hooks/useSearchResults';
 import { useCioPlpContext } from '../../PlpContext';
 import { IncludeRenderProps, PlpSearchResponse } from '../../types';
 import ProductCard from '../ProductCard';
