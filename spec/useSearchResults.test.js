@@ -5,10 +5,9 @@ import mockResponse from './local_examples/apiResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 
 describe('Testing Hook: useSearchResults', () => {
-  const ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
-  const clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
-
   test('Should return a PlpSearchResponse Object', async () => {
+    const ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
+    const clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
     clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
 
     const { result } = renderHook(
@@ -30,6 +29,8 @@ describe('Testing Hook: useSearchResults', () => {
   });
 
   test('Should pass along parameters properly', async () => {
+    const ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
+    const clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
     clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
     const filters = { Color: ['Phantom Ink'] };
     const page = 2;
