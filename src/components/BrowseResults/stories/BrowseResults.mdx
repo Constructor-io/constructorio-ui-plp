@@ -1,0 +1,29 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as BrowseResultsStories from './BrowseResults.stories';
+
+<Meta of={BrowseResultsStories} />
+
+## `BrowseResults`
+A Component to manage BrowseResults interactions and UI.
+
+<Canvas of={BrowseResultsStories.Primary} />
+
+### Props
+<Controls />
+
+### `BrowseParams`
+  | property              | type                     | description|
+  | :---------------------| -------------------------| :--------- |
+  | page                  | `number`                 | The page number of the results. Can't be used together with 'offset' |
+  | offset                | `number`                 | The number of results to skip from the beginning. Can't be used together with 'page' |
+  | resultsPerPage        | `number`                 | The number of results per page to return |
+  | filters                | `Record<string, any>`    | Filters used to refine browse |
+  | sortBy                | `string`                 | The sort method for results |
+  | sortOrder             | `string`                 | The sort order for results  |
+  | section               | `string`                 | The section name for results, default 'Products'  |
+  | fmtOptions            | `FmtOptions`             | The format options used to refine result groups  |
+  | preFilterExpression   | `FilterExpression`       | Faceting expression to scope browse results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details  |
+  | hiddenFields          | `string[]`               | Hidden metadata fields to return  |
+  | hiddenFacets          | `string[]`               | Hidden facet fields to return  |
+  | variationsMap         | `VariationsMap`          | The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details  |
+

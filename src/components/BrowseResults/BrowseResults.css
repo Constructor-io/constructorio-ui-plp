@@ -1,0 +1,8 @@
+.cio-results {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cio-results .cio-product-card {
+  flex: 1;
+}

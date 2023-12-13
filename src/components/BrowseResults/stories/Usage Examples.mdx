@@ -1,0 +1,54 @@
+import { Meta } from '@storybook/blocks';
+import * as BrowseResultsStories from './BrowseResults.stories';
+
+<Meta of={BrowseResultsStories} />
+
+{/* Todo: Update examples */}
+## Basic Example
+  ```jsx
+  import React from 'react';
+  import { CioPlpContext, BrowseResults } from '@constructor-io/constructorio-ui-plp';
+
+  const apiKey = 'MY_API_KEY';
+
+  function MyComponent() {
+
+    return (
+      <>
+        <CioPlpContext apiKey={MY_API_KEY}>
+          <BrowseResults filterName='group_id' filterValue='Electronics'>
+        </CioPlpContext>
+      </>
+    );
+  }
+  ```
+
+
+## Using RenderProps
+If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+
+```jsx
+import { CioPlpContext, BrowseResults } from '@constructor-io/constructorio-ui-plp'
+
+const apiKey = 'MY_API_KEY';
+
+const browseParams = {
+  page: 1,
+  resultsPerPage: 6,
+  sortBy: 'relevance',
+  sortOrder: 'descending',
+  section: 'Products',
+};
+
+function myApp() {
+  ...
+
+  return (
+    <CioPlpContext apiKey={MY_API_KEY}>
+      <BrowseResults filterName='group_id' filterValue='Electronics' browseParams={browseParams} >
+        {(browseResponse) => browseResponse?.results?.map((item) => <li>{item.itemName}</li>)}
+      </BrowseResults>
+    </CioPlpContext>
+  )
+}
+```
