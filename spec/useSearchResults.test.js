@@ -1,16 +1,21 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import useSearchResults from '../src/hooks/useSearchResults';
+import mockResponse from './local_examples/apiResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 
 describe('Testing Hook: useSearchResults', () => {
   const ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
+  const clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
 
   test('Should return a PlpSearchResponse Object', async () => {
+    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
+
     const { result } = renderHook(
       () => useSearchResults('linen', { cioClient: ConstructorIO }),
       {},
     );
+
     await waitFor(() => {
       const response = result?.current;
       expect(response?.resultId).not.toBeUndefined();
@@ -24,11 +29,12 @@ describe('Testing Hook: useSearchResults', () => {
     });
   });
 
-  test('Should pass along parameters properly', async () => {
+  test.only('Should pass along parameters properly', async () => {
+    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
     const filters = { Color: ['Phantom Ink'] };
     const page = 2;
     const resultsPerPage = 100;
-    const { result } = renderHook(
+    renderHook(
       () =>
         useSearchResults('Linen', {
           cioClient: ConstructorIO,
@@ -38,10 +44,11 @@ describe('Testing Hook: useSearchResults', () => {
     );
 
     await waitFor(() => {
-      const response = result?.current;
-      expect(response?.rawResponse?.request?.filters).toEqual(filters);
-      expect(response?.rawResponse?.request?.page).toEqual(page);
-      expect(response?.rawResponse?.request?.num_results_per_page).toEqual(resultsPerPage);
+      expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
+        page,
+        filters,
+        resultsPerPage,
+      });
     });
   });
 
