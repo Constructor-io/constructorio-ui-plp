@@ -37,7 +37,7 @@ describe('Testing Hook: useSearchResults', () => {
     const resultsPerPage = 100;
     renderHook(
       () =>
-        useSearchResults('Linen', {
+        useSearchResults('Linen2', {
           cioClient: ConstructorIO,
           searchParams: { page, filters, resultsPerPage },
         }),
