@@ -29,7 +29,7 @@ describe('Testing Hook: useSearchResults', () => {
     });
   });
 
-  test.only('Should pass along parameters properly', async () => {
+  test('Should pass along parameters properly', async () => {
     clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
     const filters = { Color: ['Phantom Ink'] };
     const page = 2;
