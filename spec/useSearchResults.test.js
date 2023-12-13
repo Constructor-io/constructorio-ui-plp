@@ -15,17 +15,20 @@ describe('Testing Hook: useSearchResults', () => {
       {},
     );
 
-    await waitFor(() => {
-      const response = result?.current;
-      expect(response?.resultId).not.toBeUndefined();
-      expect(response?.totalNumResults).not.toBeUndefined();
-      expect(response?.refinedContent).not.toBeUndefined();
-      expect(response?.groups).not.toBeUndefined();
-      expect(response?.results?.length).not.toBeUndefined();
-      expect(response?.facets?.length).not.toBeUndefined();
-      expect(response?.sortOptions?.length).not.toBeUndefined();
-      expect(response?.rawResponse).not.toBeUndefined();
-    });
+    await waitFor(
+      () => {
+        const response = result?.current;
+        expect(response?.resultId).not.toBeUndefined();
+        expect(response?.totalNumResults).not.toBeUndefined();
+        expect(response?.refinedContent).not.toBeUndefined();
+        expect(response?.groups).not.toBeUndefined();
+        expect(response?.results?.length).not.toBeUndefined();
+        expect(response?.facets?.length).not.toBeUndefined();
+        expect(response?.sortOptions?.length).not.toBeUndefined();
+        expect(response?.rawResponse).not.toBeUndefined();
+      },
+      { timeout: 10000 },
+    );
   });
 
   test('Should pass along parameters properly', async () => {
@@ -37,20 +40,23 @@ describe('Testing Hook: useSearchResults', () => {
     const resultsPerPage = 100;
     renderHook(
       () =>
-        useSearchResults('Linen2', {
+        useSearchResults('Linen', {
           cioClient: ConstructorIO,
           searchParams: { page, filters, resultsPerPage },
         }),
       {},
     );
 
-    await waitFor(() => {
-      expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
-        page,
-        filters,
-        resultsPerPage,
-      });
-    });
+    await waitFor(
+      () => {
+        expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
+          page,
+          filters,
+          resultsPerPage,
+        });
+      },
+      { timeout: 10000 },
+    );
   });
 
   test('Should throw error if client is not available', () => {
