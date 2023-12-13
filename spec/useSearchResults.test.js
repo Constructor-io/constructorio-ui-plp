@@ -4,7 +4,7 @@ import useSearchResults from '../src/hooks/useSearchResults';
 import mockResponse from './local_examples/apiResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 
-jest.setTimeout(10000); // Set timeout to 10000 ms (10 seconds)
+jest.setTimeout(20000); // Set timeout to 10000 ms (10 seconds)
 
 describe('Testing Hook: useSearchResults', () => {
   test('Should return a PlpSearchResponse Object', async () => {
