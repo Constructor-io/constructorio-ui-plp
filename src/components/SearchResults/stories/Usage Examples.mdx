@@ -1,0 +1,54 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as SearchResultsStories from './SearchResults.stories';
+
+<Meta of={SearchResultsStories} />
+
+{/* Todo: Update examples */}
+## Basic Example
+  ```jsx
+  import React from 'react';
+  import { CioPlpContext, SearchResults } from '@constructor-io/constructorio-ui-plp';
+
+  const apiKey = 'MY_API_KEY';
+
+  function MyComponent() {
+
+    return (
+      <>
+        <CioPlpContext apiKey={MY_API_KEY}>
+          <SearchResults initialQuery='red'>
+        </CioPlpContext>
+      </>
+    );
+  }
+  ```
+
+
+## Using RenderProps
+If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+
+```jsx
+import { CioPlpContext, SearchResults } from '@constructor-io/constructorio-ui-plp'
+
+const apiKey = 'MY_API_KEY';
+
+const searchParams = {
+  page: 1,
+  resultsPerPage: 6,
+  sortBy: 'relevance',
+  sortOrder: 'descending',
+  section: 'Products',
+};
+
+function myApp() {
+  ...
+
+  return (
+    <CioPlpContext apiKey={MY_API_KEY}>
+      <SearchResults initialQuery='red' searchParams={searchParams} >
+        {(search) => search?.results?.map((item) => <li>{item.itemName}</li>)}
+      </SearchResults>
+    </CioPlpContext>
+  )
+}
+```
