@@ -31,12 +31,13 @@ export default function useSearchResults(
   }
 
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-  console.log(searchResponse);
   useEffect(() => {
     client.search
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   }, [client, query, searchParams]);
+
+  console.log(searchResponse);
 
   return searchResponse;
 }
