@@ -24,6 +24,7 @@ export default function useSearchResults(
   const { cioClient, searchParams } = configs;
   const state = usePlpContext();
   const client = cioClient || state?.cioClient;
+  console.log('I am here');
 
   if (!client) {
     throw new Error('CioClient required');
@@ -36,6 +37,5 @@ export default function useSearchResults(
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   }, [client, query, searchParams]);
 
-  console.log('I am here');
   return searchResponse;
 }
