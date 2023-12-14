@@ -1,0 +1,17 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks';
+import * as UsePaginationStories from './UsePagination.stories';
+
+<Meta of={UsePaginationStories} />
+
+## Code Example
+  ```jsx
+  const { pagination } = usePagination({
+    totalNumResults: 100,
+    resultsPerPage: 10,
+    windowSize: 5
+  });
+  ```
+<Canvas of={UsePaginationStories.Primary} />
+
+## Controls
+<Controls />
