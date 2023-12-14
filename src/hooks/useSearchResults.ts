@@ -31,6 +31,7 @@ export default function useSearchResults(
 
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
   useEffect(() => {
+    console.log(searchParams);
     client.search
       .getSearchResults(query, searchParams)
       .then((res) => setSearchResponse(transformSearchResponse(res)));
