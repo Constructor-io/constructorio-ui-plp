@@ -124,7 +124,7 @@ export type UsePagination = (
 export interface PaginationObject {
   // represents the current page number in the pagination
   // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
-  currentPage: number;
+  currentPage: number | undefined;
 
   // Allows you to navigate to a specific page and takes a page number as an argument
   goToPage: (page: number) => void;

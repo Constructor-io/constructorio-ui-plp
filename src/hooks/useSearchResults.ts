@@ -41,7 +41,10 @@ export default function useSearchResults(
 
   const handleSubmit = () => {
     client.search
-      .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+      .getSearchResults(query, {
+        ...searchParams,
+        page: pagination.currentPage || searchParams?.page,
+      })
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   };
 
@@ -49,7 +52,10 @@ export default function useSearchResults(
   useEffect(() => {
     if (query) {
       client.search
-        .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+        .getSearchResults(query, {
+          ...searchParams,
+          page: pagination.currentPage || searchParams?.page,
+        })
         .then((res) => setSearchResponse(transformSearchResponse(res)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

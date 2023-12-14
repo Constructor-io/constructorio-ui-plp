@@ -25,8 +25,8 @@ describe('Testing Hook: useSearchResults', () => {
     );
 
     await waitFor(() => {
-      console.log('Test 1 - result.current:', result?.current);
-      const response = result?.current;
+      const response = result?.current.searchResults;
+
       expect(response?.resultId).not.toBeUndefined();
       expect(response?.totalNumResults).not.toBeUndefined();
       expect(response?.refinedContent).not.toBeUndefined();
@@ -52,8 +52,6 @@ describe('Testing Hook: useSearchResults', () => {
     );
 
     await waitFor(() => {
-      console.log('Test 2 - Spy called with:', clientGetSearchResultsSpy.mock.calls); // Log spy calls
-
       expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
         page,
         filters,
