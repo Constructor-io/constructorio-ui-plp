@@ -36,5 +36,6 @@ export default function useSearchResults(
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   }, [client, query, searchParams]);
 
+  console.log('I am here');
   return searchResponse;
 }
