@@ -8,6 +8,8 @@ import {
   Result,
   SearchResponse,
   SortOption,
+  GetBrowseResultsResponse,
+  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -86,6 +88,17 @@ export interface PlpSearchResponse {
   rawResponse: SearchResponse;
 }
 
+export interface PlpBrowseResponse {
+  resultId: string;
+  totalNumResults: number;
+  results: Array<Item>;
+  facets: Array<Facet>;
+  groups: Array<ApiGroup>;
+  sortOptions: Array<SortOption>;
+  refinedContent: Record<string, any>[];
+  rawResponse: GetBrowseResultsResponse;
+}
+
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
 /**
@@ -96,3 +109,39 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
 export type IncludeRenderProps<P, RenderProps> = P & {
   children?: (props: RenderProps) => ReactNode;
 };
+
+/**
+ * Represents a function that handles pagination logic.
+ * @param searchResponse - The search response data.
+ * @param windowSize - The number of pages to display in the pagination window.
+ * @returns An object containing pagination information and methods.
+ */
+export type UsePagination = (
+  searchResponse: Nullable<PlpSearchResponse>,
+  windowSize?: number,
+) => PaginationObject;
+
+export interface PaginationObject {
+  // represents the current page number in the pagination
+  // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
+  currentPage: number;
+
+  // Allows you to navigate to a specific page and takes a page number as an argument
+  goToPage: (page: number) => void;
+
+  // navigate to the next page. Used to implement "Next" button in a pagination control.
+  nextPage: () => void;
+
+  // navigate to the previous page. Used to implement "Previous" button in a pagination control.
+  prevPage: () => void;
+
+  // The total number of pages available in the pagination object
+  totalPages: number;
+
+  /**
+   *  Returns an array of numbers [1,2,3,4,-1,10]
+   *  1,10 are first and last page
+   *  -1 indicates a break (e.g., to show "...")
+   *  [1, 2, 3, 4, ..., 10] */
+  pages: number[];
+}
