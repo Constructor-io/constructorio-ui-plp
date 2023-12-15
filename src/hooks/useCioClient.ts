@@ -14,16 +14,18 @@ const useCioClient: UseCioClient = (apiKey, options?) => {
     throw new Error('Api Key required');
   }
 
-  const memoizedCioClient = useMemo(
-    () =>
-      new ConstructorIOClient({
+  const memoizedCioClient = useMemo(() => {
+    if (apiKey && typeof window !== 'undefined') {
+      return new ConstructorIOClient({
         apiKey,
         sendTrackingEvents: true,
         version: `cio-ui-plp-${version}`,
         ...options,
-      }),
-    [apiKey, options],
-  );
+      });
+    }
+
+    return null;
+  }, [apiKey, options]);
   return memoizedCioClient!;
 };
 
