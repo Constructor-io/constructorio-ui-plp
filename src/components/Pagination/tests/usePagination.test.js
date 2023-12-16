@@ -1,5 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { renderHook, act } from '@testing-library/react';
-import usePagination from '../src/components/Pagination/usePagination';
+import usePagination from '../usePagination';
 
 const paginationProps = {
   initialPage: 1,

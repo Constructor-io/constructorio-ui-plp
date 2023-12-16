@@ -34,6 +34,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
+    initialPage: 1,
     totalNumResults: 200,
     resultsPerPage: 10,
     windowSize: 5,

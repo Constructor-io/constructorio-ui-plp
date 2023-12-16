@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { IncludeRenderProps, PaginationObject } from '../../types';
 
@@ -27,9 +28,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
           <button onClick={() => prevPage()} type='button'>
             Previous
           </button>
-
-          {pages.map((page) => (
-            <button onClick={() => goToPage(page)} type='button'>
+          {pages.map((page, i) => (
+            <button onClick={() => goToPage(page)} type='button' key={`${page},${i}`}>
               {page === -1 ? <span>...</span> : page}
             </button>
           ))}
