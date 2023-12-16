@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import usePagination from '../src/components/Pagination/usePagination';
 
 const paginationProps = {
+  initialPage: 1,
   totalNumResults: 1000,
   resultsPerPage: 10,
   windowSize: 10,
