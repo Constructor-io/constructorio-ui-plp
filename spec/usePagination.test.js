@@ -6,6 +6,7 @@ const mockSearchResponse = {
   rawResponse: {
     request: {
       num_results_per_page: 10,
+      page: 1,
     },
   },
 };
