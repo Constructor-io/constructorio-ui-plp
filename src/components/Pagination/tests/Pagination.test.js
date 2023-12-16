@@ -4,7 +4,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, screen } from '@testing-library/react';
 import Pagination from '../Pagination'; // Adjust the import path as needed
-import UsePaginationExample from '../Stories/hooks/UsePaginationExample';
+import UsePaginationExample from '../Stories/Hooks/UsePaginationExample';
 
 describe('Pagination Component', () => {
   const pagination = {
