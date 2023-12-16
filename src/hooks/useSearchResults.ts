@@ -34,6 +34,7 @@ export default function useSearchResults(
 
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
   const pagination = usePagination({
+    initialPage: searchResponse?.rawResponse.request.page,
     totalNumResults: searchResponse?.totalNumResults,
     resultsPerPage: searchResponse?.numResultsPerPage,
   });
@@ -44,7 +45,10 @@ export default function useSearchResults(
 
   const handleSubmit = () => {
     client.search
-      .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+      .getSearchResults(query, {
+        ...searchParams,
+        page: pagination.currentPage || searchParams?.page,
+      })
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   };
 
@@ -52,7 +56,10 @@ export default function useSearchResults(
   useEffect(() => {
     if (query) {
       client.search
-        .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+        .getSearchResults(query, {
+          ...searchParams,
+          page: pagination.currentPage || searchParams?.page,
+        })
         .then((res) => setSearchResponse(transformSearchResponse(res)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
