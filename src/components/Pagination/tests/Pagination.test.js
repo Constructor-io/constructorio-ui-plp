@@ -120,7 +120,7 @@ describe('Test user interactions', () => {
   });
 
   // Rendered pages should be [1, 2, 3, 4, 5, '...', 20] when currentPage is 1
-  it('should render the correct pages when somewhere in near the start', () => {
+  it('should render the correct pages when somewhere near the start', () => {
     props.initialPage = 5;
     const { getByText, getAllByText } = render(<UsePaginationExample {...props} />);
 
@@ -138,7 +138,7 @@ describe('Test user interactions', () => {
   });
 
   // Rendered pages should be [1, '...', 16, 17, 18, 19, 20] when currentPage is 20
-  it('should render the correct pages when somewhere in near the start', () => {
+  it('should render the correct pages when somewhere near the end', () => {
     const { getByText, getAllByText } = render(<UsePaginationExample {...props} />);
 
     // Go to page 20
