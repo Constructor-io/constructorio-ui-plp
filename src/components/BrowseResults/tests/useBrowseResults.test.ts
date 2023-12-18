@@ -26,7 +26,30 @@ describe('useBrowseResults', () => {
     const filterName = 'filterName';
     const filterValue = 'filterValue';
     const browseParams = {
-      /* mock browse params */
+      page: 1,
+      resultsPerPage: 20,
+      filters: {
+        brand: ['brand1', 'brand2'],
+        color: ['color1', 'color2'],
+      },
+      sortBy: 'price',
+      sortOrder: 'descending',
+      section: 'Products',
+      fmtOptions: {
+        groups_max_depth: 5,
+      },
+      preFilterExpression: {
+        or: [
+          {
+            and: [
+              { name: 'brand', value: 'brand1' },
+              { name: 'color', value: 'color1' },
+            ],
+          },
+        ],
+      },
+      hiddenFields: ['field1', 'field2'],
+      hiddenFacets: ['facet1', 'facet2'],
     };
 
     renderHook(() =>
@@ -43,7 +66,7 @@ describe('useBrowseResults', () => {
     );
   });
 
-  it('should set the browse response after calling getBrowseResults', async () => {
+  it('should set the browse response and return it as transformed browse response', async () => {
     const { result } = renderHook(() =>
       useBrowseResults('filterName', 'filterValue', { cioClient: mockConstructorIOClient }),
     );

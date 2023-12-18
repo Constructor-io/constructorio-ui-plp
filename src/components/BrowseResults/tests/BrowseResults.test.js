@@ -19,7 +19,7 @@ jest.mock('../../../hooks/useBrowseResults', () => {
 // eslint-disable-next-line import/first
 import useBrowseResults from '../../../hooks/useBrowseResults';
 
-describe('BrowseResults', () => {
+describe.only('BrowseResults', () => {
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
@@ -49,7 +49,18 @@ describe('BrowseResults', () => {
     }).toThrow('<BrowseResults /> component must be rendered within CioPlpContext');
   });
 
-  it.only('renders browse results', () => {
+  it('renders browse results without render props', () => {
+    const { getByText, getAllByText } = renderWithCioPlpContext(
+      <BrowseResults filterName='category' filterValue='electronics' />,
+    );
+
+    expect(getByText('Browse Results')).toBeInTheDocument();
+    expect(getByText('Linen Pocket Square (Phantom Ink)')).toBeInTheDocument();
+    expect(getByText('The Clubhouse Stretch Belt (Burgundy)')).toBeInTheDocument();
+    expect(getAllByText('Add to Cart').length).toEqual(apiBrowseResponse.response.results.length);
+  });
+
+  it('renders browse results with render props', () => {
     const { getByText } = renderWithCioPlpContext(
       <BrowseResults filterName='category' filterValue='electronics'>
         {(browseResponse) => (
@@ -65,7 +76,7 @@ describe('BrowseResults', () => {
       </BrowseResults>,
     );
 
-    screen.debug();
+    expect(getByText('Browse Results')).toBeInTheDocument();
     expect(getByText('Linen Pocket Square (Phantom Ink)')).toBeInTheDocument();
     expect(getByText('The Clubhouse Stretch Belt (Burgundy)')).toBeInTheDocument();
   });
