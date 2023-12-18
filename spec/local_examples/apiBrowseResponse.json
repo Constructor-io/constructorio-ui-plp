@@ -1,0 +1,468 @@
+{
+  "response": {
+      "result_sources": {
+          "token_match": {
+              "count": 2
+          },
+          "embeddings_match": {
+              "count": 0
+          }
+      },
+      "facets": [
+          {
+              "display_name": "Accessory Size",
+              "name": "Accessory Size",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "OS",
+                      "value": "OS",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "Base Color",
+              "name": "Base Color",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "Grey",
+                      "value": "Grey",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "Blue",
+                      "value": "Blue",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "Belt Size",
+              "name": "Belt Size",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "32",
+                      "value": "32",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "Color",
+              "name": "Color",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "Phantom Ink",
+                      "value": "Phantom Ink",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "Burgundy",
+                      "value": "Burgundy",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "Product",
+              "name": "Product",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "The Clubhouse Stretch Belt",
+                      "value": "The Clubhouse Stretch Belt",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "Linen Pocket Square",
+                      "value": "Linen Pocket Square",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "inventory",
+              "name": "inventory",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "45",
+                      "value": "45",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "2",
+                      "value": "2",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "is_new",
+              "name": "is_new",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 2,
+                      "display_name": "False",
+                      "value": "False",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "on_sale",
+              "name": "on_sale",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 2,
+                      "display_name": "True",
+                      "value": "True",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "price",
+              "name": "price",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "39",
+                      "value": "39",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "28",
+                      "value": "28",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          },
+          {
+              "display_name": "sale_percent",
+              "name": "sale_percent",
+              "type": "multiple",
+              "options": [
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "0.509090909090909",
+                      "value": "0.509090909090909",
+                      "data": {}
+                  },
+                  {
+                      "status": "",
+                      "count": 1,
+                      "display_name": "0.4382022471910113",
+                      "value": "0.4382022471910113",
+                      "data": {}
+                  }
+              ],
+              "hidden": false,
+              "data": {}
+          }
+      ],
+      "groups": [
+          {
+              "group_id": "70",
+              "display_name": "Final Sale Accessories",
+              "count": 2,
+              "data": {},
+              "children": [
+                  {
+                      "group_id": "350",
+                      "display_name": "Ties & Pocket Squares",
+                      "count": 1,
+                      "data": {},
+                      "children": [],
+                      "parents": [
+                          {
+                              "display_name": "All",
+                              "group_id": "this-is-a-fake-group_as_recommended-by-constructor"
+                          },
+                          {
+                              "display_name": "Final Sale",
+                              "group_id": "63"
+                          },
+                          {
+                              "display_name": "Final Sale Accessories",
+                              "group_id": "70"
+                          }
+                      ]
+                  },
+                  {
+                      "group_id": "349",
+                      "display_name": "Scarves & Belts",
+                      "count": 1,
+                      "data": {},
+                      "children": [],
+                      "parents": [
+                          {
+                              "display_name": "All",
+                              "group_id": "this-is-a-fake-group_as_recommended-by-constructor"
+                          },
+                          {
+                              "display_name": "Final Sale",
+                              "group_id": "63"
+                          },
+                          {
+                              "display_name": "Final Sale Accessories",
+                              "group_id": "70"
+                          }
+                      ]
+                  }
+              ],
+              "parents": [
+                  {
+                      "display_name": "All",
+                      "group_id": "this-is-a-fake-group_as_recommended-by-constructor"
+                  },
+                  {
+                      "display_name": "Final Sale",
+                      "group_id": "63"
+                  }
+              ]
+          }
+      ],
+      "results": [
+          {
+              "matched_terms": [],
+              "data": {
+                  "id": "ACCES00036-phantom ink",
+                  "url": "no-url",
+                  "price": 28,
+                  "group_ids": [
+                      "350"
+                  ],
+                  "image_url": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/TIE_POCKET-SQUARE_13317-BNT84_40_category-outfitter.jpg",
+                  "description": "undefined",
+                  "variation_id": "13317-BNT84-OS"
+              },
+              "value": "Linen Pocket Square (Phantom Ink)",
+              "is_slotted": false,
+              "labels": {},
+              "variations": [
+                  {
+                      "data": {
+                          "variation_id": "13317-BNT84-OS"
+                      },
+                      "value": "Linen Pocket Square (Phantom Ink)"
+                  }
+              ]
+          },
+          {
+              "matched_terms": [],
+              "data": {
+                  "id": "BGOLF00015-burgundy",
+                  "url": "no-url",
+                  "price": 39,
+                  "group_ids": [
+                      "2548",
+                      "52",
+                      "349"
+                  ],
+                  "image_url": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/BELT_CASUAL-BELT_BNA10872XG1419_40_category-outfitter.jpg",
+                  "description": "Enough stretch for 18 holes, enough style for everything that comes after.",
+                  "variation_id": "BNA10872XG141932"
+              },
+              "value": "The Clubhouse Stretch Belt (Burgundy)",
+              "is_slotted": false,
+              "labels": {},
+              "variations": [
+                  {
+                      "data": {
+                          "variation_id": "BNA10872XG141932"
+                      },
+                      "value": "The Clubhouse Stretch Belt (Burgundy)"
+                  }
+              ]
+          }
+      ],
+      "sort_options": [],
+      "refined_content": [],
+      "total_num_results": 2,
+      "features": [
+          {
+              "feature_name": "a_a_test",
+              "display_name": "a_a_test",
+              "enabled": true,
+              "variant": null
+          },
+          {
+              "feature_name": "auto_generated_refined_query_rules",
+              "display_name": "Affinity Engine",
+              "enabled": true,
+              "variant": {
+                  "name": "default_rules",
+                  "display_name": "Default weights"
+              }
+          },
+          {
+              "feature_name": "custom_autosuggest_ui",
+              "display_name": "custom_autosuggest_ui",
+              "enabled": false,
+              "variant": null
+          },
+          {
+              "feature_name": "disable_test_only_global_rules_browse",
+              "display_name": "Disables global refined filter rules with include_in_test=1 column",
+              "enabled": false,
+              "variant": null
+          },
+          {
+              "feature_name": "disable_test_only_global_rules_search",
+              "display_name": "Disables global refined query rules with include_in_test=1 column",
+              "enabled": false,
+              "variant": null
+          },
+          {
+              "feature_name": "filter_items",
+              "display_name": "Filter-item boosts",
+              "enabled": true,
+              "variant": {
+                  "name": "filter_items_w_atcs_and_purchases",
+                  "display_name": ""
+              }
+          },
+          {
+              "feature_name": "manual_searchandizing",
+              "display_name": "Searchandizing",
+              "enabled": true,
+              "variant": null
+          },
+          {
+              "feature_name": "personalization",
+              "display_name": "Personalization",
+              "enabled": true,
+              "variant": {
+                  "name": "default_personalization",
+                  "display_name": "Default Personalization"
+              }
+          },
+          {
+              "feature_name": "query_items",
+              "display_name": "Learn To Rank",
+              "enabled": true,
+              "variant": {
+                  "name": "query_items_ctr_and_l2r",
+                  "display_name": "CTR & LTR"
+              }
+          },
+          {
+              "feature_name": "use_reranker_service_for_all",
+              "display_name": "Use reranker service to rerank search and browse results",
+              "enabled": false,
+              "variant": null
+          },
+          {
+              "feature_name": "use_reranker_service_for_browse",
+              "display_name": "Use reranker service to rerank browse / collections results",
+              "enabled": false,
+              "variant": null
+          },
+          {
+              "feature_name": "use_reranker_service_for_search",
+              "display_name": "Use reranker service to rerank search results",
+              "enabled": false,
+              "variant": null
+          }
+      ]
+  },
+  "result_id": "a443a937-52a1-42d1-9df5-d1262c5810fb",
+  "request": {
+      "num_results_per_page": 2,
+      "sort_by": "relevance",
+      "sort_order": "descending",
+      "term": "",
+      "page": 1,
+      "fmt_options": {
+          "groups_start": "current",
+          "groups_max_depth": 1,
+          "show_hidden_facets": false,
+          "show_hidden_fields": false,
+          "show_protected_facets": false
+      },
+      "section": "Products",
+      "features": {
+          "query_items": true,
+          "a_a_test": true,
+          "auto_generated_refined_query_rules": true,
+          "manual_searchandizing": true,
+          "personalization": true,
+          "filter_items": true,
+          "use_reranker_service_for_search": false,
+          "use_reranker_service_for_browse": false,
+          "use_reranker_service_for_all": false,
+          "custom_autosuggest_ui": false,
+          "disable_test_only_global_rules_search": false,
+          "disable_test_only_global_rules_browse": false
+      },
+      "feature_variants": {
+          "query_items": "query_items_ctr_and_l2r",
+          "a_a_test": null,
+          "auto_generated_refined_query_rules": "default_rules",
+          "manual_searchandizing": null,
+          "personalization": "default_personalization",
+          "filter_items": "filter_items_w_atcs_and_purchases",
+          "use_reranker_service_for_search": null,
+          "use_reranker_service_for_browse": null,
+          "use_reranker_service_for_all": null,
+          "custom_autosuggest_ui": null,
+          "disable_test_only_global_rules_search": null,
+          "disable_test_only_global_rules_browse": null
+      },
+      "searchandized_items": {},
+      "browse_filter_name": "group_id",
+      "browse_filter_value": "70"
+  }
+}
