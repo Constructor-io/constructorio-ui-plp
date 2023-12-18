@@ -1,5 +1,8 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { ConstructorClientOptions } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  ConstructorClientOptions,
+  Nullable,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useMemo } from 'react';
 import version from '../version';
 
@@ -7,7 +10,7 @@ export type CioClientConfig = { apiKey?: string };
 type UseCioClient = (
   apiKey: string,
   options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>,
-) => ConstructorIOClient | never;
+) => Nullable<ConstructorIOClient> | never;
 
 const useCioClient: UseCioClient = (apiKey, options?) => {
   if (!apiKey) {
