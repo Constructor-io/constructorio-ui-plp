@@ -64,10 +64,15 @@
   },
   "overrides": [
     {
-      "files": "tests/**/*.ts",
+      "files": ["spec/**/*.ts", "spec/**/*.js", "src/**/*.test.ts", "src/**/*.test.js"],
       "env": {
         "node": true,
         "jest": true
+      },
+      "rules": {
+        "react/prop-types": "off",
+        "react/jsx-filename-extension": "off",
+        "import/no-extraneous-dependencies": "off"
       }
     }
   ],

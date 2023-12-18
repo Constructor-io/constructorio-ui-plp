@@ -1,6 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { renderHook, waitFor } from '@testing-library/react';
-import { GetBrowseResultsResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useBrowseResults from '../../../hooks/useBrowseResults';
 import { mockConstructorIOClient } from '../../../../spec/test-utils';
 import apiBrowseResponse from '../../../../spec/local_examples/apiBrowseResponse.json';
@@ -74,9 +72,7 @@ describe('useBrowseResults', () => {
     expect(result.current).toBeNull();
 
     await waitFor(() => {
-      expect(result.current).toEqual(
-        transformBrowseResponse(apiBrowseResponse as GetBrowseResultsResponse),
-      );
+      expect(result.current).toEqual(transformBrowseResponse(apiBrowseResponse));
     });
   });
 });

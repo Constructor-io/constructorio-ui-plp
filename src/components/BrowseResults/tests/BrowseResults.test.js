@@ -1,21 +1,15 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import '@testing-library/jest-dom';
-import { renderWithCioPlpContext, render, screen } from '../../../../spec/test-utils';
+import { renderWithCioPlpContext, render } from '../../../../spec/test-utils';
 import BrowseResults from '../index';
 import apiBrowseResponse from '../../../../spec/local_examples/apiBrowseResponse.json';
 import { transformBrowseResponse } from '../../../utils/transformers';
 
-jest.mock('../../../hooks/useBrowseResults', () => {
-  return {
-    __esModule: true, // This property is important when mocking ES6 modules
-    default: jest.fn(),
-  };
-});
+jest.mock('../../../hooks/useBrowseResults', () => ({
+  __esModule: true, // This property is important when mocking ES6 modules
+  default: jest.fn(),
+}));
 
-// Then, in your test setup or before your test cases:
 // eslint-disable-next-line import/first
 import useBrowseResults from '../../../hooks/useBrowseResults';
 
@@ -34,7 +28,6 @@ describe.only('BrowseResults', () => {
   });
 
   // Mock the useBrowseResults hook
-
   useBrowseResults.mockImplementation(() => ({
     ...transformBrowseResponse(apiBrowseResponse),
   }));
