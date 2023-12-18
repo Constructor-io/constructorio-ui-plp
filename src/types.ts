@@ -29,7 +29,7 @@ export interface Callbacks {
 }
 
 export interface PlpContext {
-  cioClient: ConstructorIOClient;
+  cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   getters: Getters;

@@ -1,5 +1,8 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  SearchParameters,
+  Nullable,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
@@ -7,7 +10,7 @@ import { PlpSearchResponse } from '../types';
 import usePagination from './usePagination';
 
 export type UseSearchResultsConfigs = {
-  cioClient?: ConstructorIOClient | null;
+  cioClient?: Nullable<ConstructorIOClient>;
   searchParams?: SearchParameters;
 };
 
