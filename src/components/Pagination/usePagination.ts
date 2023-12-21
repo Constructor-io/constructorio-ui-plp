@@ -1,27 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
-import { UsePagination } from '../types';
+import { UsePagination } from '../../types';
 
-const usePagination: UsePagination = (searchResponse, windowSize = 5) => {
+const usePagination: UsePagination = ({
+  initialPage,
+  totalNumResults,
+  resultsPerPage,
+  windowSize = 5,
+}) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>();
 
   useEffect(() => {
-    setCurrentPage(searchResponse?.rawResponse.request.page);
-  }, [searchResponse?.rawResponse.request.page]);
+    if (initialPage) {
+      setCurrentPage(initialPage);
+    }
+  }, [initialPage]);
 
   // Calculate total number of pages
   useEffect(() => {
-    if (
-      searchResponse?.totalNumResults &&
-      searchResponse?.rawResponse.request.num_results_per_page
-    ) {
-      setTotalPages(
-        Math.ceil(
-          searchResponse.totalNumResults / searchResponse.rawResponse.request.num_results_per_page,
-        ),
-      );
+    if (totalNumResults && resultsPerPage) {
+      setTotalPages(Math.ceil(totalNumResults / resultsPerPage));
     }
-  }, [searchResponse?.totalNumResults, searchResponse?.rawResponse.request.num_results_per_page]);
+  }, [totalNumResults, resultsPerPage]);
 
   const goToPage = (page: number) => {
     if (currentPage && page >= 1 && page <= totalPages) {

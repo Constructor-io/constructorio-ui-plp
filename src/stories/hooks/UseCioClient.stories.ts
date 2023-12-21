@@ -20,8 +20,6 @@ const meta = {
   },
   // eslint-disable-next-line @cspell/spellchecker
   tags: ['autodocs'],
-
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } satisfies Meta<typeof UseCioClientExample>;
 
 export default meta;
