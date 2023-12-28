@@ -14,6 +14,7 @@ interface BrowseResultsProps {
   filterValue: string;
   // Browse parameters configuring the browse request.
   browseParams?: IBrowseParameters;
+  initialBrowseResponse?: PlpBrowseResponse;
 }
 
 /**
@@ -42,11 +43,16 @@ export default function BrowseResults(props: BrowseResultsWithRenderProps) {
     throw new Error('<BrowseResults /> component must be rendered within CioPlpContext');
   }
 
-  const { children, filterName, filterValue, browseParams } = props;
-  const browseResponse = useBrowseResults(filterName, filterValue, {
-    cioClient: context.cioClient,
-    browseParams,
-  });
+  const { children, filterName, filterValue, browseParams, initialBrowseResponse } = props;
+  const browseResponse = useBrowseResults(
+    filterName,
+    filterValue,
+    {
+      cioClient: context.cioClient,
+      browseParams,
+    },
+    initialBrowseResponse,
+  );
 
   return (
     <>

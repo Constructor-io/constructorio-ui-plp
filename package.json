@@ -45,7 +45,7 @@
     "check-types": "npx tsc --noEmit",
     "copy-styles": "cp src/styles.css lib/styles.css",
     "dev": "storybook dev -p 6006",
-    "test": "jest --env=jsdom",
+    "test": "jest",
     "storybook:ci": "storybook dev --ci --quiet -p 6006",
     "test-storybook": "test-storybook",
     "test-storybook:watch": "test-storybook --watch",

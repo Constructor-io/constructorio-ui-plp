@@ -25,6 +25,7 @@ export default function useBrowseResults(
   filterName: string,
   filterValue: string,
   configs: UseBrowseResultsConfig = {},
+  initialBrowseResponse?: PlpBrowseResponse,
 ): PlpBrowseResponse | null {
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
@@ -34,7 +35,9 @@ export default function useBrowseResults(
     throw new Error('CioClient required');
   }
 
-  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(null);
+  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(
+    initialBrowseResponse || null,
+  );
   useEffect(() => {
     client.browse
       .getBrowseResults(filterName, filterValue, browseParams)

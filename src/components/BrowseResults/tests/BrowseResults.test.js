@@ -13,7 +13,7 @@ jest.mock('../../../hooks/useBrowseResults', () => ({
 // eslint-disable-next-line import/first
 import useBrowseResults from '../../../hooks/useBrowseResults';
 
-describe.only('BrowseResults', () => {
+describe('BrowseResults', () => {
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
