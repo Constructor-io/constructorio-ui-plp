@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PlpBrowseResponse } from '../types';
-import usePagination from './usePagination';
+import { PaginationProps, PlpBrowseResponse } from '../types';
+import usePagination from '../components/Pagination/usePagination';
 
 export type UseBrowseResultsConfig = {
   cioClient?: Nullable<ConstructorIOClient>;
@@ -17,7 +17,7 @@ export type UseBrowseResultsConfig = {
 export type UseBrowseResultsReturn = {
   browseResults: PlpBrowseResponse | null;
   handleSubmit: () => void;
-  pagination: ReturnType<typeof usePagination>;
+  pagination: PaginationProps;
 };
 
 /**
@@ -42,7 +42,11 @@ export default function useBrowseResults(
   }
 
   const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(null);
-  const pagination = usePagination(browseResponse);
+  const pagination = usePagination({
+    initialPage: browseResponse?.rawResponse.request?.page,
+    totalNumResults: browseResponse?.totalNumResults,
+    resultsPerPage: browseResponse?.numResultsPerPage,
+  });
 
   const handleSubmit = () => {
     client.browse
