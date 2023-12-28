@@ -9,6 +9,7 @@ import {
   SearchResponse,
   SortOption,
   GetBrowseResultsResponse,
+  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
