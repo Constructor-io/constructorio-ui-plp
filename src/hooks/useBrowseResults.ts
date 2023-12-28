@@ -25,20 +25,30 @@ export default function useBrowseResults(
   filterName: string,
   filterValue: string,
   configs: UseBrowseResultsConfig = {},
+  initialBrowseResponse?: PlpBrowseResponse,
 ): PlpBrowseResponse | null {
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
 
-  if (!client) {
+  if (!filterName || !filterValue) {
+    throw new Error('filterName and filterValue are required');
+  }
+  // Throw error if client is not provided and window is defined (i.e. not SSR)
+  if (!client && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
-  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(null);
+  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(
+    initialBrowseResponse || null,
+  );
+
   useEffect(() => {
-    client.browse
-      .getBrowseResults(filterName, filterValue, browseParams)
-      .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    if (client) {
+      client.browse
+        .getBrowseResults(filterName, filterValue, browseParams)
+        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    }
   }, [client, filterName, filterValue, browseParams]);
 
   return browseResponse;
