@@ -45,6 +45,7 @@ export function transformSearchResponse(res: SearchResponse) {
   return {
     resultId: res.result_id,
     totalNumResults: res.response.total_num_results,
+    numResultsPerPage: res.request.num_results_per_page,
     results: res.response.results.map((result) => transformResultItem(result, false)),
     facets: res.response.facets,
     groups: res.response.groups,

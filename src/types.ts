@@ -9,7 +9,6 @@ import {
   SearchResponse,
   SortOption,
   GetBrowseResultsResponse,
-  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -29,7 +28,7 @@ export interface Callbacks {
 }
 
 export interface PlpContext {
-  cioClient: ConstructorIOClient;
+  cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   getters: Getters;
@@ -80,6 +79,7 @@ export interface Item {
 export interface PlpSearchResponse {
   resultId: string;
   totalNumResults: number;
+  numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
@@ -88,6 +88,7 @@ export interface PlpSearchResponse {
   rawResponse: SearchResponse;
 }
 
+export type PaginationProps = PaginationObject;
 export interface PlpBrowseResponse {
   resultId: string;
   totalNumResults: number;
@@ -116,23 +117,26 @@ export type IncludeRenderProps<P, RenderProps> = P & {
  * @param windowSize - The number of pages to display in the pagination window.
  * @returns An object containing pagination information and methods.
  */
-export type UsePagination = (
-  searchResponse: Nullable<PlpSearchResponse>,
-  windowSize?: number,
-) => PaginationObject;
+export type UsePaginationProps = {
+  initialPage?: number;
+  totalNumResults?: number;
+  resultsPerPage?: number;
+  windowSize?: number;
+};
+export type UsePagination = (props: UsePaginationProps) => PaginationObject;
 
 export interface PaginationObject {
-  // represents the current page number in the pagination
+  // Represents the current page number in the pagination
   // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
-  currentPage: number;
+  currentPage: number | undefined;
 
   // Allows you to navigate to a specific page and takes a page number as an argument
   goToPage: (page: number) => void;
 
-  // navigate to the next page. Used to implement "Next" button in a pagination control.
+  // Navigate to the next page. Used to implement "Next" button in a pagination control.
   nextPage: () => void;
 
-  // navigate to the previous page. Used to implement "Previous" button in a pagination control.
+  // Navigate to the previous page. Used to implement "Previous" button in a pagination control.
   prevPage: () => void;
 
   // The total number of pages available in the pagination object

@@ -1,20 +1,23 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  SearchParameters,
+  Nullable,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformSearchResponse } from '../utils/transformers';
-import { PlpSearchResponse } from '../types';
-import usePagination from './usePagination';
+import { PaginationProps, PlpSearchResponse } from '../types';
+import usePagination from '../components/Pagination/usePagination';
 
 export type UseSearchResultsConfigs = {
-  cioClient?: ConstructorIOClient | null;
+  cioClient?: Nullable<ConstructorIOClient>;
   searchParams?: SearchParameters;
 };
 
 export type UseSearchResultsReturn = {
   searchResults: PlpSearchResponse | null;
   handleSubmit: () => void;
-  pagination: ReturnType<typeof usePagination>;
+  pagination: PaginationProps;
 };
 
 /**
@@ -33,7 +36,11 @@ export default function useSearchResults(
   const client = cioClient || state?.cioClient;
 
   const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
-  const pagination = usePagination(searchResponse);
+  const pagination = usePagination({
+    initialPage: searchResponse?.rawResponse.request.page,
+    totalNumResults: searchResponse?.totalNumResults,
+    resultsPerPage: searchResponse?.numResultsPerPage,
+  });
 
   if (!client) {
     throw new Error('CioClient required');
@@ -41,7 +48,10 @@ export default function useSearchResults(
 
   const handleSubmit = () => {
     client.search
-      .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+      .getSearchResults(query, {
+        ...searchParams,
+        page: pagination.currentPage || searchParams?.page,
+      })
       .then((res) => setSearchResponse(transformSearchResponse(res)));
   };
 
@@ -49,7 +59,10 @@ export default function useSearchResults(
   useEffect(() => {
     if (query) {
       client.search
-        .getSearchResults(query, { ...searchParams, page: pagination.currentPage })
+        .getSearchResults(query, {
+          ...searchParams,
+          page: pagination.currentPage || searchParams?.page,
+        })
         .then((res) => setSearchResponse(transformSearchResponse(res)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

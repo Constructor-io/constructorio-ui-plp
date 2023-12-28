@@ -2,13 +2,14 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import {
   IBrowseParameters,
   SearchParameters,
+  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useCioClient from './useCioClient';
 import useSearchResults from './useSearchResults';
 import useBrowseResults from './useBrowseResults';
 
 export type CioPlpConfigs = { apiKey?: string };
-export type UseCioPlpHook = { cioClient: ConstructorIOClient };
+export type UseCioPlpHook = { cioClient: Nullable<ConstructorIOClient> };
 
 type UseCioPlp = (configs: CioPlpConfigs) => UseCioPlpHook;
 

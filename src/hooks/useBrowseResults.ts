@@ -1,12 +1,15 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  IBrowseParameters,
+  Nullable,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PlpBrowseResponse } from '../types';
 
 export type UseBrowseResultsConfig = {
-  cioClient?: ConstructorIOClient;
+  cioClient?: Nullable<ConstructorIOClient>;
   browseParams?: IBrowseParameters;
 };
 
