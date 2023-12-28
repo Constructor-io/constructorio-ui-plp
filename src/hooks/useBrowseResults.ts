@@ -6,11 +6,18 @@ import {
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../PlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PlpBrowseResponse } from '../types';
+import { PaginationProps, PlpBrowseResponse } from '../types';
+import usePagination from '../components/Pagination/usePagination';
 
 export type UseBrowseResultsConfig = {
   cioClient?: Nullable<ConstructorIOClient>;
   browseParams?: IBrowseParameters;
+};
+
+export type UseBrowseResultsReturn = {
+  browseResults: PlpBrowseResponse | null;
+  handleSubmit: () => void;
+  pagination: PaginationProps;
 };
 
 /**
@@ -25,7 +32,7 @@ export default function useBrowseResults(
   filterName: string,
   filterValue: string,
   configs: UseBrowseResultsConfig = {},
-): PlpBrowseResponse | null {
+): UseBrowseResultsReturn {
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
@@ -35,11 +42,32 @@ export default function useBrowseResults(
   }
 
   const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(null);
-  useEffect(() => {
-    client.browse
-      .getBrowseResults(filterName, filterValue, browseParams)
-      .then((res) => setBrowseResponse(transformBrowseResponse(res)));
-  }, [client, filterName, filterValue, browseParams]);
+  const pagination = usePagination({
+    initialPage: browseResponse?.rawResponse.request?.page,
+    totalNumResults: browseResponse?.totalNumResults,
+    resultsPerPage: browseResponse?.numResultsPerPage,
+  });
 
-  return browseResponse;
+  const handleSubmit = () => {
+    client.browse
+      .getBrowseResults(filterName, filterValue, {
+        ...browseParams,
+        page: pagination.currentPage || browseParams?.page,
+      })
+      .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+  };
+
+  useEffect(() => {
+    if (filterName && filterValue) {
+      client.browse
+        .getBrowseResults(filterName, filterValue, {
+          ...browseParams,
+          page: pagination.currentPage || browseParams?.page,
+        })
+        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.currentPage]);
+
+  return { browseResults: browseResponse, handleSubmit, pagination };
 }
