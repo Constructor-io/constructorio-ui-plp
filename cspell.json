@@ -6,6 +6,7 @@
   "ignorePaths": ["lib", "docs"],
   "flagWords": [],
   "words": [
+    "noninteractive",
     "key_wJSdZSiesX5hiVLt",
     "constructorio",
     "Combobox",

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import './ProductSwatch.css';
@@ -29,6 +30,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
         <div>
           <ul className='cio-swatch-container'>
             {swatchList?.map((swatch) => (
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
                 key={swatch.variationId}
                 className={`cio-swatch-item ${
