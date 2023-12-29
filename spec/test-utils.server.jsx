@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 
