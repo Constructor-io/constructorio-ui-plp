@@ -5,7 +5,7 @@ export function getPrice(item: Item): number {
   return item.data.price;
 }
 
-export function getSwatches(item: Item): [SwatchItem] {
+export function getSwatches(item: Item): SwatchItem[] | undefined {
   return item?.variations?.map((variation) => ({
     itemName: variation?.value,
     url: variation?.data?.url,

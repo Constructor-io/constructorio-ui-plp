@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../../PlpContext';
-import { SwatchItem } from '../../types';
+import { SwatchItem, UseProductSwatch } from '../../types';
 import { getSwatches as defaultGetSwatches } from '../../utils/getters';
 
-const useProductSwatch = ({ item }) => {
+const useProductSwatch: UseProductSwatch = ({ item }) => {
   const [selectedVariation, setSelectedVariation] = useState<SwatchItem>();
   const [swatchList, setSwatchList] = useState<[SwatchItem]>();
 

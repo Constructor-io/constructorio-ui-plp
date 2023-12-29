@@ -19,7 +19,7 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface Getters {
   getPrice: (item: Item) => number;
-  getSwatches: (item: Item) => [SwatchItem];
+  getSwatches: (item: Item) => SwatchItem[];
 }
 
 export interface Formatters {
@@ -176,7 +176,13 @@ export interface PaginationObject {
 }
 
 export interface ProductSwatchObject {
-  swatchList: [SwatchItem];
+  swatchList: SwatchItem[] | undefined;
   selectedVariation: SwatchItem | undefined;
   selectVariation: (swatch: SwatchItem) => void;
 }
+
+export type UseProductSwatchProps = {
+  item: Item;
+};
+
+export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
