@@ -7,7 +7,7 @@ const useProductSwatch = ({ item }) => {
   const [selectedVariation, setSelectedVariation] = useState<SwatchItem>();
   const [swatchList, setSwatchList] = useState<[SwatchItem]>();
 
-  const state = usePlpContext();
+  const state = useCioPlpContext();
 
   const getSwatches = state?.getters?.getSwatches || defaultGetSwatches;
 
