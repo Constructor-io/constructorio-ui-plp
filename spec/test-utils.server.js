@@ -28,5 +28,6 @@ export function renderHookServerSide(
       />,
     ),
     onRenderHookValue,
+    result: onRenderHookValue.mock.calls[0][0],
   };
 }

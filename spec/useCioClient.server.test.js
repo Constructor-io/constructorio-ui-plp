@@ -21,12 +21,11 @@ describe('Testing Hook on the server: useCioClient', () => {
   });
 
   it('Should return null when apiKey is provided', () => {
-    const { html, onRenderHookValue } = renderHookServerSide(({ apiKey }) => useCioClient(apiKey), {
+    const { result } = renderHookServerSide(({ apiKey }) => useCioClient(apiKey), {
       initialProps: { apiKey: 'xx' },
     });
 
-    expect(onRenderHookValue).toHaveBeenCalledWith(null);
-    expect(html).toEqual('');
+    expect(result).toBe(null);
   });
 
   it('Should return when clientOptions are provided', () => {
@@ -47,14 +46,13 @@ describe('Testing Hook on the server: useCioClient', () => {
       networkParameters: { timeout: 1000 },
     };
 
-    const { html, onRenderHookValue } = renderHookServerSide(
+    const { result } = renderHookServerSide(
       ({ apiKey, options }) => useCioClient(apiKey, options),
       {
         initialProps: { apiKey: key, options: clientOptions },
       },
     );
 
-    expect(onRenderHookValue).toHaveBeenCalledWith(null);
-    expect(html).toEqual('');
+    expect(result).toBe(null);
   });
 });
