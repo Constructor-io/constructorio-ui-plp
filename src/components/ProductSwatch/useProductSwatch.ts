@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { usePlpContext } from '../../PlpContext';
+import { useCioPlpContext } from '../../PlpContext';
 import { SwatchItem } from '../../types';
 import { getSwatches as defaultGetSwatches } from '../../utils/getters';
 
