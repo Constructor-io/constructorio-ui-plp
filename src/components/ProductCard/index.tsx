@@ -89,7 +89,7 @@ export default function ProductCard(props: ProductCardProps) {
             <div className='cio-item-price'>{itemPrice}</div>
             <div className='cio-item-name'>{itemName}</div>
             <div className='cio-item-swatches'>Here lie the swatches</div>
-            <ProductSwatch swatch={productSwatch} />
+            <ProductSwatch swatchObject={productSwatch} />
             <div>
               <button
                 type='button'

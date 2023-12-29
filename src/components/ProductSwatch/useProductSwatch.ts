@@ -19,9 +19,7 @@ const useProductSwatch = ({ item }) => {
 
   useEffect(() => {
     if (item?.variations) {
-      const initialSwatch = swatchList?.find(
-        (swatch) => swatch?.variationId === item?.variation_id,
-      );
+      const initialSwatch = swatchList?.find((swatch) => swatch?.variationId === item?.variationId);
       if (initialSwatch) {
         setSelectedVariation(initialSwatch);
       }

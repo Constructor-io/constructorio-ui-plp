@@ -174,3 +174,9 @@ export interface PaginationObject {
    *  [1, 2, 3, 4, ..., 10] */
   pages: number[];
 }
+
+export interface ProductSwatchObject {
+  swatchList: [SwatchItem];
+  selectedVariation: SwatchItem | undefined;
+  selectVariation: (swatch: SwatchItem) => void;
+}

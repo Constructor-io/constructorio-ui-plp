@@ -1,0 +1,12 @@
+.cio-swatch-selected {
+  outline: 1px solid black;
+}
+
+.cio-swatch-button {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+}
