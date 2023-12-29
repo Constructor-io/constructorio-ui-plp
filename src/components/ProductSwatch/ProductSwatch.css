@@ -1,5 +1,6 @@
 .cio-swatch-selected {
-  outline: 1px solid black;
+  outline: 2px solid black !important; 
+  z-index: 1000;
 }
 
 .cio-swatch-button {
@@ -9,4 +10,18 @@
 	padding: 0;
 	font: inherit;
 	cursor: pointer;
+}
+
+li.cio-swatch-item {
+  list-style-type: none;
+  width: 25px;
+  height: 25px;
+  outline: 1px black solid;
+  border-radius: 50%;
+}
+
+.cio-swatch-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }

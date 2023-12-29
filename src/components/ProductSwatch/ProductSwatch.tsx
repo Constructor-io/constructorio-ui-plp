@@ -19,20 +19,16 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   console.log(selectedVariation);
   return (
     <div>
-      <ul>
+      <ul className='cio-swatch-container'>
         {swatchList?.map((swatch) => (
           <li
-            className={
+            key={swatch.variationId}
+            className={`cio-swatch-item ${
               selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
-            }>
-            <button
-              className='cio-swatch-button'
-              type='button'
-              onClick={() => swatchClickHandler(swatch)}
-              style={{ color: swatch?.previewHexCode }}>
-              {swatch.variationId}
-            </button>
-          </li>
+            }`}
+            onClick={() => swatchClickHandler(swatch)}
+            style={{ background: swatch?.previewHexCode }}
+          />
         ))}
       </ul>
     </div>
