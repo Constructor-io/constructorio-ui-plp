@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 import useSearchResults from '../src/hooks/useSearchResults';
 import { renderHookServerSide } from './test-utils.server';
 
