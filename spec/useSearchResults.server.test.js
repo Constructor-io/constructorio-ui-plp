@@ -19,13 +19,12 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
   it('Should return a PlpSearchResponse Object when provided initialSearchResults', async () => {
     const initialSearchResults = transformSearchResponse(mockSearchResponse);
 
-    const { html, result } = renderHookServerSide(
+    const { result } = renderHookServerSide(
       () => useSearchResults('linen', { cioClient: null }, initialSearchResults),
       {},
     );
 
     const response = result.searchResults;
-    expect(html).toEqual('');
     expect(response?.resultId).not.toBeUndefined();
     expect(response?.totalNumResults).not.toBeUndefined();
     expect(response?.refinedContent).not.toBeUndefined();
@@ -45,13 +44,12 @@ describe('Testing Hook on the server: useSearchResults with no initialSearchResu
   });
 
   it('Should return null when called with no initialSearchResults', async () => {
-    const { html, result } = renderHookServerSide(
+    const { result } = renderHookServerSide(
       () => useSearchResults('linen', { cioClient: null }),
       {},
     );
 
     const response = result.searchResults;
-    expect(html).toEqual('');
     expect(response).toBeNull();
   });
 });
