@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import useSearchResults from '../src/hooks/useSearchResults';
-import mockResponse from './local_examples/apiResponse.json';
+import mockSearchResponse from './local_examples/apiSearchResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 
 describe('Testing Hook: useSearchResults', () => {
@@ -11,7 +11,7 @@ describe('Testing Hook: useSearchResults', () => {
   beforeEach(() => {
     ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
     clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
-    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
+    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockSearchResponse));
   });
 
   afterEach(() => {

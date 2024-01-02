@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 

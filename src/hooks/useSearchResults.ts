@@ -30,34 +30,40 @@ export type UseSearchResultsReturn = {
 export default function useSearchResults(
   query: string,
   configs: UseSearchResultsConfigs = {},
+  initialSearchResponse?: PlpSearchResponse,
 ): UseSearchResultsReturn {
   const { cioClient, searchParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
 
-  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(null);
+  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(
+    initialSearchResponse || null,
+  );
   const pagination = usePagination({
     initialPage: searchResponse?.rawResponse.request.page,
     totalNumResults: searchResponse?.totalNumResults,
     resultsPerPage: searchResponse?.numResultsPerPage,
   });
 
-  if (!client) {
+  // Throw error if client is not provided and window is defined (i.e. not SSR)
+  if (!client && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
   const handleSubmit = () => {
-    client.search
-      .getSearchResults(query, {
-        ...searchParams,
-        page: pagination.currentPage || searchParams?.page,
-      })
-      .then((res) => setSearchResponse(transformSearchResponse(res)));
+    if (client) {
+      client.search
+        .getSearchResults(query, {
+          ...searchParams,
+          page: pagination.currentPage || searchParams?.page,
+        })
+        .then((res) => setSearchResponse(transformSearchResponse(res)));
+    }
   };
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (query) {
+    if (query && client) {
       client.search
         .getSearchResults(query, {
           ...searchParams,
