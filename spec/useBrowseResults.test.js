@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import mockResponse from './local_examples/apiResponse.json';
+import mockBrowseResponse from './local_examples/apiBrowseResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 import useBrowseResults from '../src/hooks/useBrowseResults';
 
@@ -11,7 +11,7 @@ describe('Testing Hook: useBrowseResults', () => {
   beforeEach(() => {
     ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
     clientGetBrowseResultsSpy = jest.spyOn(ConstructorIO.browse, 'getBrowseResults');
-    clientGetBrowseResultsSpy.mockImplementationOnce(() => Promise.resolve(mockResponse));
+    clientGetBrowseResultsSpy.mockImplementationOnce(() => Promise.resolve(mockBrowseResponse));
   });
 
   afterEach(() => {
