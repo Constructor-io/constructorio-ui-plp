@@ -94,6 +94,8 @@
         "num_results_per_page": 20,
         "sort_by": "relevance",
         "sort_order": "descending",
+        "browse_filter_name": "group_id",
+        "browse_filter_value": "123",
         "term": "item",
         "page": 5,
         "fmt_options": {

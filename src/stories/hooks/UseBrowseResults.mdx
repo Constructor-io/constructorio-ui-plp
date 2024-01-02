@@ -11,7 +11,7 @@ A React Hook to retrieve browse results using Constructor.
 ```jsx
 function myApp() {
   const cioClient = useCioClient(MY_API_KEY)
-  const browseResults = useBrowseResults(filterName, filterValue, {cioClient});
+  const {browseResults, handleSubmit} = useBrowseResults(filterName, filterValue, {cioClient});
   ...
 }
 ```
@@ -19,7 +19,7 @@ function myApp() {
 ## Usage with CioPlpContext
 ```jsx
 function BrowseResults({ filterName, filterValue }) {
-  const browseResults = useBrowseResults(filterName, filterValue);
+  const {browseResults} = useBrowseResults(filterName, filterValue);
   ...
 }
 
@@ -56,7 +56,7 @@ This is an example of how you might utilize the `useBrowseResults` hook in tande
   // A simple React Component to showcase useBrowseResults with CioPlpContext
   function BrowseResults({ query }) {
     const browseParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-    const browseResults = useBrowseResults(filterName, filterValue, { browseParams });
+    const {browseResults} = useBrowseResults(filterName, filterValue, { browseParams });
 
     return (
       <>

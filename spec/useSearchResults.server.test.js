@@ -1,13 +1,12 @@
-/* eslint-disable react/jsx-filename-extension */
 import useSearchResults from '../src/hooks/useSearchResults';
 import { renderHookServerSide } from './test-utils.server';
 
-import mockResponse from './local_examples/apiResponse.json';
+import mockSearchResponse from './local_examples/apiSearchResponse.json';
 import { transformSearchResponse } from '../src/utils/transformers';
 
 describe('Testing Hook on the server: useSearchResults with initial search results', () => {
   it('Should not break if cioClient is null', async () => {
-    const initialSearchResults = transformSearchResponse(mockResponse);
+    const initialSearchResults = transformSearchResponse(mockSearchResponse);
 
     expect(() =>
       renderHookServerSide(
@@ -18,7 +17,7 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
   });
 
   it('Should return a PlpSearchResponse Object when provided initialSearchResults', async () => {
-    const initialSearchResults = transformSearchResponse(mockResponse);
+    const initialSearchResults = transformSearchResponse(mockSearchResponse);
 
     const { html, result } = renderHookServerSide(
       () => useSearchResults('linen', { cioClient: null }, initialSearchResults),

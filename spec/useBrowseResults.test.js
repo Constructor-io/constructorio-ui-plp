@@ -1,31 +1,31 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import useSearchResults from '../src/hooks/useSearchResults';
-import mockSearchResponse from './local_examples/apiSearchResponse.json';
+import mockBrowseResponse from './local_examples/apiBrowseResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
+import useBrowseResults from '../src/hooks/useBrowseResults';
 
-describe('Testing Hook: useSearchResults', () => {
-  let clientGetSearchResultsSpy;
+describe('Testing Hook: useBrowseResults', () => {
+  let clientGetBrowseResultsSpy;
   let ConstructorIO;
 
   beforeEach(() => {
     ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
-    clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
-    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockSearchResponse));
+    clientGetBrowseResultsSpy = jest.spyOn(ConstructorIO.browse, 'getBrowseResults');
+    clientGetBrowseResultsSpy.mockImplementationOnce(() => Promise.resolve(mockBrowseResponse));
   });
 
   afterEach(() => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  test('Should return a PlpSearchResponse Object', async () => {
+  test('Should return a PlpBrowseResponse Object', async () => {
     const { result } = renderHook(
-      () => useSearchResults('linen', { cioClient: ConstructorIO }),
+      () => useBrowseResults('group_id', '123', { cioClient: ConstructorIO }),
       {},
     );
 
     await waitFor(() => {
-      const response = result?.current.searchResults;
+      const response = result?.current.browseResults;
 
       expect(response?.resultId).not.toBeUndefined();
       expect(response?.totalNumResults).not.toBeUndefined();
@@ -44,15 +44,15 @@ describe('Testing Hook: useSearchResults', () => {
     const resultsPerPage = 100;
     renderHook(
       () =>
-        useSearchResults('Linen', {
+        useBrowseResults('group_id', '123', {
           cioClient: ConstructorIO,
-          searchParams: { page, filters, resultsPerPage },
+          browseParams: { page, filters, resultsPerPage },
         }),
       {},
     );
 
     await waitFor(() => {
-      expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
+      expect(clientGetBrowseResultsSpy).toHaveBeenCalledWith('group_id', '123', {
         page,
         filters,
         resultsPerPage,
@@ -63,7 +63,7 @@ describe('Testing Hook: useSearchResults', () => {
   test('Should throw error if client is not available', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
-    expect(() => renderHook(() => useSearchResults('item', {}), {})).toThrow();
+    expect(() => renderHook(() => useBrowseResults('group_id', '123', {}), {})).toThrow();
     spy.mockRestore();
   });
 });
