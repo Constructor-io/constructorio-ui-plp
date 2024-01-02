@@ -56,7 +56,7 @@ export default function useBrowseResults(
   });
 
   const handleSubmit = () => {
-    if (client) {
+    if (client && filterName && filterValue) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
@@ -67,7 +67,7 @@ export default function useBrowseResults(
   };
 
   useEffect(() => {
-    if (filterName && filterValue && client) {
+    if (client && filterName && filterValue) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
