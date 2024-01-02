@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import SearchResults from '../index';
+import SearchResults from '../../../components/SearchResults/index';
 import { CioPlpContext } from '../../../PlpContext';
 import { DEMO_API_KEY } from '../../../constants';
 
