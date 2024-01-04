@@ -9,6 +9,7 @@ import {
   SearchResponse,
   SortOption,
   GetBrowseResultsResponse,
+  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -92,6 +93,7 @@ export type PaginationProps = PaginationObject;
 export interface PlpBrowseResponse {
   resultId: string;
   totalNumResults: number;
+  numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
