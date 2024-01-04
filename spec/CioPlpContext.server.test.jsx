@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { CioPlpContext, useCioPlpContext } from '../src/PlpContext';
