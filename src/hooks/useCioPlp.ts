@@ -1,8 +1,5 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import {
-  IBrowseParameters,
-  SearchParameters,
-} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useCioClient from './useCioClient';
 import useSearchResults from './useSearchResults';
 import useBrowseResults from './useBrowseResults';
