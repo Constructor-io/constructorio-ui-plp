@@ -6,7 +6,7 @@ import * as SearchResultsStories from './SearchResults.stories';
 ## Basic Example
   ```jsx
   import React from 'react';
-  import { CioPlpContext, SearchResults } from '@constructor-io/constructorio-ui-plp';
+  import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp';
 
   const apiKey = 'MY_API_KEY';
 
@@ -14,9 +14,9 @@ import * as SearchResultsStories from './SearchResults.stories';
 
     return (
       <>
-        <CioPlpContext apiKey={MY_API_KEY}>
+        <CioPlp apiKey={MY_API_KEY}>
           <SearchResults initialQuery='red'>
-        </CioPlpContext>
+        </CioPlp>
       </>
     );
   }
@@ -27,7 +27,7 @@ import * as SearchResultsStories from './SearchResults.stories';
 If you prefer to handle the rendering of the search results yourself, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlpContext, SearchResults } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp'
 
 const apiKey = 'MY_API_KEY';
 
@@ -43,11 +43,11 @@ function myApp() {
   ...
 
   return (
-    <CioPlpContext apiKey={MY_API_KEY}>
+    <CioPlp apiKey={MY_API_KEY}>
       <SearchResults initialQuery='red' searchParams={searchParams} >
-        {(search) => search?.results?.map((item) => <li>{item.itemName}</li>)}
+        {({data, pagination, refetch}) => data?.response?.results?.map((item) => <li>{item.itemName}</li>)}
       </SearchResults>
-    </CioPlpContext>
+    </CioPlp>
   )
 }
 ```

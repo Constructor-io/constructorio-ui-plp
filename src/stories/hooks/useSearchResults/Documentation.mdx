@@ -1,0 +1,15 @@
+import { Meta, Markdown } from '@storybook/blocks';
+import * as UseSearchResultsStories from './UseSearchResults.stories';
+import StateDocs from './StateDocs.md?raw';
+
+<Meta of={UseSearchResultsStories} />
+
+## `useSearchResults`
+A React Hook to retrieve search results using Constructor.
+
+>Note: useSearchResults can be only called in components that are direct children of `<CioPlp />`.
+
+
+{/* -------- STATE -------- */}
+<Markdown>{StateDocs}</Markdown>
+<hr />

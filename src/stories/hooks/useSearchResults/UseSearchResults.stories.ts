@@ -3,13 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import UseSearchResultsExample from './UseSearchResultsExample';
 
 const meta = {
-  title: 'Hooks/UseSearchResults',
+  title: 'Hooks/useSearchResults',
   component: UseSearchResultsExample,
-  argTypes: {
-    configs: { control: false },
-    cioClient: { name: 'configs.cioClient', control: false },
-    searchParams: { name: 'configs.searchParams' },
-  },
   parameters: {
     layout: 'centered',
     docs: {

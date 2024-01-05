@@ -1,9 +1,9 @@
 import React from 'react';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import useSearchResults from '../../hooks/useSearchResults';
-import { useCioPlpContext } from '../../PlpContext';
-import { IncludeRenderProps, PlpSearchResponse } from '../../types';
-import ProductCard from '../ProductCard';
+import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { PropsWithChildrenRenderProps } from '../../types';
+import ProductList from '../ProductList';
 import './SearchResults.css';
 
 /**
@@ -16,12 +16,13 @@ interface SearchResultsProps {
   searchParams?: SearchParameters;
 }
 
+type ChildrenFunctionProps = UseSearchResultsReturn;
 /**
  * Type alias for SearchResultsProps with RenderProps.
  */
-type SearchResultsWithRenderProps = IncludeRenderProps<
+type SearchResultsWithRenderProps = PropsWithChildrenRenderProps<
   SearchResultsProps,
-  PlpSearchResponse | null
+  ChildrenFunctionProps
 >;
 
 /**
@@ -35,28 +36,31 @@ type SearchResultsWithRenderProps = IncludeRenderProps<
  * @throws {Error} Throws an error if the component is not rendered within CioPlpContext.
  */
 export default function SearchResults(props: SearchResultsWithRenderProps) {
+  const { searchParams, initialQuery } = props;
   const context = useCioPlpContext();
+
+  const { status, data, pagination, refetch } = useSearchResults(initialQuery || '', {
+    searchParams,
+  });
 
   if (!context) {
     throw new Error('<SearchResults /> component must be rendered within CioPlpContext');
   }
 
-  const { children, initialQuery = '', searchParams } = props;
-  const { searchResults } = useSearchResults(initialQuery, {
-    cioClient: context?.cioClient,
-    searchParams,
-  });
+  const { children } = props;
+
+  if (status === 'fetching') {
+    return 'loading';
+  }
 
   return (
     <>
       {typeof children === 'function' ? (
-        children(searchResults)
+        children({ status, data, pagination, refetch })
       ) : (
         <>
           <div>Search Results</div>
-          <div className='cio-results'>
-            {searchResults?.results.map((item) => <ProductCard item={item} />)}
-          </div>
+          <ProductList items={data.response?.results} />
         </>
       )}
     </>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { DEMO_API_KEY } from '../../constants';
 import useCioClient from '../../hooks/useCioClient';
-import useSearchResults from '../../hooks/useSearchResults';
+import SearchResults from '../../Components/SearchResults';
+import CioPlp from '../../components/CioPlp';
 
 /**
  * This interface will be rendered as a table in Storybook
@@ -22,12 +23,8 @@ interface UseCioClientExampleProps {
  */
 export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps) {
   const cioClient = useCioClient(apiKey || DEMO_API_KEY);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const { searchResults, handleSubmit, pagination } = useSearchResults(searchQuery, {
-    cioClient,
-    searchParams: { resultsPerPage: 2, page: 1 },
-  });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -47,30 +44,36 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
         />
       </div>
 
-      <div>
-        <button type='button' onClick={handleSubmit}>
-          Search
-        </button>
-      </div>
-      {searchResults?.results.length && (
-        <div>
-          <ul>{searchResults?.results.map((result) => <li>{result.itemName}</li>)}</ul>
-          <div>Current Page: {pagination.currentPage}</div>
-          <div>Total: {pagination.totalPages}</div>
-          <button onClick={() => pagination.prevPage()} type='button'>
-            Previous
-          </button>
+      <CioPlp apiKey={DEMO_API_KEY} cioClient={cioClient}>
+        <SearchResults initialQuery={searchQuery}>
+          {({ data, pagination, refetch }) => (
+            <div>
+              <button type='button' onClick={refetch}>
+                Search
+              </button>
+              {data.response?.results?.length && (
+                <div>
+                  <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
+                  <div>Current Page: {pagination.currentPage}</div>
+                  <div>Total: {pagination.totalPages}</div>
+                  <button onClick={() => pagination.prevPage()} type='button'>
+                    Previous
+                  </button>
 
-          {pagination.pages.slice(0, 10).map((page) => (
-            <button onClick={() => pagination.goToPage(page)} type='button'>
-              {page === -1 ? '...' : page}
-            </button>
-          ))}
-          <button onClick={() => pagination.nextPage()} type='button'>
-            Next
-          </button>
-        </div>
-      )}
+                  {pagination.pages.slice(0, 10).map((page) => (
+                    <button onClick={() => pagination.goToPage(page)} type='button'>
+                      {page === -1 ? '...' : page}
+                    </button>
+                  ))}
+                  <button onClick={() => pagination.nextPage()} type='button'>
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </SearchResults>
+      </CioPlp>
     </>
   );
 }

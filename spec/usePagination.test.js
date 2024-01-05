@@ -1,23 +1,23 @@
 import { renderHook, act } from '@testing-library/react';
 import usePagination from '../src/hooks/usePagination';
 
-const mockSearchResponse = {
-  totalNumResults: 1000,
-  rawResponse: {
-    request: {
-      num_results_per_page: 10,
-    },
+const mockPaginationProps = {
+  searchResponse: {
+    totalNumResults: 1000,
+  },
+  searchRequest: {
+    num_results_per_page: 10,
   },
 };
 
 describe('usePagination', () => {
   it('should initialize with the first page', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse));
+    const { result } = renderHook(() => usePagination(mockPaginationProps));
     expect(result.current.currentPage).toBe(1);
   });
 
   it('should handle page changes', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse));
+    const { result } = renderHook(() => usePagination(mockPaginationProps));
 
     act(() => {
       result.current.goToPage(5);
@@ -27,7 +27,7 @@ describe('usePagination', () => {
   });
 
   it('should not exceed total pages', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse));
+    const { result } = renderHook(() => usePagination(mockPaginationProps));
 
     act(() => {
       result.current.goToPage(101);
@@ -37,7 +37,7 @@ describe('usePagination', () => {
   });
 
   it('should not go below the first page', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse));
+    const { result } = renderHook(() => usePagination(mockPaginationProps));
 
     act(() => {
       result.current.goToPage(-1);
@@ -47,7 +47,7 @@ describe('usePagination', () => {
   });
 
   it('should go to next and previous page', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse));
+    const { result } = renderHook(() => usePagination(mockPaginationProps));
 
     act(() => {
       result.current.nextPage();
@@ -63,7 +63,7 @@ describe('usePagination', () => {
   });
 
   it('should generate correct number of pages', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse, 10));
+    const { result } = renderHook(() => usePagination(mockPaginationProps, 10));
 
     act(() => {
       result.current.goToPage(50);
@@ -73,7 +73,7 @@ describe('usePagination', () => {
   });
 
   it('should include the first and last page when near the start', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse, 10));
+    const { result } = renderHook(() => usePagination(mockPaginationProps, 10));
 
     act(() => {
       result.current.goToPage(1);
@@ -83,7 +83,7 @@ describe('usePagination', () => {
   });
 
   it('should include the first and last page when near the end', () => {
-    const { result } = renderHook(() => usePagination(mockSearchResponse, 10));
+    const { result } = renderHook(() => usePagination(mockPaginationProps, 10));
 
     act(() => {
       result.current.goToPage(100);

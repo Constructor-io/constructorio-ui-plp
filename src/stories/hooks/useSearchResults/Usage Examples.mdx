@@ -1,0 +1,35 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import meta, { Primary } from './UseSearchResults.stories';
+
+<Meta of={meta} />
+
+# `UseSearchResults`
+A React Hook to retrieve search results using Constructor.
+
+```jsx
+import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp'
+
+function SearchResults({ query }) {
+  const { data } = useSearchResults(query);
+
+  return <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
+}
+
+function myApp() {
+  ...
+  return (
+    <>
+    <CioPlp apiKey={MY_API_KEY}>
+      <SearchResults query={query} />
+    </CioPlp>
+    </>
+  )
+}
+```
+
+<Canvas withSource="none">
+  <Story of={Primary} />
+</Canvas>
+
+<Controls of={Primary} />
+

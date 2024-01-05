@@ -1,4 +1,4 @@
-import { PrimaryColorStyles } from './types';
+import { PrimaryColorStyles, PlpSearchRedirectResponse, PlpSearchResponse } from './types';
 
 // Function to emulate pausing between interactions
 export function sleep(ms) {
@@ -45,4 +45,16 @@ export function getPreferredColorScheme() {
     colorScheme = 'dark';
   }
   return colorScheme;
+}
+
+export function isPlpSearchResponse(
+  response: PlpSearchRedirectResponse | PlpSearchResponse,
+): response is PlpSearchResponse {
+  return 'results' in response;
+}
+
+export function isPlpSearchRedirectResponse(
+  response: PlpSearchRedirectResponse | PlpSearchResponse,
+): response is PlpSearchRedirectResponse {
+  return 'redirect' in response;
 }

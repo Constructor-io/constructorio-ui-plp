@@ -10,8 +10,25 @@ import {
   SortOption,
   GetBrowseResultsResponse,
   Nullable,
+  SearchRequestType,
+  SearchResponseType,
+  Redirect,
+  SearchParameters,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
+
+export {
+  Facet,
+  SortOption,
+  ApiGroup,
+  SearchRequestType,
+  SearchResponseType,
+  Redirect,
+  SearchResponse,
+  Nullable,
+  ConstructorIOClient,
+  SearchParameters,
+};
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -28,7 +45,12 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
 
-export interface PlpContext {
+export type RawApiResponseState = Nullable<SearchResponse>;
+export type SearchResponseState = Nullable<Omit<PlpSearchResponse, 'rawResponse'>>;
+export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
+export type RedirectResponseState = Nullable<Omit<PlpSearchRedirectResponse, 'rawResponse'>>;
+
+export interface PlpContextType {
   cioClient: ConstructorIOClient;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
@@ -88,6 +110,12 @@ export interface PlpSearchResponse {
   rawResponse: SearchResponse;
 }
 
+export interface PlpSearchRedirectResponse {
+  resultId: string;
+  redirect: Partial<Redirect>;
+  rawResponse: SearchResponse;
+}
+
 export interface PlpBrowseResponse {
   resultId: string;
   totalNumResults: number;
@@ -106,8 +134,8 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
  * - Props P,
  * - A children function, that takes RenderProps as its argument
  */
-export type IncludeRenderProps<P, RenderProps> = P & {
-  children?: (props: RenderProps) => ReactNode;
+export type PropsWithChildrenRenderProps<ComponentProps, RenderFunctionProps> = ComponentProps & {
+  children?: ((props: RenderFunctionProps) => ReactNode) | React.ReactNode;
 };
 
 /**
@@ -117,7 +145,8 @@ export type IncludeRenderProps<P, RenderProps> = P & {
  * @returns An object containing pagination information and methods.
  */
 export type UsePagination = (
-  searchResponse: Nullable<PlpSearchResponse>,
+  searchResponse: SearchResponseState,
+  searchRequest: SearchRequestState,
   windowSize?: number,
 ) => PaginationObject;
 

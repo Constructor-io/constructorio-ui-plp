@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import SearchResults from '../../../components/SearchResults/index';
-import { CioPlpContext } from '../../../PlpContext';
+import SearchResults from '../../../components/SearchResults';
+import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 
 const meta = {
@@ -22,9 +22,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   render: (args) => (
-    <CioPlpContext apiKey={DEMO_API_KEY}>
+    <CioPlp apiKey={DEMO_API_KEY}>
       <SearchResults {...args} />
-    </CioPlpContext>
+    </CioPlp>
   ),
   args: {
     initialQuery: 'red',

@@ -19,8 +19,7 @@ const useCioPlp: UseCioPlp = (configs) => {
   }
 
   const cioClient = useCioClient(apiKey);
-  const useCustomSearchResults = (query: string, searchParams: SearchParameters) =>
-    useSearchResults(query, { cioClient, searchParams });
+  const useCustomSearchResults = (query: string) => useSearchResults(query);
   const useCustomBrowseResults = (
     filterName: string,
     filterValue: string,

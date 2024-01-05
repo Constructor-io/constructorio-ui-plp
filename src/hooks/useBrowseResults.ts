@@ -1,7 +1,7 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
-import { useCioPlpContext } from '../PlpContext';
+import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PlpBrowseResponse } from '../types';
 
