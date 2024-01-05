@@ -1,6 +1,14 @@
+import React from 'react';
+import { render } from '@testing-library/react';
 import testRequestState from './local_examples/sampleRequestState.json';
 import testUrl from './local_examples/sampleEncodedUrl.json';
-import { decodeStateFromUrl, encodeStateToUrl, defaultQueryStringMap } from '../src/utils/encoders';
+import {
+  decodeStateFromUrl,
+  encodeStateToUrl,
+  defaultQueryStringMap,
+  getUrl,
+  setUrl,
+} from '../src/utils/encoders';
 
 describe('Testing Default Encoders: encodeStateToUrl', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
@@ -74,5 +82,39 @@ describe('Testing Default Encoders: decodeStateFromUrl', () => {
     expect(typeof state.preFilterExpression).toBe('undefined');
     expect(typeof state.variationsMap).toBe('undefined');
     expect(typeof state.qsParam).toBe('undefined');
+  });
+});
+
+describe('Testing Default Encoders: getUrl, setUrl', () => {
+  let location;
+  const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
+  const mockLocation = new URL(mockUrl);
+
+  beforeEach(() => {
+    location = window.location;
+    delete window.location;
+    window.location = mockLocation;
+  });
+
+  afterEach(() => {
+    window.location = location;
+  });
+
+  test('getUrl should get the full url by default', () => {
+    function TestReactComponent() {
+      const url = getUrl();
+      expect(url).toBe(mockUrl);
+    }
+
+    render(<TestReactComponent />);
+  });
+
+  test('setUrl should set the request configs to the url by default', () => {
+    function TestReactComponent() {
+      setUrl(testUrl);
+      expect(window.location.href).toBe(testUrl);
+    }
+
+    render(<TestReactComponent />);
   });
 });
