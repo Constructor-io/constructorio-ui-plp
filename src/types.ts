@@ -59,10 +59,9 @@ export interface RequestConfigs {
 export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
 
 export interface QueryParamEncodingOptions {
-  url?: string;
+  baseUrl?: string;
   origin?: string;
   pathname?: string;
-  hash?: string;
 }
 
 export interface PlpContext {

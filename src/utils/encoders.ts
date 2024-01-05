@@ -75,7 +75,7 @@ export function encodeStateToUrl(
   state: RequestConfigs,
   options: QueryParamEncodingOptions = {},
 ): string {
-  const { url, origin, pathname } = options;
+  const { baseUrl: url, origin, pathname } = options;
   const baseUrl = url || `${origin}${pathname}`;
 
   const params = new URLSearchParams();

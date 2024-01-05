@@ -13,7 +13,7 @@ import {
 describe('Testing Default Encoders: encodeStateToUrl', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
-      encodeStateToUrl(testRequestState, { url: 'https://www.example.com/a/random/path' }),
+      encodeStateToUrl(testRequestState, { baseUrl: 'https://www.example.com/a/random/path' }),
     );
     const params = url.searchParams;
 
