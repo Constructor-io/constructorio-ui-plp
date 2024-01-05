@@ -1,13 +1,23 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  IBrowseParameters,
+  Nullable,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PlpBrowseResponse } from '../types';
+import { PaginationProps, PlpBrowseResponse } from '../types';
+import usePagination from './usePagination';
 
 export type UseBrowseResultsConfig = {
-  cioClient?: ConstructorIOClient;
+  cioClient?: Nullable<ConstructorIOClient>;
   browseParams?: IBrowseParameters;
+};
+
+export type UseBrowseResultsReturn = {
+  browseResults: PlpBrowseResponse | null;
+  handleSubmit: () => void;
+  pagination: PaginationProps;
 };
 
 /**
@@ -22,21 +32,51 @@ export default function useBrowseResults(
   filterName: string,
   filterValue: string,
   configs: UseBrowseResultsConfig = {},
-): PlpBrowseResponse | null {
+  initialBrowseResponse?: PlpBrowseResponse,
+): UseBrowseResultsReturn {
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
 
-  if (!client) {
+  if (!filterName || !filterValue) {
+    throw new Error('filterName and filterValue are required');
+  }
+  // Throw error if client is not provided and window is defined (i.e. not SSR)
+  if (!client && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
-  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(null);
-  useEffect(() => {
-    client.browse
-      .getBrowseResults(filterName, filterValue, browseParams)
-      .then((res) => setBrowseResponse(transformBrowseResponse(res)));
-  }, [client, filterName, filterValue, browseParams]);
+  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(
+    initialBrowseResponse || null,
+  );
+  const pagination = usePagination({
+    initialPage: browseResponse?.rawResponse.request?.page,
+    totalNumResults: browseResponse?.totalNumResults,
+    resultsPerPage: browseResponse?.numResultsPerPage,
+  });
 
-  return browseResponse;
+  const handleSubmit = () => {
+    if (client && filterName && filterValue) {
+      client.browse
+        .getBrowseResults(filterName, filterValue, {
+          ...browseParams,
+          page: pagination.currentPage || browseParams?.page,
+        })
+        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    }
+  };
+
+  useEffect(() => {
+    if (client && filterName && filterValue) {
+      client.browse
+        .getBrowseResults(filterName, filterValue, {
+          ...browseParams,
+          page: pagination.currentPage || browseParams?.page,
+        })
+        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.currentPage]);
+
+  return { browseResults: browseResponse, handleSubmit, pagination };
 }

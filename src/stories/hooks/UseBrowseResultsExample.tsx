@@ -38,7 +38,7 @@ function BrowseResults({
   filterValue: string;
   configs?: UseBrowseResultsConfig;
 }) {
-  const browseResults = useBrowseResults(filterName, filterValue, configs);
+  const { browseResults } = useBrowseResults(filterName, filterValue, configs);
 
   return (
     <>

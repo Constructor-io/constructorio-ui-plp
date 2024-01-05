@@ -3,7 +3,7 @@ import { SearchParameters } from '@constructor-io/constructorio-client-javascrip
 import { useEffect, useReducer } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { transformSearchResponse } from '../utils/transformers';
-import { PaginationObject } from '../types';
+import { PaginationObject, PlpSearchResponse } from '../types';
 import {
   SearchStatus,
   searchReducer,
@@ -60,6 +60,8 @@ const fetchSearchResults = async (
 export default function useSearchResults(
   query: string,
   configs: UseSearchResultsConfigs = {},
+  // Todo: utilize initial search response
+  initialSearchResponse?: PlpSearchResponse,
 ): UseSearchResultsReturn {
   const { searchParams } = configs;
   const contextValue = useCioPlpContext();
@@ -84,16 +86,26 @@ export default function useSearchResults(
 
   const { search: data, status } = state;
 
-  const pagination = usePagination(data.response, data.request);
+  const pagination = usePagination({
+    initialPage: data.request?.page,
+    totalNumResults: data.response?.totalNumResults,
+    resultsPerPage: data.response?.numResultsPerPage,
+  });
 
-  if (!cioClient) {
+  // Throw error if client is not provided and window is defined (i.e. not SSR)
+  if (!cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (query) {
-      fetchSearchResults(cioClient, query, searchParams || {}, dispatch);
+    if (cioClient && query) {
+      fetchSearchResults(
+        cioClient,
+        query,
+        { ...searchParams, page: pagination.currentPage || searchParams?.page } || {},
+        dispatch,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);
@@ -102,6 +114,6 @@ export default function useSearchResults(
     status,
     data,
     pagination,
-    refetch: () => fetchSearchResults(cioClient, query, searchParams || {}, dispatch),
+    refetch: () => cioClient && fetchSearchResults(cioClient, query, searchParams || {}, dispatch),
   };
 }

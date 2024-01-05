@@ -1,10 +1,12 @@
 /* eslint-disable max-len */
 import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
+import { Nullable } from '@constructor-io/constructorio-client-javascript/lib/types';
+
 import { Item } from '../../types';
 
 export default function useOnProductCardClick(
-  cioClient: ConstructorIO,
+  cioClient: Nullable<ConstructorIO>,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
   return useCallback(
@@ -13,12 +15,14 @@ export default function useOnProductCardClick(
       // TODO: Obtain the search term - CSL3018
       const { itemName, itemId, variationId } = item;
 
-      cioClient.tracker.trackSearchResultClick('', {
-        itemId,
-        itemName,
-        variationId,
-        section: 'Products',
-      });
+      if (cioClient) {
+        cioClient.tracker.trackSearchResultClick('', {
+          itemId,
+          itemName,
+          variationId,
+          section: 'Products',
+        });
+      }
 
       if (callback) callback(event, item);
 

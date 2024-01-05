@@ -52,6 +52,10 @@ export default function ProductCard(props: ProductCardProps) {
     throw new Error('This component is meant to be used within the CioPlpContext.');
   }
 
+  if (!item.data || !item.itemId || !item.itemName) {
+    throw new Error('data, itemId, or itemName are required.');
+  }
+
   const client = state.cioClient;
   const getPrice = state.getters.getPrice || defaultGetPrice;
   const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
