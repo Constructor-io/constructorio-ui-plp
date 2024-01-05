@@ -30,7 +30,7 @@ export const defaultQueryStringMap = {
 };
 
 export function getUrl(): string {
-  return `${window.location.origin}${window.location.pathname}`;
+  return window.location.href;
 }
 
 export function setUrl(newUrlWithEncodedState: string) {
