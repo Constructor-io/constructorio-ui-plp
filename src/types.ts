@@ -9,6 +9,7 @@ import {
   SearchResponse,
   SortOption,
   GetBrowseResultsResponse,
+  VariationsMap,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -27,13 +28,52 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
 
+export interface Encoders {
+  getUrl: () => string;
+  setUrl: (newUrlWithEncodedState: string) => void;
+  decodeStateFromUrl: (urlString: string) => RequestConfigs;
+  encodeStateToUrl: (state: RequestConfigs, options?: QueryParamEncodingOptions) => string;
+}
+
+export interface RequestConfigs {
+  // Search
+  query?: string;
+
+  // Browse
+  filterName?: string;
+  filterValue?: string;
+
+  // Others
+  filters?: Record<string, any>;
+  sortOrder?: SortOrder;
+  sortBy?: string;
+  resultsPerPage?: number;
+  page?: number;
+  offset?: number;
+  section?: string;
+  fmtOptions?: Record<string, any>;
+  variationsMap?: VariationsMap;
+  preFilterExpression?: FilterExpression;
+}
+
+export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
+
+export interface QueryParamEncodingOptions {
+  url?: string;
+  origin?: string;
+  pathname?: string;
+  hash?: string;
+}
+
 export interface PlpContext {
   cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
+  defaultRequestConfigs: RequestConfigs;
   getters: Getters;
   formatters: Formatters;
   callbacks: Callbacks;
+  encoders: Encoders;
 }
 
 export interface PrimaryColorStyles {
@@ -50,7 +90,38 @@ export type Variation = Omit<
   'variations | matchedTerms | isSlotted | labels | variationsMap'
 >;
 
-export type VariationsMap = Record<string, any> | Record<string, any>[];
+export type SortOrder = 'ascending' | 'descending';
+
+export interface FmtOptions extends Record<string, any> {
+  groups_max_depth?: number;
+  groups_start?: 'current' | 'top';
+}
+
+export type FilterExpression =
+  | FilterExpressionGroup
+  | FilterExpressionNot
+  | FilterExpressionValue
+  | FilterExpressionRange;
+
+export type FilterExpressionGroup = FilterExpressionGroupOr | FilterExpressionGroupAnd;
+
+export type FilterExpressionGroupOr = { or: FilterExpression[] };
+export type FilterExpressionGroupAnd = { and: FilterExpression[] };
+export type FilterExpressionCondition = 'or' | 'and';
+
+export type FilterExpressionNot = { not: FilterExpression };
+
+export type FilterExpressionValue = {
+  name: string;
+  value: string;
+};
+
+export type FilterExpressionRange = {
+  name: string;
+  range: FilterExpressionRangeValue;
+};
+
+export type FilterExpressionRangeValue = ['-inf' | number, 'inf' | number];
 
 export interface Item {
   matchedTerms: Array<string>;
@@ -100,17 +171,6 @@ export interface PlpBrowseResponse {
   rawResponse: GetBrowseResultsResponse;
 }
 
-// Type Extenders
-export type PropsWithChildren<P> = P & { children?: ReactNode };
-/**
- * Composes a type for a Component that accepts
- * - Props P,
- * - A children function, that takes RenderProps as its argument
- */
-export type IncludeRenderProps<P, RenderProps> = P & {
-  children?: (props: RenderProps) => ReactNode;
-};
-
 /**
  * Represents a function that handles pagination logic.
  * @param searchResponse - The search response data.
@@ -149,3 +209,16 @@ export interface PaginationObject {
    *  [1, 2, 3, 4, ..., 10] */
   pages: number[];
 }
+
+// Type Extenders
+export type PropsWithChildren<P> = P & { children?: ReactNode };
+/**
+ * Composes a type for a Component that accepts
+ * - Props P,
+ * - A children function, that takes RenderProps as its argument
+ */
+export type IncludeRenderProps<P, RenderProps> = P & {
+  children?: (props: RenderProps) => ReactNode;
+};
+
+export type Nullable<T> = T | null;

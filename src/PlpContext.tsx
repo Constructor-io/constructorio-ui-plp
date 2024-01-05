@@ -2,7 +2,8 @@ import React, { PropsWithChildren, createContext, useContext, useMemo, useState 
 import useCioClient from './hooks/useCioClient';
 import * as defaultGetters from './utils/getters';
 import * as defaultFormatters from './utils/formatters';
-import { Callbacks, Formatters, Getters, PlpContext } from './types';
+import * as defaultEncoders from './utils/encoders';
+import { Callbacks, Formatters, Getters, PlpContext, Encoders, RequestConfigs } from './types';
 
 const plpContext = createContext<PlpContext | null>(null);
 plpContext.displayName = 'PlpContext';
@@ -21,28 +22,35 @@ export function CioPlpContext(
     formatters?: Formatters;
     callbacks?: Callbacks;
     getters?: Getters;
+    encoders?: Encoders;
+    defaultRequestConfigs?: RequestConfigs;
   }>,
 ) {
-  const { apiKey, formatters, callbacks, getters, children } = props;
+  const {
+    apiKey,
+    formatters,
+    callbacks,
+    getters,
+    encoders,
+    children,
+    defaultRequestConfigs = {},
+  } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
-  // More states
 
   const cioClient = useCioClient(apiKey);
 
-  // To Consider: Splitting the context into separate layers
-  // Global Configurations
-  // Api Results
-  // User activity
   const state = useMemo(
     () => ({
       cioClient,
       cioClientOptions,
       setCioClientOptions,
+      defaultRequestConfigs,
       getters: { ...defaultGetters, ...getters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
+      encoders: { ...defaultEncoders, ...encoders },
     }),
-    [cioClient, cioClientOptions, getters, formatters, callbacks],
+    [cioClient, cioClientOptions, getters, formatters, callbacks, encoders, defaultRequestConfigs],
   );
 
   return <plpContext.Provider value={state}>{children}</plpContext.Provider>;
