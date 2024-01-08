@@ -1,10 +1,10 @@
 import React from 'react';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
-import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import { PropsWithChildrenRenderProps } from '../../types';
+import { IncludeRenderProps } from '../../types';
 import ProductList from '../ProductList';
 import './SearchResults.css';
+import { useCioPlpContext } from '../../PlpContext';
 
 /**
  * Props for the SearchResults component.
@@ -20,10 +20,7 @@ type ChildrenFunctionProps = UseSearchResultsReturn;
 /**
  * Type alias for SearchResultsProps with RenderProps.
  */
-type SearchResultsWithRenderProps = PropsWithChildrenRenderProps<
-  SearchResultsProps,
-  ChildrenFunctionProps
->;
+type SearchResultsWithRenderProps = IncludeRenderProps<SearchResultsProps, ChildrenFunctionProps>;
 
 /**
  * Renders the search results based on the provided query and search parameters.

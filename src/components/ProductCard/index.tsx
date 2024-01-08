@@ -1,10 +1,10 @@
 import React from 'react';
-import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
 import { getPrice as defaultGetPrice } from '../../utils/getters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
-import { PropsWithChildrenRenderProps, Item } from '../../types';
+import { IncludeRenderProps, Item } from '../../types';
+import { useCioPlpContext } from '../../PlpContext';
 
 interface Props {
   /**
@@ -39,7 +39,7 @@ export interface ProductCardRenderProps extends ProductCardProps {
   onClick: (event: React.MouseEvent, item: Item) => void;
 }
 
-export type ProductCardProps = PropsWithChildrenRenderProps<Props, ProductCardRenderProps>;
+export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>;
 
 /**
  * ProductCard component that has ConstructorIO tracking built-in.

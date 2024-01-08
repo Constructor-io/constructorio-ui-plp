@@ -14,9 +14,9 @@ import * as SearchResultsStories from './SearchResults.stories';
 
     return (
       <>
-        <CioPlp apiKey={MY_API_KEY}>
+        <CioPlpContext apiKey={MY_API_KEY}>
           <SearchResults initialQuery='red'>
-        </CioPlp>
+        </CioPlpContext>
       </>
     );
   }
@@ -43,11 +43,11 @@ function myApp() {
   ...
 
   return (
-    <CioPlp apiKey={MY_API_KEY}>
+    <CioPlpContext apiKey={MY_API_KEY}>
       <SearchResults initialQuery='red' searchParams={searchParams} >
         {({data, pagination, refetch}) => data?.response?.results?.map((item) => <li>{item.itemName}</li>)}
       </SearchResults>
-    </CioPlp>
+    </CioPlpContext>
   )
 }
 ```

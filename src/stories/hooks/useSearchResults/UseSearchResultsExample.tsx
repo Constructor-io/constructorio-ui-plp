@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useSearchResults from '../../../hooks/useSearchResults';
-import CioPlp from '../../../components/CioPlp';
+import { CioPlpContext } from '../../../PlpContext';
 import { DEMO_API_KEY } from '../../../constants';
 
 export interface UseCioClientExampleProps {
@@ -35,9 +35,9 @@ export default function UseSearchResultsExample({ query, searchParams }: UseCioC
   return (
     <>
       <h1>useSearchResults</h1>
-      <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <SearchResults query={query} searchParams={searchParams} />
-      </CioPlp>
+      </CioPlpContext>
     </>
   );
 }

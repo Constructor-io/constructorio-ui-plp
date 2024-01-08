@@ -137,7 +137,7 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
  * - Props P,
  * - A children function, that takes RenderProps as its argument
  */
-export type PropsWithChildrenRenderProps<ComponentProps, RenderFunctionProps> = ComponentProps & {
+export type IncludeRenderProps<ComponentProps, RenderFunctionProps> = ComponentProps & {
   children?: ((props: RenderFunctionProps) => ReactNode) | React.ReactNode;
 };
 

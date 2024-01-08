@@ -4,10 +4,10 @@ import {
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
-import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
 import usePagination from './usePagination';
+import { useCioPlpContext } from '../PlpContext';
 
 export type UseBrowseResultsConfig = {
   cioClient?: Nullable<ConstructorIOClient>;

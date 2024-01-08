@@ -1,8 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { PropsWithChildrenRenderProps, PaginationObject } from '../../types';
+import { IncludeRenderProps, PaginationObject } from '../../types';
 
-type PaginationWithRenderProps = PropsWithChildrenRenderProps<
+type PaginationWithRenderProps = IncludeRenderProps<
   { pagination: PaginationObject },
   PaginationObject
 >;

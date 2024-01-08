@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductCard from '../src/components/ProductCard';
-import CioPlp from '../src/components/CioPlp';
+import { CioPlpContext } from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import testItem from './local_examples/item.json';
 import { transformResultItem } from '../src/utils/transformers';
@@ -20,9 +20,9 @@ describe('Testing Component: ProductCard', () => {
     spy.mockImplementation(() => {});
     expect(() =>
       render(
-        <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpContext apiKey={DEMO_API_KEY}>
           <ProductCard />
-        </CioPlp>,
+        </CioPlpContext>,
       ),
     ).toThrow();
     spy.mockRestore();
@@ -30,9 +30,9 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render default price formatting if not overridden', () => {
     render(
-      <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
+      </CioPlpContext>,
     );
     screen.getByText('$79.00');
   });
@@ -40,9 +40,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should render custom price formatting if overridden at the PlpContext level', () => {
     const contextPriceFormatter = (price) => `USD$${price.toFixed(2)}`;
     render(
-      <CioPlp apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
+      </CioPlpContext>,
     );
     screen.getByText('USD$79.00');
   });
@@ -50,9 +50,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should retrieve custom price if overridden at the PlpContext level', () => {
     const contextPriceGetter = (item) => item.data.altPrice;
     render(
-      <CioPlp apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
+      </CioPlpContext>,
     );
     screen.getByText('$69.00');
   });
@@ -60,9 +60,11 @@ describe('Testing Component: ProductCard', () => {
   test('Should run custom onclick handler if overridden at the PlpContext level', () => {
     const contextOnClickHandler = jest.fn();
     render(
-      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onProductCardClick: contextOnClickHandler }}>
+      <CioPlpContext
+        apiKey={DEMO_API_KEY}
+        callbacks={{ onProductCardClick: contextOnClickHandler }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
+      </CioPlpContext>,
     );
     // Click the title
     fireEvent.click(screen.getByText('Jersey Riviera Shirt (Park Bench Dot)'));
@@ -84,9 +86,9 @@ describe('Testing Component: ProductCard', () => {
   test('Should run custom onAddToCart handler if overridden at the PlpContext level', () => {
     const contextOnAddToCart = jest.fn();
     render(
-      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+      <CioPlpContext apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
+      </CioPlpContext>,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
@@ -95,14 +97,14 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render renderProps argument', () => {
     render(
-      <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price
             <div>My Rendered Price: {props.formatPrice(props.getPrice(props.item))}</div>
           )}
         </ProductCard>
-      </CioPlp>,
+      </CioPlpContext>,
     );
 
     screen.getByText('My Rendered Price: $79.00');

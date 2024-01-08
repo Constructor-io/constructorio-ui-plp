@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DEMO_API_KEY } from '../../constants';
 import useCioClient from '../../hooks/useCioClient';
 import SearchResults from '../../Components/SearchResults';
-import CioPlp from '../../components/CioPlp';
+import { CioPlpContext } from '../../PlpContext';
 
 /**
  * This interface will be rendered as a table in Storybook
@@ -44,7 +44,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
         />
       </div>
 
-      <CioPlp apiKey={DEMO_API_KEY} cioClient={cioClient}>
+      <CioPlpContext apiKey={DEMO_API_KEY} cioClient={cioClient}>
         <SearchResults initialQuery={searchQuery}>
           {({ data, pagination, refetch }) => (
             <div>
@@ -73,7 +73,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
             </div>
           )}
         </SearchResults>
-      </CioPlp>
+      </CioPlpContext>
     </>
   );
 }

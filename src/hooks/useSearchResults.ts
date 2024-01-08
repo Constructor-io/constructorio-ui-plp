@@ -1,7 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useReducer } from 'react';
-import { useCioPlpContext } from './useCioPlpContext';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationObject, PlpSearchResponse } from '../types';
 import {
@@ -11,6 +10,7 @@ import {
   SearchData,
 } from '../components/SearchResults/searchReducer';
 import usePagination from './usePagination';
+import { useCioPlpContext } from '../PlpContext';
 
 export type UseSearchResultsConfigs = {
   searchParams?: SearchParameters;

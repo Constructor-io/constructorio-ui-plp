@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useBrowseResults, { UseBrowseResultsConfig } from '../../hooks/useBrowseResults';
-import CioPlp from '../../components/CioPlp';
 import { DEMO_API_KEY } from '../../constants';
+import { CioPlpContext } from '../../PlpContext';
 
 export interface UseCioClientExampleProps {
   /**
@@ -80,13 +80,13 @@ export default function UseBrowseResultsExample({
     <>
       <h1>useBrowseResults</h1>
       <p>This hook returns an object with the following properties:</p>
-      <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpContext apiKey={DEMO_API_KEY}>
         <BrowseResults
           filterName={filterName}
           filterValue={filterValue}
           configs={storybookConfigs}
         />
-      </CioPlp>
+      </CioPlpContext>
     </>
   );
 }

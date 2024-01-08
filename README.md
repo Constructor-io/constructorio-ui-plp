@@ -21,12 +21,12 @@ npm i @constructor-io/constructorio-ui-plp
 The `CioPlp` component handles state management, data fetching, and rendering logic for the entire PLP.
 
 ```jsx
-import CioPlp from '@constructor-io/constructorio-ui-plp';
+import { CioPlpContext } from '@constructor-io/constructorio-ui-plp';
 
 function YourComponent() {
   return (
     <div>
-      <CioPlp apiKey='key_M57QS8SMPdLdLx4x' />
+      <CioPlpContext apiKey='key_M57QS8SMPdLdLx4x' />
     </div>
   );
 }
@@ -38,7 +38,7 @@ This is a framework agnostic method that can be used in any JavaScript project. 
 In addition to [PLP component props](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/plp-component--docs), this function also accepts `selector` and `includeCSS`.
 
 ```js
-import CioPlp from '@constructor-io/constructorio-ui-plp/constructorio-ui-plp-bundled';
+import { CioPlpContext } from '@constructor-io/constructorio-ui-plp/constructorio-ui-plp-bundled';
 
 CioPlp({
   selector: '#plp-container',
@@ -84,7 +84,7 @@ You may need an appropriate loader to handle this file type, currently no loader
 
 To solve this you can import the CommonJS (cjs) build which supports ES6 (ES2015) syntax:
 
-`import CioPlp from '@constructor-io/constructorio-ui-plp/cjs'`
+`import { CioPlpContext } from '@constructor-io/constructorio-ui-plp/cjs'`
 
 **ESLint**
 
