@@ -12,7 +12,7 @@ A Component to manage pagination interactions and UI.
 ## Basic Example
   ```jsx
   import React from 'react';
-  import { CioPlpContext, Pagination, usePagination } from '@constructor-io/constructorio-ui-plp';
+  import { CioPlp, Pagination, usePagination } from '@constructor-io/constructorio-ui-plp';
 
   const apiKey = 'MY_API_KEY'
 
@@ -21,9 +21,9 @@ A Component to manage pagination interactions and UI.
 
     return (
       <>
-        <CioPlpContext apiKey={MY_API_KEY}>
+        <CioPlp apiKey={MY_API_KEY}>
           <Pagination pagination={{ currentPage, goToPage, nextPage, pages, prevPage, totalPages }}>
-        </CioPlpContext>
+        </CioPlp>
       </>
     );
   }
@@ -33,13 +33,13 @@ A Component to manage pagination interactions and UI.
 ## Using RenderProps
 If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
 ```jsx
-import { CioPlpContext, Pagination } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, Pagination } from '@constructor-io/constructorio-ui-plp'
 
 function myApp() {
   ...
   
   return (
-    <CioPlpContext apiKey={YOUR_API_KEY}>
+    <CioPlp apiKey={YOUR_API_KEY}>
       <Pagination>
         {
           ({
@@ -69,7 +69,7 @@ function myApp() {
            )
         }
       </Pagination>
-    </CioPlpContext>
+    </CioPlp>
   )
 }
 ```

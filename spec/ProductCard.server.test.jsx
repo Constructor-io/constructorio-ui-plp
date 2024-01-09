@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { CioPlpContext } from '../src/PlpContext';
+import { CioPlpProvider as CioPlp } from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import ProductCard from '../src/components/ProductCard';
 import testItem from './local_examples/item.json';
@@ -16,25 +16,25 @@ describe('ProductCard: React Server-Side Rendering', () => {
     jest.resetAllMocks();
   });
 
-  test('Should throw error if used outside the CioPlpContext', () => {
+  test('Should throw error if used outside the CioPlp provider', () => {
     expect(() => ReactDOMServer.renderToString(<ProductCard />)).toThrow();
   });
 
   test("Should throw error if item isn't provided", () => {
     expect(() =>
       ReactDOMServer.renderToString(
-        <CioPlpContext apiKey={DEMO_API_KEY}>
+        <CioPlp apiKey={DEMO_API_KEY}>
           <ProductCard />
-        </CioPlpContext>,
+        </CioPlp>,
       ),
     ).toThrow();
   });
 
   test('Should render default price formatting if not overridden', () => {
     const html = ReactDOMServer.renderToString(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     expect(html).toContain('$79.00');
   });
@@ -42,9 +42,9 @@ describe('ProductCard: React Server-Side Rendering', () => {
   test('Should render custom price formatting if overridden at the PlpContext level', () => {
     const customPriceFormatter = (price) => `USD$${price.toFixed(2)}`;
     const html = ReactDOMServer.renderToString(
-      <CioPlpContext apiKey={DEMO_API_KEY} formatters={{ formatPrice: customPriceFormatter }}>
+      <CioPlp apiKey={DEMO_API_KEY} formatters={{ formatPrice: customPriceFormatter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     expect(html).toContain('USD$79.00');
   });
@@ -52,23 +52,23 @@ describe('ProductCard: React Server-Side Rendering', () => {
   test('Should retrieve custom price if overridden at the PlpContext level', () => {
     const customPriceGetter = (item) => item.data.altPrice;
     const html = ReactDOMServer.renderToString(
-      <CioPlpContext apiKey={DEMO_API_KEY} getters={{ getPrice: customPriceGetter }}>
+      <CioPlp apiKey={DEMO_API_KEY} getters={{ getPrice: customPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     expect(html).toContain('$69.00');
   });
 
   test('Should renders custom children correctly', () => {
     const html = ReactDOMServer.renderToString(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)}>
           {({ formatPrice, getPrice, item }) => (
             // Custom Rendered Price
             <div>My Rendered Price: {formatPrice(getPrice(item))}</div>
           )}
         </ProductCard>
-      </CioPlpContext>,
+      </CioPlp>,
     );
 
     // React injects <!-- --> on the server to mark dynamic content for rehydration
@@ -79,9 +79,9 @@ describe('ProductCard: React Server-Side Rendering', () => {
     const invalidItem = {};
     expect(() =>
       ReactDOMServer.renderToString(
-        <CioPlpContext apiKey={DEMO_API_KEY}>
+        <CioPlp apiKey={DEMO_API_KEY}>
           <ProductCard item={invalidItem} />
-        </CioPlpContext>,
+        </CioPlp>,
       ),
     ).toThrow('data, itemId, or itemName are required.');
   });

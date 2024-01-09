@@ -2,13 +2,13 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductCard from '../src/components/ProductCard';
-import { CioPlpContext } from '../src/PlpContext';
+import { CioPlpProvider as CioPlp } from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import testItem from './local_examples/item.json';
 import { transformResultItem } from '../src/utils/transformers';
 
 describe('Testing Component: ProductCard', () => {
-  test('Should throw error if used outside the CioPlpContext', () => {
+  test('Should throw error if used outside the CioPlp', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
     expect(() => render(<ProductCard />)).toThrow();
@@ -20,9 +20,9 @@ describe('Testing Component: ProductCard', () => {
     spy.mockImplementation(() => {});
     expect(() =>
       render(
-        <CioPlpContext apiKey={DEMO_API_KEY}>
+        <CioPlp apiKey={DEMO_API_KEY}>
           <ProductCard />
-        </CioPlpContext>,
+        </CioPlp>,
       ),
     ).toThrow();
     spy.mockRestore();
@@ -30,41 +30,39 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render default price formatting if not overridden', () => {
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     screen.getByText('$79.00');
   });
 
-  test('Should render custom price formatting if overridden at the PlpContext level', () => {
+  test('Should render custom price formatting if overridden at the CioPlp provider level', () => {
     const contextPriceFormatter = (price) => `USD$${price.toFixed(2)}`;
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
+      <CioPlp apiKey={DEMO_API_KEY} formatters={{ formatPrice: contextPriceFormatter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     screen.getByText('USD$79.00');
   });
 
-  test('Should retrieve custom price if overridden at the PlpContext level', () => {
+  test('Should retrieve custom price if overridden at the CioPlp provider level', () => {
     const contextPriceGetter = (item) => item.data.altPrice;
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
+      <CioPlp apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     screen.getByText('$69.00');
   });
 
-  test('Should run custom onclick handler if overridden at the PlpContext level', () => {
+  test('Should run custom onclick handler if overridden at the CioPlp provider level', () => {
     const contextOnClickHandler = jest.fn();
     render(
-      <CioPlpContext
-        apiKey={DEMO_API_KEY}
-        callbacks={{ onProductCardClick: contextOnClickHandler }}>
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onProductCardClick: contextOnClickHandler }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
     // Click the title
     fireEvent.click(screen.getByText('Jersey Riviera Shirt (Park Bench Dot)'));
@@ -83,12 +81,12 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
   });
 
-  test('Should run custom onAddToCart handler if overridden at the PlpContext level', () => {
+  test('Should run custom onAddToCart handler if overridden at the CioPlp provider level', () => {
     const contextOnAddToCart = jest.fn();
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
         <ProductCard item={transformResultItem(testItem)} />
-      </CioPlpContext>,
+      </CioPlp>,
     );
 
     fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
@@ -97,14 +95,14 @@ describe('Testing Component: ProductCard', () => {
 
   test('Should render renderProps argument', () => {
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price
             <div>My Rendered Price: {props.formatPrice(props.getPrice(props.item))}</div>
           )}
         </ProductCard>
-      </CioPlpContext>,
+      </CioPlp>,
     );
 
     screen.getByText('My Rendered Price: $79.00');

@@ -4,7 +4,7 @@ import {
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
-import { useCioPlpContext } from '../PlpContext';
+import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
 import usePagination from '../components/Pagination/usePagination';
@@ -25,7 +25,7 @@ export type UseBrowseResultsReturn = {
  * @param filterName Browse Filter Name
  * @param filterValue Browse Filter Value
  * @param configs A configuration object
- * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlpContext.
+ * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlp provider.
  * @param configs.browseParams Browse Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-browse.html#~getBrowseResults for the full list of options.
  */
 export default function useBrowseResults(

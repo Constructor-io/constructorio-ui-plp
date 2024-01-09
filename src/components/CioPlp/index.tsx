@@ -1,13 +1,52 @@
-import React from 'react';
-import { useCioPlpContext } from '../../PlpContext';
+import React, { useMemo, useState } from 'react';
+import useCioClient from '../../hooks/useCioClient';
+import * as defaultGetters from '../../utils/getters';
+import * as defaultFormatters from '../../utils/formatters';
+import {
+  Callbacks,
+  Formatters,
+  Getters,
+  PlpContextValue,
+  ConstructorIOClient,
+  IncludeRenderProps,
+  Nullable,
+} from '../../types';
+import { PlpContext } from '../../hooks/useCioPlpContext';
 
-export default function CioPlp() {
-  const state = useCioPlpContext();
+export interface CioPlpProviderProps {
+  apiKey: string;
+  cioClient?: Nullable<ConstructorIOClient>;
+  formatters?: Formatters;
+  callbacks?: Callbacks;
+  getters?: Getters;
+}
+
+// Children function props
+type ChildrenFunctionProps = PlpContextValue;
+
+export function CioPlpProvider(
+  props: IncludeRenderProps<CioPlpProviderProps, ChildrenFunctionProps>,
+) {
+  const { apiKey, formatters, callbacks, getters, cioClient: customCioClient, children } = props;
+  const [cioClientOptions, setCioClientOptions] = useState({});
+
+  const cioClient = useCioClient(apiKey);
+
+  const contextValue = useMemo(
+    (): PlpContextValue => ({
+      cioClient: customCioClient || cioClient,
+      cioClientOptions,
+      setCioClientOptions,
+      getters: { ...defaultGetters, ...getters },
+      formatters: { ...defaultFormatters, ...formatters },
+      callbacks: { ...callbacks },
+    }),
+    [cioClient, customCioClient, cioClientOptions, getters, formatters, callbacks],
+  );
 
   return (
-    <div>
-      <div>This is a Product Listing Page (PLP)</div>
-      <div>{JSON.stringify(state?.cioClientOptions)}</div>
-    </div>
+    <PlpContext.Provider value={contextValue}>
+      {typeof children === 'function' ? children(contextValue) : children}
+    </PlpContext.Provider>
   );
 }
