@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { CioPlpProvider as CioPlp } from '../src/components/CioPlp';
-import { useCioPlpContext } from '../src/hooks/useCioPlpContext';
-import { DEMO_API_KEY } from '../src/constants';
+import { CioPlpProvider as CioPlp } from '../../src/components/CioPlp';
+import { useCioPlpContext } from '../../src/hooks/useCioPlpContext';
+import { DEMO_API_KEY } from '../../src/constants';
 
 describe('CioPlp React Server-Side Rendering', () => {
   it("throws an error if apiKey isn't provided", () => {
@@ -24,6 +24,14 @@ describe('CioPlp React Server-Side Rendering', () => {
       <CioPlp apiKey={DEMO_API_KEY}>
         <div>Test</div>
       </CioPlp>,
+    );
+    expect(html).toContain('<div>Test</div>');
+  });
+
+  it('renders CioPlp provider with render props on the server', () => {
+    // Render the component to a string
+    const html = ReactDOMServer.renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>{() => <div>Test</div>}</CioPlp>,
     );
     expect(html).toContain('<div>Test</div>');
   });
