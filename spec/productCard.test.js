@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductCard from '../src/components/ProductCard';
-import { CioPlpProvider as CioPlp } from '../src/components/CioPlp';
+import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import testItem from './local_examples/item.json';
 import { transformResultItem } from '../src/utils/transformers';

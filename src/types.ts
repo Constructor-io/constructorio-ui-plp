@@ -115,6 +115,16 @@ export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = Componen
   children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
 };
 
+export interface CioPlpProviderProps {
+  apiKey: string;
+  cioClient?: Nullable<ConstructorIOClient>;
+  formatters?: Formatters;
+  callbacks?: Callbacks;
+  getters?: Getters;
+}
+
+export type CioPlpProps = CioPlpProviderProps;
+
 /**
  * Represents a function that handles pagination logic.
  * @param searchResponse - The search response data.

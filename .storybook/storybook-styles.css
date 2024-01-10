@@ -6,11 +6,6 @@
   background-color: #F6F9FC;
 }
 
-#storybook-docs .sbdocs-content ul li{
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
 .small-container-example-wrapper {
   height: 100%;
   display: grid;

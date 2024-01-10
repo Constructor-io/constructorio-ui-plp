@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { IBrowseParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useBrowseResults, { UseBrowseResultsConfig } from '../../hooks/useBrowseResults';
-import { CioPlpProvider as CioPlp } from '../../components/CioPlp';
+import CioPlp from '../../components/CioPlp';
 import { DEMO_API_KEY } from '../../constants';
 
 export interface UseCioClientExampleProps {

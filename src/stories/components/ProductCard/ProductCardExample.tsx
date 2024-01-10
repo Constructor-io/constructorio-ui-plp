@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductCard, { ProductCardProps } from '../../../components/ProductCard';
 import { DEMO_API_KEY } from '../../../constants';
-import { CioPlpProvider as CioPlp } from '../../../components/CioPlp';
+import CioPlp from '../../../components/CioPlp';
 
 /**
  * A Product Card UI Component

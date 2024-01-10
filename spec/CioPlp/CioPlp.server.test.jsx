@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { CioPlpProvider as CioPlp } from '../../src/components/CioPlp';
+import CioPlp from '../../src/components/CioPlp';
 import { useCioPlpContext } from '../../src/hooks/useCioPlpContext';
 import { DEMO_API_KEY } from '../../src/constants';
 

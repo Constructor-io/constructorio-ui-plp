@@ -1,0 +1,65 @@
+import { Meta, Markdown } from '@storybook/blocks';
+import * as CioPlpStories from './CioPlp.stories';
+import CioPlpContextValue from './CioPlpContextValue.md?raw'
+
+<Meta of={CioPlpStories} />
+
+## CioPlp
+
+The `<CioPlp/>` component is designed to simplify and enhance the way you manage and display product listings or similar content in your application.
+It serves as a versatile wrapper around other components, allowing for consistent context management and flexible content rendering.
+
+**Key Features:**
+
+- Context Management: [Context values](../?path=/docs/components-cioplp--documentation#cipplp-context-value) are accessible within children of CioPlp
+- Flexible Rendering
+- Fallback UI: If you use CioPlp without any children, it renders a default markups
+
+### Usage with render props pattern
+>[Render function accessible Props from CipPlp Context value](..?path=/docs/components-cioplp--documentation#cipplp-context-value)
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+
+function MyComponent() {
+  return (
+    <CioPlp>
+      {({ cioClient, cioClientOptions, setCioClientOptions, formatters, getters }) => <div />}
+    </CioPlp>
+  );
+}
+```
+
+### Usage with useCioPlpContext
+
+[Utilizing the Context](..?path=/docs/components-cioplp--documentation#cipplp-context-value):
+
+Inside `ChildOfCioPlp` or other child components, you can access the context provided by `CioPlp` for any of the context values.
+
+```jsx
+import { CioPlp, useCioPlpContext } from '@constructor-io/constructorio-ui-plp';
+
+function ChildOfCioPlp(params) {
+  const { cioClient, cioClientOptions, setCioClientOptions, formatters, getters } =
+    useCioPlpContext();
+
+  return <div />;
+}
+
+function MyComponent() {
+  return (
+    <CioPlp>
+      <ChildOfCioPlp />
+    </CioPlp>
+  );
+}
+```
+
+------
+
+### CipPlp Context value
+>Accessible to children of the CioPlp component via [render props](../?path=/docs/components-cioplp--documentation#usage-with-render-props-pattern) 
+or via [useCioPlpContext()](../?path=/docs/components-cioplp--documentation#usage-with-usecioplpcontext) hook. 
+
+<Markdown>{CioPlpContextValue}</Markdown>
+

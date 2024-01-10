@@ -6,7 +6,7 @@ export { default as useCioClient } from './hooks/useCioClient';
 export * from './hooks/callbacks';
 
 // Components
-export { CioPlpProvider as CioPlp } from './components/CioPlp';
+export { default as CioPlp } from './components/CioPlp';
 export { default as ProductCard, ProductCardProps } from './components/ProductCard';
 
 export { useCioPlpContext } from './hooks/useCioPlpContext';
