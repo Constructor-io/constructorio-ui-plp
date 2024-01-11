@@ -13,6 +13,8 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
+export { Nullable, ConstructorIOClient };
+
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface Getters {
@@ -28,7 +30,7 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
 
-export interface PlpContext {
+export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
@@ -109,9 +111,19 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
  * - Props P,
  * - A children function, that takes RenderProps as its argument
  */
-export type IncludeRenderProps<P, RenderProps> = P & {
-  children?: (props: RenderProps) => ReactNode;
+export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
+  children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
 };
+
+export interface CioPlpProviderProps {
+  apiKey: string;
+  cioClient?: Nullable<ConstructorIOClient>;
+  formatters?: Formatters;
+  callbacks?: Callbacks;
+  getters?: Getters;
+}
+
+export type CioPlpProps = CioPlpProviderProps;
 
 /**
  * Represents a function that handles pagination logic.

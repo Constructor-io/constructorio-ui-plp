@@ -56,7 +56,7 @@
         "devDependencies": [
           "**/stories/**/*.*",
           "**/.storybook/**/*.*",
-          "spec/*.*"
+          "spec/**/*.*"
         ],
         "peerDependencies": true
       }

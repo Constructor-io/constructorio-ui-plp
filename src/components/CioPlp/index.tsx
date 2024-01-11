@@ -1,13 +1,12 @@
 import React from 'react';
-import { useCioPlpContext } from '../../PlpContext';
+import { CioPlpProps, IncludeRenderProps, PlpContextValue } from '../../types';
+import CioPlpProvider from './CioPlpProvider';
 
-export default function CioPlp() {
-  const state = useCioPlpContext();
+// Wrapper component for CioPlpProvider with default Markup
+export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContextValue>) {
+  const { children } = props;
+  // Todo: Add SearchResults/BrowseResults
+  const defaultMarkup = <div>To Do: Return actual default markup</div>;
 
-  return (
-    <div>
-      <div>This is a Product Listing Page (PLP)</div>
-      <div>{JSON.stringify(state?.cioClientOptions)}</div>
-    </div>
-  );
+  return <CioPlpProvider {...props}>{children || defaultMarkup}</CioPlpProvider>;
 }

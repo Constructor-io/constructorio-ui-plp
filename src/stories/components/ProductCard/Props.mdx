@@ -39,9 +39,9 @@ facilitating flexible and dynamic rendering.
   | Name              | type                 | description|
   | :-----------------| :--------------------| :--------- |
   | item              | `Item`               | Item to be rendered as the Product Card. |
-  | formatPrice       | `function(price: number) => string` | Function to format the price. Defaults to "$0.00". Set globally at the PlpContext level. |
-  | getPrice          | `function(item: Item) => number` | Function to retrieve the price. Defaults to `item.data.price`. Set globally at the PlpContext level. |
-  | onAddToCart       | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on add-to-cart event. Set globally at the PlpContext level. |
-  | onClick           | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on Product Card Click. Set globally at the PlpContext level. |
+  | formatPrice       | `function(price: number) => string` | Function to format the price. Defaults to "$0.00". Set globally at the CioPlp provider level. |
+  | getPrice          | `function(item: Item) => number` | Function to retrieve the price. Defaults to `item.data.price`. Set globally at the CioPlp provider level. |
+  | onAddToCart       | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on add-to-cart event. Set globally at the CioPlp provider level. |
+  | onClick           | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on Product Card Click. Set globally at the CioPlp provider level. |
 
 
