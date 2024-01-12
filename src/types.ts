@@ -19,7 +19,7 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface Getters {
   getPrice: (item: Item) => number;
-  getSwatches: (item: Item) => SwatchItem[];
+  getSwatches: (item: Item, retrievePrice: Getters['getPrice']) => SwatchItem[];
 }
 
 export interface Formatters {
