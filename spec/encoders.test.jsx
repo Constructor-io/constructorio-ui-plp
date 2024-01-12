@@ -47,6 +47,30 @@ describe('Testing Default Encoders: encodeStateToUrl', () => {
     const section = params.get(defaultQueryStringMap.section);
     expect(section).toBe('Products');
   });
+
+  test('Should not encode parameters not defined in defaultQueryStringMap', () => {
+    const urlString = encodeStateToUrl(testRequestState, {
+      baseUrl: 'https://www.example.com/a/random/path',
+    });
+    const url = new URL(urlString);
+    const params = url.searchParams;
+
+    // Check if we used `null` or `undefined` as keys
+    const nullCheck = params.get(null);
+    expect(nullCheck).toBeNull();
+
+    const undefinedCheck = params.get(undefined);
+    expect(undefinedCheck).toBeNull();
+
+    // Check for the values
+    expect(urlString.indexOf(testRequestState.query)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.filterName)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.filterValue)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.fmtOptions)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.preFilterExpression)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.variationsMap)).toBe(-1);
+    expect(urlString.indexOf(testRequestState.qsParam)).toBe(-1);
+  });
 });
 
 describe('Testing Default Encoders: decodeStateFromUrl', () => {

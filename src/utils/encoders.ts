@@ -80,6 +80,10 @@ export function encodeStateToUrl(
 
   const params = new URLSearchParams();
   Object.entries(state).forEach(([key, val]) => {
+    if (defaultQueryStringMap[key] === undefined) {
+      return;
+    }
+
     let encodedVal: string;
 
     if (key === 'filters' && state.filters) {
