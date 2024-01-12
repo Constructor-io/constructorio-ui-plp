@@ -10,6 +10,8 @@ import {
   SortOption,
   GetBrowseResultsResponse,
   VariationsMap,
+  FilterExpression,
+  FmtOptions,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -51,7 +53,7 @@ export interface RequestConfigs {
   page?: number;
   offset?: number;
   section?: string;
-  fmtOptions?: Record<string, any>;
+  fmtOptions?: FmtOptions;
   variationsMap?: VariationsMap;
   preFilterExpression?: FilterExpression;
 }
@@ -90,37 +92,6 @@ export type Variation = Omit<
 >;
 
 export type SortOrder = 'ascending' | 'descending';
-
-export interface FmtOptions extends Record<string, any> {
-  groups_max_depth?: number;
-  groups_start?: 'current' | 'top';
-}
-
-export type FilterExpression =
-  | FilterExpressionGroup
-  | FilterExpressionNot
-  | FilterExpressionValue
-  | FilterExpressionRange;
-
-export type FilterExpressionGroup = FilterExpressionGroupOr | FilterExpressionGroupAnd;
-
-export type FilterExpressionGroupOr = { or: FilterExpression[] };
-export type FilterExpressionGroupAnd = { and: FilterExpression[] };
-export type FilterExpressionCondition = 'or' | 'and';
-
-export type FilterExpressionNot = { not: FilterExpression };
-
-export type FilterExpressionValue = {
-  name: string;
-  value: string;
-};
-
-export type FilterExpressionRange = {
-  name: string;
-  range: FilterExpressionRangeValue;
-};
-
-export type FilterExpressionRangeValue = ['-inf' | number, 'inf' | number];
 
 export interface Item {
   matchedTerms: Array<string>;
