@@ -7,13 +7,11 @@ import { Item } from '../../types';
 
 export default function useOnAddToCart(
   cioClient: Nullable<ConstructorIO>,
-  getPrice: (item: Item) => number,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
   return useCallback(
-    (event: React.MouseEvent, item: Item, selectedVariationId?: string) => {
+    (event: React.MouseEvent, item: Item, revenue: number, selectedVariationId?: string) => {
       const { itemId, itemName, variationId } = item;
-      const revenue = getPrice(item);
 
       // TODO: Obtain the search term, if it exists - CSL3018
       if (cioClient) {
@@ -31,6 +29,6 @@ export default function useOnAddToCart(
       event.preventDefault();
       event.stopPropagation();
     },
-    [callback, getPrice, cioClient],
+    [callback, cioClient],
   );
 }

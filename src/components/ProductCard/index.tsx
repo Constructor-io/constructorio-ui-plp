@@ -2,11 +2,10 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
-import { getPrice as defaultGetPrice } from '../../utils/getters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
-import { IncludeRenderProps, Item } from '../../types';
+import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch/ProductSwatch';
-import useProductSwatch from '../ProductSwatch/useProductSwatch';
+import useProductInfo from '../../hooks/useProduct';
 
 interface Props {
   /**
@@ -25,15 +24,19 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   formatPrice: (price: number) => string;
   /**
-   * Function to retrieve the price. Defaults to `item.data.price`.
-   * Set globally at the CioPlp provider level.
+   * Object containing information about the current product, variation
    */
-  getPrice: (item: Item) => number;
+  productInfo: ProductInfoObject;
   /**
    * Callback to run on add-to-cart event.
    * Set globally at the CioPlp provider level.
    */
-  onAddToCart: (event: React.MouseEvent, item: Item) => void;
+  onAddToCart: (
+    event: React.MouseEvent,
+    item: Item,
+    revenue: number,
+    selectedVariation: string,
+  ) => void;
   /**
    * Callback to run on Product Card Click.
    * Set globally at the CioPlp provider level.
@@ -48,9 +51,9 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
  */
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
-
-  const productSwatch = useProductSwatch({ item });
   const state = useCioPlpContext();
+  const productInfo = useProductInfo({ item });
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -61,21 +64,20 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   const client = state.cioClient;
-  const getPrice = state.getters.getPrice || defaultGetPrice;
-  const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
-  const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
+  const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
-
-  const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
-  const itemPrice =
-    formatPrice(productSwatch?.selectedVariation?.price) || formatPrice(getPrice(item));
-  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
-  const itemUrl = productSwatch?.selectedVariation?.url || item.url;
+  const formatPrice = state?.formatters?.formatPrice || defaultFormatPrice;
 
   return (
     <>
       {typeof children === 'function' ? (
-        children({ item, getPrice, formatPrice, onAddToCart, onClick })
+        children({
+          item,
+          productInfo,
+          formatPrice,
+          onAddToCart,
+          onClick,
+        })
       ) : (
         <a
           className='cio-product-card'
@@ -86,15 +88,15 @@ export default function ProductCard(props: ProductCardProps) {
           </div>
 
           <div className='cio-content'>
-            <div className='cio-item-price'>{itemPrice}</div>
+            <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
             <div className='cio-item-name'>{itemName}</div>
             <div className='cio-item-swatches'>Here lie the swatches</div>
-            <ProductSwatch swatchObject={productSwatch} />
+            {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
             <div>
               <button
                 type='button'
                 onClick={(e) =>
-                  onAddToCart(e, item, productSwatch?.selectedVariation?.variationId)
+                  onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
                 }>
                 Add to Cart
               </button>

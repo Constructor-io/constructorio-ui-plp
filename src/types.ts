@@ -186,3 +186,17 @@ export type UseProductSwatchProps = {
 };
 
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
+
+export interface ProductInfoObject {
+  productSwatch: ProductSwatchObject | undefined;
+  itemName: string;
+  itemPrice: number;
+  itemUrl: string | undefined;
+  itemImageUrl: string | undefined;
+}
+
+export type UseProductInfoProps = {
+  item: Item;
+};
+
+export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
