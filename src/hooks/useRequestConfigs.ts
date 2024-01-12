@@ -8,8 +8,17 @@ export default function useRequestConfigs(): RequestConfigs {
   }
 
   const { encoders, defaultRequestConfigs } = context;
-  const { getUrl, decodeStateFromUrl } = encoders;
+  const { getUrl, decodeStateFromUrlQueryParams, getBrowseStateFromPath } = encoders;
 
-  const urlRequestConfigs = decodeStateFromUrl(getUrl());
-  return { ...defaultRequestConfigs, ...urlRequestConfigs };
+  const url = getUrl();
+  const { filterName, filterValue } = getBrowseStateFromPath(url) || {};
+  const urlRequestConfigs = decodeStateFromUrlQueryParams(url);
+
+  const requestConfigs: RequestConfigs = { ...defaultRequestConfigs, ...urlRequestConfigs };
+  if (filterName && filterValue) {
+    requestConfigs.filterName = filterName;
+    requestConfigs.filterValue = filterValue;
+  }
+
+  return requestConfigs;
 }

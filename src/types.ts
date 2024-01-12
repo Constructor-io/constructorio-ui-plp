@@ -30,11 +30,27 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
 
+export type DefaultQueryStringMap = {
+  query: 'q';
+  page: 'page';
+  offset: 'offset';
+  resultsPerPage: 'numResults';
+  filters: 'f';
+  sortBy: 'sortBy';
+  sortOrder: 'sortOrder';
+  section: 'section';
+};
+
 export interface Encoders {
   getUrl: () => string;
   setUrl: (newUrlWithEncodedState: string) => void;
-  decodeStateFromUrl: (urlString: string) => RequestConfigs;
-  encodeStateToUrl: (state: RequestConfigs, options?: QueryParamEncodingOptions) => string;
+  decodeStateFromUrlQueryParams: (urlString: string) => RequestConfigs;
+  encodeStateToUrlQueryParams: (
+    state: RequestConfigs,
+    options: QueryParamEncodingOptions,
+  ) => string;
+  getBrowseStateFromPath: (url: string) => { filterName: string; filterValue: string } | null;
+  defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
 export interface RequestConfigs {

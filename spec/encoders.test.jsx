@@ -1,30 +1,27 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import testRequestState from './local_examples/sampleRequestState.json';
-import testUrl from './local_examples/sampleEncodedUrl.json';
+import testUrl from './local_examples/testJsonEncodedUrl.json';
 import {
-  decodeStateFromUrl,
-  encodeStateToUrl,
+  decodeStateFromUrlQueryParams,
+  encodeStateToUrlQueryParams,
   defaultQueryStringMap,
   getUrl,
   setUrl,
+  getBrowseStateFromPath,
 } from '../src/utils/encoders';
 
-describe('Testing Default Encoders: encodeStateToUrl', () => {
+describe('Testing Default Encoders: encodeStateToUrlQueryParams', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
-      encodeStateToUrl(testRequestState, { baseUrl: 'https://www.example.com/a/random/path' }),
+      encodeStateToUrlQueryParams(testRequestState, {
+        baseUrl: 'https://www.example.com/a/random/path',
+      }),
     );
     const params = url.searchParams;
 
     const query = params.get(defaultQueryStringMap.query);
     expect(query).toBe('item');
-
-    const filterName = params.get(defaultQueryStringMap.filterName);
-    expect(filterName).toBe('group_id');
-
-    const filterValue = params.get(defaultQueryStringMap.filterValue);
-    expect(filterValue).toBe('Styles');
 
     const filters = params.get(defaultQueryStringMap.filters);
     expect(filters).toBe('[["price","5-100"],["test","testValue"],["lowestPrice",100]]');
@@ -49,7 +46,7 @@ describe('Testing Default Encoders: encodeStateToUrl', () => {
   });
 
   test('Should not encode parameters not defined in defaultQueryStringMap', () => {
-    const urlString = encodeStateToUrl(testRequestState, {
+    const urlString = encodeStateToUrlQueryParams(testRequestState, {
       baseUrl: 'https://www.example.com/a/random/path',
     });
     const url = new URL(urlString);
@@ -63,7 +60,6 @@ describe('Testing Default Encoders: encodeStateToUrl', () => {
     expect(undefinedCheck).toBeNull();
 
     // Check for the values
-    expect(urlString.indexOf(testRequestState.query)).toBe(-1);
     expect(urlString.indexOf(testRequestState.filterName)).toBe(-1);
     expect(urlString.indexOf(testRequestState.filterValue)).toBe(-1);
     expect(urlString.indexOf(testRequestState.fmtOptions)).toBe(-1);
@@ -73,18 +69,12 @@ describe('Testing Default Encoders: encodeStateToUrl', () => {
   });
 });
 
-describe('Testing Default Encoders: decodeStateFromUrl', () => {
+describe('Testing Default Encoders: decodeStateFromUrlQueryParams', () => {
   test('Should decode all request parameters as defined in defaultQueryStringMap', () => {
-    const state = decodeStateFromUrl(testUrl);
+    const state = decodeStateFromUrlQueryParams(testUrl);
 
     expect(typeof state.query).toBe('string');
     expect(state.query).toBe('item');
-
-    expect(typeof state.filterName).toBe('string');
-    expect(state.filterName).toBe('group_id');
-
-    expect(typeof state.filterValue).toBe('string');
-    expect(state.filterValue).toBe('Styles');
 
     expect(typeof state.filters).toBe('object');
     expect(state.filters).toEqual({
@@ -140,5 +130,15 @@ describe('Testing Default Encoders: getUrl, setUrl', () => {
     }
 
     render(<TestReactComponent />);
+  });
+});
+
+describe('Testing Default Encoders: getBrowseStateFromPath', () => {
+  const mockUrl = 'https://example.com/a/random/lastPathName?q=3&randomQuery=[true,%20false]';
+
+  test('getBrowseGroup should get the last path name as the group_id', () => {
+    const { filterName, filterValue } = getBrowseStateFromPath(mockUrl);
+    expect(filterName).toBe('group_id');
+    expect(filterValue).toBe('lastPathName');
   });
 });

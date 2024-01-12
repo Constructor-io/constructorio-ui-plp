@@ -1,4 +1,4 @@
-import type { RequestConfigs, QueryParamEncodingOptions } from '../types';
+import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
 
 function decodeArrayAsObj<T>(objStr: string): T | undefined {
   try {
@@ -16,10 +16,8 @@ function encodeObjAsArray(obj: Record<string, any>) {
   return JSON.stringify(objAsArray);
 }
 
-export const defaultQueryStringMap = {
+export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
-  filterName: 'filterName',
-  filterValue: 'filterValue',
   page: 'page',
   offset: 'offset',
   resultsPerPage: 'numResults',
@@ -27,7 +25,26 @@ export const defaultQueryStringMap = {
   sortBy: 'sortBy',
   sortOrder: 'sortOrder',
   section: 'section',
-};
+});
+
+export function getBrowseStateFromPath(urlString: string): {
+  filterName: string;
+  filterValue: string;
+} | null {
+  const url = new URL(urlString);
+  const paths = decodeURI(url?.pathname)?.split('/');
+
+  if (paths.length === 0) {
+    return null;
+  }
+
+  const groupId = paths[paths.length - 1];
+
+  return {
+    filterName: 'group_id',
+    filterValue: groupId,
+  };
+}
 
 export function getUrl(): string {
   return window.location.href;
@@ -37,7 +54,7 @@ export function setUrl(newUrlWithEncodedState: string) {
   window.location.href = newUrlWithEncodedState;
 }
 
-export function decodeStateFromUrl(url: string): RequestConfigs {
+export function decodeStateFromUrlQueryParams(url: string): RequestConfigs {
   const urlObject = new URL(url);
   const urlParams = urlObject.searchParams;
 
@@ -71,7 +88,7 @@ export function decodeStateFromUrl(url: string): RequestConfigs {
   return state;
 }
 
-export function encodeStateToUrl(
+export function encodeStateToUrlQueryParams(
   state: RequestConfigs,
   options: QueryParamEncodingOptions = {},
 ): string {
