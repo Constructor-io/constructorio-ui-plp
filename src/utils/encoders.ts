@@ -1,8 +1,8 @@
 import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
 
-function decodeArrayAsObj<T>(objStr: string): T | undefined {
+function decodeArrayAsObj<T>(arrStr: string): T | undefined {
   try {
-    const arr = JSON.parse(objStr);
+    const arr = JSON.parse(arrStr);
     return Object.fromEntries(arr) as T;
   } catch (err) {
     // Fail silently?

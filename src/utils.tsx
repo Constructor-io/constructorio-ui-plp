@@ -59,8 +59,8 @@ export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs
 export function getBrowseParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
   filterName: string;
   filterValue: string;
-  searchParams: RequestQueryParams;
+  queryParams: RequestQueryParams;
 } {
-  const { query, filterValue = '', filterName = '', ...searchParams } = requestConfigs;
-  return { filterName, filterValue, searchParams };
+  const { query, filterValue = '', filterName = '', ...queryParams } = requestConfigs;
+  return { filterName, filterValue, queryParams };
 }
