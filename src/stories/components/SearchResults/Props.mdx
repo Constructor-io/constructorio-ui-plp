@@ -1,0 +1,36 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as SearchResultsStories from './SearchResults.stories';
+
+<Meta of={SearchResultsStories} />
+
+### Props
+<Controls />
+
+### `PlpSearchResponse`
+  | property              | type                     | description|
+  | :---------------------| -------------------------| :--------- |
+  | resultId              | `string`                 | The result ID' |
+  | totalNumResults       | `number`                 | The total number of results across all pages |
+  | numResultsPerPage     | `number`                 | The number of results per page |
+  | results               | `Array<Item>`            | Array of Constructor result items |
+  | facets                | `Array<Facet>`           | Array of Constructor filters  |
+  | groups                | `Array<Group>`           | Array of group items the results belongs to  |
+  | sortOptions           | `Record<string, any>[]`  | Array of available sort options  |
+
+
+### `SearchParams`
+  | property              | type                     | description|
+  | :---------------------| -------------------------| :--------- |
+  | page                  | `number`                 | The page number of the results. Can't be used together with 'offset' |
+  | offset                | `number`                 | The number of results to skip from the beginning. Can't be used together with 'page' |
+  | resultsPerPage        | `number`                 | The number of results per page to return |
+  | filters                | `Record<string, any>`    | Filters used to refine search |
+  | sortBy                | `string`                 | The sort method for results |
+  | sortOrder             | `string`                 | The sort order for results  |
+  | section               | `string`                 | The section name for results, default 'Products'  |
+  | fmtOptions            | `FmtOptions`             | The format options used to refine result groups  |
+  | preFilterExpression   | `FilterExpression`       | Faceting expression to scope search results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details  |
+  | hiddenFields          | `string[]`               | Hidden metadata fields to return  |
+  | hiddenFacets          | `string[]`               | Hidden facet fields to return  |
+  | variationsMap         | `VariationsMap`          | The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details  |
+  | qsParam               | `Record<string, any>`    | Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.io/rest_api/search/queries for details  |

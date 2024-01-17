@@ -11,9 +11,7 @@ describe('Testing Hook: useCioClient', () => {
   });
 
   test('Should return a ConstructorIO Client Object', () => {
-    const { result } = renderHook(({ apiKey }) => useCioClient(apiKey), {
-      initialProps: { apiKey: 'xx' },
-    });
+    const { result } = renderHook(() => useCioClient({ apiKey: 'xx' }));
     const client = result.current;
     expect(client).not.toBeUndefined();
     expect(client.options).not.toBeUndefined();
@@ -42,9 +40,7 @@ describe('Testing Hook: useCioClient', () => {
       networkParameters: { timeout: 1000 },
     };
 
-    const { result } = renderHook(({ apiKey, options }) => useCioClient(apiKey, options), {
-      initialProps: { apiKey: key, options: clientOptions },
-    });
+    const { result } = renderHook(() => useCioClient({ apiKey: key, options: clientOptions }));
 
     const client = result.current;
     expect(client.options).toEqual({

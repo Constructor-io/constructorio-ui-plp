@@ -13,17 +13,13 @@ describe('Testing Hook on the server: useCioClient', () => {
   });
 
   it('Should throw error if Api Key not provided', () => {
-    expect(() =>
-      renderHookServerSide(() => useCioClient(), {
-        initialProps: {},
-      }),
-    ).toThrow('Api Key required');
+    expect(() => renderHookServerSide(() => useCioClient())).toThrow(
+      'Api Key or cioClient required',
+    );
   });
 
   it('Should return null when apiKey is provided', () => {
-    const { result } = renderHookServerSide(({ apiKey }) => useCioClient(apiKey), {
-      initialProps: { apiKey: 'xx' },
-    });
+    const { result } = renderHookServerSide(() => useCioClient({ apiKey: 'xx' }));
 
     expect(result).toBe(null);
   });
@@ -46,11 +42,8 @@ describe('Testing Hook on the server: useCioClient', () => {
       networkParameters: { timeout: 1000 },
     };
 
-    const { result } = renderHookServerSide(
-      ({ apiKey, options }) => useCioClient(apiKey, options),
-      {
-        initialProps: { apiKey: key, options: clientOptions },
-      },
+    const { result } = renderHookServerSide(() =>
+      useCioClient({ apiKey: key, options: clientOptions }),
     );
 
     expect(result).toBe(null);

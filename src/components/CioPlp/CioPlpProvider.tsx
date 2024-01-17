@@ -11,18 +11,18 @@ export default function CioPlpProvider(
   const { apiKey, formatters, callbacks, getters, cioClient: customCioClient, children } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
 
-  const cioClient = useCioClient(apiKey);
+  const cioClient = useCioClient({ apiKey, cioClient: customCioClient });
 
   const contextValue = useMemo(
     (): PlpContextValue => ({
-      cioClient: customCioClient || cioClient,
+      cioClient,
       cioClientOptions,
       setCioClientOptions,
       getters: { ...defaultGetters, ...getters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
     }),
-    [cioClient, customCioClient, cioClientOptions, getters, formatters, callbacks],
+    [cioClient, cioClientOptions, getters, formatters, callbacks],
   );
 
   return (

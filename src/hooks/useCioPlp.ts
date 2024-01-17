@@ -19,9 +19,9 @@ const useCioPlp: UseCioPlp = (configs) => {
     throw new Error('Api Key required');
   }
 
-  const cioClient = useCioClient(apiKey);
+  const cioClient = useCioClient({ apiKey });
   const useCustomSearchResults = (query: string, searchParams: SearchParameters) =>
-    useSearchResults(query, { cioClient, searchParams });
+    useSearchResults({ query, searchParams });
   const useCustomBrowseResults = (
     filterName: string,
     filterValue: string,

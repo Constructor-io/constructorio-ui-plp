@@ -10,7 +10,7 @@ A React Hook to retrieve browse results using Constructor.
 ## Usage with useCioClient
 ```jsx
 function myApp() {
-  const cioClient = useCioClient(MY_API_KEY)
+  const cioClient = useCioClient({apiKey: MY_API_KEY})
   const {browseResults, handleSubmit} = useBrowseResults(filterName, filterValue, {cioClient});
   ...
 }
