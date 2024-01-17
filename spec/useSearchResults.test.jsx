@@ -19,9 +19,7 @@ describe('Testing Hook: useSearchResults', () => {
   });
 
   it('Should return a PlpSearchResponse Object', async () => {
-    const { result } = renderHookWithCioPlpApiKey(() =>
-      useSearchResults({ query: 'linen', configs: {} }),
-    );
+    const { result } = renderHookWithCioPlpApiKey(() => useSearchResults({ query: 'linen' }));
 
     await waitFor(() => {
       const { current } = result;

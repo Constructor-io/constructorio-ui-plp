@@ -9,7 +9,7 @@ import {
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
 } from '../types';
-import { isRedirectResponse } from './typeHelpers';
+import { isRedirectResponse } from '../utils';
 
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {

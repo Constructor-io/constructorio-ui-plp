@@ -3,7 +3,7 @@ import { SearchParameters } from '@constructor-io/constructorio-client-javascrip
 import useSearchResults from '../../hooks/useSearchResults';
 import CioPlp from '../../components/CioPlp';
 import { DEMO_API_KEY } from '../../constants';
-import { PlpSearchRedirectResponse, PlpSearchResponse } from '../../types';
+import { PlpSearchResponse } from '../../types';
 
 export interface UseCioClientExampleProps {
   /**
