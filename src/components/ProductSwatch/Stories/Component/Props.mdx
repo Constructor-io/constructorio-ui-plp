@@ -1,0 +1,17 @@
+import { Meta, ArgTypes } from '@storybook/blocks';
+import ProductSwatch from '../../ProductSwatch';
+import * as ProductSwatchStories from './ProductSwatch.stories';
+
+<Meta of={ProductSwatchStories} />
+
+## Props
+
+<ArgTypes of={ProductSwatch} />
+
+`swatchObject`
+  | property          | type                          | description|
+  | :-----------------| ------------------------------| :--------- |
+  | swatchList        | `SwatchItem[]`                | Represents the List of Swatch items to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
+  | selectedVariation | `SwatchItem`                  | Allows you to navigate to a specific page and takes a page number as an argument |
+  | selectVariation   | `(swatch: SwatchItem) => void`| Navigate to the next page. Used to implement "Next" button in a pagination control |
+

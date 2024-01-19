@@ -15,6 +15,7 @@ export function getSwatches(
   item?.variations?.forEach((variation) => {
     if (retrieveSwatchPreview(variation)) {
       swatchList.push({
+        itemName: variation?.value || item?.itemName,
         url: variation?.data?.url || item?.data?.url,
         imageUrl: variation?.data?.image_url,
         variationId: variation?.data?.variation_id,
