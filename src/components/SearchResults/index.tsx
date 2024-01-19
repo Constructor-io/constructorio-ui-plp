@@ -36,6 +36,7 @@ type SearchResultsWithRenderProps = IncludeRenderProps<SearchResultsProps, Child
  */
 export default function SearchResults(props: SearchResultsWithRenderProps) {
   const { searchParams, initialQuery, initialSearchResponse } = props;
+  // TODO: Access searchParams from context that's returned from useRequestConfigs
   const context = useCioPlpContext();
 
   const { status, data, pagination, refetch } = useSearchResults({
