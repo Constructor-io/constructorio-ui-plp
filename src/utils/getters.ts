@@ -10,14 +10,21 @@ export function getSwatches(
   retrievePrice: Getters['getPrice'],
   retrieveSwatchPreview: Getters['getSwatchPreview'],
 ): SwatchItem[] | undefined {
-  return item?.variations?.map((variation) => ({
-    itemName: variation?.value || item?.value,
-    url: variation?.data?.url || item?.data?.url,
-    imageUrl: variation?.data?.image_url,
-    variationId: variation?.data?.variation_id,
-    price: retrievePrice(variation),
-    swatchPreview: retrieveSwatchPreview(variation),
-  }));
+  const swatchList: SwatchItem[] = [];
+
+  item?.variations?.forEach((variation) => {
+    if (retrieveSwatchPreview(variation)) {
+      swatchList.push({
+        url: variation?.data?.url || item?.data?.url,
+        imageUrl: variation?.data?.image_url,
+        variationId: variation?.data?.variation_id,
+        price: retrievePrice(variation),
+        swatchPreview: retrieveSwatchPreview(variation),
+      });
+    }
+  });
+
+  return swatchList;
 }
 
 export function getSwatchPreview(item: Item): string {
