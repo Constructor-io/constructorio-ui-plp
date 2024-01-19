@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
+import { isHexColor } from '../../utils';
 import './ProductSwatch.css';
 
 type ProductSwatchProps = IncludeRenderProps<
@@ -37,7 +38,11 @@ export default function ProductSwatch(props: ProductSwatchProps) {
                   selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
                 }`}
                 onClick={() => swatchClickHandler(swatch)}
-                style={{ background: swatch?.previewHexCode }}
+                style={{
+                  background: isHexColor(swatch?.swatchPreview)
+                    ? swatch?.swatchPreview
+                    : `url(${swatch?.swatchPreview})`,
+                }}
               />
             ))}
           </ul>

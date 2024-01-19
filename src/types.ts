@@ -19,7 +19,12 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface Getters {
   getPrice: (item: Item) => number;
-  getSwatches: (item: Item, retrievePrice: Getters['getPrice']) => SwatchItem[];
+  getSwatchPreview: (item: Item) => string;
+  getSwatches: (
+    item: Item,
+    retrievePrice: Getters['getPrice'],
+    retrieveSwatchPreview: Getters['getSwatchPreview'],
+  ) => SwatchItem[] | undefined;
 }
 
 export interface Formatters {
@@ -84,9 +89,8 @@ export interface SwatchItem {
   url?: string;
   itemName?: string;
   imageUrl?: string;
-  previewImageUrl?: string;
-  previewHexCode?: string;
   price?: number;
+  swatchPreview: string;
   variationId?: string;
 }
 

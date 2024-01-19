@@ -8,14 +8,18 @@ export function getPrice(item: Item): number {
 export function getSwatches(
   item: Item,
   retrievePrice: Getters['getPrice'],
+  retrieveSwatchPreview: Getters['getSwatchPreview'],
 ): SwatchItem[] | undefined {
   return item?.variations?.map((variation) => ({
-    itemName: variation?.value,
-    url: variation?.data?.url,
+    itemName: variation?.value || item?.value,
+    url: variation?.data?.url || item?.data?.url,
     imageUrl: variation?.data?.image_url,
     variationId: variation?.data?.variation_id,
     price: retrievePrice(variation),
-    previewImageUrl: variation?.data?.image_url,
-    previewHexCode: variation?.data?.swatchHex,
+    swatchPreview: retrieveSwatchPreview(variation),
   }));
+}
+
+export function getSwatchPreview(item: Item): string {
+  return item?.data?.swatchPreview;
 }
