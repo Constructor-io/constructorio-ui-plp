@@ -14,7 +14,7 @@ describe('Testing Hook on the server: useCioClient', () => {
 
   it('Should throw error if Api Key not provided', () => {
     expect(() => renderHookServerSide(() => useCioClient())).toThrow(
-      'Api Key or cioClient required',
+      'Either apiKey or cioJsClient is required',
     );
   });
 

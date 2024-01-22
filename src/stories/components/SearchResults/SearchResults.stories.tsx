@@ -26,14 +26,5 @@ export const Primary: Story = {
       <SearchResults {...args} />
     </CioPlp>
   ),
-  args: {
-    initialQuery: 'red',
-    searchParams: {
-      page: 1,
-      resultsPerPage: 6,
-      sortBy: 'relevance',
-      sortOrder: 'descending',
-      section: 'Products',
-    },
-  },
+  args: {},
 };

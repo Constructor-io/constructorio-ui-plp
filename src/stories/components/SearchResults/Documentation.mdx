@@ -18,7 +18,7 @@ A Component to manage the rendering and UI of SearchResults.
     return (
       <>
         <CioPlp apiKey={MY_API_KEY}>
-          <SearchResults initialQuery='red'>
+          <SearchResults />
         </CioPlp>
       </>
     );
@@ -35,20 +35,12 @@ import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp'
 
 const apiKey = 'MY_API_KEY';
 
-const searchParams = {
-  page: 1,
-  resultsPerPage: 6,
-  sortBy: 'relevance',
-  sortOrder: 'descending',
-  section: 'Products',
-};
-
 function myApp() {
   ...
 
   return (
     <CioPlp apiKey={MY_API_KEY}>
-      <SearchResults initialQuery='red' searchParams={searchParams} >
+      <SearchResults />
         {({data, pagination, refetch}) => data?.response?.results?.map((item) => <li>{item.itemName}</li>)}
       </SearchResults>
     </CioPlp>

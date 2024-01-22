@@ -10,7 +10,7 @@ export type CioClientConfig = { apiKey?: string };
 
 export interface UseCioClientProps {
   apiKey?: string;
-  cioClient?: Nullable<ConstructorIOClient> | undefined;
+  cioJsClient?: Nullable<ConstructorIOClient> | undefined;
   options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>;
 }
 
@@ -18,17 +18,17 @@ type UseCioClient = (props: UseCioClientProps) => Nullable<ConstructorIOClient> 
 
 const useCioClient: UseCioClient = (props) => {
   if (!props) {
-    throw new Error('Api Key or cioClient required');
+    throw new Error('Either apiKey or cioJsClient is required');
   }
 
-  const { apiKey, cioClient, options } = props;
+  const { apiKey, cioJsClient, options } = props;
 
-  if (!apiKey && !cioClient) {
-    throw new Error('Api Key or cioClient required');
+  if (!apiKey && !cioJsClient) {
+    throw new Error('Either apiKey or cioJsClient is required');
   }
 
   const memoizedCioClient = useMemo(() => {
-    if (cioClient && typeof window !== 'undefined') return cioClient;
+    if (cioJsClient && typeof window !== 'undefined') return cioJsClient;
 
     if (apiKey && typeof window !== 'undefined') {
       return new ConstructorIOClient({
@@ -40,7 +40,7 @@ const useCioClient: UseCioClient = (props) => {
     }
 
     return null;
-  }, [apiKey, options, cioClient]);
+  }, [apiKey, options, cioJsClient]);
   return memoizedCioClient;
 };
 

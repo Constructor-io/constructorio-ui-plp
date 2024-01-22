@@ -11,7 +11,7 @@ export default function CioPlpProvider(
   const { apiKey, formatters, callbacks, getters, cioClient: customCioClient, children } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
 
-  const cioClient = useCioClient({ apiKey, cioClient: customCioClient });
+  const cioClient = useCioClient({ apiKey, cioJsClient: customCioClient });
 
   const contextValue = useMemo(
     (): PlpContextValue => ({

@@ -4,16 +4,13 @@ import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchR
 import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from '../../types';
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import useRequestConfigs from '../../hooks/useRequestConfigs';
 import '../../styles.css';
 
 /**
  * Props for the SearchResults component.
  */
 interface SearchResultsProps {
-  // Initial query for the search results.
-  initialQuery?: string;
-  // Search parameters configuring the search request.
-  searchParams?: SearchParameters;
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
 }
 
@@ -28,20 +25,19 @@ type SearchResultsWithRenderProps = IncludeRenderProps<SearchResultsProps, Child
  *
  * @component
  * @param {Object} props - The component props.
- * @param {string} [props.initialQuery] - The initial search query.
- * @param {SearchParameters} [props.searchParams] - The search parameters.
  * @param {object} [props.initialSearchResponse] Default search response
  * @returns {JSX.Element} The rendered search results.
  * @throws {Error} Throws an error if the component is not rendered within CioPlpContext.
  */
 export default function SearchResults(props: SearchResultsWithRenderProps) {
-  const { searchParams, initialQuery, initialSearchResponse } = props;
-  // TODO: Access searchParams from context that's returned from useRequestConfigs
+  const { initialSearchResponse } = props;
   const context = useCioPlpContext();
 
+  const requestConfigs = useRequestConfigs() as SearchParameters & { query?: string };
+  const { query, ...restRequestConfigs } = requestConfigs;
   const { status, data, pagination, refetch } = useSearchResults({
-    query: initialQuery || '',
-    searchParams,
+    query: query || '',
+    searchParams: restRequestConfigs,
     initialSearchResponse,
   });
 
