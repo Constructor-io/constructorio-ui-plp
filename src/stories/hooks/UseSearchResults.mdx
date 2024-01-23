@@ -1,91 +1,34 @@
 import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
 import meta, { Primary } from './UseSearchResults.stories';
 
-<Meta of={meta} />
+<Meta of={meta} name='Code Examples'/>
 
-# `UseSearchResults`
+## `useSearchResults`
 A React Hook to retrieve search results using Constructor.
 
-## Usage with useCioClient
-```jsx
-function myApp() {
-  const cioClient = useCioClient(MY_API_KEY)
-  const {searchResults, handleSubmit} = useSearchResults(query, { cioClient });
-  ...
-}
-```
+>Note: useSearchResults can be only called in components that are direct children of `<CioPlp />`.
 
-## Usage with CioPlp provider
 ```jsx
+import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp'
+
 function SearchResults({ query }) {
-  const {searchResults} = useSearchResults(query);
-  ...
+  const { data } = useSearchResults({ query });
+
+  return <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
 }
 
 function myApp() {
   ...
   return (
-    <>
     <CioPlp apiKey={MY_API_KEY}>
       <SearchResults query={query} />
     </CioPlp>
-    </>
   )
 }
 ```
-
-
-## Working Example
-This is an example of how you might utilize the `useSearchResults` hook in tandem with the `CioPlp` provider to retrieve search results.
 
 <Canvas withSource="none">
   <Story of={Primary} />
 </Canvas>
 
 <Controls of={Primary} />
-
-### Working Example - Source Code 
-```jsx
-  import React from 'react';
-  import { CioPlp, useSearchResults } from '@constructor-io/constructorio-ui-plp';
-
-  const apiKey = 'MY_API_KEY'
-
-  // A simple React Component to showcase useSearchResults with CioPlp provider
-  function SearchResults({ query }) {
-    const searchParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-    const {searchResults} = useSearchResults(query, { searchParams });
-
-    return (
-      <>
-        <h2>Result Id </h2>
-        <div>{JSON.stringify(searchResults?.resultId)}</div>
-        <h2>Total Number of Results </h2>
-        <div>{JSON.stringify(searchResults?.totalNumResults)}</div>
-        <h2>Array of Groups</h2>
-        <div>{JSON.stringify(searchResults?.groups)}</div>
-        <h2>Array of Facets</h2>
-        <div>{JSON.stringify(searchResults?.facets)}</div>
-        <h2>Array of Sort Options</h2>
-        <div>{JSON.stringify(searchResults?.sortOptions)}</div>
-        <h2>Array of Results</h2>
-        <div>{JSON.stringify(searchResults?.results)}</div>
-      </>
-    );
-  }
-
-  // Main Component
-  function useSearchResultsExample() {
-    const [query] = useState('water')
-
-    return (
-      <>
-        <h1>useSearchResults</h1>
-        <p>This hook returns an object with the following properties:</p>
-        <CioPlp apiKey={MY_API_KEY}>
-          <SearchResults query={query} />
-        </CioPlp>
-      </>
-    );
-  }
-```

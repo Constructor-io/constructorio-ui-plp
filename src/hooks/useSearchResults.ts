@@ -1,78 +1,115 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import {
-  SearchParameters,
-  Nullable,
-} from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useState } from 'react';
-import { useCioPlpContext } from './useCioPlpContext';
+import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import { useEffect, useReducer } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
-import { PaginationProps, PlpSearchResponse } from '../types';
+import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
+import {
+  RequestStatus,
+  searchReducer,
+  SearchAction,
+  SearchData,
+  initialState,
+  initFunction,
+} from '../components/SearchResults/reducer';
+import { useCioPlpContext } from './useCioPlpContext';
 import usePagination from '../components/Pagination/usePagination';
 
-export type UseSearchResultsConfigs = {
-  cioClient?: Nullable<ConstructorIOClient>;
+export interface UseSearchResultsProps {
+  query: string;
   searchParams?: SearchParameters;
-};
+  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+}
 
-export type UseSearchResultsReturn = {
-  searchResults: PlpSearchResponse | null;
-  handleSubmit: () => void;
-  pagination: PaginationProps;
+export interface UseSearchResultsReturn {
+  status: RequestStatus;
+  message?: string;
+  data: SearchData;
+  pagination: PaginationObject;
+  refetch: () => void;
+}
+
+const fetchSearchResults = async (
+  client: ConstructorIOClient,
+  query: string,
+  searchParams: SearchParameters,
+  dispatch: React.Dispatch<SearchAction>,
+) => {
+  dispatch({
+    type: RequestStatus.FETCHING,
+  });
+
+  try {
+    const res = await client.search.getSearchResults(query, searchParams);
+
+    dispatch({
+      type: RequestStatus.SUCCESS,
+      payload: transformSearchResponse(res),
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      dispatch({
+        type: RequestStatus.ERROR,
+        payload: err.message,
+      });
+    }
+  }
 };
 
 /**
  * A React Hook to call to utilize Constructor.io Search
- * @param query Search Query
- * @param configs A configuration object
- * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlp provider.
- * @param configs.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
+ * @param {Object} props - The component props.
+ * @param {string} props.query Search Query
+ * @param {SearchParameters} props.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
+ * @param {object} [props.initialSearchResponse] Default search response
+ * @returns {status, data, pagination, refetch}
  */
-export default function useSearchResults(
-  query: string,
-  configs: UseSearchResultsConfigs = {},
-  initialSearchResponse?: PlpSearchResponse,
-): UseSearchResultsReturn {
-  const { cioClient, searchParams } = configs;
-  const state = useCioPlpContext();
-  const client = cioClient || state?.cioClient;
+export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
+  const { query, searchParams, initialSearchResponse } = props;
+  const contextValue = useCioPlpContext();
 
-  const [searchResponse, setSearchResponse] = useState<PlpSearchResponse | null>(
-    initialSearchResponse || null,
+  if (!contextValue) {
+    throw new Error(
+      'useSearchResults() must be used within a component that is a child of <CioPlp />',
+    );
+  }
+
+  const { cioClient } = contextValue;
+
+  const [state, dispatch] = useReducer(searchReducer, initialState, (defaultState) =>
+    initFunction(defaultState, initialSearchResponse),
   );
+
+  const { search: data, status, message } = state;
+
   const pagination = usePagination({
-    initialPage: searchResponse?.rawResponse.request.page,
-    totalNumResults: searchResponse?.totalNumResults,
-    resultsPerPage: searchResponse?.numResultsPerPage,
+    initialPage: data.request?.page,
+    totalNumResults: data.response?.totalNumResults,
+    resultsPerPage: data.response?.numResultsPerPage,
   });
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
-  if (!client && typeof window !== 'undefined') {
+  if (!cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
-  const handleSubmit = () => {
-    if (client) {
-      client.search
-        .getSearchResults(query, {
-          ...searchParams,
-          page: pagination.currentPage || searchParams?.page,
-        })
-        .then((res) => setSearchResponse(transformSearchResponse(res)));
-    }
-  };
-
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (query && client) {
-      client.search
-        .getSearchResults(query, {
-          ...searchParams,
-          page: pagination.currentPage || searchParams?.page,
-        })
-        .then((res) => setSearchResponse(transformSearchResponse(res)));
+    if (cioClient && query) {
+      fetchSearchResults(
+        cioClient,
+        query,
+        { ...searchParams, page: pagination.currentPage || searchParams?.page } || {},
+        dispatch,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);
 
-  return { searchResults: searchResponse, handleSubmit, pagination };
+  return {
+    status,
+    message,
+    data,
+    pagination,
+    refetch: () => cioClient && fetchSearchResults(cioClient, query, searchParams || {}, dispatch),
+  };
 }

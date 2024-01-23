@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DEMO_API_KEY } from '../../constants';
 import useCioClient from '../../hooks/useCioClient';
 import useSearchResults from '../../hooks/useSearchResults';
+import CioPlp from '../../components/CioPlp';
 
 /**
  * This interface will be rendered as a table in Storybook
@@ -15,6 +16,29 @@ interface UseCioClientExampleProps {
   apiKey?: string;
 }
 
+function SearchResults({ searchQuery }: { searchQuery: string }) {
+  const { data, refetch } = useSearchResults({
+    query: searchQuery,
+    searchParams: { resultsPerPage: 2, page: 1 },
+  });
+
+  return (
+    <>
+      {' '}
+      <div>
+        <button type='button' onClick={refetch}>
+          Search
+        </button>
+      </div>
+      {data.response?.results?.length && (
+        <div>
+          <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
+        </div>
+      )}
+    </>
+  );
+}
+
 // Note Description here will be translated into the story description
 /**
  * A React Hook to obtain a Constructor.io Client from our
@@ -23,11 +47,6 @@ interface UseCioClientExampleProps {
 export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps) {
   const cioClient = useCioClient(apiKey || DEMO_API_KEY);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const { searchResults, handleSubmit } = useSearchResults(searchQuery, {
-    cioClient,
-    searchParams: { resultsPerPage: 2, page: 1 },
-  });
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -46,17 +65,9 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
           onChange={onInputHandler}
         />
       </div>
-
-      <div>
-        <button type='button' onClick={handleSubmit}>
-          Search
-        </button>
-      </div>
-      {searchResults?.results.length && (
-        <div>
-          <ul>{searchResults?.results.map((result) => <li>{result.itemName}</li>)}</ul>
-        </div>
-      )}
+      <CioPlp cioClient={cioClient}>
+        <SearchResults searchQuery={searchQuery} />
+      </CioPlp>
     </>
   );
 }
@@ -67,37 +78,55 @@ import useCioClient from '../../hooks/useCioClient';
 
 const apiKey = 'MY_API_KEY'
 
-function UseCioClientExample() {
-  const cioClient = useCioClient(apiKey);
-  const [results, setResults] = useState({});
+function SearchResults({ searchQuery }: { searchQuery: string }) {
+  const { data, refetch } = useSearchResults({
+    query: searchQuery,
+    searchParams: { resultsPerPage: 2, page: 1 },
+  });
+
+  return (
+    <>
+      {' '}
+      <div>
+        <button type='button' onClick={refetch}>
+          Search
+        </button>
+      </div>
+      {data.response?.results?.length && (
+        <div>
+          <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
+        </div>
+      )}
+    </>
+  );
+}
+
+
+export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps) {
+  const cioClient = useCioClient(apiKey || DEMO_API_KEY);
   const [searchQuery, setSearchQuery] = useState('');
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  const runSearch = async () => {
-    const res = await cioClient.search.getSearchResults(searchQuery || '');
-    setResults(res.response.results);
-  };
-
   return (
     <>
       <h1>Search Results as JSON</h1>
-      <input
-        type='text'
-        name='searchBox'
-        id='searchBox'
-        placeholder='Search query'
-        value={searchQuery}
-        onChange={onInputHandler}
-      />
-      <div>{JSON.stringify(results)}</div>
       <div>
-        <button type='button' onClick={runSearch}>
-          Search
-        </button>
+        <input
+          type='text'
+          name='searchBox'
+          id='searchBox'
+          placeholder='Search query'
+          value={searchQuery}
+          onChange={onInputHandler}
+        />
       </div>
+      <CioPlp cioClient={cioClient}>
+        <SearchResults searchQuery={searchQuery} />
+      </CioPlp>
     </>
   );
-}`;
+}
+`;

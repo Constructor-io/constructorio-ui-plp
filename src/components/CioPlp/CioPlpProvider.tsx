@@ -8,21 +8,21 @@ import { PlpContext } from '../../hooks/useCioPlpContext';
 export default function CioPlpProvider(
   props: IncludeRenderProps<CioPlpProviderProps, PlpContextValue>,
 ) {
-  const { apiKey, formatters, callbacks, getters, cioClient: customCioClient, children } = props;
+  const { apiKey, formatters, callbacks, getters, children } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
 
   const cioClient = useCioClient(apiKey);
 
   const contextValue = useMemo(
     (): PlpContextValue => ({
-      cioClient: customCioClient || cioClient,
+      cioClient,
       cioClientOptions,
       setCioClientOptions,
       getters: { ...defaultGetters, ...getters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
     }),
-    [cioClient, customCioClient, cioClientOptions, getters, formatters, callbacks],
+    [cioClient, cioClientOptions, getters, formatters, callbacks],
   );
 
   return (

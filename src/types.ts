@@ -10,10 +10,14 @@ import {
   SortOption,
   GetBrowseResultsResponse,
   Nullable,
+  SearchRequestType,
+  SearchResponseType,
+  Redirect,
+  SearchParameters,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -29,6 +33,19 @@ export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
+
+export interface PlpSearchRedirectResponse {
+  resultId: string;
+  redirect: Partial<Redirect>;
+  rawResponse: SearchResponse;
+}
+
+export type RawApiResponseState = Nullable<SearchResponse>;
+export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
+export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
+export type RedirectResponseState = Nullable<
+  Omit<Partial<PlpSearchRedirectResponse>, 'rawResponse'>
+>;
 
 export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;
@@ -117,7 +134,6 @@ export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = Componen
 
 export interface CioPlpProviderProps {
   apiKey: string;
-  cioClient?: Nullable<ConstructorIOClient>;
   formatters?: Formatters;
   callbacks?: Callbacks;
   getters?: Getters;
