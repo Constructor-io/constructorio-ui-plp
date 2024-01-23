@@ -65,7 +65,7 @@ export default function UseCioClientExample({ apiKey }: UseCioClientExampleProps
           onChange={onInputHandler}
         />
       </div>
-      <CioPlp cioClient={cioClient}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <SearchResults searchQuery={searchQuery} />
       </CioPlp>
     </>
