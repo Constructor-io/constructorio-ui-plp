@@ -134,6 +134,7 @@ export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = Componen
 
 export interface CioPlpProviderProps {
   apiKey: string;
+  cioClient?: Nullable<ConstructorIOClient>;
   formatters?: Formatters;
   callbacks?: Callbacks;
   getters?: Getters;
