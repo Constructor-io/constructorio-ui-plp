@@ -1,11 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import useSearchResults from '../src/hooks/useSearchResults';
-import {
-  mockConstructorIOClient,
-  renderHookWithCioPlpApiKey,
-  renderHookWithCioPlpCioClient,
-} from './test-utils';
+import { mockConstructorIOClient, renderHookWithCioPlp } from './test-utils';
 
 describe('Testing Hook: useSearchResults', () => {
   beforeEach(() => {
@@ -19,7 +15,7 @@ describe('Testing Hook: useSearchResults', () => {
   });
 
   it('Should return a PlpSearchResponse Object', async () => {
-    const { result } = renderHookWithCioPlpApiKey(() => useSearchResults({ query: 'linen' }));
+    const { result } = renderHookWithCioPlp(() => useSearchResults({ query: 'linen' }));
 
     await waitFor(() => {
       const { current } = result;
@@ -42,7 +38,7 @@ describe('Testing Hook: useSearchResults', () => {
   it('Should pass along parameters properly', async () => {
     const filters = { Color: ['Phantom Ink'] };
     const resultsPerPage = 100;
-    renderHookWithCioPlpCioClient(() =>
+    renderHookWithCioPlp(() =>
       useSearchResults({
         query: 'Linen',
         searchParams: { filters, resultsPerPage, page: 1 },

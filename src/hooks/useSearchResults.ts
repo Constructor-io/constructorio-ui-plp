@@ -22,6 +22,7 @@ export interface UseSearchResultsProps {
 
 export interface UseSearchResultsReturn {
   status: RequestStatus;
+  message?: string;
   data: SearchData;
   pagination: PaginationObject;
   refetch: () => void;
@@ -78,7 +79,7 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
     initFunction(defaultState, initialSearchResponse),
   );
 
-  const { search: data, status } = state;
+  const { search: data, status, message } = state;
 
   const pagination = usePagination({
     initialPage: data.request?.page,
@@ -106,6 +107,7 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
 
   return {
     status,
+    message,
     data,
     pagination,
     refetch: () => cioClient && fetchSearchResults(cioClient, query, searchParams || {}, dispatch),

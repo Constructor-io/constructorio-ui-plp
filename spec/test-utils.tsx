@@ -5,8 +5,6 @@ import { DEMO_API_KEY } from '../src/constants';
 import apiBrowseResponse from './local_examples/apiBrowseResponse.json';
 import apiSearchResponse from './local_examples/apiSearchResponse.json';
 
-import CioPlp from '../src/components/CioPlp';
-
 // ConstructorIO Client Mock
 class MockConstructorIO extends ConstructorIO {
   browse = {
@@ -23,30 +21,25 @@ class MockConstructorIO extends ConstructorIO {
 const mockConstructorIOClient =
   typeof window !== 'undefined' ? new MockConstructorIO({ apiKey: DEMO_API_KEY }) : null;
 
+jest.mock('../src/hooks/useCioClient', () => ({
+  __esModule: true,
+  default: () => (() => mockConstructorIOClient)(),
+}));
+
+// eslint-disable-next-line import/first
+import CioPlp from '../src/components/CioPlp';
+
 // Context Wrapper
-function CioPlpWrapperApiKey({ children }: { children: any }) {
+function CioPlpWrapper({ children }: { children: any }) {
   return <CioPlp apiKey={DEMO_API_KEY}>{children}</CioPlp>;
 }
 
-function CioPlpWrapperCioClient({ children }: { children: any }) {
-  return <CioPlp cioClient={mockConstructorIOClient}>{children}</CioPlp>;
-}
+const customRender = (ui, options) => render(ui, { wrapper: CioPlpWrapper, ...options });
 
-const customRender = (ui, options) => render(ui, { wrapper: CioPlpWrapperApiKey, ...options });
-
-const customRenderHookWithApiKey: typeof renderHook = (callback, options) =>
+const customRenderHook: typeof renderHook = (callback, options) =>
   renderHook(callback, {
     wrapper: ({ children }) => (
       <CioPlp apiKey={DEMO_API_KEY} {...options?.initialProps}>
-        {children}
-      </CioPlp>
-    ),
-  });
-
-const customRenderHookWithCioClient: typeof renderHook = (callback, options) =>
-  renderHook(callback, {
-    wrapper: ({ children }) => (
-      <CioPlp cioClient={mockConstructorIOClient} {...options?.initialProps}>
         {children}
       </CioPlp>
     ),
@@ -58,9 +51,6 @@ export * from '@testing-library/react';
 // override render method
 export {
   customRender as renderWithCioPlp,
-  customRenderHookWithApiKey as renderHookWithCioPlpApiKey,
-  customRenderHookWithCioClient as renderHookWithCioPlpCioClient,
+  customRenderHook as renderHookWithCioPlp,
   mockConstructorIOClient,
-  CioPlpWrapperApiKey,
-  CioPlpWrapperCioClient,
 };

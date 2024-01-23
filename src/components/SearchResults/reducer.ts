@@ -25,6 +25,7 @@ export interface SearchData {
 
 export interface SearchState {
   status: RequestStatus;
+  message?: string;
   search: SearchData;
 }
 
@@ -88,6 +89,7 @@ export function searchReducer(state: SearchState, action: SearchAction) {
       return {
         ...state,
         status: RequestStatus.ERROR,
+        message: action.payload,
       };
     }
     default: {
