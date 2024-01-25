@@ -51,7 +51,7 @@
     "test-storybook:watch": "test-storybook --watch",
     "test-storybook:ci": "start-server-and-test storybook:ci http://localhost:6006 test-storybook",
     "build-storybook": "storybook build --docs -o 'docs'",
-    "storybook-docs-dev": "storybook dev --docs -p 6007'",
+    "storybook-docs-dev": "storybook dev --docs -p 6007",
     "serve-built-storybook": "npx http-server docs",
     "verify-node-version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh",
     "version": "npm run verify-node-version && npm run build-storybook && git add -u ./docs && git add ./docs/* && npm run compile",
