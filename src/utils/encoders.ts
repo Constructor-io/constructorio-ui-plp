@@ -27,25 +27,6 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
   section: 'section',
 });
 
-export function getBrowseStateFromPath(urlString: string): {
-  filterName: string;
-  filterValue: string;
-} | null {
-  const url = new URL(urlString);
-  const paths = decodeURI(url?.pathname)?.split('/');
-
-  if (paths.length === 0) {
-    return null;
-  }
-
-  const groupId = paths[paths.length - 1];
-
-  return {
-    filterName: 'group_id',
-    filterValue: groupId,
-  };
-}
-
 export function getUrl(): string {
   return window.location.href;
 }
@@ -54,9 +35,17 @@ export function setUrl(newUrlWithEncodedState: string) {
   window.location.href = newUrlWithEncodedState;
 }
 
-export function decodeStateFromUrlQueryParams(url: string): RequestConfigs {
+export function getStateFromUrl(url: string): RequestConfigs {
   const urlObject = new URL(url);
   const urlParams = urlObject.searchParams;
+  const paths = decodeURI(urlObject?.pathname)?.split('/');
+  let filterName: string | undefined;
+  let filterValue: string | undefined;
+
+  if (paths.length > 0) {
+    filterName = 'group_id';
+    filterValue = paths[paths.length - 1];
+  }
 
   const rawState = {} as Record<string, string>;
   Object.entries(defaultQueryStringMap).forEach(([key, val]) => {
@@ -84,11 +73,15 @@ export function decodeStateFromUrlQueryParams(url: string): RequestConfigs {
   if (offset) state.offset = Number(offset);
   if (resultsPerPage) state.resultsPerPage = Number(resultsPerPage);
   if (filters) state.filters = decodeArrayAsObj<Record<string, any>>(filters);
+  if (filterName) {
+    state.filterName = filterName;
+    state.filterValue = filterValue;
+  }
 
   return state;
 }
 
-export function encodeStateToUrlQueryParams(
+export function getUrlFromState(
   state: RequestConfigs,
   options: QueryParamEncodingOptions = {},
 ): string {
@@ -114,5 +107,10 @@ export function encodeStateToUrlQueryParams(
     params.set(defaultQueryStringMap[key], encodedVal);
   });
 
-  return `${baseUrl}?${params.toString()}`;
+  let groupPath = '';
+  if (state.filterValue) {
+    groupPath = `/${state.filterName}/${state.filterValue}`;
+  }
+
+  return `${baseUrl}${groupPath}?${params.toString()}`;
 }

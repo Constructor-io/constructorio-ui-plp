@@ -44,12 +44,8 @@ export type DefaultQueryStringMap = {
 export interface Encoders {
   getUrl: () => string;
   setUrl: (newUrlWithEncodedState: string) => void;
-  decodeStateFromUrlQueryParams: (urlString: string) => RequestConfigs;
-  encodeStateToUrlQueryParams: (
-    state: RequestConfigs,
-    options: QueryParamEncodingOptions,
-  ) => string;
-  getBrowseStateFromPath: (url: string) => { filterName: string; filterValue: string } | null;
+  getStateFromUrl: (urlString: string) => RequestConfigs;
+  getUrlFromState: (state: RequestConfigs, options: QueryParamEncodingOptions) => string;
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 

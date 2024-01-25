@@ -5,29 +5,33 @@ import { CioPlpContext } from '../src/PlpContext';
 import testRequestState from './local_examples/sampleRequestState.json';
 import testUrl from './local_examples/testJsonEncodedUrl.json';
 import { DEMO_API_KEY } from '../src/constants';
+import { getStateFromUrl as defaultGetStateFromUrl } from '../src/utils/encoders';
+import { RequestConfigs } from '../src/types';
 
 describe('Testing Hook: useRequestConfigs', () => {
   let location;
-  const mockLocation = new URL('https://example.com');
+  const mockLocation = new URL('https://example.com/');
 
   beforeEach(() => {
     location = window.location;
     delete window.location;
+    // @ts-ignore
     window.location = mockLocation;
+    mockLocation.href = 'https://example.com/';
   });
 
   afterEach(() => {
     window.location = location;
   });
 
-  test('Should throw error if called outside of PlpContext', () => {
+  it('Should throw error if called outside of PlpContext', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
     expect(() => renderHook(() => useRequestConfigs())).toThrow();
     spy.mockRestore();
   });
 
-  test('Should return an empty object if no defaults have been specified', () => {
+  it('Should return an empty object if no defaults have been specified', () => {
     function TestReactComponent() {
       const requestConfigs = useRequestConfigs();
       expect(requestConfigs).toEqual({});
@@ -41,7 +45,8 @@ describe('Testing Hook: useRequestConfigs', () => {
     );
   });
 
-  test('Should return configurations set as defaults at Plp Context', () => {
+  it('Should return configurations set as defaults at Plp Context', () => {
+    window.location.href = 'https://example.com/group_id/Styles';
     function TestReactComponent() {
       const requestConfigs = useRequestConfigs();
       expect(requestConfigs).toEqual(testRequestState);
@@ -49,13 +54,15 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY} defaultRequestConfigs={testRequestState}>
+      <CioPlpContext
+        apiKey={DEMO_API_KEY}
+        defaultRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
       </CioPlpContext>,
     );
   });
 
-  test('Should return configurations set in the URL path/query parameters', () => {
+  it('Should return configurations set in the URL path/query parameters', () => {
     function TestReactComponent() {
       window.location.href = testUrl;
       const requestConfigs = useRequestConfigs();
@@ -63,7 +70,7 @@ describe('Testing Hook: useRequestConfigs', () => {
         testRequestState;
 
       sampleRequestState.filterName = 'group_id';
-      sampleRequestState.filterValue = 'path';
+      sampleRequestState.filterValue = 'Styles';
 
       expect(requestConfigs).toEqual(sampleRequestState);
 
@@ -77,7 +84,7 @@ describe('Testing Hook: useRequestConfigs', () => {
     );
   });
 
-  test('Should return merged configurations with the URL query parameters taking priority', () => {
+  it('Should return merged configurations with the URL query parameters taking priority', () => {
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
       const requestConfigs = useRequestConfigs();
@@ -92,28 +99,25 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY} defaultRequestConfigs={testRequestState}>
+      <CioPlpContext
+        apiKey={DEMO_API_KEY}
+        defaultRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
       </CioPlpContext>,
     );
   });
 
   test('Should use custom encoders if set', () => {
-    const customNotActuallyAUrlGetter = () => ({
-      customPassByField: 'earth',
-    });
+    const customUrlGetter = () => 'https://www.example.com/water/fall?page=7';
 
-    const customDecoder = (notActuallyAUrl) => ({
-      query: 'water',
-      page: 7,
-      customField: 'fire',
-      customPassByField: notActuallyAUrl.customPassByField,
-    });
+    const customGetStateFromUrl = (urlString: string) => {
+      const stateFromUrl = defaultGetStateFromUrl(urlString);
 
-    const customGetBrowseStateFromPath = () => ({
-      filterName: 'collection_id',
-      filterValue: 'my-random-collection',
-    });
+      stateFromUrl.filterName = 'collection_id';
+      stateFromUrl.filterValue = 'testing-collection-id';
+
+      return stateFromUrl;
+    };
 
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
@@ -121,20 +125,18 @@ describe('Testing Hook: useRequestConfigs', () => {
 
       expect(typeof decodedRequestState).toBe('object');
       expect(decodedRequestState.page).toBe(7);
-      expect(decodedRequestState.query).toBe('water');
-      expect(decodedRequestState.customField).toBe('fire');
-      expect(decodedRequestState.customPassByField).toBe('earth');
+      expect(decodedRequestState.query).toBeUndefined();
+      expect(decodedRequestState.filterName).toBe('collection_id');
+      expect(decodedRequestState.filterValue).toBe('testing-collection-id');
       return <div>hello</div>;
     }
 
     render(
       <CioPlpContext
         apiKey={DEMO_API_KEY}
-        defaultRequestConfigs={testRequestState}
         encoders={{
-          getUrl: customNotActuallyAUrlGetter,
-          decodeStateFromUrlQueryParams: customDecoder,
-          getBrowseStateFromPath: customGetBrowseStateFromPath,
+          getUrl: customUrlGetter,
+          getStateFromUrl: customGetStateFromUrl,
         }}>
         <TestReactComponent />
       </CioPlpContext>,

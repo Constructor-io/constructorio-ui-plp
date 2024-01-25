@@ -19,10 +19,10 @@ export function useCioPlpContext() {
 export function CioPlpContext(
   props: PropsWithChildren<{
     apiKey: string;
-    formatters?: Formatters;
-    callbacks?: Callbacks;
-    getters?: Getters;
-    encoders?: Encoders;
+    formatters?: Partial<Formatters>;
+    callbacks?: Partial<Callbacks>;
+    getters?: Partial<Getters>;
+    encoders?: Partial<Encoders>;
     defaultRequestConfigs?: RequestConfigs;
   }>,
 ) {

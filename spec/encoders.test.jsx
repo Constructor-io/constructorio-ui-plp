@@ -3,18 +3,17 @@ import { render } from '@testing-library/react';
 import testRequestState from './local_examples/sampleRequestState.json';
 import testUrl from './local_examples/testJsonEncodedUrl.json';
 import {
-  decodeStateFromUrlQueryParams,
-  encodeStateToUrlQueryParams,
+  getStateFromUrl,
+  getUrlFromState,
   defaultQueryStringMap,
   getUrl,
   setUrl,
-  getBrowseStateFromPath,
 } from '../src/utils/encoders';
 
-describe('Testing Default Encoders: encodeStateToUrlQueryParams', () => {
+describe('Testing Default Encoders: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
-      encodeStateToUrlQueryParams(testRequestState, {
+      getUrlFromState(testRequestState, {
         baseUrl: 'https://www.example.com/a/random/path',
       }),
     );
@@ -46,7 +45,7 @@ describe('Testing Default Encoders: encodeStateToUrlQueryParams', () => {
   });
 
   test('Should not encode parameters not defined in defaultQueryStringMap', () => {
-    const urlString = encodeStateToUrlQueryParams(testRequestState, {
+    const urlString = getUrlFromState(testRequestState, {
       baseUrl: 'https://www.example.com/a/random/path',
     });
     const url = new URL(urlString);
@@ -60,18 +59,31 @@ describe('Testing Default Encoders: encodeStateToUrlQueryParams', () => {
     expect(undefinedCheck).toBeNull();
 
     // Check for the values
-    expect(urlString.indexOf(testRequestState.filterName)).toBe(-1);
-    expect(urlString.indexOf(testRequestState.filterValue)).toBe(-1);
     expect(urlString.indexOf(testRequestState.fmtOptions)).toBe(-1);
     expect(urlString.indexOf(testRequestState.preFilterExpression)).toBe(-1);
     expect(urlString.indexOf(testRequestState.variationsMap)).toBe(-1);
     expect(urlString.indexOf(testRequestState.qsParam)).toBe(-1);
+
+    // Check that filterName and filterValue aren't encoded as query string parameters
+    expect(params.has(testRequestState.filterName)).toBe(false);
+    expect(params.has(testRequestState.filterValue)).toBe(false);
+  });
+
+  test('Should encode filterName and filterValue as part of the path', () => {
+    const urlString = getUrlFromState(testRequestState, {
+      baseUrl: 'https://www.example.com/a/random/path',
+    });
+    const url = new URL(urlString);
+    const paths = url.pathname.split('/');
+
+    expect(paths.indexOf(testRequestState.filterName)).not.toBe(-1);
+    expect(paths.indexOf(testRequestState.filterValue)).not.toBe(-1);
   });
 });
 
-describe('Testing Default Encoders: decodeStateFromUrlQueryParams', () => {
+describe('Testing Default Encoders: getStateFromUrl', () => {
   test('Should decode all request parameters as defined in defaultQueryStringMap', () => {
-    const state = decodeStateFromUrlQueryParams(testUrl);
+    const state = getStateFromUrl(testUrl);
 
     expect(typeof state.query).toBe('string');
     expect(state.query).toBe('item');
@@ -96,6 +108,13 @@ describe('Testing Default Encoders: decodeStateFromUrlQueryParams', () => {
     expect(typeof state.preFilterExpression).toBe('undefined');
     expect(typeof state.variationsMap).toBe('undefined');
     expect(typeof state.qsParam).toBe('undefined');
+  });
+
+  test('getBrowseGroup should get the last path name as the group_id', () => {
+    const mockUrl = 'https://example.com/a/random/lastPathName?q=3&randomQuery=[true,%20false]';
+    const { filterName, filterValue } = getStateFromUrl(mockUrl);
+    expect(filterName).toBe('group_id');
+    expect(filterValue).toBe('lastPathName');
   });
 });
 
@@ -130,15 +149,5 @@ describe('Testing Default Encoders: getUrl, setUrl', () => {
     }
 
     render(<TestReactComponent />);
-  });
-});
-
-describe('Testing Default Encoders: getBrowseStateFromPath', () => {
-  const mockUrl = 'https://example.com/a/random/lastPathName?q=3&randomQuery=[true,%20false]';
-
-  test('getBrowseGroup should get the last path name as the group_id', () => {
-    const { filterName, filterValue } = getBrowseStateFromPath(mockUrl);
-    expect(filterName).toBe('group_id');
-    expect(filterValue).toBe('lastPathName');
   });
 });
