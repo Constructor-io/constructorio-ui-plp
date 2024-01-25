@@ -45,10 +45,6 @@ const customRenderHook: typeof renderHook = (callback, options) =>
     ),
   });
 
-// re-export everything
-export * from '@testing-library/react';
-
-// override render method
 export {
   customRender as renderWithCioPlp,
   customRenderHook as renderHookWithCioPlp,

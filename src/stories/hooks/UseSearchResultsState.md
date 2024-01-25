@@ -31,7 +31,7 @@ const initialSearchResponse {
   | request        | `SearchRequestState`           | API returned request object                 |
   | response       | `SearchResponseState`          | API transformed response object             |
   | redirect       | `RedirectResponseState`        | API transformed redirect object             |
-  | rawResponse    | `RawApiResponseState`          | API raw response without any transformations|
+  | rawResponse    | `Nullable<SearchResponse>`          | API raw response without any transformations|
 
 
 - `pagination`: Pagination information including:

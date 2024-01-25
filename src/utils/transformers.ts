@@ -9,7 +9,7 @@ import {
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
 } from '../types';
-import { isRedirectResponse } from '../utils';
+import { isSearchRedirectResponse } from '../utils';
 
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {
@@ -53,7 +53,7 @@ export function transformSearchResponse(
 ): PlpSearchRedirectResponse | PlpSearchResponse {
   const { response } = res;
   // Return PlpSearchRedirectResponse
-  if (isRedirectResponse(response)) {
+  if (isSearchRedirectResponse(response)) {
     return {
       resultId: res.result_id,
       redirect: response.redirect!,

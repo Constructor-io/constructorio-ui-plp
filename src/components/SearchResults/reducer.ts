@@ -1,8 +1,8 @@
+import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   SearchResponseState,
   RedirectResponseState,
   SearchRequestState,
-  RawApiResponseState,
   PlpSearchRedirectResponse,
   PlpSearchResponse,
   Nullable,
@@ -17,7 +17,7 @@ export enum RequestStatus {
 }
 
 export interface SearchData {
-  rawApiResponse: RawApiResponseState;
+  rawApiResponse: Nullable<SearchResponse>;
   request: SearchRequestState;
   response: SearchResponseState;
   redirect: RedirectResponseState;
@@ -98,10 +98,10 @@ export function searchReducer(state: SearchState, action: SearchAction) {
   }
 }
 
-export const initFunction = (
+export function initFunction(
   defaultState: SearchState,
-  initialSearchResponse: PlpSearchResponse | PlpSearchRedirectResponse | undefined,
-): SearchState => {
+  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse,
+): SearchState {
   if (initialSearchResponse) {
     if (isPlpSearchRedirectResponse(initialSearchResponse)) {
       const { rawResponse, redirect, resultId } = initialSearchResponse;
@@ -131,4 +131,4 @@ export const initFunction = (
   }
 
   return defaultState;
-};
+}

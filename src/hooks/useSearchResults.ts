@@ -21,7 +21,7 @@ export interface UseSearchResultsProps {
 }
 
 export interface UseSearchResultsReturn {
-  status: RequestStatus;
+  status: RequestStatus | null;
   message?: string;
   data: SearchData;
   pagination: PaginationObject;
@@ -60,7 +60,9 @@ const fetchSearchResults = async (
  * @param {Object} props - The component props.
  * @param {string} props.query Search Query
  * @param {SearchParameters} props.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
- * @param {object} [props.initialSearchResponse] Default search response
+ * @param {object} [props.initialSearchResponse] Initial value for search results
+ * (Would be useful when passing initial state for the first render from the server
+ *  to the client via something like getServerSideProps)
  * @returns {status, data, pagination, refetch}
  */
 export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
@@ -94,7 +96,7 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient && query) {
+    if (cioClient) {
       fetchSearchResults(
         cioClient,
         query,

@@ -6,7 +6,7 @@ import apiSearchResponse from '../../../spec/local_examples/apiSearchResponse.js
 import { PlpSearchResponse } from '../../types';
 
 const meta = {
-  title: 'Hooks/useSearchResults',
+  title: 'Hooks/UseSearchResults',
   component: UseSearchResultsExample,
   parameters: {
     layout: 'centered',

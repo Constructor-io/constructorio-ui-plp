@@ -40,7 +40,6 @@ export interface PlpSearchRedirectResponse {
   rawResponse: SearchResponse;
 }
 
-export type RawApiResponseState = Nullable<SearchResponse>;
 export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
 export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
 export type RedirectResponseState = Nullable<

@@ -65,7 +65,7 @@ export function isPlpSearchRedirectResponse(
   return 'redirect' in response;
 }
 
-export function isRedirectResponse(
+export function isSearchRedirectResponse(
   response: Partial<SearchResponseType | Redirect>,
 ): response is Partial<Redirect> {
   return 'redirect' in response;
