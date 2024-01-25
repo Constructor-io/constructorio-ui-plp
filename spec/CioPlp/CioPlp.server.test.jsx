@@ -50,7 +50,7 @@ describe('CioPlp React Server-Side Rendering', () => {
       </CioPlp>,
     );
     expect(html).toContain(
-      '<div>{&quot;cioClient&quot;:null,&quot;cioClientOptions&quot;:{},&quot;getters&quot;:{},&quot;formatters&quot;:{},&quot;callbacks&quot;:{}}</div>',
+      '<div>{&quot;cioClient&quot;:null,&quot;cioClientOptions&quot;:{},&quot;staticRequestConfigs&quot;:{},&quot;getters&quot;:{},&quot;formatters&quot;:{},&quot;callbacks&quot;:{},&quot;encoders&quot;:{&quot;defaultQueryStringMap&quot;:{&quot;query&quot;:&quot;q&quot;,&quot;page&quot;:&quot;page&quot;,&quot;offset&quot;:&quot;offset&quot;,&quot;resultsPerPage&quot;:&quot;numResults&quot;,&quot;filters&quot;:&quot;f&quot;,&quot;sortBy&quot;:&quot;sortBy&quot;,&quot;sortOrder&quot;:&quot;sortOrder&quot;,&quot;section&quot;:&quot;section&quot;}}}</div>',
     );
   });
 });

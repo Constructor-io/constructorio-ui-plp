@@ -164,6 +164,7 @@ export interface CioPlpProviderProps {
   callbacks?: Callbacks;
   getters?: Getters;
   encoders?: Encoders;
+  staticRequestConfigs?: RequestConfigs;
 }
 
 export type CioPlpProps = CioPlpProviderProps;
