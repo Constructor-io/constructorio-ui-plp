@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCioPlpContext } from '../../PlpContext';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
 import { getPrice as defaultGetPrice } from '../../utils/getters';
@@ -19,22 +19,22 @@ interface Props {
 export interface ProductCardRenderProps extends ProductCardProps {
   /**
    * Function to format the price. Defaults to "$0.00".
-   * Set globally at the PlpContext level.
+   * Set globally at the CioPlp provider level.
    */
   formatPrice: (price: number) => string;
   /**
    * Function to retrieve the price. Defaults to `item.data.price`.
-   * Set globally at the PlpContext level.
+   * Set globally at the CioPlp provider level.
    */
   getPrice: (item: Item) => number;
   /**
    * Callback to run on add-to-cart event.
-   * Set globally at the PlpContext level.
+   * Set globally at the CioPlp provider level.
    */
   onAddToCart: (event: React.MouseEvent, item: Item) => void;
   /**
    * Callback to run on Product Card Click.
-   * Set globally at the PlpContext level.
+   * Set globally at the CioPlp provider level.
    */
   onClick: (event: React.MouseEvent, item: Item) => void;
 }
@@ -49,7 +49,11 @@ export default function ProductCard(props: ProductCardProps) {
 
   const state = useCioPlpContext();
   if (!state) {
-    throw new Error('This component is meant to be used within the CioPlpContext.');
+    throw new Error('This component is meant to be used within the CioPlp provider.');
+  }
+
+  if (!item.data || !item.itemId || !item.itemName) {
+    throw new Error('data, itemId, or itemName are required.');
   }
 
   const client = state.cioClient;

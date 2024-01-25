@@ -1,15 +1,9 @@
 #storybook-root {
-  display: flex;
   background-color: #F6F9FC;
 }
 
 #storybook-docs {
   background-color: #F6F9FC;
-}
-
-#storybook-docs .sbdocs-content ul li{
-  margin-top: 20px;
-  margin-bottom: 10px;
 }
 
 .small-container-example-wrapper {

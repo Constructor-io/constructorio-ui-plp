@@ -11,15 +11,15 @@ A React Hook to retrieve browse results using Constructor.
 ```jsx
 function myApp() {
   const cioClient = useCioClient(MY_API_KEY)
-  const browseResults = useBrowseResults(filterName, filterValue, {cioClient});
+  const {browseResults, handleSubmit} = useBrowseResults(filterName, filterValue, {cioClient});
   ...
 }
 ```
 
-## Usage with CioPlpContext
+## Usage with CioPlp provider
 ```jsx
 function BrowseResults({ filterName, filterValue }) {
-  const browseResults = useBrowseResults(filterName, filterValue);
+  const {browseResults} = useBrowseResults(filterName, filterValue);
   ...
 }
 
@@ -27,9 +27,9 @@ function myApp() {
   ...
   return (
     <>
-    <CioPlpContext apiKey={MY_API_KEY}>
+    <CioPlp apiKey={MY_API_KEY}>
       <BrowseResults filterName={filterName} fiterValue={filterValue} />
-    </CioPlpContext>
+    </CioPlp>
     </>
   )
 }
@@ -37,7 +37,7 @@ function myApp() {
 
 
 ## Working Example
-This is an example of how you might utilize the `useBrowseResults` hook in tandem with the `CioPlpContext` to retrieve browse results.
+This is an example of how you might utilize the `useBrowseResults` hook in tandem with the `CioPlp` to retrieve browse results.
 
 <Canvas withSource="none">
   <Story of={Primary} />
@@ -48,15 +48,14 @@ This is an example of how you might utilize the `useBrowseResults` hook in tande
 ### Working Example - Source Code 
 ```jsx
   import React from 'react';
-  import { CioPlpContext } from '../../PlpContext';
-  import useBrowseResults from '../../hooks/useBrowseResults';
+  import { CioPlp, useBrowseResults }from '@constructor-io/constructorio-ui-plp'
 
   const apiKey = 'MY_API_KEY'
 
-  // A simple React Component to showcase useBrowseResults with CioPlpContext
+  // A simple React Component to showcase useBrowseResults with CioPlp provider
   function BrowseResults({ query }) {
     const browseParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-    const browseResults = useBrowseResults(filterName, filterValue, { browseParams });
+    const {browseResults} = useBrowseResults(filterName, filterValue, { browseParams });
 
     return (
       <>
@@ -84,9 +83,9 @@ This is an example of how you might utilize the `useBrowseResults` hook in tande
       <>
         <h1>useBrowsesResults</h1>
         <p>This hook returns an object with the following properties:</p>
-        <CioPlpContext apiKey={MY_API_KEY}>
+        <CioPlp apiKey={MY_API_KEY}>
           <BrowseResults filterName={"group_id"} filterValue={filterValue} />
-        </CioPlpContext>
+        </CioPlp>
       </>
     );
   }

@@ -12,8 +12,11 @@ import {
   VariationsMap,
   FilterExpression,
   FmtOptions,
+  Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
+
+export { Nullable, ConstructorIOClient };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -78,7 +81,7 @@ export interface QueryParamEncodingOptions {
   pathname?: string;
 }
 
-export interface PlpContext {
+export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
@@ -145,6 +148,7 @@ export type PaginationProps = PaginationObject;
 export interface PlpBrowseResponse {
   resultId: string;
   totalNumResults: number;
+  numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
@@ -152,6 +156,17 @@ export interface PlpBrowseResponse {
   refinedContent: Record<string, any>[];
   rawResponse: GetBrowseResultsResponse;
 }
+
+export interface CioPlpProviderProps {
+  apiKey: string;
+  cioClient?: Nullable<ConstructorIOClient>;
+  formatters?: Formatters;
+  callbacks?: Callbacks;
+  getters?: Getters;
+  encoders?: Encoders;
+}
+
+export type CioPlpProps = CioPlpProviderProps;
 
 /**
  * Represents a function that handles pagination logic.
@@ -194,13 +209,12 @@ export interface PaginationObject {
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
+
 /**
  * Composes a type for a Component that accepts
  * - Props P,
  * - A children function, that takes RenderProps as its argument
  */
-export type IncludeRenderProps<P, RenderProps> = P & {
-  children?: (props: RenderProps) => ReactNode;
+export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
+  children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
 };
-
-export type Nullable<T> = T | null;

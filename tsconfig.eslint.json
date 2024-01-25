@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": ["jest"]
   },
-  "include": ["src", "tests", "spec"],
+  "include": ["src", "tests", "spec", "spec/**/*.jsx"],
   "exclude": ["node_modules", "lib", "storybook-static", ".storybook"]
 }
  

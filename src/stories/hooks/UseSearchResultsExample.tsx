@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useSearchResults, { UseSearchResultsConfigs } from '../../hooks/useSearchResults';
-import { CioPlpContext } from '../../PlpContext';
+import CioPlp from '../../components/CioPlp';
 import { DEMO_API_KEY } from '../../constants';
 
 export interface UseCioClientExampleProps {
@@ -24,7 +24,7 @@ export interface UseCioClientExampleProps {
   searchParams?: SearchParameters;
 }
 
-// A simple React Component to showcase use with PlpContext
+// A simple React Component to showcase use with CioPlp provider
 function SearchResults({ query, configs }: { query: string; configs?: UseSearchResultsConfigs }) {
   const { searchResults } = useSearchResults(query, configs);
 
@@ -66,9 +66,9 @@ export default function UseSearchResultsExample({
     <>
       <h1>useSearchResults</h1>
       <p>This hook returns an object with the following properties:</p>
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlp apiKey={DEMO_API_KEY}>
         <SearchResults query={query} configs={storybookConfigs} />
-      </CioPlpContext>
+      </CioPlp>
     </>
   );
 }

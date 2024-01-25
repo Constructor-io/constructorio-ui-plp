@@ -56,7 +56,7 @@
         "devDependencies": [
           "**/stories/**/*.*",
           "**/.storybook/**/*.*",
-          "spec/*.*"
+          "spec/**/*.*"
         ],
         "peerDependencies": true
       }
@@ -68,6 +68,12 @@
       "env": {
         "node": true,
         "jest": true
+      }
+    },
+    {
+      "files": "spec/*.jsx",
+      "rules": {
+        "react/prop-types": "off"
       }
     }
   ],
