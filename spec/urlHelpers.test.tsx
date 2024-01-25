@@ -8,10 +8,10 @@ import {
   defaultQueryStringMap,
   getUrl,
   setUrl,
-} from '../src/utils/encoders';
+} from '../src/utils/urlHelpers';
 import { RequestConfigs } from '../src/types';
 
-describe('Testing Default Encoders: getUrlFromState', () => {
+describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
       getUrlFromState(testRequestState as RequestConfigs, {
@@ -82,7 +82,7 @@ describe('Testing Default Encoders: getUrlFromState', () => {
   });
 });
 
-describe('Testing Default Encoders: getStateFromUrl', () => {
+describe('Testing Default UrlHelpers: getStateFromUrl', () => {
   test('Should decode all request parameters as defined in defaultQueryStringMap', () => {
     const state = getStateFromUrl(testUrl);
 
@@ -119,7 +119,7 @@ describe('Testing Default Encoders: getStateFromUrl', () => {
   });
 });
 
-describe('Testing Default Encoders: getUrl, setUrl', () => {
+describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
   let location;
   const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
   const mockLocation = new URL(mockUrl);

@@ -20,7 +20,7 @@ export { Nullable, ConstructorIOClient };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
-export interface Getters {
+export interface ItemFieldGetters {
   getPrice: (item: Item) => number;
 }
 
@@ -44,7 +44,7 @@ export type DefaultQueryStringMap = {
   section: 'section';
 };
 
-export interface Encoders {
+export interface UrlHelpers {
   getUrl: () => string;
   setUrl: (newUrlWithEncodedState: string) => void;
   getStateFromUrl: (urlString: string) => RequestConfigs;
@@ -86,10 +86,10 @@ export interface PlpContextValue {
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   staticRequestConfigs: RequestConfigs;
-  getters: Getters;
+  itemFieldGetters: ItemFieldGetters;
   formatters: Formatters;
   callbacks: Callbacks;
-  encoders: Encoders;
+  urlHelpers: UrlHelpers;
 }
 
 export interface PrimaryColorStyles {
@@ -160,11 +160,11 @@ export interface PlpBrowseResponse {
 export interface CioPlpProviderProps {
   apiKey: string;
   cioClient?: Nullable<ConstructorIOClient>;
-  formatters?: Formatters;
-  callbacks?: Callbacks;
-  getters?: Getters;
-  encoders?: Encoders;
-  staticRequestConfigs?: RequestConfigs;
+  formatters?: Partial<Formatters>;
+  callbacks?: Partial<Callbacks>;
+  itemFieldGetters?: Partial<ItemFieldGetters>;
+  urlHelpers?: Partial<UrlHelpers>;
+  staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
 export type CioPlpProps = CioPlpProviderProps;

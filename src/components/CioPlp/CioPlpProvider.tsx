@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import useCioClient from '../../hooks/useCioClient';
-import * as defaultGetters from '../../utils/getters';
+import * as defaultGetters from '../../utils/itemFieldGetters';
 import * as defaultFormatters from '../../utils/formatters';
-import * as defaultEncoders from '../../utils/encoders';
+import * as defaultUrlHelpers from '../../utils/urlHelpers';
 import { PlpContextValue, IncludeRenderProps, CioPlpProviderProps } from '../../types';
 import { PlpContext } from '../../hooks/useCioPlpContext';
 
@@ -13,8 +13,8 @@ export default function CioPlpProvider(
     apiKey,
     formatters,
     callbacks,
-    getters,
-    encoders,
+    itemFieldGetters,
+    urlHelpers,
     staticRequestConfigs = {},
     cioClient: customCioClient,
     children,
@@ -29,19 +29,19 @@ export default function CioPlpProvider(
       cioClientOptions,
       setCioClientOptions,
       staticRequestConfigs,
-      getters: { ...defaultGetters, ...getters },
+      itemFieldGetters: { ...defaultGetters, ...itemFieldGetters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
-      encoders: { ...defaultEncoders, ...encoders },
+      urlHelpers: { ...defaultUrlHelpers, ...urlHelpers },
     }),
     [
       cioClient,
       customCioClient,
       cioClientOptions,
-      getters,
+      itemFieldGetters,
       formatters,
       callbacks,
-      encoders,
+      urlHelpers,
       staticRequestConfigs,
     ],
   );

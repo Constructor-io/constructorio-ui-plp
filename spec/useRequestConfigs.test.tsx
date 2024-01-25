@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, renderHook } from '@testing-library/react';
 import useRequestConfigs from '../src/hooks/useRequestConfigs';
-import { CioPlpContext } from '../src/PlpContext';
+import CioPlpProvider from '../src/components/CioPlp/CioPlpProvider';
 import testRequestState from './local_examples/sampleRequestState.json';
 import testUrl from './local_examples/testJsonEncodedUrl.json';
 import { DEMO_API_KEY } from '../src/constants';
-import { getStateFromUrl as defaultGetStateFromUrl } from '../src/utils/encoders';
+import { getStateFromUrl as defaultGetStateFromUrl } from '../src/utils/urlHelpers';
 import { RequestConfigs } from '../src/types';
 
 describe('Testing Hook: useRequestConfigs', () => {
@@ -39,9 +39,9 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlpProvider apiKey={DEMO_API_KEY}>
         <TestReactComponent />
-      </CioPlpContext>,
+      </CioPlpProvider>,
     );
   });
 
@@ -54,11 +54,11 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext
+      <CioPlpProvider
         apiKey={DEMO_API_KEY}
         staticRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
-      </CioPlpContext>,
+      </CioPlpProvider>,
     );
   });
 
@@ -78,9 +78,9 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext apiKey={DEMO_API_KEY}>
+      <CioPlpProvider apiKey={DEMO_API_KEY}>
         <TestReactComponent />
-      </CioPlpContext>,
+      </CioPlpProvider>,
     );
   });
 
@@ -99,15 +99,15 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext
+      <CioPlpProvider
         apiKey={DEMO_API_KEY}
         staticRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
-      </CioPlpContext>,
+      </CioPlpProvider>,
     );
   });
 
-  test('Should use custom encoders if set', () => {
+  test('Should use custom urlHelpers if set', () => {
     const customUrlGetter = () => 'https://www.example.com/water/fall?page=7';
 
     const customGetStateFromUrl = (urlString: string) => {
@@ -132,14 +132,14 @@ describe('Testing Hook: useRequestConfigs', () => {
     }
 
     render(
-      <CioPlpContext
+      <CioPlpProvider
         apiKey={DEMO_API_KEY}
-        encoders={{
+        urlHelpers={{
           getUrl: customUrlGetter,
           getStateFromUrl: customGetStateFromUrl,
         }}>
         <TestReactComponent />
-      </CioPlpContext>,
+      </CioPlpProvider>,
     );
   });
 });

@@ -7,8 +7,8 @@ export default function useRequestConfigs(): RequestConfigs {
     throw new Error('This Hook needs to be called within the C.io PLP Context Provider.');
   }
 
-  const { encoders, staticRequestConfigs } = context;
-  const { getUrl, getStateFromUrl } = encoders;
+  const { urlHelpers, staticRequestConfigs } = context;
+  const { getUrl, getStateFromUrl } = urlHelpers;
 
   const url = getUrl();
   const urlRequestConfigs = getStateFromUrl(url);
