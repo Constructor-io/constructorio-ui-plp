@@ -1,4 +1,4 @@
-import { useCioPlpContext } from '../PlpContext';
+import { useCioPlpContext } from './useCioPlpContext';
 import { RequestConfigs } from '../types';
 
 export default function useRequestConfigs(): RequestConfigs {
