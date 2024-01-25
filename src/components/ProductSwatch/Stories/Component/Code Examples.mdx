@@ -22,7 +22,7 @@ A Component to manage Product Swatch interactions and UI.
     return (
       <>
         <CioPlp apiKey={MY_API_KEY}>
-          <Pagination pagination={{ swatchList, selectedVariation, selectedVariation }}>
+          <ProductSwatch swatchObject={{ swatchList, selectedVariation, selectedVariation }}>
         </CioPlp>
       </>
     );
@@ -68,9 +68,3 @@ function myApp() {
   )
 }
 ```
-
-  
-
-{/* Todo: add control once props are updated to usePaginationProps */}
-{/* <h2>Controls</h2> */}
-{/* <Controls /> */}

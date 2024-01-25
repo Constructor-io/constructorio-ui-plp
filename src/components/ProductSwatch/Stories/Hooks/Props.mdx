@@ -32,5 +32,5 @@ Hook takes productSwatch config options as a parameter and return product swatch
   | property          | type                          | description|
   | :-----------------| ------------------------------| :--------- |
   | swatchList        | `SwatchItem[]`                | Represents the List of Swatch items to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
-  | selectedVariation | `SwatchItem`                  | Allows you to navigate to a specific page and takes a page number as an argument |
-  | selectVariation   | `(swatch: SwatchItem) => void`| Navigate to the next page. Used to implement "Next" button in a pagination control |
+  | selectedVariation | `SwatchItem`                  | Currently Selected SwatchItem object |
+  | selectVariation   | `(swatch: SwatchItem) => void`| Function to change the currently selected SwatchItem object |

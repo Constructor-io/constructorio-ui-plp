@@ -13,7 +13,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Todo: Add wrapper context that returns pagination controls
 export const Primary: Story = {
   args: {
     swatchObject: {
