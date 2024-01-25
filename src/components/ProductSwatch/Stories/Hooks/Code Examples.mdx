@@ -1,0 +1,17 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks';
+import * as UseProductSwatchStories from './UseProductSwatch.stories';
+
+<Meta of={UseProductSwatchStories} />
+
+## Code Example
+  ```jsx
+  const { productSwatch } = useProductSwatch({
+    totalNumResults: 200,
+    resultsPerPage: 10,
+    windowSize: 5
+  });
+  ```
+<Canvas of={UseProductSwatchStories.Primary} />
+
+## Controls
+<Controls />

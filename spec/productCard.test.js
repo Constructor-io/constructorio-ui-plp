@@ -34,7 +34,7 @@ describe('Testing Component: ProductCard', () => {
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );
-    screen.getByText('$79.00');
+    screen.getByText('$90.00');
   });
 
   test('Should render custom price formatting if overridden at the CioPlp provider level', () => {
@@ -44,7 +44,7 @@ describe('Testing Component: ProductCard', () => {
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );
-    screen.getByText('USD$79.00');
+    screen.getByText('USD$90.00');
   });
 
   test('Should retrieve custom price if overridden at the CioPlp provider level', () => {
@@ -65,7 +65,7 @@ describe('Testing Component: ProductCard', () => {
       </CioPlp>,
     );
     // Click the title
-    fireEvent.click(screen.getByText('Jersey Riviera Shirt (Park Bench Dot)'));
+    fireEvent.click(screen.getByText('Jersey Riviera Shirt (Red Park Bench Dot)'));
     expect(contextOnClickHandler).toHaveBeenCalledTimes(1);
 
     // Click the image
@@ -73,7 +73,7 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnClickHandler).toHaveBeenCalledTimes(2);
 
     // Click the price
-    fireEvent.click(screen.getByText('$79.00'));
+    fireEvent.click(screen.getByText('$90.00'));
     expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
 
     // Click the ATC Button should not trigger the handler
@@ -99,12 +99,12 @@ describe('Testing Component: ProductCard', () => {
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price
-            <div>My Rendered Price: {props.formatPrice(props.getPrice(props.item))}</div>
+            <div>My Rendered Price: {props.formatPrice(props.productInfo.itemPrice)}</div>
           )}
         </ProductCard>
       </CioPlp>,
     );
 
-    screen.getByText('My Rendered Price: $79.00');
+    screen.getByText('My Rendered Price: $90.00');
   });
 });
