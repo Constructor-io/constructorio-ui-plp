@@ -82,7 +82,7 @@ export interface PlpContext {
   cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
-  defaultRequestConfigs: RequestConfigs;
+  staticRequestConfigs: RequestConfigs;
   getters: Getters;
   formatters: Formatters;
   callbacks: Callbacks;

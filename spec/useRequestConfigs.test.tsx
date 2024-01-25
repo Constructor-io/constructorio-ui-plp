@@ -56,7 +56,7 @@ describe('Testing Hook: useRequestConfigs', () => {
     render(
       <CioPlpContext
         apiKey={DEMO_API_KEY}
-        defaultRequestConfigs={testRequestState as RequestConfigs}>
+        staticRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
       </CioPlpContext>,
     );
@@ -101,7 +101,7 @@ describe('Testing Hook: useRequestConfigs', () => {
     render(
       <CioPlpContext
         apiKey={DEMO_API_KEY}
-        defaultRequestConfigs={testRequestState as RequestConfigs}>
+        staticRequestConfigs={testRequestState as RequestConfigs}>
         <TestReactComponent />
       </CioPlpContext>,
     );

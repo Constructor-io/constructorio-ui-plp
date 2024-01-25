@@ -7,13 +7,13 @@ export default function useRequestConfigs(): RequestConfigs {
     throw new Error('This Hook needs to be called within the C.io PLP Context Provider.');
   }
 
-  const { encoders, defaultRequestConfigs } = context;
+  const { encoders, staticRequestConfigs } = context;
   const { getUrl, getStateFromUrl } = encoders;
 
   const url = getUrl();
   const urlRequestConfigs = getStateFromUrl(url);
 
-  const requestConfigs: RequestConfigs = { ...defaultRequestConfigs, ...urlRequestConfigs };
+  const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs };
 
   if (!requestConfigs.filterValue || requestConfigs.filterValue === '') {
     delete requestConfigs.filterName;

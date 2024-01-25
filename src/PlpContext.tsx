@@ -23,7 +23,7 @@ export function CioPlpContext(
     callbacks?: Partial<Callbacks>;
     getters?: Partial<Getters>;
     encoders?: Partial<Encoders>;
-    defaultRequestConfigs?: RequestConfigs;
+    staticRequestConfigs?: RequestConfigs;
   }>,
 ) {
   const {
@@ -33,7 +33,7 @@ export function CioPlpContext(
     getters,
     encoders,
     children,
-    defaultRequestConfigs = {},
+    staticRequestConfigs = {},
   } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
 
@@ -44,13 +44,13 @@ export function CioPlpContext(
       cioClient,
       cioClientOptions,
       setCioClientOptions,
-      defaultRequestConfigs,
+      staticRequestConfigs,
       getters: { ...defaultGetters, ...getters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
       encoders: { ...defaultEncoders, ...encoders },
     }),
-    [cioClient, cioClientOptions, getters, formatters, callbacks, encoders, defaultRequestConfigs],
+    [cioClient, cioClientOptions, getters, formatters, callbacks, encoders, staticRequestConfigs],
   );
 
   return <plpContext.Provider value={state}>{children}</plpContext.Provider>;
