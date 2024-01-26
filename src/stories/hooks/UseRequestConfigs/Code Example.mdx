@@ -1,0 +1,31 @@
+import { Meta } from '@storybook/blocks';
+import meta from './UseRequestConfigs.stories';
+
+<Meta of={meta} />
+
+# Usage with CioPlpProvider
+```jsx
+function MyComponent() {
+  const cioClient = useCioClient('MY_API_KEY')
+
+  // For Search
+  const { query, ...requestParameters } = useRequestConfigs()
+  const { searchResults } = cioClient.search.getSearchResults(requestParameters)
+
+  // For Browse
+  const { filterName, filterValue, ...requestParameters } = useRequestConfigs()
+  const { browseResults } = cioClient.browse.getBrowseResults(filterName, filterValue, requestParameters)
+  ...
+}
+
+function myApp() {
+  ...
+  return (
+    <>
+    <CioPlpProvider apiKey={MY_API_KEY}>
+      <MyComponent query={query} />
+    </CioPlpProvider>
+    </>
+  )
+}
+```

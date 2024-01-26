@@ -2,7 +2,7 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
-import { getPrice as defaultGetPrice } from '../../utils/getters';
+import { getPrice as defaultGetPrice } from '../../utils/itemFieldGetters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
 import { IncludeRenderProps, Item } from '../../types';
 
@@ -57,7 +57,7 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   const client = state.cioClient;
-  const getPrice = state.getters.getPrice || defaultGetPrice;
+  const getPrice = state.itemFieldGetters.getPrice || defaultGetPrice;
   const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
   const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
