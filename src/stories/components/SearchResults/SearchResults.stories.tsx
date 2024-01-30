@@ -26,5 +26,14 @@ export const Primary: Story = {
       <SearchResults {...args} />
     </CioPlp>
   ),
+  decorators: [
+    (Story) => {
+      const url = new URL(window.location as any);
+      url.searchParams.set('q', 'red');
+      window.history.pushState({}, '', url);
+
+      return <Story />;
+    },
+  ],
   args: {},
 };
