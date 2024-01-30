@@ -1,10 +1,4 @@
-import {
-  PlpSearchRedirectResponse,
-  PlpSearchResponse,
-  PrimaryColorStyles,
-  Redirect,
-  SearchResponseType,
-} from './types';
+import { PlpSearchRedirectResponse, PlpSearchResponse, PrimaryColorStyles } from './types';
 
 // Function to emulate pausing between interactions
 export function sleep(ms) {
@@ -59,14 +53,8 @@ export function isPlpSearchResponse(
   return 'results' in response;
 }
 
-export function isPlpSearchRedirectResponse(
+export function isPlpRedirectSearchResponse(
   response: PlpSearchRedirectResponse | PlpSearchResponse,
 ): response is PlpSearchRedirectResponse {
-  return 'redirect' in response;
-}
-
-export function isSearchRedirectResponse(
-  response: Partial<SearchResponseType | Redirect>,
-): response is Partial<Redirect> {
   return 'redirect' in response;
 }

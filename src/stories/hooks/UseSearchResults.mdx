@@ -6,13 +6,13 @@ import meta, { Primary } from './UseSearchResults.stories';
 ## `useSearchResults`
 A React Hook to retrieve search results using Constructor.
 
->Note: useSearchResults can be only called in components that are direct children of `<CioPlp />`.
+>Note: useSearchResults can be only called in components that are children of `<CioPlp />`.
 
 ```jsx
-import { CioPlp, SearchResults } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp } from '@constructor-io/constructorio-ui-plp'
 
-function SearchResults({ query }) {
-  const { data } = useSearchResults({ query });
+function MySearchResults() {
+  const { data } = useSearchResults({ query: 'red', searchParams: { page: 1 } });
 
   return <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
 }
@@ -21,14 +21,8 @@ function myApp() {
   ...
   return (
     <CioPlp apiKey={MY_API_KEY}>
-      <SearchResults query={query} />
+      <MySearchResults />
     </CioPlp>
   )
 }
 ```
-
-<Canvas withSource="none">
-  <Story of={Primary} />
-</Canvas>
-
-<Controls of={Primary} />

@@ -1,12 +1,13 @@
-import { Meta, Markdown, Controls } from '@storybook/blocks';
+import { Meta, Markdown, Controls, ArgTypes } from '@storybook/blocks';
 import * as UseSearchResultsStories from './UseSearchResults.stories';
-import UseSearchResultsStateDocs from './UseSearchResultsState.md?raw';
+/* This "?raw" import raw text form the md file */
+import SearchResultsReturn from './SearchResultsReturn.md?raw';
 
-<Meta of={UseSearchResultsStories} name='Props' />
+<Meta of={UseSearchResultsStories} name='Documentation' />
 
 ### Props
-<Controls />
+<ArgTypes />
 
-{/* -------- STATE -------- */}
-<Markdown>{UseSearchResultsStateDocs}</Markdown>
+### Returns
+<Markdown>{SearchResultsReturn}</Markdown>
 <hr />

@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import UseSearchResultsExample from './UseSearchResultsExample';
-import { transformSearchResponse } from '../../utils/transformers';
-import apiSearchResponse from '../../../spec/local_examples/apiSearchResponse.json';
-import { PlpSearchResponse } from '../../types';
 
 const meta = {
   title: 'Hooks/UseSearchResults',
@@ -25,6 +22,5 @@ export const Primary: Story = {
   args: {
     query: 'water',
     searchParams: { resultsPerPage: 2 },
-    initialSearchResponse: transformSearchResponse(apiSearchResponse as any) as PlpSearchResponse,
   },
 };

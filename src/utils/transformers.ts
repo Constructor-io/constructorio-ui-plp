@@ -1,6 +1,8 @@
 import {
   GetBrowseResultsResponse,
+  Redirect,
   SearchResponse,
+  SearchResponseType,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PlpSearchResponse,
@@ -9,7 +11,12 @@ import {
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
 } from '../types';
-import { isSearchRedirectResponse } from '../utils';
+
+function isAPIRedirectSearchResponse(
+  response: Partial<SearchResponseType | Redirect>,
+): response is Partial<Redirect> {
+  return 'redirect' in response;
+}
 
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {
@@ -53,7 +60,7 @@ export function transformSearchResponse(
 ): PlpSearchRedirectResponse | PlpSearchResponse {
   const { response } = res;
   // Return PlpSearchRedirectResponse
-  if (isSearchRedirectResponse(response)) {
+  if (isAPIRedirectSearchResponse(response)) {
     return {
       resultId: res.result_id,
       redirect: response.redirect!,
@@ -73,6 +80,7 @@ export function transformSearchResponse(
     rawResponse: res,
   } as PlpSearchResponse;
 }
+
 export function transformBrowseResponse(res: GetBrowseResultsResponse) {
   return {
     resultId: res.result_id,

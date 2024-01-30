@@ -7,7 +7,7 @@ import {
   PlpSearchResponse,
   Nullable,
 } from '../../types';
-import { isPlpSearchRedirectResponse, isPlpSearchResponse } from '../../utils';
+import { isPlpRedirectSearchResponse, isPlpSearchResponse } from '../../utils';
 
 export enum RequestStatus {
   STALE = 'stale',
@@ -53,6 +53,7 @@ export const initialState: SearchState = {
     redirect: null,
   },
 };
+
 export function searchReducer(state: SearchState, action: SearchAction) {
   switch (action.type) {
     case RequestStatus.FETCHING: {
@@ -66,7 +67,7 @@ export function searchReducer(state: SearchState, action: SearchAction) {
       let redirect: Nullable<Omit<PlpSearchRedirectResponse, 'rawResponse'>> = null;
       let search: Nullable<Omit<PlpSearchResponse, 'rawResponse'>> = null;
 
-      if (isPlpSearchRedirectResponse(payload)) {
+      if (isPlpRedirectSearchResponse(payload)) {
         const { rawResponse, ...otherFields } = payload;
         redirect = otherFields;
       } else {
@@ -103,7 +104,7 @@ export function initFunction(
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse,
 ): SearchState {
   if (initialSearchResponse) {
-    if (isPlpSearchRedirectResponse(initialSearchResponse)) {
+    if (isPlpRedirectSearchResponse(initialSearchResponse)) {
       const { rawResponse, redirect, resultId } = initialSearchResponse;
 
       return {
