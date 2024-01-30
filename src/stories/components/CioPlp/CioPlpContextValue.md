@@ -4,6 +4,6 @@
   | cioClientOptions      | `CioClientOptions`                     | The Constructor IO client options         |
   | setCioClientOptions   | `React.Dispatch<CioClientOptions>`     | The Constructor IO options setter         |
   | formatters            | `Formatters`                           | Data formatter functions for things like price, description, etc |
-  | getters               | `Getters`                              | Data getter functions for things like price, description, etc    |
+  | itemFieldGetters               | `ItemFieldGetters`                              | Data getter functions for things like price, description, etc    |
   | callbacks             | `Callbacks`                            | Callback functions   |
   

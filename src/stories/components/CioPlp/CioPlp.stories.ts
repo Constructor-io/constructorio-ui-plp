@@ -42,11 +42,20 @@ const meta = {
         },
       },
     },
-    getters: {
+    itemFieldGetters: {
       description: 'Data getter functions for things like price, description, etc',
       table: {
         type: {
-          summary: 'Getters',
+          summary: 'ItemFieldGetters',
+        },
+      },
+    },
+    urlHelpers: {
+      description:
+        'Url Helpers for getting, setting and parsing request configurations from the url.',
+      table: {
+        type: {
+          summary: 'UrlHelpers',
         },
       },
     },

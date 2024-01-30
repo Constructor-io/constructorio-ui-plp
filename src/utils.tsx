@@ -1,4 +1,11 @@
-import { PlpSearchRedirectResponse, PlpSearchResponse, PrimaryColorStyles } from './types';
+import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  PrimaryColorStyles,
+  RequestConfigs,
+  RequestQueryParams,
+  PlpSearchRedirectResponse,
+  PlpSearchResponse,
+} from './types';
 
 // Function to emulate pausing between interactions
 export function sleep(ms) {
@@ -57,4 +64,21 @@ export function isPlpRedirectSearchResponse(
   response: PlpSearchRedirectResponse | PlpSearchResponse,
 ): response is PlpSearchRedirectResponse {
   return 'redirect' in response;
+}
+
+export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
+  query: string;
+  searchParams: SearchParameters;
+} {
+  const { query = '', filterValue, filterName, ...searchParams } = requestConfigs;
+  return { query, searchParams };
+}
+
+export function getBrowseParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
+  filterName: string;
+  filterValue: string;
+  queryParams: RequestQueryParams;
+} {
+  const { query, filterValue = '', filterName = '', ...queryParams } = requestConfigs;
+  return { filterName, filterValue, queryParams };
 }

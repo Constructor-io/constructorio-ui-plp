@@ -1,18 +1,24 @@
-export default function useRequestConfigs() {
-  return {
-    // Search
-    query: 'red',
+import { useCioPlpContext } from './useCioPlpContext';
+import { RequestConfigs } from '../types';
 
-    // Browse
-    filterName: 'group_id',
-    filterValue: 'filterValue',
+export default function useRequestConfigs(): RequestConfigs {
+  const context = useCioPlpContext();
+  if (!context) {
+    throw new Error('This Hook needs to be called within the C.io PLP Context Provider.');
+  }
 
-    // Others
-    filters: {},
-    page: 1,
-    resultsPerPage: 6,
-    sortBy: 'relevance',
-    sortOrder: 'descending',
-    section: 'Products',
-  };
+  const { urlHelpers, staticRequestConfigs } = context;
+  const { getUrl, getStateFromUrl } = urlHelpers;
+
+  const url = getUrl();
+  const urlRequestConfigs = getStateFromUrl(url);
+
+  const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs };
+
+  if (!requestConfigs.filterValue || requestConfigs.filterValue === '') {
+    delete requestConfigs.filterName;
+    delete requestConfigs.filterValue;
+  }
+
+  return requestConfigs;
 }

@@ -1,0 +1,77 @@
+{
+  "query": "item",
+  "filterName": "group_id",
+  "filterValue": "Styles",
+  "page": 3,
+  "offset": 24,
+  "resultsPerPage": 30,
+  "filters": {
+    "price": "5-100",
+    "test": "testValue",
+    "lowestPrice": 100
+  },
+  "sortBy": "price",
+  "sortOrder": "descending",
+  "section": "Products",
+  "fmtOptions": {
+    "hiddenFields": ["water", "ice", "fire"],
+    "hiddenFacets": ["water", "ice", "fire"],
+    "fields": ["water", "ice", "fire"],
+    "groupsMaxDepth": 3,
+    "groupsStart": 1
+  },
+  "preFilterExpression": {
+    "or": [
+      {
+        "and": [
+          {
+            "name": "group_id",
+            "value": "electronics-group-id"
+          },
+          {
+            "name": "Price",
+            "range": ["-inf", 200]
+          }
+        ]
+      },
+      {
+        "and": [
+          {
+            "name": "Type",
+            "value": "Laptop"
+          },
+          {
+            "not": {
+              "name": "Price",
+              "range": [800, "inf"]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "variationsMap": {
+    "filter_by": {
+      "and": [
+        {"field": "Brand", "value": "XYZ"},
+        {
+          "or": [
+            {"not": {"field": "Brand", "value": "XYZ"}},
+            {"not": {"field": "Color", "value": "pink"}}
+          ]
+        }
+      ]
+    },
+    "group_by": [
+      {"name": "My Colors", "field": "Color"}
+    ],
+    "values": {
+      "Color": {
+          "aggregation": "first",
+          "field": "Color"
+      }
+    },
+    "dtype":  "object"
+  },
+  "qsParam": "test_qs_string"
+}
