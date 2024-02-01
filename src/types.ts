@@ -13,10 +13,14 @@ import {
   FilterExpression,
   FmtOptions,
   Nullable,
+  SearchRequestType,
+  SearchResponseType,
+  Redirect,
+  SearchParameters,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -33,6 +37,17 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
 }
 
+export interface PlpSearchRedirectResponse {
+  resultId: string;
+  redirect: Partial<Redirect>;
+  rawResponse: SearchResponse;
+}
+
+export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
+export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
+export type RedirectResponseState = Nullable<
+  Omit<Partial<PlpSearchRedirectResponse>, 'rawResponse'>
+>;
 export type DefaultQueryStringMap = {
   query: 'q';
   page: 'page';
