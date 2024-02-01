@@ -14,13 +14,12 @@ interface SearchResultsProps {
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
 }
 
-type ChildrenFunctionProps = UseSearchResultsReturn;
 /**
  * Type alias for SearchResultsProps with RenderProps.
  */
 export type SearchResultsWithRenderProps = IncludeRenderProps<
   SearchResultsProps,
-  ChildrenFunctionProps
+  UseSearchResultsReturn
 >;
 
 /**
