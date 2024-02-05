@@ -24,7 +24,7 @@ import { CioPlp } from '@constructor-io/constructorio-ui-plp';
 function MyComponent() {
   return (
     <CioPlp>
-      {({ cioClient, cioClientOptions, setCioClientOptions, formatters, getters }) => <div />}
+      {({ cioClient, cioClientOptions, setCioClientOptions, formatters, itemFieldGetters, urlHelpers }) => <div />}
     </CioPlp>
   );
 }
@@ -40,7 +40,7 @@ Inside `ChildOfCioPlp` or other child components, you can access the context pro
 import { CioPlp, useCioPlpContext } from '@constructor-io/constructorio-ui-plp';
 
 function ChildOfCioPlp(params) {
-  const { cioClient, cioClientOptions, setCioClientOptions, formatters, getters } =
+  const { cioClient, cioClientOptions, setCioClientOptions, formatters, itemFieldGetters, urlHelpers } =
     useCioPlpContext();
 
   return <div />;

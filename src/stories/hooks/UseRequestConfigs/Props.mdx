@@ -1,0 +1,20 @@
+import { Meta, Controls, Markdown } from '@storybook/blocks';
+import meta from './UseRequestConfigs.stories';
+import ReturnValue from './ReturnValue.md?raw'
+
+<Meta of={meta} />
+
+# UseRequestConfigs
+React Hook to retrieve the relevant request parameters to be passed to Constructor.
+
+## Elaboration
+Dynamic request parameters (such as `page`, `query`) are pulled from the url, while static request parameters (such as `fmtOptions` and `preFilterExpressions`) are set at the top-level component.
+
+For more details on request parameters, please see [This Page](https://www.todo.com).
+
+## useRequestConfigs Props
+`useRequestConfigs` doesn't take in any arguments.
+
+## Returns
+`RequestConfigs` object
+<Markdown>{ReturnValue}</Markdown>
