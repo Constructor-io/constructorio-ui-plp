@@ -10,12 +10,6 @@ const usePagination: UsePagination = ({
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState<number | undefined>(initialPage);
 
-  useEffect(() => {
-    if (initialPage) {
-      setCurrentPage(initialPage);
-    }
-  }, [initialPage]);
-
   // Calculate total number of pages
   useEffect(() => {
     if (totalNumResults && resultsPerPage) {

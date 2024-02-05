@@ -8,7 +8,7 @@ const paginationProps = {
   windowSize: 10,
 };
 
-describe('usePagination', () => {
+describe('Testing Hook on the server: usePagination', () => {
   it('Should not break', async () => {
     expect(() => renderHookServerSide(() => usePagination(paginationProps), {})).not.toThrow();
   });
@@ -21,5 +21,10 @@ describe('usePagination', () => {
   it('should initialize with 0 total pages', () => {
     const { result } = renderHookServerSide(() => usePagination(paginationProps), {});
     expect(result.totalPages).toBe(0);
+  });
+
+  it('should initialize with an empty pages array', () => {
+    const { result } = renderHookServerSide(() => usePagination(paginationProps), {});
+    expect(result.pages).toEqual([]);
   });
 });
