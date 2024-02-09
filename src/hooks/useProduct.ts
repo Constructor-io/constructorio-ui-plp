@@ -1,4 +1,3 @@
-import { getPrice as defaultGetPrice } from '../utils/getters';
 import useProductSwatch from '../components/ProductSwatch/useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
@@ -11,7 +10,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     throw new Error('data, itemId, or itemName are required.');
   }
 
-  const getPrice = state?.getters?.getPrice || defaultGetPrice;
+  const getPrice = state?.getters?.getPrice;
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);

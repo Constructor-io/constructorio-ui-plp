@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor } from '../../utils';
 import './ProductSwatch.css';
@@ -12,11 +13,23 @@ type ProductSwatchProps = IncludeRenderProps<
 >;
 
 export default function ProductSwatch(props: ProductSwatchProps) {
+  const context = useCioPlpContext();
   const { swatchObject, children } = props;
   const { swatchList, selectVariation, selectedVariation } = swatchObject;
+  if (!context) {
+    throw new Error('This component is meant to be used within the context of the CioPlpProvider');
+  }
 
-  const swatchClickHandler = (clickedSwatch: SwatchItem) => {
+  const {
+    callbacks: { onSwatchClick },
+  } = context;
+
+  const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
     selectVariation(clickedSwatch);
+
+    if (onSwatchClick) {
+      onSwatchClick(e, clickedSwatch);
+    }
   };
 
   return (
@@ -38,7 +51,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
                 className={`cio-swatch-item ${
                   selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
                 }`}
-                onClick={() => swatchClickHandler(swatch)}
+                onClick={(e) => swatchClickHandler(e, swatch)}
                 style={{
                   background: isHexColor(swatch?.swatchPreview)
                     ? swatch?.swatchPreview

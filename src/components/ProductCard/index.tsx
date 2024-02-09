@@ -66,7 +66,7 @@ export default function ProductCard(props: ProductCardProps) {
   const client = state.cioClient;
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
-  const formatPrice = state?.formatters?.formatPrice || defaultFormatPrice;
+  const formatPrice = state?.formatters?.formatPrice;
 
   return (
     <>
