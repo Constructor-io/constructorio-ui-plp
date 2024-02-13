@@ -11,8 +11,8 @@ import useBrowseResults from './useBrowseResults';
 
 export type CioPlpConfigs = {
   apiKey?: string;
-  cioClient: any;
-  options: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>;
+  cioClient?: any;
+  options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>;
 };
 export type UseCioPlpHook = { cioClient: Nullable<ConstructorIOClient> };
 
