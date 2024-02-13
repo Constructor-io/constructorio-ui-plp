@@ -17,15 +17,16 @@ describe('Testing Hook on the server: useCioClient', () => {
       renderHookServerSide(() => useCioClient(), {
         initialProps: {},
       }),
-    ).toThrow('Api Key required');
+    ).toThrow('Api Key or Constructor Client required');
   });
 
-  it('Should return null when apiKey is provided', () => {
-    const { result } = renderHookServerSide(({ apiKey }) => useCioClient(apiKey), {
-      initialProps: { apiKey: 'xx' },
+  it('Should return client when custom client is provided', () => {
+    const mockClient = { tracker: () => {} };
+    const { result } = renderHookServerSide(({ cioClient }) => useCioClient({ cioClient }), {
+      initialProps: { cioClient: mockClient },
     });
 
-    expect(result).toBe(null);
+    expect(result).toBe(mockClient);
   });
 
   it('Should return when clientOptions are provided', () => {
@@ -47,7 +48,7 @@ describe('Testing Hook on the server: useCioClient', () => {
     };
 
     const { result } = renderHookServerSide(
-      ({ apiKey, options }) => useCioClient(apiKey, options),
+      ({ apiKey, options }) => useCioClient({ apiKey, options }),
       {
         initialProps: { apiKey: key, options: clientOptions },
       },

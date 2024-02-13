@@ -25,6 +25,10 @@ describe('CioPlp React Client-Side Rendering', () => {
     expect(() => render(<CioPlp apiKey={DEMO_API_KEY} />)).not.toThrow();
   });
 
+  it('renders CioPlp provider without children on the client without error, if client is provided', () => {
+    expect(() => render(<CioPlp cioClient={{}} />)).not.toThrow();
+  });
+
   it('renders CioPlp provider with children correctly on the client', () => {
     // Render the component to a string
     const { getByText } = render(
