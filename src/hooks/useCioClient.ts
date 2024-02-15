@@ -8,7 +8,7 @@ import version from '../version';
 
 type UseCioClientProps = {
   apiKey?: string;
-  cioClient?: any;
+  cioClient?: ConstructorIOClient;
   options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>;
 };
 
@@ -22,15 +22,12 @@ const useCioClient: UseCioClient = ({ apiKey, cioClient, options } = {}) => {
   const memoizedCioClient = useMemo(() => {
     if (cioClient) return cioClient;
     if (apiKey && typeof window !== 'undefined') {
-      return (
-        cioClient ||
-        new ConstructorIOClient({
-          apiKey,
-          sendTrackingEvents: true,
-          version: `cio-ui-plp-${version}`,
-          ...options,
-        })
-      );
+      return new ConstructorIOClient({
+        apiKey,
+        sendTrackingEvents: true,
+        version: `cio-ui-plp-${version}`,
+        ...options,
+      });
     }
 
     return null;
