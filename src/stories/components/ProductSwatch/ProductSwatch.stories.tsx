@@ -1,6 +1,9 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import ProductSwatch from '../../ProductSwatch';
-import KitchenSinkDecorator from '../../../../stories/utils/KitchenSinkDecorator';
+import { DEMO_API_KEY } from '../../../constants';
+import CioPlp from '../../../components/CioPlp';
+import ProductSwatch from '../../../components/ProductSwatch/ProductSwatch';
+import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
 
 const meta = {
   title: 'Components/ProductSwatch',
@@ -14,6 +17,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
+  render: (args) => (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <ProductSwatch {...args} />
+    </CioPlp>
+  ),
   args: {
     swatchObject: {
       swatchList: [
@@ -46,6 +54,11 @@ export const Primary: Story = {
 
 export const KitchenSink: Story = {
   decorators: [KitchenSinkDecorator],
+  render: (args) => (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <ProductSwatch {...args} />
+    </CioPlp>
+  ),
   args: {
     swatchObject: {
       swatchList: [

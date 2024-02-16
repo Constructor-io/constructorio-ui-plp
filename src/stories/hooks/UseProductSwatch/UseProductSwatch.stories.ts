@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import UseProductSwatchExample from './UseProductSwatchExample';
-import { transformResultItem } from '../../../../utils/transformers';
-import SampleItem from '../../../../../spec/local_examples/item.json';
+import { transformResultItem } from '../../../utils/transformers';
+import SampleItem from '../../../../spec/local_examples/item.json';
 
 const meta = {
   title: 'Hooks/UseProductSwatch',
