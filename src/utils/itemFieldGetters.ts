@@ -1,4 +1,4 @@
-import { Getters, Item, SwatchItem } from '../types';
+import { ItemFieldGetters, Item, SwatchItem } from '../types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getPrice(item: Item): number {
@@ -7,8 +7,8 @@ export function getPrice(item: Item): number {
 
 export function getSwatches(
   item: Item,
-  retrievePrice: Getters['getPrice'],
-  retrieveSwatchPreview: Getters['getSwatchPreview'],
+  retrievePrice: ItemFieldGetters['getPrice'],
+  retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
 

@@ -10,7 +10,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     throw new Error('data, itemId, or itemName are required.');
   }
 
-  const getPrice = state?.getters?.getPrice;
+  const getPrice = state?.itemFieldGetters?.getPrice;
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);

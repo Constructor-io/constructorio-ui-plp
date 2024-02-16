@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { SwatchItem, UseProductSwatch } from '../../types';
-import {
-  getSwatches as defaultGetSwatches,
-  getPrice as defaultGetPrice,
-  getSwatchPreview as defaultGetSwatchPreview,
-} from '../../utils/getters';
 
 const useProductSwatch: UseProductSwatch = ({ item }) => {
   const [selectedVariation, setSelectedVariation] = useState<SwatchItem>();
@@ -13,9 +8,9 @@ const useProductSwatch: UseProductSwatch = ({ item }) => {
 
   const state = useCioPlpContext();
 
-  const getSwatches = state?.getters?.getSwatches || defaultGetSwatches;
-  const getPrice = state?.getters?.getPrice || defaultGetPrice;
-  const getSwatchPreview = state?.getters?.getSwatchPreview || defaultGetSwatchPreview;
+  const getSwatches = state?.itemFieldGetters?.getSwatches;
+  const getPrice = state?.itemFieldGetters?.getPrice;
+  const getSwatchPreview = state?.itemFieldGetters?.getSwatchPreview;
 
   useEffect(() => {
     if (item?.variations) {
