@@ -14,7 +14,7 @@ export default function useOnAddToCart(
   const requestConfigs = useRequestConfigs();
 
   if (!requestConfigs) {
-    throw new Error('This component is meant to be used within the CioPlp provider.');
+    throw new Error('This hook is meant to be used within the CioPlp provider.');
   }
 
   return useCallback(
