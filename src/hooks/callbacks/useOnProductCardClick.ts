@@ -19,7 +19,7 @@ export default function useOnProductCardClick(
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
       const { itemName, itemId, variationId } = item;
-      const { query, section, filterName, filterValue } = requestConfigs;
+      const { query, section } = requestConfigs;
 
       if (cioClient) {
         // Track search result click
@@ -30,16 +30,8 @@ export default function useOnProductCardClick(
             variationId,
             section,
           });
-        } else if (filterName && filterValue) {
-          // Track browse result click
-          cioClient.tracker.trackBrowseResultClick({
-            itemId,
-            variationId,
-            section,
-            filterName,
-            filterValue,
-          });
         }
+        // TODO: Track browse result click
       }
 
       if (callback) callback(event, item);
