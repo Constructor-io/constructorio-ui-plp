@@ -12,8 +12,7 @@
 	cursor: pointer;
 }
 
-li.cio-swatch-item {
-  list-style-type: none;
+.cio-swatch-item {
   width: 25px;
   height: 25px;
   outline: 1px black solid;

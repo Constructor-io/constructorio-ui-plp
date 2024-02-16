@@ -44,11 +44,11 @@ export default function ProductSwatch(props: ProductSwatchProps) {
         <div>
           <ul className='cio-swatch-container'>
             {swatchList?.map((swatch) => (
-              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-              <li
+              <button
+                type='button'
                 key={swatch.variationId}
                 data-cnstrc-variation-id={swatch.variationId}
-                className={`cio-swatch-item ${
+                className={`cio-swatch-button cio-swatch-item ${
                   selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
                 }`}
                 onClick={(e) => swatchClickHandler(e, swatch)}
