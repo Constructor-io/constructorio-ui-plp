@@ -10,3 +10,16 @@
     transform: rotate(360deg);
   }
 }
+
+.cio-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.cio-results .cio-product-card {
+  flex: 0 0 calc(33.333% - 10px); 
+  text-align: center;
+}

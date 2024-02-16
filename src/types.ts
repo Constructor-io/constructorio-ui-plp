@@ -9,21 +9,28 @@ import {
   SearchResponse,
   SortOption,
   GetBrowseResultsResponse,
+  VariationsMap,
+  FilterExpression,
+  FmtOptions,
   Nullable,
+  SearchRequestType,
+  SearchResponseType,
+  Redirect,
+  SearchParameters,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
-export interface Getters {
+export interface ItemFieldGetters {
   getPrice: (item: Item) => number;
   getSwatchPreview: (item: Item) => string;
   getSwatches: (
     item: Item,
-    retrievePrice: Getters['getPrice'],
-    retrieveSwatchPreview: Getters['getSwatchPreview'],
+    retrievePrice: ItemFieldGetters['getPrice'],
+    retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
   ) => SwatchItem[] | undefined;
 }
 
@@ -37,13 +44,74 @@ export interface Callbacks {
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
 }
 
+export interface PlpSearchRedirectResponse {
+  resultId: string;
+  redirect: Partial<Redirect>;
+  rawResponse: SearchResponse;
+}
+
+export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
+export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
+export type RedirectResponseState = Nullable<
+  Omit<Partial<PlpSearchRedirectResponse>, 'rawResponse'>
+>;
+export type DefaultQueryStringMap = {
+  query: 'q';
+  page: 'page';
+  offset: 'offset';
+  resultsPerPage: 'numResults';
+  filters: 'f';
+  sortBy: 'sortBy';
+  sortOrder: 'sortOrder';
+  section: 'section';
+};
+
+export interface UrlHelpers {
+  getUrl: () => string;
+  setUrl: (newUrlWithEncodedState: string) => void;
+  getStateFromUrl: (urlString: string) => RequestConfigs;
+  getUrlFromState: (state: RequestConfigs, options: QueryParamEncodingOptions) => string;
+  defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
+}
+
+export interface RequestConfigs {
+  // Search
+  query?: string;
+
+  // Browse
+  filterName?: string;
+  filterValue?: string;
+
+  // Others
+  filters?: Record<string, any>;
+  sortOrder?: SortOrder;
+  sortBy?: string;
+  resultsPerPage?: number;
+  page?: number;
+  offset?: number;
+  section?: string;
+  fmtOptions?: FmtOptions;
+  variationsMap?: VariationsMap;
+  preFilterExpression?: FilterExpression;
+}
+
+export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
+
+export interface QueryParamEncodingOptions {
+  baseUrl?: string;
+  origin?: string;
+  pathname?: string;
+}
+
 export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
-  getters: Getters;
+  staticRequestConfigs: RequestConfigs;
+  itemFieldGetters: ItemFieldGetters;
   formatters: Formatters;
   callbacks: Callbacks;
+  urlHelpers: UrlHelpers;
 }
 
 export interface PrimaryColorStyles {
@@ -60,7 +128,7 @@ export type Variation = Omit<
   'variations | matchedTerms | isSlotted | labels | variationsMap'
 >;
 
-export type VariationsMap = Record<string, any> | Record<string, any>[];
+export type SortOrder = 'ascending' | 'descending';
 
 export interface Item {
   matchedTerms: Array<string>;
@@ -120,23 +188,14 @@ export interface PlpBrowseResponse {
   rawResponse: GetBrowseResultsResponse;
 }
 
-// Type Extenders
-export type PropsWithChildren<P> = P & { children?: ReactNode };
-/**
- * Composes a type for a Component that accepts
- * - Props P,
- * - A children function, that takes RenderProps as its argument
- */
-export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
-  children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
-};
-
 export interface CioPlpProviderProps {
   apiKey: string;
   cioClient?: Nullable<ConstructorIOClient>;
-  formatters?: Formatters;
-  callbacks?: Callbacks;
-  getters?: Getters;
+  formatters?: Partial<Formatters>;
+  callbacks?: Partial<Callbacks>;
+  itemFieldGetters?: Partial<ItemFieldGetters>;
+  urlHelpers?: Partial<UrlHelpers>;
+  staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
 export type CioPlpProps = CioPlpProviderProps;
@@ -205,3 +264,14 @@ export type UseProductInfoProps = {
 };
 
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
+// Type Extenders
+export type PropsWithChildren<P> = P & { children?: ReactNode };
+
+/**
+ * Composes a type for a Component that accepts
+ * - Props P,
+ * - A children function, that takes RenderProps as its argument
+ */
+export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
+  children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
+};

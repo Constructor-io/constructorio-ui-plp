@@ -2,7 +2,6 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
 import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
-import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
 import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch/ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
@@ -65,8 +64,8 @@ export default function ProductCard(props: ProductCardProps) {
 
   const client = state.cioClient;
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
+  const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
-  const formatPrice = state?.formatters?.formatPrice;
 
   return (
     <>

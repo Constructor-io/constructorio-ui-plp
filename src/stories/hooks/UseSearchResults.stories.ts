@@ -5,11 +5,6 @@ import UseSearchResultsExample from './UseSearchResultsExample';
 const meta = {
   title: 'Hooks/UseSearchResults',
   component: UseSearchResultsExample,
-  argTypes: {
-    configs: { control: false },
-    cioClient: { name: 'configs.cioClient', control: false },
-    searchParams: { name: 'configs.searchParams' },
-  },
   parameters: {
     layout: 'centered',
     docs: {

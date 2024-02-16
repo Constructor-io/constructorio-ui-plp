@@ -1,31 +1,27 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
+import '@testing-library/jest-dom';
 import useSearchResults from '../src/hooks/useSearchResults';
-import mockSearchResponse from './local_examples/apiSearchResponse.json';
-import { DEMO_API_KEY } from '../src/constants';
+import { mockConstructorIOClient, renderHookWithCioPlp } from './test-utils';
 
 describe('Testing Hook: useSearchResults', () => {
-  let clientGetSearchResultsSpy;
-  let ConstructorIO;
-
   beforeEach(() => {
-    ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
-    clientGetSearchResultsSpy = jest.spyOn(ConstructorIO.search, 'getSearchResults');
-    clientGetSearchResultsSpy.mockImplementationOnce(() => Promise.resolve(mockSearchResponse));
+    // Mock console error to de-clutter the console for expected errors
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
   });
 
   afterEach(() => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  test('Should return a PlpSearchResponse Object', async () => {
-    const { result } = renderHook(
-      () => useSearchResults('linen', { cioClient: ConstructorIO }),
-      {},
-    );
+  it('Should return a PlpSearchResponse Object', async () => {
+    const { result } = renderHookWithCioPlp(() => useSearchResults({ query: 'linen' }));
 
     await waitFor(() => {
-      const response = result?.current.searchResults;
+      const { current } = result;
+      const {
+        data: { response, rawApiResponse, request },
+      } = current;
 
       expect(response?.resultId).not.toBeUndefined();
       expect(response?.totalNumResults).not.toBeUndefined();
@@ -34,36 +30,31 @@ describe('Testing Hook: useSearchResults', () => {
       expect(response?.results?.length).not.toBeUndefined();
       expect(response?.facets?.length).not.toBeUndefined();
       expect(response?.sortOptions?.length).not.toBeUndefined();
-      expect(response?.rawResponse).not.toBeUndefined();
+      expect(rawApiResponse).not.toBeUndefined();
+      expect(request).not.toBeUndefined();
     });
   });
 
-  test('Should pass along parameters properly', async () => {
+  it('Should pass along parameters properly', async () => {
     const filters = { Color: ['Phantom Ink'] };
-    const page = 2;
     const resultsPerPage = 100;
-    renderHook(
-      () =>
-        useSearchResults('Linen', {
-          cioClient: ConstructorIO,
-          searchParams: { page, filters, resultsPerPage },
-        }),
-      {},
+    renderHookWithCioPlp(() =>
+      useSearchResults({
+        query: 'Linen',
+        searchParams: { filters, resultsPerPage, page: 1 },
+      }),
     );
 
     await waitFor(() => {
-      expect(clientGetSearchResultsSpy).toHaveBeenCalledWith('Linen', {
-        page,
+      expect(mockConstructorIOClient.search.getSearchResults).toHaveBeenCalledWith('Linen', {
         filters,
         resultsPerPage,
+        page: 1,
       });
     });
   });
 
-  test('Should throw error if client is not available', () => {
-    const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
-    expect(() => renderHook(() => useSearchResults('item', {}), {})).toThrow();
-    spy.mockRestore();
+  it('Should throw error if client is not available', () => {
+    expect(() => renderHook(() => useSearchResults({ query: 'item' }))).toThrow();
   });
 });

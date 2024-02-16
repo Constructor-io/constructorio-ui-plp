@@ -1,14 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import useCioClient from '../../hooks/useCioClient';
-import * as defaultGetters from '../../utils/getters';
+import * as defaultGetters from '../../utils/itemFieldGetters';
 import * as defaultFormatters from '../../utils/formatters';
+import * as defaultUrlHelpers from '../../utils/urlHelpers';
 import { PlpContextValue, IncludeRenderProps, CioPlpProviderProps } from '../../types';
 import { PlpContext } from '../../hooks/useCioPlpContext';
 
 export default function CioPlpProvider(
   props: IncludeRenderProps<CioPlpProviderProps, PlpContextValue>,
 ) {
-  const { apiKey, formatters, callbacks, getters, cioClient: customCioClient, children } = props;
+  const {
+    apiKey,
+    formatters,
+    callbacks,
+    itemFieldGetters,
+    urlHelpers,
+    staticRequestConfigs = {},
+    cioClient: customCioClient,
+    children,
+  } = props;
   const [cioClientOptions, setCioClientOptions] = useState({});
 
   const cioClient = useCioClient(apiKey);
@@ -18,11 +28,22 @@ export default function CioPlpProvider(
       cioClient: customCioClient || cioClient,
       cioClientOptions,
       setCioClientOptions,
-      getters: { ...defaultGetters, ...getters },
+      staticRequestConfigs,
+      itemFieldGetters: { ...defaultGetters, ...itemFieldGetters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
+      urlHelpers: { ...defaultUrlHelpers, ...urlHelpers },
     }),
-    [cioClient, customCioClient, cioClientOptions, getters, formatters, callbacks],
+    [
+      cioClient,
+      customCioClient,
+      cioClientOptions,
+      itemFieldGetters,
+      formatters,
+      callbacks,
+      urlHelpers,
+      staticRequestConfigs,
+    ],
   );
 
   return (

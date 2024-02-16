@@ -52,7 +52,7 @@ describe('ProductCard: React Server-Side Rendering', () => {
   test('Should retrieve custom price if overridden at the PlpContext level', () => {
     const customPriceGetter = (item) => item.data.altPrice;
     const html = ReactDOMServer.renderToString(
-      <CioPlp apiKey={DEMO_API_KEY} getters={{ getPrice: customPriceGetter }}>
+      <CioPlp apiKey={DEMO_API_KEY} itemFieldGetters={{ getPrice: customPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );

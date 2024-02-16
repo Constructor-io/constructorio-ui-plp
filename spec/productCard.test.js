@@ -50,7 +50,7 @@ describe('Testing Component: ProductCard', () => {
   test('Should retrieve custom price if overridden at the CioPlp provider level', () => {
     const contextPriceGetter = (item) => item.data.altPrice;
     render(
-      <CioPlp apiKey={DEMO_API_KEY} getters={{ getPrice: contextPriceGetter }}>
+      <CioPlp apiKey={DEMO_API_KEY} itemFieldGetters={{ getPrice: contextPriceGetter }}>
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );
