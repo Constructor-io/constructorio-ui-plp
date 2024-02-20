@@ -24,7 +24,6 @@ export default function useOnAddToCart(
       const revenue = getPrice(item);
 
       if (cioClient) {
-        // TODO: if a browse result send "TERM_UNKNOWN" instead of "query" CSL-3275
         cioClient.tracker.trackConversion(query, {
           itemId,
           itemName,
