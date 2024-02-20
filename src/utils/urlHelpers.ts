@@ -28,10 +28,12 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
 });
 
 export function getUrl(): string {
+  if (typeof window === 'undefined') return '';
   return window.location.href;
 }
 
 export function setUrl(newUrlWithEncodedState: string) {
+  if (typeof window === 'undefined') return;
   window.location.href = newUrlWithEncodedState;
 }
 
