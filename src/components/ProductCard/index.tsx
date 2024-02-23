@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
-import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
+import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { getPrice as defaultGetPrice } from '../../utils/itemFieldGetters';
 import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
 import { IncludeRenderProps, Item } from '../../types';
