@@ -27,8 +27,8 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
   section: 'section',
 });
 
-export function getUrl(): string {
-  if (typeof window === 'undefined') return '';
+export function getUrl(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
   return window.location.href;
 }
 
