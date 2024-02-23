@@ -11,7 +11,7 @@ export default function useRequestConfigs(): RequestConfigs {
   const { getUrl, getStateFromUrl } = urlHelpers;
 
   const url = getUrl();
-  const urlRequestConfigs = getStateFromUrl(url);
+  const urlRequestConfigs = url ? getStateFromUrl(url) : {};
 
   const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs };
 

@@ -27,11 +27,13 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
   section: 'section',
 });
 
-export function getUrl(): string {
+export function getUrl(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
   return window.location.href;
 }
 
 export function setUrl(newUrlWithEncodedState: string) {
+  if (typeof window === 'undefined') return;
   window.location.href = newUrlWithEncodedState;
 }
 
