@@ -60,7 +60,7 @@ export type DefaultQueryStringMap = {
 };
 
 export interface UrlHelpers {
-  getUrl: () => string;
+  getUrl: () => string | undefined;
   setUrl: (newUrlWithEncodedState: string) => void;
   getStateFromUrl: (urlString: string) => RequestConfigs;
   getUrlFromState: (state: RequestConfigs, options: QueryParamEncodingOptions) => string;
