@@ -8,7 +8,7 @@ import version from '../version';
 
 type UseCioClientProps = {
   apiKey?: string;
-  cioClient?: ConstructorIOClient;
+  cioClient?: Nullable<ConstructorIOClient>;
   options?: Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents' | 'version'>;
 };
 
