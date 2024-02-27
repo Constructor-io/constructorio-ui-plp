@@ -13,10 +13,10 @@ import {
 } from '../components/SearchResults/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import usePagination from '../components/Pagination/usePagination';
+import useRequestConfigs from './useRequestConfigs';
+import { getSearchParamsFromRequestConfigs } from '../utils';
 
 export interface UseSearchResultsProps {
-  query: string;
-  searchParams?: SearchParameters;
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
 }
 
@@ -57,16 +57,16 @@ const fetchSearchResults = async (
 
 /**
  * A React Hook to call to utilize Constructor.io Search
- * @param {Object} props - The component props.
- * @param {string} props.query Search Query
- * @param {SearchParameters} props.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
+ * @param {Object} [props] - The component props.
  * @param {object} [props.initialSearchResponse] Initial value for search results
  * (Would be useful when passing initial state for the first render from the server
  *  to the client via something like getServerSideProps)
  * @returns {status, data, pagination, refetch}
  */
-export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
-  const { query, searchParams, initialSearchResponse } = props;
+export default function useSearchResults(
+  props: UseSearchResultsProps = {},
+): UseSearchResultsReturn {
+  const { initialSearchResponse } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -76,6 +76,16 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
   }
 
   const { cioClient } = contextValue;
+  const { query, searchParams } = getSearchParamsFromRequestConfigs(useRequestConfigs());
+
+  // Throw error if client is not provided and window is defined (i.e. not SSR)
+  if (!cioClient && typeof window !== 'undefined') {
+    throw new Error('CioClient required');
+  }
+
+  if (!query && typeof window !== 'undefined') {
+    throw new Error('Unable to retrieve query from the url.');
+  }
 
   const [state, dispatch] = useReducer(searchReducer, initialState, (defaultState) =>
     initFunction(defaultState, initialSearchResponse),
@@ -89,20 +99,14 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
     resultsPerPage: data.response?.numResultsPerPage,
   });
 
-  // Throw error if client is not provided and window is defined (i.e. not SSR)
-  if (!cioClient && typeof window !== 'undefined') {
-    throw new Error('CioClient required');
-  }
-
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
     if (cioClient) {
-      fetchSearchResults(
-        cioClient,
-        query,
-        { ...searchParams, page: pagination.currentPage || searchParams?.page } || {},
-        dispatch,
-      );
+      const searchParameters = searchParams;
+
+      if (pagination.currentPage) searchParameters.page = pagination.currentPage;
+
+      fetchSearchResults(cioClient, query, searchParameters, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);

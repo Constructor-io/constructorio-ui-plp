@@ -11,7 +11,7 @@ const initialSearchResponse {
     },
   ];
 }
-  const { status, data, pagination, refetch } = useSearchResults({ query: '', searchParams: {}, initialSearchResponse });
+  const { status, data, pagination, refetch } = useSearchResults();
 ```
 
 ### Returns

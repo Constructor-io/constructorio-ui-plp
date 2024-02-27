@@ -19,8 +19,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {
-    query: 'water',
-    searchParams: { resultsPerPage: 2 },
-  },
+  decorators: [
+    () => {
+      const url = new URL(window.location as any);
+      url.searchParams.set('q', 'shirt');
+      window.history.pushState({}, '', url);
+
+      return null;
+    },
+  ],
 };

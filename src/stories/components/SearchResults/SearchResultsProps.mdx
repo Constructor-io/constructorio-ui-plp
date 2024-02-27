@@ -1,0 +1,14 @@
+import { Meta, Markdown, Controls, ArgTypes } from '@storybook/blocks';
+import * as UseSearchResultsStories from './SearchResults.stories';
+/* This "?raw" import raw text form the md file */
+import SearchResultsReturn from '../../hooks/SearchResultsReturn.md?raw';
+
+<Meta of={UseSearchResultsStories} name='Props' />
+
+### Props
+<ArgTypes />
+<hr />
+
+
+#### Data passed with a render prop
+<Markdown>{SearchResultsReturn}</Markdown>
