@@ -10,7 +10,7 @@ export default function useOnProductCardClick(
   cioClient: Nullable<ConstructorIO>,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
-  const requestConfigs = useRequestConfigs();
+  const { requestConfigs } = useRequestConfigs();
 
   if (!requestConfigs) {
     throw new Error('This hook is meant to be used within the CioPlp provider.');

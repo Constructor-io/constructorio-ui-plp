@@ -21,11 +21,14 @@ describe('Testing Hook on the server: useRequestConfigs', () => {
     ).not.toThrow();
   });
 
-  it('Should return any empty object', async () => {
-    const { result } = renderHookServerSideWithCioPlp(() => useRequestConfigs(), {
+  it('Should return any empty object and a setter', async () => {
+    const {
+      result: { requestConfigs, setRequestConfigs },
+    } = renderHookServerSideWithCioPlp(() => useRequestConfigs(), {
       apiKey: DEMO_API_KEY,
     });
 
-    expect(result).toEqual({});
+    expect(requestConfigs).toEqual({});
+    expect(typeof setRequestConfigs).toBe('function');
   });
 });
