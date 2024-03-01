@@ -11,7 +11,7 @@ export default function useOnAddToCart(
   getPrice: (item: Item) => number,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
-  const requestConfigs = useRequestConfigs();
+  const { requestConfigs } = useRequestConfigs();
 
   if (!requestConfigs) {
     throw new Error('This hook is meant to be used within the CioPlp provider.');
