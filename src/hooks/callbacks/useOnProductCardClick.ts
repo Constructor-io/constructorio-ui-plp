@@ -4,24 +4,34 @@ import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { Nullable } from '@constructor-io/constructorio-client-javascript/lib/types';
 
 import { Item } from '../../types';
+import useRequestConfigs from '../useRequestConfigs';
 
 export default function useOnProductCardClick(
   cioClient: Nullable<ConstructorIO>,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
+  const { requestConfigs } = useRequestConfigs();
+
+  if (!requestConfigs) {
+    throw new Error('This hook is meant to be used within the CioPlp provider.');
+  }
+
   return useCallback(
     (event: React.MouseEvent, item: Item) => {
-      // TODO: Identify if Search & Browse, and call the right method - CSL3018
-      // TODO: Obtain the search term - CSL3018
       const { itemName, itemId, variationId } = item;
+      const { query, section } = requestConfigs;
 
       if (cioClient) {
-        cioClient.tracker.trackSearchResultClick('', {
-          itemId,
-          itemName,
-          variationId,
-          section: 'Products',
-        });
+        // Track search result click
+        if (query) {
+          cioClient.tracker.trackSearchResultClick(query, {
+            itemId,
+            itemName,
+            variationId,
+            section,
+          });
+        }
+        // TODO: Track browse result click
       }
 
       if (callback) callback(event, item);
@@ -29,6 +39,6 @@ export default function useOnProductCardClick(
       event.preventDefault();
       event.stopPropagation();
     },
-    [callback, cioClient],
+    [callback, cioClient, requestConfigs],
   );
 }

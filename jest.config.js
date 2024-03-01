@@ -4,7 +4,7 @@ module.exports = {
     {
       displayName: 'client',
       testEnvironment: 'jsdom',
-      testMatch: ['**/**/*.test.(js|jsx)', '!**/**/*.server.test.(js|jsx)'],
+      testMatch: ['**/**/*.test.(js|jsx|ts|tsx)', '!**/**/*.server.test.(js|jsx|ts|tsx)'],
     },
     {
       displayName: 'server',

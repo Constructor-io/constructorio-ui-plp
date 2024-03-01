@@ -41,7 +41,9 @@ export default function SearchResults(props: SearchResultsWithRenderProps) {
     throw new Error('<SearchResults /> component must be rendered within CioPlpContext');
   }
 
-  const requestConfigs = useRequestConfigs() as SearchParameters & { query?: string };
+  const { requestConfigs } = useRequestConfigs() as {
+    requestConfigs: SearchParameters & { query?: string };
+  };
   const { query, ...restRequestConfigs } = requestConfigs;
   if (!query) {
     throw new Error('query is a required parameter of type string');
