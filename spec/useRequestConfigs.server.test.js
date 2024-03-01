@@ -21,7 +21,7 @@ describe('Testing Hook on the server: useRequestConfigs', () => {
     ).not.toThrow();
   });
 
-  it('Should return any empty object and a setter', async () => {
+  it('Should return an empty object and a setter', async () => {
     const {
       result: { requestConfigs, setRequestConfigs },
     } = renderHookServerSideWithCioPlp(() => useRequestConfigs(), {
