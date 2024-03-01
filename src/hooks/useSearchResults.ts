@@ -76,7 +76,8 @@ export default function useSearchResults(
   }
 
   const { cioClient } = contextValue;
-  const { query, searchParams } = getSearchParamsFromRequestConfigs(useRequestConfigs());
+  const { requestConfigs } = useRequestConfigs();
+  const { query, searchParams } = getSearchParamsFromRequestConfigs(requestConfigs);
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
   if (!cioClient && typeof window !== 'undefined') {

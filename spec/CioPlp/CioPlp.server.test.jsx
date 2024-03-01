@@ -18,6 +18,13 @@ describe('CioPlp React Server-Side Rendering', () => {
     expect(html).toContain('');
   });
 
+  it('renders CioPlp provider without children on the server without error, if client is provided', () => {
+    // Render the component to a string
+    const html = ReactDOMServer.renderToString(<CioPlp cioClient={{}} />);
+
+    expect(html).toContain('');
+  });
+
   it('renders CioPlp provider with children correctly on the server', () => {
     // Render the component to a string
     const html = ReactDOMServer.renderToString(
