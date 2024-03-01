@@ -11,7 +11,7 @@ jest.mock('../src/styles.css', () => ({}));
 jest.mock('../src/hooks/useSearchResults');
 jest.mock('../src/hooks/useRequestConfigs', () => ({
   __esModule: true,
-  default: jest.fn(() => ({ query: 'red' })),
+  default: jest.fn(() => ({ requestConfigs: { query: 'red' } })),
 }));
 
 describe('Testing Component: SearchResults', () => {
