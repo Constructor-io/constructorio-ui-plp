@@ -10,8 +10,17 @@ describe('Testing Hook: useCioClient', () => {
     spy.mockRestore();
   });
 
+  test('Should return client when custom client is provided', () => {
+    const mockClient = { tracker: () => {} };
+    const { result } = renderHook(({ cioClient }) => useCioClient({ cioClient }), {
+      initialProps: { cioClient: mockClient },
+    });
+
+    expect(result.current).toBe(mockClient);
+  });
+
   test('Should return a ConstructorIO Client Object', () => {
-    const { result } = renderHook(({ apiKey }) => useCioClient(apiKey), {
+    const { result } = renderHook(({ apiKey }) => useCioClient({ apiKey }), {
       initialProps: { apiKey: 'xx' },
     });
     const client = result.current;
@@ -42,7 +51,7 @@ describe('Testing Hook: useCioClient', () => {
       networkParameters: { timeout: 1000 },
     };
 
-    const { result } = renderHook(({ apiKey, options }) => useCioClient(apiKey, options), {
+    const { result } = renderHook(({ apiKey, options }) => useCioClient({ apiKey, options }), {
       initialProps: { apiKey: key, options: clientOptions },
     });
 
