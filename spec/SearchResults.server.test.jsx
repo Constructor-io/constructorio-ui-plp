@@ -3,6 +3,8 @@ import { renderToString } from 'react-dom/server';
 import SearchResults from '../src/components/SearchResults';
 import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
+import { transformSearchResponse } from '../src/utils/transformers';
+import mockSearchResponse from './local_examples/apiSearchResponse.json';
 
 jest.mock('../src/styles.css', () => ({}));
 jest.mock('../src/hooks/useSearchResults');
@@ -39,16 +41,12 @@ describe('SearchResults Component (Server-Side Rendering)', () => {
   });
 
   it('Should render title and search results when data is fetched', () => {
-    const mockData = {
-      response: {
-        results: [
-          { itemId: '1', itemName: 'Product 1', data: { price: 100 }, price: 100 },
-          { itemId: '2', itemName: 'Product 2', data: { price: 100 }, price: 100 },
-        ],
-      },
-    };
+    const mockData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({ status: 'success', data: mockData });
+    mockUseSearchResults.mockReturnValue({
+      status: 'success',
+      data: { response: { ...mockData } },
+    });
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -57,7 +55,19 @@ describe('SearchResults Component (Server-Side Rendering)', () => {
     );
 
     expect(html).toContain('Search Results');
-    expect(html).toContain('Product 1');
-    expect(html).toContain('Product 2');
+    expect(html).toContain(mockData.results[0].itemName);
+  });
+
+  it('Should render title and search results when when provided initialSearchResponse', async () => {
+    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
+
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults initialSearchResponse={initialSearchResponse} />
+      </CioPlp>,
+    );
+
+    expect(html).toContain('Search Results');
+    expect(html).toContain(initialSearchResponse.results[0].itemName);
   });
 });

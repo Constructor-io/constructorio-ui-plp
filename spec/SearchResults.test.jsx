@@ -4,6 +4,8 @@ import SearchResults from '../src/components/SearchResults';
 import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import '@testing-library/jest-dom';
+import { transformSearchResponse } from '../src/utils/transformers';
+import mockSearchResponse from './local_examples/apiSearchResponse.json';
 
 jest.mock('../src/styles.css', () => ({}));
 jest.mock('../src/hooks/useSearchResults');
@@ -40,16 +42,12 @@ describe('Testing Component: SearchResults', () => {
   });
 
   it('Should render title and search results when data is fetched', async () => {
-    const mockData = {
-      response: {
-        results: [
-          { itemId: '1', itemName: 'Product 1', data: { price: 100 }, price: 100 },
-          { itemId: '2', itemName: 'Product 2', data: { price: 100 }, price: 100 },
-        ],
-      },
-    };
+    const mockData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({ status: 'success', data: mockData });
+    mockUseSearchResults.mockReturnValue({
+      status: 'success',
+      data: { response: { ...mockData } },
+    });
 
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -58,7 +56,21 @@ describe('Testing Component: SearchResults', () => {
     );
 
     await waitFor(() => expect(getByText('Search Results')).toBeInTheDocument());
-    await waitFor(() => expect(getByText('Product 1')).toBeInTheDocument());
-    await waitFor(() => expect(getByText('Product 2')).toBeInTheDocument());
+    await waitFor(() => expect(getByText(mockData.results[0].itemName)).toBeInTheDocument());
+  });
+
+  it('Should render title and search results when when provided initialSearchResponse', async () => {
+    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
+
+    const { getByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults initialSearchResponse={initialSearchResponse} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => expect(getByText('Search Results')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByText(initialSearchResponse.results[0].itemName)).toBeInTheDocument(),
+    );
   });
 });
