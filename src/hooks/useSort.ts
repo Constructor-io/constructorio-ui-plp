@@ -18,11 +18,7 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
     throw new Error('CioClient required');
   }
 
-  const [selectedSort, setSelectedSort] = useState<PlpSortOption>({
-    sortBy: '',
-    sortOrder: 'ascending',
-    displayName: '',
-  });
+  const [selectedSort, setSelectedSort] = useState<PlpSortOption | null>(null);
 
   const sortOptions = transformSortOptionsResponse(searchOrBrowseResponse.sortOptions);
   const {
@@ -30,11 +26,14 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
     setRequestConfigs,
   } = useRequestConfigs();
 
+  // Read sort configs from url and set state
   useEffect(() => {
     const sortOption = sortOptions.find(
       (option) => option.sortBy === sortBy && option.sortOrder === sortOrder,
     );
     if (sortOption) setSelectedSort(sortOption);
+    // Select default sort option
+    else if (sortOptions.length) setSelectedSort(sortOptions[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, sortOrder]);
 

@@ -192,7 +192,7 @@ export type CioPlpProps = CioPlpProviderProps;
 
 export type UseSortReturn = {
   sortOptions: PlpSortOption[];
-  selectedSort: PlpSortOption;
+  selectedSort: PlpSortOption | null;
   changeSelectedSort: (sortOption: PlpSortOption) => void;
 };
 
