@@ -28,7 +28,7 @@ export default function useOnProductCardClick(
             itemId,
             itemName,
             variationId: selectedVariationId || variationId,
-            section: 'Products',
+            section,
           });
         }
         // TODO: Track browse result click
