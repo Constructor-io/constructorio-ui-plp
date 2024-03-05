@@ -10,12 +10,42 @@ import {
   ApiItem,
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
+  Variation,
 } from '../types';
 
 function isAPIRedirectSearchResponse(
   response: Partial<SearchResponseType | Redirect>,
 ): response is Partial<Redirect> {
   return 'redirect' in response;
+}
+
+export function transformResultVariation(variation: ApiItem, includeRaw = true): Variation {
+  const {
+    url,
+    image_url: imageUrl,
+    group_ids: groupIds,
+    description,
+    facets,
+    variation_id: variationId,
+    ...otherMetadataFields
+  }: any = variation.data;
+
+  const transformedVariation: Variation = {
+    itemName: variation.value,
+
+    // Flatten the data object
+    url,
+    imageUrl,
+    description,
+    facets,
+    variationId,
+    rawResponse: includeRaw ? variation : undefined,
+
+    // Remaining unmapped metadata fields
+    data: otherMetadataFields,
+  };
+
+  return transformedVariation;
 }
 
 // TODO: transform variations as well
@@ -36,7 +66,7 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
     itemName: item.value,
     isSlotted: item.is_slotted,
     labels: item.labels,
-    variations: item.variations,
+    variations: item.variations?.map((variation: ApiItem) => transformResultVariation(variation)),
     variationsMap: item.variations_map,
 
     // Flatten the data object

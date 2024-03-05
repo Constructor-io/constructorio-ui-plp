@@ -25,8 +25,8 @@ export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Re
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface ItemFieldGetters {
-  getPrice: (item: Item) => number;
-  getSwatchPreview: (item: Item) => string;
+  getPrice: (item: Item | Variation) => number;
+  getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
     retrievePrice: ItemFieldGetters['getPrice'],
@@ -125,7 +125,7 @@ export type ApiItem = MakeOptional<Result, 'variations | variations_map'>;
 
 export type Variation = Omit<
   Item,
-  'variations | matchedTerms | isSlotted | labels | variationsMap'
+  'variations' | 'matchedTerms' | 'isSlotted' | 'labels' | 'variationsMap' | 'itemId'
 >;
 
 export type SortOrder = 'ascending' | 'descending';

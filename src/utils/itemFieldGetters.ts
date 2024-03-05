@@ -1,7 +1,7 @@
-import { ItemFieldGetters, Item, SwatchItem } from '../types';
+import { ItemFieldGetters, Item, SwatchItem, Variation } from '../types';
 
 // eslint-disable-next-line import/prefer-default-export
-export function getPrice(item: Item): number {
+export function getPrice(item: Item | Variation): number {
   return item.data.price;
 }
 
@@ -12,13 +12,13 @@ export function getSwatches(
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
 
-  item?.variations?.forEach((variation) => {
+  item?.variations?.forEach((variation: Variation) => {
     if (retrieveSwatchPreview(variation)) {
       swatchList.push({
-        itemName: variation?.value || item?.itemName,
-        url: variation?.data?.url || item?.data?.url,
-        imageUrl: variation?.data?.image_url,
-        variationId: variation?.data?.variation_id,
+        itemName: variation?.itemName || item?.itemName,
+        url: variation?.url || item?.url,
+        imageUrl: variation?.url,
+        variationId: variation?.variationId,
         price: retrievePrice(variation),
         swatchPreview: retrieveSwatchPreview(variation),
       });
@@ -28,6 +28,6 @@ export function getSwatches(
   return swatchList;
 }
 
-export function getSwatchPreview(item: Item): string {
-  return item?.data?.swatchPreview;
+export function getSwatchPreview(variation: Variation): string {
+  return variation?.data?.swatchPreview;
 }
