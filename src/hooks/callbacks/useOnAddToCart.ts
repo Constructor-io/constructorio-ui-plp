@@ -21,7 +21,6 @@ export default function useOnAddToCart(
       const { itemId, itemName, variationId } = item;
       const { query, section } = requestConfigs;
 
-
       if (cioClient) {
         cioClient.tracker.trackConversion(query, {
           itemId,
