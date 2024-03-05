@@ -33,8 +33,9 @@ describe('Testing Hook: useRequestConfigs', () => {
 
   it('Should return an empty object if no defaults have been specified', () => {
     function TestReactComponent() {
-      const requestConfigs = useRequestConfigs();
+      const { requestConfigs, setRequestConfigs } = useRequestConfigs();
       expect(requestConfigs).toEqual({});
+      expect(typeof setRequestConfigs).toEqual('function');
       return <div>hello</div>;
     }
 
@@ -48,7 +49,7 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return configurations set as defaults at Plp Context', () => {
     window.location.href = 'https://example.com/group_id/Styles';
     function TestReactComponent() {
-      const requestConfigs = useRequestConfigs();
+      const { requestConfigs } = useRequestConfigs();
       expect(requestConfigs).toEqual(testRequestState);
       return <div>hello</div>;
     }
@@ -65,7 +66,7 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return configurations set in the URL path/query parameters', () => {
     function TestReactComponent() {
       window.location.href = testUrl;
-      const requestConfigs = useRequestConfigs();
+      const { requestConfigs } = useRequestConfigs();
       const { fmtOptions, qsParam, preFilterExpression, variationsMap, ...sampleRequestState } =
         testRequestState;
 
@@ -87,7 +88,7 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return merged configurations with the URL query parameters taking priority', () => {
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
-      const requestConfigs = useRequestConfigs();
+      const { requestConfigs } = useRequestConfigs();
       const decodedRequestState = testRequestState;
       decodedRequestState.page = 2;
       decodedRequestState.query = 'fire';
@@ -121,7 +122,7 @@ describe('Testing Hook: useRequestConfigs', () => {
 
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
-      const decodedRequestState = useRequestConfigs();
+      const { requestConfigs: decodedRequestState } = useRequestConfigs();
 
       expect(typeof decodedRequestState).toBe('object');
       expect(decodedRequestState.page).toBe(7);
@@ -138,6 +139,30 @@ describe('Testing Hook: useRequestConfigs', () => {
           getUrl: customUrlGetter,
           getStateFromUrl: customGetStateFromUrl,
         }}>
+        <TestReactComponent />
+      </CioPlpProvider>,
+    );
+  });
+
+  test('Using setRequestConfigs should work', () => {
+    function TestReactComponent() {
+      window.location.href = 'https://www.example.com/search?q=item&page=3';
+      const { setRequestConfigs } = useRequestConfigs();
+
+      const oldUrlObj = new URL(window.location.href);
+      setRequestConfigs({ page: 12 });
+      const newUrlObj = new URL(window.location.href);
+
+      expect(newUrlObj.searchParams.get('page')).toEqual('12');
+
+      // Check the remaining query parameters are the same
+      expect(newUrlObj.searchParams.get('q')).toEqual(oldUrlObj.searchParams.get('q'));
+
+      return <div>hello</div>;
+    }
+
+    render(
+      <CioPlpProvider apiKey={DEMO_API_KEY}>
         <TestReactComponent />
       </CioPlpProvider>,
     );

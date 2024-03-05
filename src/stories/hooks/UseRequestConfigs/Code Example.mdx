@@ -9,11 +9,13 @@ function MyComponent() {
   const cioClient = useCioClient('MY_API_KEY')
 
   // For Search
-  const { query, ...requestParameters } = useRequestConfigs()
+  const { requestConfigs } = useRequestConfigs()
+  const { query, ...requestParameters } = requestConfigs
   const { searchResults } = cioClient.search.getSearchResults(requestParameters)
 
   // For Browse
-  const { filterName, filterValue, ...requestParameters } = useRequestConfigs()
+  const { requestConfigs } = useRequestConfigs()
+  const { filterName, filterValue, ...requestParameters } = requestConfigs
   const { browseResults } = cioClient.browse.getBrowseResults(filterName, filterValue, requestParameters)
   ...
 }

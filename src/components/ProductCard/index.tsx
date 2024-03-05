@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import useOnAddToCart from '../../hooks/callbacks/useOnAddToCart';
-import useOnProductCardClick from '../../hooks/callbacks/useOnProductCardClick';
+import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch/ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';

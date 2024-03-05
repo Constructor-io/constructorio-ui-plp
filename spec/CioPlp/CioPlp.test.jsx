@@ -4,6 +4,7 @@ import CioPlp from '../../src/components/CioPlp';
 import { useCioPlpContext } from '../../src/hooks/useCioPlpContext';
 import { DEMO_API_KEY } from '../../src/constants';
 import '@testing-library/jest-dom';
+import { mockConstructorIOClient } from '../test-utils';
 
 describe('CioPlp React Client-Side Rendering', () => {
   beforeEach(() => {
@@ -23,6 +24,10 @@ describe('CioPlp React Client-Side Rendering', () => {
 
   it('renders CioPlp provider without children on the client without error', () => {
     expect(() => render(<CioPlp apiKey={DEMO_API_KEY} />)).not.toThrow();
+  });
+
+  it('renders CioPlp provider without children on the client without error, if client is provided', () => {
+    expect(() => render(<CioPlp cioClient={mockConstructorIOClient} />)).not.toThrow();
   });
 
   it('renders CioPlp provider with children correctly on the client', () => {

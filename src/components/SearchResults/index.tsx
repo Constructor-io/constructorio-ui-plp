@@ -41,7 +41,9 @@ export default function SearchResults(props: SearchResultsWithRenderProps) {
     throw new Error('<SearchResults /> component must be rendered within CioPlpContext');
   }
 
-  const requestConfigs = useRequestConfigs() as SearchParameters & { query?: string };
+  const { requestConfigs } = useRequestConfigs() as {
+    requestConfigs: SearchParameters & { query?: string };
+  };
   const { query, ...restRequestConfigs } = requestConfigs;
   if (!query) {
     throw new Error('query is a required parameter of type string');
@@ -69,7 +71,9 @@ export default function SearchResults(props: SearchResultsWithRenderProps) {
           <>
             {data.response?.results?.length ? (
               <div className='cio-results data-results-search' data-cnstrc-search>
-                {data.response?.results.map((item) => <ProductCard item={item} />)}
+                {data.response?.results.map((item) => (
+                  <ProductCard item={item} key={item.itemId} />
+                ))}
               </div>
             ) : (
               "Can't find matching items. Please try something else"

@@ -4,10 +4,10 @@ module.exports = {
     {
       displayName: 'client',
       testEnvironment: 'jsdom',
-      testMatch: ['**/**/*.test.(js|jsx)', '!**/**/*.server.test.(js|jsx)'],
       moduleNameMapper: {
         '\\.css$': require.resolve('./spec/mock-styles.js'),
       },
+      testMatch: ['**/**/*.test.(js|jsx|ts|tsx)', '!**/**/*.server.test.(js|jsx|ts|tsx)'],
     },
     {
       displayName: 'server',
