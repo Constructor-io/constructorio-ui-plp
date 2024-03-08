@@ -11,13 +11,6 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
     throw new Error('useSort must be used within a component that is a child of <CioPlp />');
   }
 
-  const { cioClient } = contextValue;
-
-  // Throw error if client is not provided and window is defined (i.e. not SSR)
-  if (!cioClient && typeof window !== 'undefined') {
-    throw new Error('CioClient required');
-  }
-
   const [selectedSort, setSelectedSort] = useState<PlpSortOption | null>(null);
 
   const sortOptions = transformSortOptionsResponse(searchOrBrowseResponse.sortOptions);
