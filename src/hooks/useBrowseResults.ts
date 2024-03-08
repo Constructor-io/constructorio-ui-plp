@@ -3,7 +3,7 @@ import {
   IBrowseParameters,
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
@@ -34,6 +34,7 @@ export default function useBrowseResults(
   configs: UseBrowseResultsConfig = {},
   initialBrowseResponse?: PlpBrowseResponse,
 ): UseBrowseResultsReturn {
+  const firstRender = useRef(true);
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
@@ -67,13 +68,17 @@ export default function useBrowseResults(
   };
 
   useEffect(() => {
-    if (client && filterName && filterValue) {
+    if (client && filterName && filterValue && (!initialBrowseResponse || !firstRender)) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
           page: pagination.currentPage || browseParams?.page,
         })
         .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    }
+
+    if (firstRender.current) {
+      firstRender.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);

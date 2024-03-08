@@ -1,6 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
 import {
@@ -66,6 +66,7 @@ const fetchSearchResults = async (
  * @returns {status, data, pagination, refetch}
  */
 export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
+  const firstRender = useRef(true);
   const { query, searchParams, initialSearchResponse } = props;
   const contextValue = useCioPlpContext();
 
@@ -96,13 +97,17 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient) {
+    if (cioClient && (!initialSearchResponse || !firstRender)) {
       fetchSearchResults(
         cioClient,
         query,
         { ...searchParams, page: pagination.currentPage || searchParams?.page } || {},
         dispatch,
       );
+    }
+
+    if (firstRender.current) {
+      firstRender.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);
