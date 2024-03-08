@@ -63,9 +63,9 @@ describe('ProductCard: React Server-Side Rendering', () => {
     const html = ReactDOMServer.renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={transformResultItem(testItem)}>
-          {({ formatPrice, getPrice, item }) => (
+          {({ formatPrice, productInfo }) => (
             // Custom Rendered Price
-            <div>My Rendered Price: {formatPrice(getPrice(item))}</div>
+            <div>My Rendered Price: {formatPrice(productInfo.itemPrice)}</div>
           )}
         </ProductCard>
       </CioPlp>,
