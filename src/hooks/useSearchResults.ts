@@ -55,16 +55,18 @@ const fetchSearchResults = async (
   }
 };
 
+/* eslint-disable max-len */
 /**
  * A React Hook to call to utilize Constructor.io Search
  * @param {Object} props - The component props.
  * @param {string} props.query Search Query
  * @param {SearchParameters} props.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
- * @param {object} [props.initialSearchResponse] Initial value for search results
+ * @param {object} [props.initialSearchResponse] Initial value for search results. Results will not be re-fetched on first render if this is provided
  * (Would be useful when passing initial state for the first render from the server
  *  to the client via something like getServerSideProps)
  * @returns {status, data, pagination, refetch}
  */
+/* eslint-enable max-len */
 export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
   const firstRender = useRef(true);
   const { query, searchParams, initialSearchResponse } = props;
