@@ -1,0 +1,222 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks';
+import * as UseProductSwatchStories from './UseProductSwatch.stories';
+
+<Meta of={UseProductSwatchStories} />
+
+## Code Example
+  ```jsx
+  const { productSwatch } = useProductSwatch(
+  {
+    data: {
+      altPrice: 69,
+      price: 79,
+      sale_price: 23
+    },
+    description: 'Cotton jersey fabric that feels like a tee & looks like a button-down.',
+    facets: [
+      {
+        name: 'Color',
+        values: [
+          'Park Bench Dot'
+        ]
+      }
+    ],
+    groupIds: [
+      '1111'
+    ],
+    imageUrl: 'https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/KNIT-CASUAL-SHIRT_BUTTON-DOWN-KNIT-SHIRT_BKT00110SG1733_3_category.jpg',
+    isSlotted: false,
+    itemId: 'KNITS00423-park bench dot',
+    itemName: 'Jersey Riviera Shirt (Park Bench Dot)',
+    labels: {},
+    matchedTerms: [
+      'shirts'
+    ],
+    rawResponse: undefined,
+    url: 'https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/KNIT-CASUAL-SHIRT_BUTTON-DOWN-KNIT-SHIRT_BKT00110SG1733_3_category.jpg',
+    variationId: 'BKT00110DG1733LR',
+    variations: [
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          price: 90,
+          swatchPreview: '#e04062',
+          variation_id: 'BKT00110DG1733LR'
+        },
+        value: 'Jersey Riviera Shirt (Red Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          price: 99,
+          swatchPreview: '#a3c43b',
+          variation_id: 'BKT00110DG1733MR'
+        },
+        value: 'Jersey Riviera Shirt (Green Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          price: 100,
+          swatchPreview: '#253d37',
+          variation_id: 'BKT00110DG1733SR'
+        },
+        value: 'Jersey Riviera Shirt (Black Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          price: 105,
+          swatchPreview: '#bfc1bc',
+          variation_id: 'BKT00110DG1733XLR'
+        },
+        value: 'Jersey Riviera Shirt (Silver Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110DG1733XSR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110DG1733XXLR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733LR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733MR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733SR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733XLR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733XSR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      },
+      {
+        data: {
+          facets: [
+            {
+              name: 'Color',
+              values: [
+                'Park Bench Dot'
+              ]
+            }
+          ],
+          variation_id: 'BKT00110SG1733XXLR'
+        },
+        value: 'Jersey Riviera Shirt (Park Bench Dot)'
+      }
+    ],
+    variationsMap: undefined
+  });
+  ```
+<Canvas of={UseProductSwatchStories.Primary} />
+
+## Controls
+<Controls />

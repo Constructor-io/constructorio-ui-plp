@@ -30,6 +30,8 @@
     {
       "data": {
         "variation_id": "BKT00110DG1733LR",
+        "swatchPreview": "#e04062",
+        "price": 90,
         "facets": [
           {
             "name": "Color",
@@ -39,49 +41,55 @@
           }
         ]
       },
-      "value": "Jersey Riviera Shirt (Park Bench Dot)"
+      "value": "Jersey Riviera Shirt (Red Park Bench Dot)"
     },
     {
       "data": {
         "variation_id": "BKT00110DG1733MR",
+        "swatchPreview": "#a3c43b",
+        "price": 99,
         "facets": [
           {
             "name": "Color",
             "values": [
-              "Park Bench Dot"
+              "Red Park Bench Dot"
             ]
           }
         ]
       },
-      "value": "Jersey Riviera Shirt (Park Bench Dot)"
+      "value": "Jersey Riviera Shirt (Green Park Bench Dot)"
     },
     {
       "data": {
         "variation_id": "BKT00110DG1733SR",
+        "swatchPreview": "#253d37",
+        "price": 100,
         "facets": [
           {
             "name": "Color",
             "values": [
-              "Park Bench Dot"
+              "Green Park Bench Dot"
             ]
           }
         ]
       },
-      "value": "Jersey Riviera Shirt (Park Bench Dot)"
+      "value": "Jersey Riviera Shirt (Black Park Bench Dot)"
     },
     {
       "data": {
         "variation_id": "BKT00110DG1733XLR",
+        "swatchPreview": "#bfc1bc",
+        "price": 105,
         "facets": [
           {
             "name": "Color",
             "values": [
-              "Park Bench Dot"
+              "Black Park Bench Dot"
             ]
           }
         ]
       },
-      "value": "Jersey Riviera Shirt (Park Bench Dot)"
+      "value": "Jersey Riviera Shirt (Silver Park Bench Dot)"
     },
     {
       "data": {
@@ -90,7 +98,7 @@
           {
             "name": "Color",
             "values": [
-              "Park Bench Dot"
+              "Silver Park Bench Dot"
             ]
           }
         ]

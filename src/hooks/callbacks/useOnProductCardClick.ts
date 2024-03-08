@@ -17,7 +17,7 @@ export default function useOnProductCardClick(
   }
 
   return useCallback(
-    (event: React.MouseEvent, item: Item) => {
+    (event: React.MouseEvent, item: Item, selectedVariationId?: string) => {
       const { itemName, itemId, variationId } = item;
       const { query, section } = requestConfigs;
 
@@ -27,7 +27,7 @@ export default function useOnProductCardClick(
           cioClient.tracker.trackSearchResultClick(query, {
             itemId,
             itemName,
-            variationId,
+            variationId: selectedVariationId || variationId,
             section,
           });
         }

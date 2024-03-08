@@ -1,0 +1,70 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as ProductSwatchStories from './ProductSwatch.stories';
+
+<Meta of={ProductSwatchStories} />
+
+# `Product Swatch`
+A Component to manage Product Swatch interactions and UI.
+
+<Canvas of={ProductSwatchStories.Primary} />
+
+{/* Todo: Update examples */}
+## Basic Example
+  ```jsx
+  import React from 'react';
+  import { CioPlp, ProductSwatch, useProductSwatch } from '@constructor-io/constructorio-ui-plp';
+
+  const apiKey = 'MY_API_KEY'
+
+  function MyComponent() {
+  const {swatchList, selectedVariation, selectVariation} = useProductSwatch({ item });
+
+    return (
+      <>
+        <CioPlp apiKey={MY_API_KEY}>
+          <ProductSwatch swatchObject={{ swatchList, selectedVariation, selectVariation }}>
+        </CioPlp>
+      </>
+    );
+  }
+  ```
+
+
+## Using RenderProps
+If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+```jsx
+import { CioPlp, ProductSwatch } from '@constructor-io/constructorio-ui-plp'
+
+function myApp() {
+  ...
+  
+  return (
+    <CioPlp apiKey={YOUR_API_KEY}>
+      <ProductSwatch>
+        {
+          ({
+            swatchList,
+            selectedVariation,
+            selectVariation,
+          }) => (
+            <ul>
+            {swatchList?.map((swatch) => (
+              <li
+                key={swatch.variationId}
+                className={`cio-swatch-item ${
+                  selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
+                }`}
+                onClick={() => selectVariation(swatch)}
+                style={{
+                  background: swatch?.swatchPreview
+                }}
+              />
+            ))}
+            </ul>
+           )
+        }
+      </ProductSwatch>
+    </CioPlp>
+  )
+}
+```
