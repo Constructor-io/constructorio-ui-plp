@@ -151,6 +151,7 @@ export type PlpSortOption = {
   sortBy: string;
   sortOrder: SortOrder;
   displayName: string;
+  status: string;
 };
 
 export interface PlpSearchResponse {

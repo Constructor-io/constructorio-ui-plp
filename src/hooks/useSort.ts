@@ -26,7 +26,11 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
     );
     if (sortOption) setSelectedSort(sortOption);
     // Select default sort option
-    else if (sortOptions.length) setSelectedSort(sortOptions[0]);
+    else if (sortOptions.length) {
+      const defaultSort = sortOptions.find((option) => option.status === 'selected');
+      if (defaultSort) setSelectedSort(defaultSort);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, sortOrder]);
 

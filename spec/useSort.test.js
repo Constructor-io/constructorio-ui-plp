@@ -53,7 +53,8 @@ describe('Testing Hook: useSort', () => {
         current: { selectedSort },
       } = result;
 
-      expect(selectedSort).toEqual(responseSortOptions[0]);
+      const defaultSort = responseSortOptions.find((option) => option.status === 'selected');
+      expect(selectedSort).toEqual(defaultSort);
     });
   });
 

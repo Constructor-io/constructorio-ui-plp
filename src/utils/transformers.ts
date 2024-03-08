@@ -104,6 +104,7 @@ export function transformSortOptionsResponse(options: SortOption[]): PlpSortOpti
         sortBy: option.sort_by,
         sortOrder: option.sort_order,
         displayName: option.display_name,
+        status: option.status,
       }) as PlpSortOption,
   );
 }
