@@ -45,9 +45,15 @@ const customRenderHook: typeof renderHook = (callback, options) =>
     ),
   });
 
+const delay = (ms) =>
+  new Promise((r) => {
+    setTimeout(r, ms);
+  });
+
 export {
   customRender as renderWithCioPlp,
   customRenderHook as renderHookWithCioPlp,
   mockConstructorIOClient,
   CioPlpWrapper,
+  delay,
 };
