@@ -3,6 +3,7 @@ import {
   Redirect,
   SearchResponse,
   SearchResponseType,
+  SortOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PlpSearchResponse,
@@ -10,6 +11,7 @@ import {
   ApiItem,
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
+  PlpSortOption,
   Variation,
 } from '../types';
 
@@ -124,4 +126,16 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse) {
     refinedContent: res.response!.refined_content,
     rawResponse: res,
   } as PlpBrowseResponse;
+}
+
+export function transformSortOptionsResponse(options: SortOption[]): PlpSortOption[] {
+  return options.map(
+    (option) =>
+      ({
+        sortBy: option.sort_by,
+        sortOrder: option.sort_order,
+        displayName: option.display_name,
+        status: option.status,
+      }) as PlpSortOption,
+  );
 }
