@@ -103,11 +103,9 @@ export default function useSearchResults(
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
     if (cioClient) {
-      const searchParameters = searchParams;
+      if (pagination.currentPage) searchParams.page = pagination.currentPage;
 
-      if (pagination.currentPage) searchParameters.page = pagination.currentPage;
-
-      fetchSearchResults(cioClient, query, searchParameters, dispatch);
+      fetchSearchResults(cioClient, query, searchParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);
