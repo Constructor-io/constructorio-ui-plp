@@ -8,6 +8,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
 import usePagination from '../components/Pagination/usePagination';
+import useFirstRender from './useFirstRender';
 
 export type UseBrowseResultsConfig = {
   cioClient?: Nullable<ConstructorIOClient>;
@@ -20,6 +21,7 @@ export type UseBrowseResultsReturn = {
   pagination: PaginationProps;
 };
 
+/* eslint-disable max-len */
 /**
  * A React Hook to call to utilize Constructor.io Browse
  * @param filterName Browse Filter Name
@@ -27,13 +29,16 @@ export type UseBrowseResultsReturn = {
  * @param configs A configuration object
  * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlp provider.
  * @param configs.browseParams Browse Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-browse.html#~getBrowseResults for the full list of options.
+ * @param {object} initialBrowseResponse Initial value for browse results. Results will not be re-fetched on first render if this is provided
  */
+/* eslint-enable max-len */
 export default function useBrowseResults(
   filterName: string,
   filterValue: string,
   configs: UseBrowseResultsConfig = {},
   initialBrowseResponse?: PlpBrowseResponse,
 ): UseBrowseResultsReturn {
+  const { isFirstRender } = useFirstRender();
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
@@ -67,7 +72,7 @@ export default function useBrowseResults(
   };
 
   useEffect(() => {
-    if (client && filterName && filterValue) {
+    if (client && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,

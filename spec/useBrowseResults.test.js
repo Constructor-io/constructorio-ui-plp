@@ -3,6 +3,8 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import mockBrowseResponse from './local_examples/apiBrowseResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 import useBrowseResults from '../src/hooks/useBrowseResults';
+import { transformBrowseResponse } from '../src/utils/transformers';
+import { delay } from './test-utils';
 
 describe('Testing Hook: useBrowseResults', () => {
   let clientGetBrowseResultsSpy;
@@ -36,6 +38,20 @@ describe('Testing Hook: useBrowseResults', () => {
       expect(response?.sortOptions?.length).not.toBeUndefined();
       expect(response?.rawResponse).not.toBeUndefined();
     });
+  });
+
+  it('Should not fetch results on first render with initialBrowseResponse', async () => {
+    const initialBrowseResults = transformBrowseResponse(mockBrowseResponse);
+
+    renderHook(
+      () => useBrowseResults('group_id', '123', { cioClient: ConstructorIO }, initialBrowseResults),
+      {},
+    );
+
+    // wait 200 ms for code to execute
+    await delay(200);
+
+    expect(clientGetBrowseResultsSpy).not.toHaveBeenCalled();
   });
 
   test('Should pass along parameters properly', async () => {
