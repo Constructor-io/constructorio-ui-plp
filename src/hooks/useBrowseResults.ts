@@ -3,7 +3,7 @@ import {
   IBrowseParameters,
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
