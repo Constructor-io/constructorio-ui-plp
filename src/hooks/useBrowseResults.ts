@@ -8,6 +8,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import { transformBrowseResponse } from '../utils/transformers';
 import { PaginationProps, PlpBrowseResponse } from '../types';
 import usePagination from '../components/Pagination/usePagination';
+import useFirstRender from './useFirstRender';
 
 export type UseBrowseResultsConfig = {
   cioClient?: Nullable<ConstructorIOClient>;
@@ -37,7 +38,7 @@ export default function useBrowseResults(
   configs: UseBrowseResultsConfig = {},
   initialBrowseResponse?: PlpBrowseResponse,
 ): UseBrowseResultsReturn {
-  const firstRender = useRef(true);
+  const { isFirstRender } = useFirstRender();
   const { cioClient, browseParams } = configs;
   const state = useCioPlpContext();
   const client = cioClient || state?.cioClient;
@@ -71,17 +72,13 @@ export default function useBrowseResults(
   };
 
   useEffect(() => {
-    if (client && filterName && filterValue && (!initialBrowseResponse || !firstRender)) {
+    if (client && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
           page: pagination.currentPage || browseParams?.page,
         })
         .then((res) => setBrowseResponse(transformBrowseResponse(res)));
-    }
-
-    if (firstRender.current) {
-      firstRender.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);

@@ -13,6 +13,7 @@ import {
 } from '../components/SearchResults/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import usePagination from '../components/Pagination/usePagination';
+import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
   query: string;
@@ -68,7 +69,7 @@ const fetchSearchResults = async (
  */
 /* eslint-enable max-len */
 export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
-  const firstRender = useRef(true);
+  const { isFirstRender } = useFirstRender();
   const { query, searchParams, initialSearchResponse } = props;
   const contextValue = useCioPlpContext();
 
@@ -99,17 +100,13 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient && (!initialSearchResponse || !firstRender)) {
+    if (cioClient && (!initialSearchResponse || !isFirstRender)) {
       fetchSearchResults(
         cioClient,
         query,
         { ...searchParams, page: pagination.currentPage || searchParams?.page } || {},
         dispatch,
       );
-    }
-
-    if (firstRender.current) {
-      firstRender.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.currentPage]);
