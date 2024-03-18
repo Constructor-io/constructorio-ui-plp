@@ -1,18 +1,14 @@
-import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import {
-  IBrowseParameters,
-  Nullable,
-} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
+import useRequestConfigs from './useRequestConfigs';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PaginationProps, PlpBrowseResponse } from '../types';
 import usePagination from '../components/Pagination/usePagination';
+import { PaginationProps, PlpBrowseResponse } from '../types';
+import { getBrowseParamsFromRequestConfigs } from '../utils';
 
-export type UseBrowseResultsConfig = {
-  cioClient?: Nullable<ConstructorIOClient>;
-  browseParams?: IBrowseParameters;
-};
+export interface UseBrowseResultsProps {
+  initialBrowseResponse?: PlpBrowseResponse;
+}
 
 export type UseBrowseResultsReturn = {
   browseResults: PlpBrowseResponse | null;
@@ -22,25 +18,34 @@ export type UseBrowseResultsReturn = {
 
 /**
  * A React Hook to call to utilize Constructor.io Browse
- * @param filterName Browse Filter Name
- * @param filterValue Browse Filter Value
- * @param configs A configuration object
- * @param configs.cioClient A CioClient created by useCioClient. Required if called outside of the CioPlp provider.
- * @param configs.browseParams Browse Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-browse.html#~getBrowseResults for the full list of options.
+ * @param {object} [props.initialBrowseResponse] Initial value for browse results
+ * (Would be useful when passing initial state for the first render from the server
+ *  to the client via something like getServerSideProps)
  */
 export default function useBrowseResults(
-  filterName: string,
-  filterValue: string,
-  configs: UseBrowseResultsConfig = {},
-  initialBrowseResponse?: PlpBrowseResponse,
+  props: UseBrowseResultsProps = {},
 ): UseBrowseResultsReturn {
-  const { cioClient, browseParams } = configs;
-  const state = useCioPlpContext();
-  const client = cioClient || state?.cioClient;
+  const { initialBrowseResponse } = props;
+  const contextValue = useCioPlpContext();
 
-  if (!filterName || !filterValue) {
+  if (!contextValue) {
+    throw new Error(
+      'useBrowseResults() must be used within a component that is a child of <CioPlp />',
+    );
+  }
+
+  const { cioClient: client } = contextValue;
+  const { requestConfigs } = useRequestConfigs();
+  const {
+    filterName,
+    filterValue,
+    queryParams: browseParams,
+  } = getBrowseParamsFromRequestConfigs(requestConfigs);
+
+  if ((!filterName || !filterValue) && typeof window !== 'undefined') {
     throw new Error('filterName and filterValue are required');
   }
+
   // Throw error if client is not provided and window is defined (i.e. not SSR)
   if (!client && typeof window !== 'undefined') {
     throw new Error('CioClient required');
@@ -49,10 +54,9 @@ export default function useBrowseResults(
   const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(
     initialBrowseResponse || null,
   );
+
   const pagination = usePagination({
-    initialPage: browseResponse?.rawResponse.request?.page,
     totalNumResults: browseResponse?.totalNumResults,
-    resultsPerPage: browseResponse?.numResultsPerPage,
   });
 
   const handleSubmit = () => {
