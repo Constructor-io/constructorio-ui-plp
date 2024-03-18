@@ -1,0 +1,36 @@
+import { Meta, ArgTypes } from '@storybook/blocks';
+import * as UseProductSwatchStories from './UseProductSwatch.stories';
+
+<Meta of={UseProductSwatchStories} name='Props' />
+
+# useProductSwatch
+Hook takes an item `Item` as a parameter and returns product swatch state and controls `swatchObject`.
+
+## Parameters
+<ArgTypes />
+
+### Item
+  | Name              | type                   | description       | 
+  | :-----------------| :----------------------| :---------------- |
+  | itemName          | `string`               | Item name         |
+  | description       | `string`               | Item description  |
+  | itemId            | `string`               | Item ID           |
+  | url               | `string`               | Item product details page url |
+  | imageUrl          | `string`               | Item image url                |
+  | groupIds          | `string[]`             | Array of strings of associated item group IDs |
+  | groups            | `ApiGroup[]`           | Array of group objects laying out the associated groups hierarchy  |
+  | facets            | `any[]`                | Array of the item facets/filters |
+  | variationId       | `string`               | The rolled up variation ID      |
+  | isSlotted         | `Boolean`              | Whether the item has a slotting rule applied to it or not |
+  | variations        | `Variation[]`          | Array of variations of the item. Null if variationsMap exists. |
+  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the variations_map parameter. Null if variations exists. (https://docs.constructor.io/rest_api/variations_mapping/#aggregations-explained)  |
+  | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
+
+## Returns
+
+`swatchObject`
+  | property          | type                          | description|
+  | :-----------------| ------------------------------| :--------- |
+  | swatchList        | `SwatchItem[]`                | Represents the List of [SwatchItems](../?path=/docs/components-productswatch--props#swatchitem) to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
+  | selectedVariation | `SwatchItem`                  | Currently Selected SwatchItem object |
+  | selectVariation   | `(swatch: SwatchItem) => void`| Function to change the currently selected SwatchItem object |

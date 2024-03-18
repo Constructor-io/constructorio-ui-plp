@@ -8,7 +8,6 @@ import useRequestConfigs from '../useRequestConfigs';
 
 export default function useOnAddToCart(
   cioClient: Nullable<ConstructorIO>,
-  getPrice: (item: Item) => number,
   callback?: (event: React.MouseEvent, item: Item) => void,
 ) {
   const { requestConfigs } = useRequestConfigs();
@@ -18,16 +17,15 @@ export default function useOnAddToCart(
   }
 
   return useCallback(
-    (event: React.MouseEvent, item: Item) => {
+    (event: React.MouseEvent, item: Item, revenue: number, selectedVariationId?: string) => {
       const { itemId, itemName, variationId } = item;
       const { query, section } = requestConfigs;
-      const revenue = getPrice(item);
 
       if (cioClient) {
         cioClient.tracker.trackConversion(query, {
           itemId,
           itemName,
-          variationId,
+          variationId: selectedVariationId || variationId,
           revenue,
           section,
         });
@@ -38,6 +36,6 @@ export default function useOnAddToCart(
       event.preventDefault();
       event.stopPropagation();
     },
-    [callback, getPrice, cioClient, requestConfigs],
+    [callback, cioClient, requestConfigs],
   );
 }

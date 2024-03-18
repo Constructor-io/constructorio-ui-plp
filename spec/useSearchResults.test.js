@@ -1,7 +1,9 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import useSearchResults from '../src/hooks/useSearchResults';
-import { mockConstructorIOClient, renderHookWithCioPlp } from './test-utils';
+import mockSearchResponse from './local_examples/apiSearchResponse.json';
+import { delay, mockConstructorIOClient, renderHookWithCioPlp } from './test-utils';
+import { transformSearchResponse } from '../src/utils/transformers';
 import { getUrlFromState } from '../src/utils/urlHelpers';
 
 describe('Testing Hook: useSearchResults', () => {
@@ -23,6 +25,7 @@ describe('Testing Hook: useSearchResults', () => {
   afterEach(() => {
     window.location = location;
     jest.restoreAllMocks(); // This will reset all mocks after each test
+    jest.clearAllMocks();
   });
 
   it('Should return a PlpSearchResponse Object', async () => {
@@ -44,6 +47,23 @@ describe('Testing Hook: useSearchResults', () => {
       expect(rawApiResponse).not.toBeUndefined();
       expect(request).not.toBeUndefined();
     });
+  });
+
+  it('Should not fetch results on first render with initialSearchResponse', async () => {
+    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
+
+    renderHookWithCioPlp(() =>
+      useSearchResults({
+        query: 'Linen',
+        searchParams: { page: 1 },
+        initialSearchResponse,
+      }),
+    );
+
+    // wait 200 ms for code to execute
+    await delay(200);
+
+    expect(mockConstructorIOClient.search.getSearchResults).not.toHaveBeenCalled();
   });
 
   it('Should receive parameters from useRequestConfigs correctly', async () => {

@@ -90,7 +90,7 @@ describe('Pagination Component', () => {
   });
 });
 
-// Integration Test
+// Interaction Test
 describe('Test user interactions', () => {
   const props = {
     initialPage: 1,

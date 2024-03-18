@@ -3,6 +3,7 @@ import {
   Redirect,
   SearchResponse,
   SearchResponseType,
+  SortOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PlpSearchResponse,
@@ -10,6 +11,8 @@ import {
   ApiItem,
   PlpBrowseResponse,
   PlpSearchRedirectResponse,
+  PlpSortOption,
+  Variation,
 } from '../types';
 
 function isAPIRedirectSearchResponse(
@@ -18,6 +21,36 @@ function isAPIRedirectSearchResponse(
   return 'redirect' in response;
 }
 
+export function transformResultVariation(variation: ApiItem, includeRaw = true): Variation {
+  const {
+    url,
+    image_url: imageUrl,
+    group_ids: groupIds,
+    description,
+    facets,
+    variation_id: variationId,
+    ...otherMetadataFields
+  }: any = variation.data;
+
+  const transformedVariation: Variation = {
+    itemName: variation.value,
+
+    // Flatten the data object
+    url,
+    imageUrl,
+    description,
+    facets,
+    variationId,
+    rawResponse: includeRaw ? variation : undefined,
+
+    // Remaining unmapped metadata fields
+    data: otherMetadataFields,
+  };
+
+  return transformedVariation;
+}
+
+// TODO: transform variations as well
 export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   const {
     id: itemId,
@@ -35,7 +68,7 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
     itemName: item.value,
     isSlotted: item.is_slotted,
     labels: item.labels,
-    variations: item.variations,
+    variations: item.variations?.map((variation: ApiItem) => transformResultVariation(variation)),
     variationsMap: item.variations_map,
 
     // Flatten the data object
@@ -93,4 +126,16 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse) {
     refinedContent: res.response!.refined_content,
     rawResponse: res,
   } as PlpBrowseResponse;
+}
+
+export function transformSortOptionsResponse(options: SortOption[]): PlpSortOption[] {
+  return options.map(
+    (option) =>
+      ({
+        sortBy: option.sort_by,
+        sortOrder: option.sort_order,
+        displayName: option.display_name,
+        status: option.status,
+      }) as PlpSortOption,
+  );
 }

@@ -59,7 +59,9 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
           <>
             {data.response?.results?.length ? (
               <div className='cio-results data-results-search' data-cnstrc-search>
-                {data.response?.results.map((item) => <ProductCard item={item} />)}
+                {data.response?.results.map((item) => (
+                  <ProductCard item={item} key={item.itemId} />
+                ))}
               </div>
             ) : (
               "Can't find matching items. Please try something else"

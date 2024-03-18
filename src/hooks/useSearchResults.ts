@@ -1,6 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
 import {
@@ -15,6 +15,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import usePagination from '../components/Pagination/usePagination';
 import useRequestConfigs from './useRequestConfigs';
 import { getSearchParamsFromRequestConfigs } from '../utils';
+import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
@@ -55,6 +56,7 @@ const fetchSearchResults = async (
   }
 };
 
+/* eslint-disable max-len */
 /**
  * A React Hook to call to utilize Constructor.io Search
  * @param {Object} [props] - The component props.
@@ -63,9 +65,11 @@ const fetchSearchResults = async (
  *  to the client via something like getServerSideProps)
  * @returns {status, data, pagination, refetch}
  */
+/* eslint-enable max-len */
 export default function useSearchResults(
   props: UseSearchResultsProps = {},
 ): UseSearchResultsReturn {
+  const { isFirstRender } = useFirstRender();
   const { initialSearchResponse } = props;
   const contextValue = useCioPlpContext();
 
@@ -102,7 +106,7 @@ export default function useSearchResults(
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient) {
+    if (cioClient && (!initialSearchResponse || !isFirstRender)) {
       if (pagination.currentPage) searchParams.page = pagination.currentPage;
 
       fetchSearchResults(cioClient, query, searchParams, dispatch);

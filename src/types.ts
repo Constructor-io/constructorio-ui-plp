@@ -25,16 +25,23 @@ export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Re
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface ItemFieldGetters {
-  getPrice: (item: Item) => number;
+  getPrice: (item: Item | Variation) => number;
+  getSwatchPreview: (variation: Variation) => string;
+  getSwatches: (
+    item: Item,
+    retrievePrice: ItemFieldGetters['getPrice'],
+    retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
+  ) => SwatchItem[] | undefined;
 }
 
 export interface Formatters {
-  formatPrice: (price: number) => string;
+  formatPrice: (price?: number) => string;
 }
 
 export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
+  onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
 }
 
 export interface PlpSearchRedirectResponse {
@@ -118,7 +125,7 @@ export type ApiItem = MakeOptional<Result, 'variations | variations_map'>;
 
 export type Variation = Omit<
   Item,
-  'variations | matchedTerms | isSlotted | labels | variationsMap'
+  'variations' | 'matchedTerms' | 'isSlotted' | 'labels' | 'variationsMap' | 'itemId'
 >;
 
 export type SortOrder = 'ascending' | 'descending';
@@ -145,6 +152,22 @@ export interface Item {
   data: Record<string, any>;
 
   rawResponse?: ApiItem;
+}
+
+export type PlpSortOption = {
+  sortBy: string;
+  sortOrder: SortOrder;
+  displayName: string;
+  status: string;
+};
+
+export interface SwatchItem {
+  url?: string;
+  itemName?: string;
+  imageUrl?: string;
+  price?: number;
+  swatchPreview: string;
+  variationId?: string;
 }
 
 export interface PlpSearchResponse {
@@ -183,6 +206,12 @@ export interface CioPlpProviderProps {
 }
 
 export type CioPlpProps = CioPlpProviderProps;
+
+export type UseSortReturn = {
+  sortOptions: PlpSortOption[];
+  selectedSort: PlpSortOption | null;
+  changeSelectedSort: (sortOption: PlpSortOption) => void;
+};
 
 /**
  * Represents a function that handles pagination logic.
@@ -223,6 +252,31 @@ export interface PaginationObject {
   pages: number[];
 }
 
+export interface ProductSwatchObject {
+  swatchList: SwatchItem[] | undefined;
+  selectedVariation: SwatchItem | undefined;
+  selectVariation: (swatch: SwatchItem) => void;
+}
+
+export type UseProductSwatchProps = {
+  item: Item;
+};
+
+export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
+
+export interface ProductInfoObject {
+  productSwatch: ProductSwatchObject | undefined;
+  itemName: string;
+  itemPrice: number;
+  itemUrl: string | undefined;
+  itemImageUrl: string | undefined;
+}
+
+export type UseProductInfoProps = {
+  item: Item;
+};
+
+export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
 

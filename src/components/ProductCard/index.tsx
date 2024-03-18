@@ -1,9 +1,9 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
-import { getPrice as defaultGetPrice } from '../../utils/itemFieldGetters';
-import { formatPrice as defaultFormatPrice } from '../../utils/formatters';
-import { IncludeRenderProps, Item } from '../../types';
+import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
+import ProductSwatch from '../ProductSwatch/ProductSwatch';
+import useProductInfo from '../../hooks/useProduct';
 
 interface Props {
   /**
@@ -22,15 +22,19 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   formatPrice: (price: number) => string;
   /**
-   * Function to retrieve the price. Defaults to `item.data.price`.
-   * Set globally at the CioPlp provider level.
+   * Object containing information about the current product, variation
    */
-  getPrice: (item: Item) => number;
+  productInfo: ProductInfoObject;
   /**
    * Callback to run on add-to-cart event.
    * Set globally at the CioPlp provider level.
    */
-  onAddToCart: (event: React.MouseEvent, item: Item) => void;
+  onAddToCart: (
+    event: React.MouseEvent,
+    item: Item,
+    revenue: number,
+    selectedVariation: string,
+  ) => void;
   /**
    * Callback to run on Product Card Click.
    * Set globally at the CioPlp provider level.
@@ -45,8 +49,10 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
  */
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
-
   const state = useCioPlpContext();
+  const productInfo = useProductInfo({ item });
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
+
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
   }
@@ -56,27 +62,39 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   const client = state.cioClient;
-  const getPrice = state.itemFieldGetters.getPrice || defaultGetPrice;
-  const formatPrice = state.formatters.formatPrice || defaultFormatPrice;
-  const onAddToCart = useOnAddToCart(client, getPrice, state.callbacks.onAddToCart);
+  const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
+  const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
   return (
     <>
       {typeof children === 'function' ? (
-        children({ item, getPrice, formatPrice, onAddToCart, onClick })
+        children({
+          item,
+          productInfo,
+          formatPrice,
+          onAddToCart,
+          onClick,
+        })
       ) : (
-        <a className='cio-product-card' href={item.url} onClick={(e) => onClick(e, item)}>
+        <a
+          className='cio-product-card'
+          href={itemUrl}
+          onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
           <div className='cio-image-container'>
-            <img alt={item.itemName} src={item.imageUrl} className='cio-image' />
+            <img alt={itemName} src={itemImageUrl} className='cio-image' />
           </div>
 
           <div className='cio-content'>
-            <div className='cio-item-price'>{formatPrice(getPrice(item))}</div>
-            <div className='cio-item-name'>{item.itemName}</div>
-            <div className='cio-item-swatches'>Here lie the swatches</div>
+            <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
+            <div className='cio-item-name'>{itemName}</div>
+            {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
             <div>
-              <button type='button' onClick={(e) => onAddToCart(e, item)}>
+              <button
+                type='button'
+                onClick={(e) =>
+                  onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
+                }>
                 Add to Cart
               </button>
             </div>
