@@ -5,6 +5,7 @@ import { transformBrowseResponse } from '../utils/transformers';
 import usePagination from '../components/Pagination/usePagination';
 import { PaginationProps, PlpBrowseResponse } from '../types';
 import { getBrowseParamsFromRequestConfigs } from '../utils';
+import useFirstRender from './useFirstRender';
 
 export interface UseBrowseResultsProps {
   initialBrowseResponse?: PlpBrowseResponse;
@@ -16,15 +17,16 @@ export type UseBrowseResultsReturn = {
   pagination: PaginationProps;
 };
 
+/* eslint-disable max-len */
 /**
  * A React Hook to call to utilize Constructor.io Browse
- * @param {object} [props.initialBrowseResponse] Initial value for browse results
- * (Would be useful when passing initial state for the first render from the server
- *  to the client via something like getServerSideProps)
+ * @param {object} [props.initialBrowseResponse] Initial value for browse results. Results will not be re-fetched on first render if this is provided
  */
+/* eslint-enable max-len */
 export default function useBrowseResults(
   props: UseBrowseResultsProps = {},
 ): UseBrowseResultsReturn {
+  const { isFirstRender } = useFirstRender();
   const { initialBrowseResponse } = props;
   const contextValue = useCioPlpContext();
 
@@ -71,7 +73,7 @@ export default function useBrowseResults(
   };
 
   useEffect(() => {
-    if (client && filterName && filterValue) {
+    if (client && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,

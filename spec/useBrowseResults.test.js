@@ -1,10 +1,11 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { renderHook, waitFor } from '@testing-library/react';
-import { renderHookWithCioPlp, mockConstructorIOClient } from './test-utils';
+import { renderHookWithCioPlp, mockConstructorIOClient, delay } from './test-utils';
 import mockBrowseResponse from './local_examples/apiBrowseResponse.json';
 import { DEMO_API_KEY } from '../src/constants';
 import useBrowseResults from '../src/hooks/useBrowseResults';
 import { getUrlFromState } from '../src/utils/urlHelpers';
+import { transformBrowseResponse } from '../src/utils/transformers';
 
 describe('Testing Hook: useBrowseResults', () => {
   let clientGetBrowseResultsSpy;
@@ -44,6 +45,19 @@ describe('Testing Hook: useBrowseResults', () => {
       expect(response?.sortOptions?.length).not.toBeUndefined();
       expect(response?.rawResponse).not.toBeUndefined();
     });
+  });
+
+  it('Should not fetch results on first render with initialBrowseResponse', async () => {
+    const initialBrowseResults = transformBrowseResponse(mockBrowseResponse);
+
+    renderHookWithCioPlp(() =>
+      useBrowseResults('group_id', '123', { cioClient: ConstructorIO }, initialBrowseResults),
+    );
+
+    // wait 200 ms for code to execute
+    await delay(200);
+
+    expect(clientGetBrowseResultsSpy).not.toHaveBeenCalled();
   });
 
   test('Should receive parameters from useRequestConfigs correctly', async () => {

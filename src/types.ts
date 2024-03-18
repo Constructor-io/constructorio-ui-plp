@@ -154,6 +154,13 @@ export interface Item {
   rawResponse?: ApiItem;
 }
 
+export type PlpSortOption = {
+  sortBy: string;
+  sortOrder: SortOrder;
+  displayName: string;
+  status: string;
+};
+
 export interface SwatchItem {
   url?: string;
   itemName?: string;
@@ -199,6 +206,12 @@ export interface CioPlpProviderProps {
 }
 
 export type CioPlpProps = CioPlpProviderProps;
+
+export type UseSortReturn = {
+  sortOptions: PlpSortOption[];
+  selectedSort: PlpSortOption | null;
+  changeSelectedSort: (sortOption: PlpSortOption) => void;
+};
 
 /**
  * Represents a function that handles pagination logic.

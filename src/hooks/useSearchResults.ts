@@ -1,6 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../components/SearchResults/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import usePagination from '../components/Pagination/usePagination';
+import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
   query: string;
@@ -55,17 +56,20 @@ const fetchSearchResults = async (
   }
 };
 
+/* eslint-disable max-len */
 /**
  * A React Hook to call to utilize Constructor.io Search
  * @param {Object} props - The component props.
  * @param {string} props.query Search Query
  * @param {SearchParameters} props.searchParams Search Parameters to be passed in along with the request. See https://constructor-io.github.io/constructorio-client-javascript/module-search.html#~getSearchResults for the full list of options.
- * @param {object} [props.initialSearchResponse] Initial value for search results
+ * @param {object} [props.initialSearchResponse] Initial value for search results. Results will not be re-fetched on first render if this is provided
  * (Would be useful when passing initial state for the first render from the server
  *  to the client via something like getServerSideProps)
  * @returns {status, data, pagination, refetch}
  */
+/* eslint-enable max-len */
 export default function useSearchResults(props: UseSearchResultsProps): UseSearchResultsReturn {
+  const { isFirstRender } = useFirstRender();
   const { query, searchParams, initialSearchResponse } = props;
   const contextValue = useCioPlpContext();
 
@@ -96,7 +100,7 @@ export default function useSearchResults(props: UseSearchResultsProps): UseSearc
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient) {
+    if (cioClient && (!initialSearchResponse || !isFirstRender)) {
       fetchSearchResults(
         cioClient,
         query,
