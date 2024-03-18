@@ -1,6 +1,6 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
 import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
 import {
