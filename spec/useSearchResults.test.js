@@ -54,8 +54,6 @@ describe('Testing Hook: useSearchResults', () => {
 
     renderHookWithCioPlp(() =>
       useSearchResults({
-        query: 'Linen',
-        searchParams: { page: 1 },
         initialSearchResponse,
       }),
     );
