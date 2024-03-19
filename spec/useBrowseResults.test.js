@@ -1,23 +1,16 @@
-import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import { renderHook, waitFor } from '@testing-library/react';
-import { renderHookWithCioPlp, mockConstructorIOClient, delay } from './test-utils';
+import { renderHookWithCioPlp, mockConstructorIOClient } from './test-utils';
 import mockBrowseResponse from './local_examples/apiBrowseResponse.json';
-import { DEMO_API_KEY } from '../src/constants';
 import useBrowseResults from '../src/hooks/useBrowseResults';
 import { getUrlFromState } from '../src/utils/urlHelpers';
 import { transformBrowseResponse } from '../src/utils/transformers';
 
 describe('Testing Hook: useBrowseResults', () => {
-  let clientGetBrowseResultsSpy;
   let ConstructorIO;
   let location;
   const mockLocation = new URL('https://example.com/');
 
   beforeEach(() => {
-    ConstructorIO = new ConstructorIOClient({ apiKey: DEMO_API_KEY });
-    clientGetBrowseResultsSpy = jest.spyOn(ConstructorIO.browse, 'getBrowseResults');
-    clientGetBrowseResultsSpy.mockImplementationOnce(() => Promise.resolve(mockBrowseResponse));
-
     location = window.location;
     delete window.location;
     // @ts-ignore
@@ -28,6 +21,7 @@ describe('Testing Hook: useBrowseResults', () => {
   afterEach(() => {
     window.location = location;
     jest.restoreAllMocks(); // This will reset all mocks after each test
+    jest.clearAllMocks();
   });
 
   test('Should return a PlpBrowseResponse Object', async () => {
@@ -48,16 +42,13 @@ describe('Testing Hook: useBrowseResults', () => {
   });
 
   it('Should not fetch results on first render with initialBrowseResponse', async () => {
-    const initialBrowseResults = transformBrowseResponse(mockBrowseResponse);
+    const initialBrowseResponse = transformBrowseResponse(mockBrowseResponse);
 
-    renderHookWithCioPlp(() =>
-      useBrowseResults('group_id', '123', { cioClient: ConstructorIO }, initialBrowseResults),
-    );
+    renderHookWithCioPlp(() => useBrowseResults({ initialBrowseResponse }));
 
-    // wait 200 ms for code to execute
-    await delay(200);
-
-    expect(clientGetBrowseResultsSpy).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockConstructorIOClient.browse.getBrowseResults).not.toHaveBeenCalled();
+    });
   });
 
   test('Should receive parameters from useRequestConfigs correctly', async () => {
