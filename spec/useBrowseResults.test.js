@@ -6,7 +6,6 @@ import { getUrlFromState } from '../src/utils/urlHelpers';
 import { transformBrowseResponse } from '../src/utils/transformers';
 
 describe('Testing Hook: useBrowseResults', () => {
-  let ConstructorIO;
   let location;
   const mockLocation = new URL('https://example.com/');
 
