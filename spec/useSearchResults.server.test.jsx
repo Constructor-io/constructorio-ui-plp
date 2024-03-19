@@ -20,12 +20,9 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
     const initialSearchResponse = transformSearchResponse(mockSearchResponse);
 
     expect(() =>
-      renderHookServerSideWithCioPlp(
-        () => useSearchResults({ query: 'linen', initialSearchResponse }),
-        {
-          apiKey: DEMO_API_KEY,
-        },
-      ),
+      renderHookServerSideWithCioPlp(() => useSearchResults({ initialSearchResponse }), {
+        apiKey: DEMO_API_KEY,
+      }),
     ).not.toThrow();
   });
 
@@ -33,12 +30,9 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
     const initialSearchResponse = transformSearchResponse(mockSearchResponse);
 
     expect(() =>
-      renderHookServerSideWithCioPlp(
-        () => useSearchResults({ query: 'linen', initialSearchResponse }),
-        {
-          apiKey: DEMO_API_KEY,
-        },
-      ),
+      renderHookServerSideWithCioPlp(() => useSearchResults({ initialSearchResponse }), {
+        apiKey: DEMO_API_KEY,
+      }),
     ).not.toThrow();
   });
 
@@ -46,7 +40,7 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
     const initialSearchResponse = transformSearchResponse(mockSearchResponse);
 
     const { result } = renderHookServerSideWithCioPlp(
-      () => useSearchResults({ query: 'linen', initialSearchResponse }),
+      () => useSearchResults({ initialSearchResponse }),
       {
         apiKey: DEMO_API_KEY,
       },
@@ -80,7 +74,7 @@ describe('Testing Hook on the server: useSearchResults with no initialSearchResp
 
   it('Should not break if cioClient is null', async () => {
     expect(() =>
-      renderHookServerSideWithCioPlp(() => useSearchResults({ query: '' }), {
+      renderHookServerSideWithCioPlp(() => useSearchResults(), {
         apiKey: DEMO_API_KEY,
       }),
     ).not.toThrow();
@@ -91,7 +85,7 @@ describe('Testing Hook on the server: useSearchResults with no initialSearchResp
       result: {
         data: { response },
       },
-    } = renderHookServerSideWithCioPlp(() => useSearchResults({ query: 'linen' }), {
+    } = renderHookServerSideWithCioPlp(() => useSearchResults(), {
       apiKey: DEMO_API_KEY,
     });
 

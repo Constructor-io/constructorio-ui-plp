@@ -11,8 +11,8 @@ A React Hook to retrieve search results using Constructor.
 ```jsx
 import { CioPlp } from '@constructor-io/constructorio-ui-plp'
 
-function MySearchResults() {
-  const { data } = useSearchResults({ query: 'red', searchParams: { page: 1 } });
+function MyCustomSearchResultsComponent() {
+  const { data } = useSearchResults();
 
   return <ul>{data.response?.results.map((result) => <li>{result.itemName}</li>)}</ul>
 }
@@ -21,7 +21,7 @@ function myApp() {
   ...
   return (
     <CioPlp apiKey={MY_API_KEY}>
-      <MySearchResults />
+      <MyCustomSearchResultsComponent />
     </CioPlp>
   )
 }

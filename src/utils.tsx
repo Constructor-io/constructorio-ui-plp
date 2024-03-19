@@ -13,6 +13,12 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function removeNullValuesFromObject(obj: Object) {
+  const filteredListOfEntries = Object.entries(obj).filter(([, val]) => val != null);
+
+  return Object.fromEntries(filteredListOfEntries);
+}
+
 export function rgbToHsl(r: number, g: number, b: number) {
   const rConverted = r / 255;
   const gConverted = g / 255;
@@ -76,7 +82,9 @@ export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs
   query: string;
   searchParams: SearchParameters;
 } {
-  const { query = '', filterValue, filterName, ...searchParams } = requestConfigs;
+  const { query = '', filterValue, filterName, ...rest } = requestConfigs;
+  const searchParams = removeNullValuesFromObject(rest);
+
   return { query, searchParams };
 }
 
@@ -86,5 +94,6 @@ export function getBrowseParamsFromRequestConfigs(requestConfigs: RequestConfigs
   queryParams: RequestQueryParams;
 } {
   const { query, filterValue = '', filterName = '', ...queryParams } = requestConfigs;
-  return { filterName, filterValue, queryParams };
+
+  return { filterName, filterValue, queryParams: removeNullValuesFromObject(queryParams) };
 }

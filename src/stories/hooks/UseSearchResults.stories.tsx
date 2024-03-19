@@ -1,5 +1,5 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
 import UseSearchResultsExample from './UseSearchResultsExample';
 
 const meta = {
@@ -19,8 +19,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {
-    query: 'water',
-    searchParams: { resultsPerPage: 2 },
-  },
+  decorators: [
+    (Story) => {
+      const url = new URL(window.location as any);
+      url.searchParams.set('q', 'shirt');
+      window.history.pushState({}, '', url);
+
+      return <Story />;
+    },
+  ],
 };
