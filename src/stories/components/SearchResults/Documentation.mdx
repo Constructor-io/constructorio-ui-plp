@@ -1,9 +1,7 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as SearchResultsStories from './SearchResults.stories';
-/* This "?raw" import raw text form the md file */
-import SearchResultsReturn from '../../hooks/SearchResultsReturn.md?raw';
 
-<Meta of={SearchResultsStories} />
+<Meta of={SearchResultsStories} name="Documentation" />
 
 ## `SearchResults`
 The SearchResults component is a dynamic and user-friendly component. 
@@ -74,5 +72,3 @@ function myApp() {
 }
 ```
 
-#### Data passed with a render prop
-<Markdown>{SearchResultsReturn}</Markdown>

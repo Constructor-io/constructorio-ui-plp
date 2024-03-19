@@ -1,13 +1,9 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import {
-  IBrowseParameters,
-  SearchParameters,
   Nullable,
   ConstructorClientOptions,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import useCioClient from './useCioClient';
-import useSearchResults from './useSearchResults';
-import useBrowseResults from './useBrowseResults';
 
 export type CioPlpConfigs = {
   apiKey?: string;
@@ -25,18 +21,9 @@ const useCioPlp: UseCioPlp = (configs) => {
   }
 
   const cioClient = useCioClient({ apiKey, cioClient: customClient, options });
-  const useCustomSearchResults = (query: string, searchParams: SearchParameters) =>
-    useSearchResults({ query, searchParams });
-  const useCustomBrowseResults = (
-    filterName: string,
-    filterValue: string,
-    browseParams: IBrowseParameters,
-  ) => useBrowseResults(filterName, filterValue, { cioClient, browseParams });
 
   return {
     cioClient,
-    useSearchResults: useCustomSearchResults,
-    useBrowseResults: useCustomBrowseResults,
   };
 };
 
