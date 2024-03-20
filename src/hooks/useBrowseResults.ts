@@ -45,7 +45,7 @@ export default function useBrowseResults(
   } = getBrowseParamsFromRequestConfigs(requestConfigs);
 
   if ((!filterName || !filterValue) && typeof window !== 'undefined') {
-    throw new Error('filterName and filterValue are required');
+    throw new Error('Unable to retrieve filterName and filterValue from the url.');
   }
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
