@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { PlpBrowseResponse, PlpSearchResponse, PlpSortOption, UseSortReturn } from '../types';
-import { transformSortOptionsResponse } from '../utils/transformers';
 import useRequestConfigs from './useRequestConfigs';
 
 const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse): UseSortReturn => {
@@ -13,7 +12,7 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
 
   const [selectedSort, setSelectedSort] = useState<PlpSortOption | null>(null);
 
-  const sortOptions = transformSortOptionsResponse(searchOrBrowseResponse.sortOptions);
+  const { sortOptions } = searchOrBrowseResponse;
   const {
     requestConfigs: { sortBy, sortOrder },
     setRequestConfigs,
