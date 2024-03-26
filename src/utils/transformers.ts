@@ -4,6 +4,8 @@ import {
   SearchResponse,
   SearchResponseType,
   SortOption,
+  Facet,
+  FacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PlpSearchResponse,
@@ -13,7 +15,9 @@ import {
   PlpSearchRedirectResponse,
   PlpSortOption,
   Variation,
+  PlpFacet,
 } from '../types';
+import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
 
 function isAPIRedirectSearchResponse(
   response: Partial<SearchResponseType | Redirect>,
@@ -138,4 +142,36 @@ export function transformSortOptionsResponse(options: SortOption[]): PlpSortOpti
         status: option.status,
       }) as PlpSortOption,
   );
+}
+
+export function transformFacetsResponse(facets: Array<Facet>): Array<PlpFacet> {
+  return facets.map((facet) => {
+    const { displayName, name, type, data, hidden, min, max, status, options } = facet;
+
+    const transformedFacet = {
+      displayName,
+      name,
+      type,
+      data,
+      hidden,
+    };
+
+    if (isRangeFacet(transformedFacet)) {
+      transformedFacet.min = min;
+      transformedFacet.max = max;
+      transformedFacet.status = status;
+    }
+
+    if (isMultipleOrBucketedFacet(transformedFacet)) {
+      transformedFacet.options = options.map((option: FacetOption) => ({
+        status: option.status,
+        count: option.count,
+        displayName: option.display_name,
+        value: option.value,
+        data: option.data,
+      }));
+    }
+
+    return transformedFacet;
+  });
 }
