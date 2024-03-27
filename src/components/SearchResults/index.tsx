@@ -28,6 +28,7 @@ export type SearchResultsWithRenderProps = IncludeRenderProps<
  * @component
  * @param {Object} [props] - The component props.
  * @param {object} [props.initialSearchResponse] Initial value for search results
+ * @param {object} [props.spinner] An optional custom component to display as a spinner when fetching data
  * (Would be useful when passing initial state for the first render from the server
  *  to the client via something like getServerSideProps)
  * @returns {JSX.Element} The rendered search results.
