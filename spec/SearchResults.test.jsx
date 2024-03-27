@@ -28,17 +28,33 @@ describe('Testing Component: SearchResults', () => {
     expect(() => render(<SearchResults />)).toThrow();
   });
 
-  it('Should render loading state while fetching data', async () => {
+  it('Should render spinner while fetching data', async () => {
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({ status: 'fetching' });
 
-    const { getByText } = render(
+    const { getByTestId } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <SearchResults />
       </CioPlp>,
     );
 
-    await waitFor(() => expect(getByText('loading')).toBeInTheDocument());
+    await waitFor(() => expect(getByTestId('cio-spinner')).toBeInTheDocument());
+  });
+
+  it('Should render custom spinner while fetching data if provided', async () => {
+    const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({ status: 'fetching' });
+
+    const { getByText, queryByTestId } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults spinner={<div>spinner</div>} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(getByText('spinner')).toBeInTheDocument();
+      expect(queryByTestId('cio-spinner')).toBeFalsy();
+    });
   });
 
   it('Should render title and search results when data is fetched', async () => {

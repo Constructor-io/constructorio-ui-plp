@@ -4,11 +4,13 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
+import Spinner from '../Spinner';
 
 /**
  * Props for the SearchResults component.
  */
 interface SearchResultsProps {
+  spinner?: React.ReactNode;
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
 }
 
@@ -43,10 +45,10 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
     initialSearchResponse,
   });
 
-  const { children } = props;
+  const { children, spinner } = props;
 
   if (status === 'fetching') {
-    return <>loading</>;
+    return spinner || <Spinner />;
   }
 
   return (
