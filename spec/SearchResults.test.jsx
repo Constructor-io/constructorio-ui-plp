@@ -41,6 +41,76 @@ describe('Testing Component: SearchResults', () => {
     await waitFor(() => expect(getByTestId('cio-spinner')).toBeInTheDocument());
   });
 
+  it('Should not render spinner if data has been fetched', async () => {
+    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: 'success',
+      data: { response: { ...mockData } },
+    });
+
+    const { queryByTestId } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults />
+      </CioPlp>,
+    );
+
+    await waitFor(() => expect(queryByTestId('cio-spinner')).toBeFalsy());
+  });
+
+  it('Should not render spinner if there has been an error while fetching data', async () => {
+    const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: 'error',
+      data: {
+        response: null,
+      },
+    });
+
+    const { queryByTestId } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults />
+      </CioPlp>,
+    );
+
+    await waitFor(() => expect(queryByTestId('cio-spinner')).toBeFalsy());
+  });
+
+  it('Should not render custom spinner if there has been an error while fetching data', async () => {
+    const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: 'error',
+      data: {
+        response: null,
+      },
+    });
+
+    const { queryByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults spinner={<div>spinner</div>} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => expect(queryByText('spinner')).toBeFalsy());
+  });
+
+  it('Should not render custom spinner if data has been fetched', async () => {
+    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: 'success',
+      data: { response: { ...mockData } },
+    });
+
+    const { queryByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <SearchResults spinner={<div>spinner</div>} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => expect(queryByText('spinner')).toBeFalsy());
+  });
+
   it('Should render custom spinner while fetching data if provided', async () => {
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({ status: 'fetching' });
