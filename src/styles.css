@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 /* Spinner Styles */
-.cio-plp .cio-spinner {
+.cio-spinner {
   display: inline-block;
   position: relative;
   width: 80px;
   margin: auto;
 }
 
-.cio-plp.cio-plp-loading {
+.cio-plp-loading {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -20,7 +20,7 @@
   margin-left: auto;
 }
 
-.cio-plp .cio-spinner div {
+.cio-spinner div {
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -34,15 +34,15 @@
   border-color: hsl(227, 70%, 46%) transparent transparent transparent;
 }
 
-.cio-plp .cio-spinner div:nth-child(1) {
+.cio-spinner div:nth-child(1) {
   animation-delay: -0.45s;
 }
 
-.cio-plp .cio-spinner div:nth-child(2) {
+.cio-spinner div:nth-child(2) {
   animation-delay: -0.3s;
 }
 
-.cio-plp .cio-spinner div:nth-child(3) {
+.cio-spinner div:nth-child(3) {
   animation-delay: -0.15s;
 }
 
