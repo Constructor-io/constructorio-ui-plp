@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import {
   ConstructorClientOptions,
-  Facet,
   Group as ApiGroup,
   Result,
   SearchResponse,
