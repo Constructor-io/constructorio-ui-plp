@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { PlpBrowseResponse, PlpFacet, PlpFacetValue, PlpSearchResponse } from '../types';
-import { transformFacetsResponse } from '../utils/transformers';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
@@ -30,7 +29,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
 
   // Read filters applied from response and set state
   useEffect(() => {
-    const responseFacets = transformFacetsResponse(searchOrBrowseResponse.facets);
+    const responseFacets = searchOrBrowseResponse.facets;
 
     setReturnedFacets(responseFacets);
   }, [searchOrBrowseResponse]);

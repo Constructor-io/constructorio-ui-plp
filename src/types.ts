@@ -175,7 +175,7 @@ export interface PlpSearchResponse {
   totalNumResults: number;
   numResultsPerPage: number;
   results: Array<Item>;
-  facets: Array<Facet>;
+  facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
   sortOptions: Array<SortOption>;
   refinedContent: Record<string, any>[];
@@ -188,7 +188,7 @@ export interface PlpBrowseResponse {
   totalNumResults: number;
   numResultsPerPage: number;
   results: Array<Item>;
-  facets: Array<Facet>;
+  facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
   sortOptions: Array<SortOption>;
   refinedContent: Record<string, any>[];

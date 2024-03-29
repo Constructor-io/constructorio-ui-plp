@@ -92,59 +92,7 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   return transformedItem;
 }
 
-export function transformSearchResponse(
-  res: SearchResponse,
-): PlpSearchRedirectResponse | PlpSearchResponse {
-  const { response } = res;
-  // Return PlpSearchRedirectResponse
-  if (isAPIRedirectSearchResponse(response)) {
-    return {
-      resultId: res.result_id,
-      redirect: response.redirect!,
-      rawResponse: res,
-    };
-  }
-
-  // Return PlpSearchResponse
-  return {
-    resultId: res.result_id,
-    totalNumResults: response.total_num_results,
-    results: response.results!.map((result) => transformResultItem(result, false)),
-    facets: response.facets,
-    groups: response.groups,
-    sortOptions: response.sort_options,
-    refinedContent: response.refined_content,
-    rawResponse: res,
-  } as PlpSearchResponse;
-}
-
-export function transformBrowseResponse(res: GetBrowseResultsResponse) {
-  return {
-    resultId: res.result_id,
-    totalNumResults: res.response!.total_num_results,
-    numResultsPerPage: res.request?.num_results_per_page,
-    results: res.response!.results!.map((result) => transformResultItem(result, false)),
-    facets: res.response!.facets,
-    groups: res.response!.groups,
-    sortOptions: res.response!.sort_options,
-    refinedContent: res.response!.refined_content,
-    rawResponse: res,
-  } as PlpBrowseResponse;
-}
-
-export function transformSortOptionsResponse(options: SortOption[]): PlpSortOption[] {
-  return options.map(
-    (option) =>
-      ({
-        sortBy: option.sort_by,
-        sortOrder: option.sort_order,
-        displayName: option.display_name,
-        status: option.status,
-      }) as PlpSortOption,
-  );
-}
-
-export function transformFacetsResponse(facets: Array<Facet>): Array<PlpFacet> {
+export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
   return facets.map((facet) => {
     const { displayName, name, type, data, hidden, min, max, status, options } = facet;
 
@@ -174,4 +122,56 @@ export function transformFacetsResponse(facets: Array<Facet>): Array<PlpFacet> {
 
     return transformedFacet;
   });
+}
+
+export function transformSearchResponse(
+  res: SearchResponse,
+): PlpSearchRedirectResponse | PlpSearchResponse {
+  const { response } = res;
+  // Return PlpSearchRedirectResponse
+  if (isAPIRedirectSearchResponse(response)) {
+    return {
+      resultId: res.result_id,
+      redirect: response.redirect!,
+      rawResponse: res,
+    };
+  }
+
+  // Return PlpSearchResponse
+  return {
+    resultId: res.result_id,
+    totalNumResults: response.total_num_results,
+    results: response.results!.map((result) => transformResultItem(result, false)),
+    facets: transformResponseFacets(res.response!.facets),
+    groups: response.groups,
+    sortOptions: response.sort_options,
+    refinedContent: response.refined_content,
+    rawResponse: res,
+  } as PlpSearchResponse;
+}
+
+export function transformBrowseResponse(res: GetBrowseResultsResponse) {
+  return {
+    resultId: res.result_id,
+    totalNumResults: res.response!.total_num_results,
+    numResultsPerPage: res.request?.num_results_per_page,
+    results: res.response!.results!.map((result) => transformResultItem(result, false)),
+    facets: transformResponseFacets(res.response!.facets as any),
+    groups: res.response!.groups,
+    sortOptions: res.response!.sort_options,
+    refinedContent: res.response!.refined_content,
+    rawResponse: res,
+  } as PlpBrowseResponse;
+}
+
+export function transformSortOptionsResponse(options: SortOption[]): PlpSortOption[] {
+  return options.map(
+    (option) =>
+      ({
+        sortBy: option.sort_by,
+        sortOrder: option.sort_order,
+        displayName: option.display_name,
+        status: option.status,
+      }) as PlpSortOption,
+  );
 }
