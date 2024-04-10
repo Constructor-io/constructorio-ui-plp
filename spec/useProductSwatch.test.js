@@ -55,4 +55,26 @@ describe('Testing Hook: useProductSwatch', () => {
       expect(swatchList).toEqual(expectedSwatch);
     });
   });
+
+  it('Should return nothing properly with getters that return nothing', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
+      initialProps: {
+        itemFieldGetters: {
+          getPrice: () => {},
+          getSwatches: () => {},
+          getSwatchPreview: () => {},
+        },
+      },
+    });
+
+    await waitFor(() => {
+      const {
+        current: { swatchList, selectedVariation, selectVariation },
+      } = result;
+
+      expect(typeof selectVariation).toBe('function');
+      expect(selectedVariation).toBeUndefined();
+      expect(swatchList).toBeUndefined();
+    });
+  });
 });

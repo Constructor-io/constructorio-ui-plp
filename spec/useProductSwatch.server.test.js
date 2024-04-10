@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import useProductSwatch from '../src/components/ProductSwatch/useProductSwatch';
+import { DEMO_API_KEY } from '../src/constants';
 import { transformResultItem } from '../src/utils/transformers';
 import mockItem from './local_examples/item.json';
 import { renderHookServerSide, renderHookServerSideWithCioPlp } from './test-utils.server';
@@ -24,7 +25,9 @@ describe('Testing Hook on the server: useProductSwatch', () => {
   it('Should return swatchList, selectedVariation, selectVariation', async () => {
     const {
       result: { swatchList, selectedVariation, selectVariation },
-    } = renderHookServerSideWithCioPlp(() => useProductSwatch({ item: transformedItem }));
+    } = renderHookServerSideWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
+      apiKey: DEMO_API_KEY,
+    });
 
     expect(typeof selectVariation).toBe('function');
     expect(selectedVariation).toBeUndefined();
