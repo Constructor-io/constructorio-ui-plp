@@ -19,7 +19,11 @@ const useProductSwatch: UseProductSwatch = ({ item }) => {
 
   useEffect(() => {
     if (item?.variations) {
-      setSwatchList(getSwatches(item, getPrice, getSwatchPreview));
+      try {
+        setSwatchList(getSwatches(item, getPrice, getSwatchPreview));
+      } catch (e) {
+        // do nothing
+      }
     }
   }, [item, getSwatches, getPrice, getSwatchPreview]);
 
