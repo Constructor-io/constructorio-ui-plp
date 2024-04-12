@@ -60,7 +60,7 @@ export type DefaultQueryStringMap = {
   page: 'page';
   offset: 'offset';
   resultsPerPage: 'numResults';
-  filters: 'f';
+  filters: 'filters';
   sortBy: 'sortBy';
   sortOrder: 'sortOrder';
   section: 'section';
