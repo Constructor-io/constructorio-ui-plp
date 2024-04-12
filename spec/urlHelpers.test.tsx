@@ -12,7 +12,7 @@ import {
 import { RequestConfigs } from '../src/types';
 
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
-  test.only('Should encode all request parameters as defined in defaultQueryStringMap', () => {
+  test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
       getUrlFromState(testRequestState as RequestConfigs, {
         baseUrl: 'https://www.example.com/a/random/path',
@@ -25,12 +25,8 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
 
     Object.entries(testRequestState.filters)?.forEach(([key, value]) => {
       const filterValues = params.getAll(`${defaultQueryStringMap.filters}[${key}]`);
-      let arrayValue = value;
 
-      if (!Array.isArray(arrayValue)) {
-        arrayValue = [arrayValue];
-      }
-      expect(new Set(filterValues)).toEqual(new Set(arrayValue));
+      expect(new Set(filterValues)).toEqual(new Set(value));
     });
 
     const page = params.get(defaultQueryStringMap.page);
@@ -98,9 +94,9 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
 
     expect(typeof state.filters).toBe('object');
     expect(state.filters).toEqual({
-      price: '5-100',
-      test: 'testValue',
-      lowestPrice: 100,
+      price: ['5-100'],
+      test: ['testValue'],
+      lowestPrice: ['100'],
     });
 
     expect(typeof state.sortBy).toBe('string');
