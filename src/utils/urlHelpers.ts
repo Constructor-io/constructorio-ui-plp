@@ -88,8 +88,6 @@ export function getStateFromUrl(url: string): RequestConfigs {
 
   const filters = extractFiltersFromUrl(urlParams);
 
-  // extract filters
-
   const {
     page,
     offset,
