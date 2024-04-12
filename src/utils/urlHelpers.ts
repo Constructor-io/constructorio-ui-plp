@@ -1,21 +1,5 @@
 import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
 
-function decodeArrayAsObj<T>(arrStr: string): T | undefined {
-  try {
-    const arr = JSON.parse(arrStr);
-    return Object.fromEntries(arr) as T;
-  } catch (err) {
-    // Fail silently?
-  }
-
-  return undefined;
-}
-
-function encodeObjAsArray(obj: Record<string, any>) {
-  const objAsArray = Array.from(Object.entries(obj));
-  return JSON.stringify(objAsArray);
-}
-
 export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
   page: 'page',
