@@ -31,6 +31,6 @@ describe('Testing Hook on the server: useProductSwatch', () => {
 
     expect(typeof selectVariation).toBe('function');
     expect(selectedVariation).toBeUndefined();
-    expect(swatchList).toBeUndefined();
+    expect(swatchList.length).toBe(0);
   });
 });

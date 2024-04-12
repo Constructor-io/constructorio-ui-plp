@@ -9,7 +9,7 @@ import {
 
 const useProductSwatch: UseProductSwatch = ({ item }) => {
   const [selectedVariation, setSelectedVariation] = useState<SwatchItem>();
-  const [swatchList, setSwatchList] = useState<SwatchItem[]>();
+  const [swatchList, setSwatchList] = useState<SwatchItem[]>([]);
 
   const state = useCioPlpContext();
 
@@ -20,7 +20,7 @@ const useProductSwatch: UseProductSwatch = ({ item }) => {
   useEffect(() => {
     if (item?.variations) {
       try {
-        setSwatchList(getSwatches(item, getPrice, getSwatchPreview));
+        setSwatchList(getSwatches(item, getPrice, getSwatchPreview) || []);
       } catch (e) {
         // do nothing
       }

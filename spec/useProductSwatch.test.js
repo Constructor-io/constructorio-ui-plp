@@ -74,7 +74,7 @@ describe('Testing Hook: useProductSwatch', () => {
 
       expect(typeof selectVariation).toBe('function');
       expect(selectedVariation).toBeUndefined();
-      expect(swatchList).toBeUndefined();
+      expect(swatchList.length).toBe(0);
     });
   });
 
@@ -102,7 +102,7 @@ describe('Testing Hook: useProductSwatch', () => {
 
       expect(typeof selectVariation).toBe('function');
       expect(selectedVariation).toBeUndefined();
-      expect(swatchList).toBeUndefined();
+      expect(swatchList.length).toBe(0);
     });
   });
 });
