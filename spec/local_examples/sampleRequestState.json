@@ -6,9 +6,9 @@
   "offset": 24,
   "resultsPerPage": 30,
   "filters": {
-    "price": "5-100",
-    "test": "testValue",
-    "lowestPrice": 100
+    "price": ["5-100"],
+    "test": ["testValue"],
+    "lowestPrice": ["100"]
   },
   "sortBy": "price",
   "sortOrder": "descending",
