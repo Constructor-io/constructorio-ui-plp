@@ -7,8 +7,8 @@
   "resultsPerPage": 30,
   "filters": {
     "price": ["5-100"],
-    "test": ["testValue", "testValue2"],
-    "lowestPrice": ["100"]
+    "test": ["testValue", "testValue2", "testValue3"],
+    "lowestPrice": ["100", "300"]
   },
   "sortBy": "price",
   "sortOrder": "descending",
