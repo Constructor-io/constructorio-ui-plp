@@ -60,8 +60,14 @@ export function getFilterParamsFromState(
   filters: RequestConfigs['filters'],
 ) {
   if (filters) {
-    Object.entries(filters)?.forEach(([filterName, filterValue]) => {
-      urlParams.set(`filters[${filterName}]`, filterValue);
+    Object.entries(filters)?.forEach(([filterName, filterValues]) => {
+      if (Array.isArray(filterValues)) {
+        filterValues.forEach((filterValue) => {
+          urlParams.append(`filters[${filterName}]`, filterValue);
+        });
+      } else {
+        urlParams.append(`filters[${filterName}]`, filterValues);
+      }
     });
   }
 }

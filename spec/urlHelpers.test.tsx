@@ -23,9 +23,11 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     const query = params.get(defaultQueryStringMap.query);
     expect(query).toBe('item');
 
+    console.log(url.toString());
     Object.entries(testRequestState.filters)?.forEach(([key, value]) => {
       const filterValues = params.getAll(`${defaultQueryStringMap.filters}[${key}]`);
 
+      console.log(filterValues);
       expect(new Set(filterValues)).toEqual(new Set(value));
     });
 
@@ -95,7 +97,7 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
     expect(typeof state.filters).toBe('object');
     expect(state.filters).toEqual({
       price: ['5-100'],
-      test: ['testValue'],
+      test: ['testValue', 'testValue2'],
       lowestPrice: ['100'],
     });
 
