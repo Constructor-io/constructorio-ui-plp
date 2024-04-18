@@ -58,7 +58,9 @@ export default function useBrowseResults(
   );
 
   const pagination = usePagination({
+    initialPage: browseResponse?.rawResponse.request?.page,
     totalNumResults: browseResponse?.totalNumResults,
+    resultsPerPage: browseResponse?.numResultsPerPage,
   });
 
   const handleSubmit = () => {
