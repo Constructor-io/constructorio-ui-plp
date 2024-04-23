@@ -38,3 +38,23 @@ export const Primary: Story = {
     },
   ],
 };
+
+export const ZeroResults: Story = {
+  render: (args) => (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <div>Example Url: https://www.example.com?q=cvwdacoknqeauosd1</div>
+      <br />
+      <SearchResults {...args} />
+    </CioPlp>
+  ),
+  decorators: [
+    (Story) => {
+      const url = new URL(window.location as any);
+      // eslint-disable-next-line @cspell/spellchecker
+      url.searchParams.set('q', 'cvwdacoknqeauosd1');
+      window.history.pushState({}, '', url);
+
+      return <Story />;
+    },
+  ],
+};
