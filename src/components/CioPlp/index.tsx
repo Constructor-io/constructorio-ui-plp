@@ -8,5 +8,9 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
   // Todo: Add SearchResults/BrowseResults
   const defaultMarkup = <div>To Do: Return actual default markup</div>;
 
-  return <CioPlpProvider {...props}>{children || defaultMarkup}</CioPlpProvider>;
+  return (
+    <div className='cio-plp-global'>
+      <CioPlpProvider {...props}>{children || defaultMarkup}</CioPlpProvider>
+    </div>
+  );
 }
