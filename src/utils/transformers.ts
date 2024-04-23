@@ -94,7 +94,17 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
 
 export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
   return facets.map((facet) => {
-    const { displayName, name, type, data, hidden, min, max, status, options } = facet;
+    const {
+      display_name: displayName,
+      name,
+      type,
+      data,
+      hidden,
+      min,
+      max,
+      status,
+      options,
+    } = facet;
 
     const transformedFacet = {
       displayName,

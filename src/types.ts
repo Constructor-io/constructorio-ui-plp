@@ -277,13 +277,11 @@ export type UseProductInfoProps = {
 
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
 
-export type PlpFacetValue = string | number | boolean;
-
 export interface PlpFacetOption {
   status: string;
   count: number;
   displayName: string;
-  value: PlpFacetValue;
+  value: string;
   data: any;
 }
 
