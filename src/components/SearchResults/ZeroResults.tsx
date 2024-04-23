@@ -8,7 +8,7 @@ import './ZeroResults.css';
  * @component
  * @returns {JSX.Element} The 'no results' component
  */
-export function ZeroResults() {
+export default function ZeroResults() {
   const config = useRequestConfigs();
   const { query } = config.requestConfigs;
 
