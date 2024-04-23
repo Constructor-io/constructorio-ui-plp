@@ -4,6 +4,30 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
+import useRequestConfigs from '../../hooks/useRequestConfigs';
+import './SearchResults.css';
+
+/**
+ * Renders the 'no results' component if search results returns no items.
+ *
+ * @component
+ * @returns {JSX.Element} The 'no results' component
+ */
+function NoResults() {
+  const config = useRequestConfigs();
+  const { query } = config.requestConfigs;
+
+  return (
+    <>
+      <div className='no-results-header'>Sorry, we didn’t find: “{query}”</div>
+      <ul className='no-results-option-list'>
+        <li>Check for typos</li>
+        <li>Use fewer keywords</li>
+        <li>Broaden your search terms</li>
+      </ul>
+    </>
+  );
+}
 
 /**
  * Props for the SearchResults component.
@@ -53,21 +77,15 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
     <>
       {typeof children === 'function' ? (
         children({ status, data, pagination, refetch })
-      ) : (
+      ) : data.response?.results?.length ? (
         <>
           <div>Search Results</div>
-          <>
-            {data.response?.results?.length ? (
-              <div className='cio-results data-results-search' data-cnstrc-search>
-                {data.response?.results.map((item) => (
-                  <ProductCard item={item} key={item.itemId} />
-                ))}
-              </div>
-            ) : (
-              "Can't find matching items. Please try something else"
-            )}
-          </>
+          <div className='cio-results data-results-search' data-cnstrc-search>
+            {data.response?.results.map((item) => <ProductCard item={item} key={item.itemId} />)}
+          </div>
         </>
+      ) : (
+        <NoResults />
       )}
     </>
   );
