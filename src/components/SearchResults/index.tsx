@@ -4,7 +4,7 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
-import { ZeroResults } from './ZeroResults';
+import ZeroResults from './ZeroResults';
 
 /**
  * Props for the SearchResults component.
