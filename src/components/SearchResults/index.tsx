@@ -77,15 +77,21 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
     <>
       {typeof children === 'function' ? (
         children({ status, data, pagination, refetch })
-      ) : data.response?.results?.length ? (
-        <>
-          <div>Search Results</div>
-          <div className='cio-results data-results-search' data-cnstrc-search>
-            {data.response?.results.map((item) => <ProductCard item={item} key={item.itemId} />)}
-          </div>
-        </>
       ) : (
-        <NoResults />
+        <>
+          {data.response?.results?.length ? (
+            <>
+              <div>Search Results</div>
+              <div className='cio-results data-results-search' data-cnstrc-search>
+                {data.response?.results.map((item) => (
+                  <ProductCard item={item} key={item.itemId} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <NoResults />
+          )}
+        </>
       )}
     </>
   );
