@@ -9,7 +9,13 @@ import {
 import './sort.css';
 
 type SortProps = {
+  /**
+   * Default open state of dropdown
+   */
   isOpen?: boolean;
+  /**
+   * Used to build and render sort options dynamically
+   */
   searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse;
 };
 type SortWithRenderProps = IncludeRenderProps<SortProps, UseSortReturn>;
@@ -39,10 +45,10 @@ export default function Sort({
           changeSelectedSort,
         })
       ) : (
-        <div className='plp-sort'>
+        <div className='cio-plp-sort'>
           <button type='button' className='collapsible' onClick={toggleCollapsible}>
             Sort
-            <i className={`arrow ${isOpen ? 'up' : 'down'}`} />
+            <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
           {isOpen && (
             <div className='collapsible-content'>

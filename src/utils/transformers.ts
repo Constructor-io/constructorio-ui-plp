@@ -88,7 +88,7 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   return transformedItem;
 }
 
-export function transformSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
+export function transformResponseSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
   if (options) {
     return options.map(
       (option) =>
@@ -124,7 +124,7 @@ export function transformSearchResponse(
     results: response.results!.map((result) => transformResultItem(result, false)),
     facets: response.facets,
     groups: response.groups,
-    sortOptions: transformSortOptions(response.sort_options),
+    sortOptions: transformResponseSortOptions(response.sort_options),
     refinedContent: response.refined_content,
     rawResponse: res,
   } as PlpSearchResponse;
@@ -138,7 +138,7 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse) {
     results: res.response!.results!.map((result) => transformResultItem(result, false)),
     facets: res.response!.facets,
     groups: res.response!.groups,
-    sortOptions: transformSortOptions(res.response!.sort_options),
+    sortOptions: transformResponseSortOptions(res.response!.sort_options),
     refinedContent: res.response!.refined_content,
     rawResponse: res,
   } as PlpBrowseResponse;
