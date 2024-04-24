@@ -50,7 +50,7 @@ export const ZeroResults: Story = {
   decorators: [
     (Story) => {
       const url = new URL(window.location as any);
-      // eslint-disable-next-line @cspell/spellchecker
+      /* cspell:disable-next-line */
       url.searchParams.set('q', 'cvwdacoknqeauosd1');
       window.history.pushState({}, '', url);
 
