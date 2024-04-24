@@ -4,6 +4,7 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
+import ZeroResults from './ZeroResults';
 
 /**
  * Props for the SearchResults component.
@@ -55,18 +56,18 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
         children({ status, data, pagination, refetch })
       ) : (
         <>
-          <div>Search Results</div>
-          <>
-            {data.response?.results?.length ? (
+          {data.response?.results?.length ? (
+            <>
+              <div>Search Results</div>
               <div className='cio-results data-results-search' data-cnstrc-search>
                 {data.response?.results.map((item) => (
                   <ProductCard item={item} key={item.itemId} />
                 ))}
               </div>
-            ) : (
-              "Can't find matching items. Please try something else"
-            )}
-          </>
+            </>
+          ) : (
+            <ZeroResults />
+          )}
         </>
       )}
     </>
