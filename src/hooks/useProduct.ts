@@ -1,6 +1,7 @@
 import useProductSwatch from '../components/ProductSwatch/useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
+import { tryCatchify } from '../utils';
 
 const useProductInfo: UseProductInfo = ({ item }) => {
   const state = useCioPlpContext();
@@ -10,7 +11,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     throw new Error('data, itemId, or itemName are required.');
   }
 
-  const getPrice = state?.itemFieldGetters?.getPrice;
+  const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice);
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);

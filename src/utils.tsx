@@ -13,6 +13,18 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// eslint-disable-next-line @cspell/spellchecker
+export function tryCatchify(func: Function) {
+  return (...args: any) => {
+    try {
+      return func(...args);
+    } catch (e) {
+      // do nothing
+    }
+    return undefined;
+  };
+}
+
 export function removeNullValuesFromObject(obj: Object) {
   const filteredListOfEntries = Object.entries(obj).filter(([, val]) => val != null);
 
