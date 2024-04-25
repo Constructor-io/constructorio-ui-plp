@@ -9,7 +9,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
   const defaultMarkup = <div>To Do: Return actual default markup</div>;
 
   return (
-    <div className='cio-plp-global'>
+    <div className='cio-plp'>
       <CioPlpProvider {...props}>{children || defaultMarkup}</CioPlpProvider>
     </div>
   );
