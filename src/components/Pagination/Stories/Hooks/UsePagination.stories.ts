@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import UsePaginationExample from './UsePaginationExample';
+import '../../../../styles.css';
 
 const meta = {
   title: 'Hooks/UsePagination',
