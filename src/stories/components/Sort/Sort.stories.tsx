@@ -7,6 +7,7 @@ import { DEMO_API_KEY } from '../../../constants';
 import { transformSearchResponse } from '../../../utils/transformers';
 import mockSearchResponse from '../../../../spec/local_examples/apiSearchResponse.json';
 import { PlpSearchResponse } from '../../../types';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/Sort',

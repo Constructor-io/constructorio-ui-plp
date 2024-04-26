@@ -6,7 +6,6 @@ import {
   PlpSearchResponse,
   UseSortReturn,
 } from '../../types';
-import './sort.css';
 
 type SortProps = {
   /**
