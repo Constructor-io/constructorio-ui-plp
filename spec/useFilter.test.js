@@ -58,4 +58,55 @@ describe('Testing Hook: useFilter', () => {
       expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
     });
   });
+
+  it('Should apply multiple-type filters correctly', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+
+    await waitFor(() => {
+      const {
+        current: { applyFilter },
+      } = result;
+
+      applyFilter('Brand', 'test-brand');
+      applyFilter('Brand', 'test-brand2');
+
+      expect(mockLocation.href.indexOf('test-brand')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf('test-brand2')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('Should apply range-type filters correctly', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+
+    await waitFor(() => {
+      const {
+        current: { applyFilter },
+      } = result;
+
+      applyFilter('Price', '2-150');
+      expect(mockLocation.href.indexOf('Price')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf('2-150')).toBeGreaterThanOrEqual(0);
+
+      applyFilter('Price', '100-150');
+      expect(mockLocation.href.indexOf('2-150')).toBe(-1);
+      expect(mockLocation.href.indexOf('100-150')).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('Should remove a filter if value == null', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+
+    await waitFor(() => {
+      const {
+        current: { applyFilter },
+      } = result;
+
+      applyFilter('Brand', 'test-brand');
+      applyFilter('Brand', null);
+
+      expect(mockLocation.href.indexOf('test-brand')).toBe(-1);
+      expect(mockLocation.href.indexOf('Brand')).toBe(-1);
+    });
+  });
 });
