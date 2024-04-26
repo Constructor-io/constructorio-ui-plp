@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/CioPlp',
