@@ -6,7 +6,6 @@ import {
   Group as ApiGroup,
   Result,
   SearchResponse,
-  SortOption,
   GetBrowseResultsResponse,
   VariationsMap,
   FilterExpression,
@@ -176,7 +175,7 @@ export interface PlpSearchResponse {
   results: Array<Item>;
   facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
-  sortOptions: Array<SortOption>;
+  sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
   rawResponse: SearchResponse;
 }
@@ -189,7 +188,7 @@ export interface PlpBrowseResponse {
   results: Array<Item>;
   facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
-  sortOptions: Array<SortOption>;
+  sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
   rawResponse: GetBrowseResultsResponse;
 }
