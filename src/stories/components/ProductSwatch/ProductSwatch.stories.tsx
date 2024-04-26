@@ -4,6 +4,7 @@ import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
 import ProductSwatch from '../../../components/ProductSwatch/ProductSwatch';
 import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/ProductSwatch',

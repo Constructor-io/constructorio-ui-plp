@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import SearchResults from '../../../components/SearchResults';
 import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/SearchResults',
@@ -32,6 +33,26 @@ export const Primary: Story = {
     (Story) => {
       const url = new URL(window.location as any);
       url.searchParams.set('q', 'shirt');
+      window.history.pushState({}, '', url);
+
+      return <Story />;
+    },
+  ],
+};
+
+export const ZeroResults: Story = {
+  render: (args) => (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <div>Example Url: https://www.example.com?q=cvwdacoknqeauosd1</div>
+      <br />
+      <SearchResults {...args} />
+    </CioPlp>
+  ),
+  decorators: [
+    (Story) => {
+      const url = new URL(window.location as any);
+      /* cspell:disable-next-line */
+      url.searchParams.set('q', 'cvwdacoknqeauosd1');
       window.history.pushState({}, '', url);
 
       return <Story />;
