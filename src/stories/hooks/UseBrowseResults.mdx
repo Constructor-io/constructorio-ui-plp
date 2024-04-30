@@ -4,22 +4,13 @@ import meta, { Primary } from './UseBrowseResults.stories';
 
 <Meta of={meta} />
 
-# `UseBrowseResults`
+# `[BETA] UseBrowseResults`
 A React Hook to retrieve browse results using Constructor.
-
-## Usage with useCioClient
-```jsx
-function myApp() {
-  const cioClient = useCioClient(MY_API_KEY)
-  const {browseResults, handleSubmit} = useBrowseResults(filterName, filterValue, {cioClient});
-  ...
-}
-```
 
 ## Usage with CioPlp provider
 ```jsx
-function BrowseResults({ filterName, filterValue }) {
-  const {browseResults} = useBrowseResults(filterName, filterValue);
+function MyCustomBrowseResultsComponent() {
+  const { browseResults } = useBrowseResults();
   ...
 }
 
@@ -28,7 +19,7 @@ function myApp() {
   return (
     <>
     <CioPlp apiKey={MY_API_KEY}>
-      <BrowseResults filterName={filterName} fiterValue={filterValue} />
+      <MyCustomBrowseResultsComponent />
     </CioPlp>
     </>
   )
@@ -53,9 +44,8 @@ This is an example of how you might utilize the `useBrowseResults` hook in tande
   const apiKey = 'MY_API_KEY'
 
   // A simple React Component to showcase useBrowseResults with CioPlp provider
-  function BrowseResults({ query }) {
-    const browseParams = useMemo(() => ({ resultsPerPage: 2 }), []);
-    const {browseResults} = useBrowseResults(filterName, filterValue, { browseParams });
+  function MyCustomBrowseResultsComponent() {
+    const { browseResults } = useBrowseResults();
 
     return (
       <>
@@ -84,7 +74,7 @@ This is an example of how you might utilize the `useBrowseResults` hook in tande
         <h1>useBrowsesResults</h1>
         <p>This hook returns an object with the following properties:</p>
         <CioPlp apiKey={MY_API_KEY}>
-          <BrowseResults filterName={"group_id"} filterValue={filterValue} />
+          <MyCustomBrowseResultsComponent />
         </CioPlp>
       </>
     );

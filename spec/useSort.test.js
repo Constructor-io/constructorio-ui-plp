@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
 import useSort from '../src/hooks/useSort';
-import { transformSearchResponse, transformSortOptionsResponse } from '../src/utils/transformers';
+import { transformSearchResponse } from '../src/utils/transformers';
 import mockSearchResponse from './local_examples/apiSearchResponse.json';
 import { renderHookWithCioPlp } from './test-utils';
 
@@ -26,7 +26,7 @@ describe('Testing Hook: useSort', () => {
   });
 
   const searchResponse = transformSearchResponse(mockSearchResponse);
-  const responseSortOptions = transformSortOptionsResponse(searchResponse.sortOptions);
+  const responseSortOptions = searchResponse.sortOptions;
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useSort())).toThrow();

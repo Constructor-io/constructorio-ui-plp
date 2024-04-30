@@ -7,7 +7,6 @@ import {
   Group as ApiGroup,
   Result,
   SearchResponse,
-  SortOption,
   GetBrowseResultsResponse,
   VariationsMap,
   FilterExpression,
@@ -60,7 +59,7 @@ export type DefaultQueryStringMap = {
   page: 'page';
   offset: 'offset';
   resultsPerPage: 'numResults';
-  filters: 'f';
+  filters: 'filters';
   sortBy: 'sortBy';
   sortOrder: 'sortOrder';
   section: 'section';
@@ -177,7 +176,7 @@ export interface PlpSearchResponse {
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
-  sortOptions: Array<SortOption>;
+  sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
   rawResponse: SearchResponse;
 }
@@ -190,7 +189,7 @@ export interface PlpBrowseResponse {
   results: Array<Item>;
   facets: Array<Facet>;
   groups: Array<ApiGroup>;
-  sortOptions: Array<SortOption>;
+  sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
   rawResponse: GetBrowseResultsResponse;
 }

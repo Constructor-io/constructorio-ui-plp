@@ -1,27 +1,11 @@
 import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
 
-function decodeArrayAsObj<T>(arrStr: string): T | undefined {
-  try {
-    const arr = JSON.parse(arrStr);
-    return Object.fromEntries(arr) as T;
-  } catch (err) {
-    // Fail silently?
-  }
-
-  return undefined;
-}
-
-function encodeObjAsArray(obj: Record<string, any>) {
-  const objAsArray = Array.from(Object.entries(obj));
-  return JSON.stringify(objAsArray);
-}
-
 export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
   page: 'page',
   offset: 'offset',
   resultsPerPage: 'numResults',
-  filters: 'f', // do special encoding/decoding
+  filters: 'filters', // do special encoding/decoding
   sortBy: 'sortBy',
   sortOrder: 'sortOrder',
   section: 'section',
@@ -35,6 +19,41 @@ export function getUrl(): string | undefined {
 export function setUrl(newUrlWithEncodedState: string) {
   if (typeof window === 'undefined') return;
   window.location.href = newUrlWithEncodedState;
+}
+
+export function extractFiltersFromUrl(urlParams: URLSearchParams) {
+  const filters = {};
+  const filterRegex = new RegExp(`^${defaultQueryStringMap.filters}\\[(.*)\\]`);
+
+  urlParams?.forEach((value, key) => {
+    const filterKey = key?.match(filterRegex)?.[1];
+    if (filterKey) {
+      if (filters[filterKey]) {
+        filters[filterKey].push(value);
+      } else {
+        filters[filterKey] = [value];
+      }
+    }
+  });
+
+  return Object.keys(filters).length ? filters : undefined;
+}
+
+export function getFilterParamsFromState(
+  urlParams: URLSearchParams,
+  filters: RequestConfigs['filters'],
+) {
+  if (filters) {
+    Object.entries(filters)?.forEach(([filterName, filterValues]) => {
+      if (Array.isArray(filterValues)) {
+        filterValues.forEach((filterValue) => {
+          urlParams.append(`filters[${filterName}]`, filterValue);
+        });
+      } else {
+        urlParams.append(`filters[${filterName}]`, filterValues);
+      }
+    });
+  }
 }
 
 export function getStateFromUrl(url: string): RequestConfigs {
@@ -57,11 +76,12 @@ export function getStateFromUrl(url: string): RequestConfigs {
     }
   });
 
+  const filters = extractFiltersFromUrl(urlParams);
+
   const {
     page,
     offset,
     resultsPerPage,
-    filters,
     fmtOptions,
     hiddenFacets,
     hiddenFields,
@@ -74,7 +94,7 @@ export function getStateFromUrl(url: string): RequestConfigs {
   if (page) state.page = Number(page);
   if (offset) state.offset = Number(offset);
   if (resultsPerPage) state.resultsPerPage = Number(resultsPerPage);
-  if (filters) state.filters = decodeArrayAsObj<Record<string, any>>(filters);
+  if (filters) state.filters = filters;
   if (filterName) {
     state.filterName = filterName;
     state.filterValue = filterValue;
@@ -96,17 +116,19 @@ export function getUrlFromState(
       return;
     }
 
-    let encodedVal: string;
+    let encodedVal: string = '';
 
     if (key === 'filters' && state.filters) {
-      encodedVal = encodeObjAsArray(state.filters);
+      getFilterParamsFromState(params, state.filters);
     } else if (typeof val !== 'string') {
       encodedVal = JSON.stringify(val);
     } else {
       encodedVal = val;
     }
 
-    params.set(defaultQueryStringMap[key], encodedVal);
+    if (encodedVal) {
+      params.set(defaultQueryStringMap[key], encodedVal);
+    }
   });
 
   let groupPath = '';

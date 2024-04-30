@@ -88,6 +88,22 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   return transformedItem;
 }
 
+export function transformResponseSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
+  if (options) {
+    return options.map(
+      (option) =>
+        ({
+          sortBy: option.sort_by,
+          sortOrder: option.sort_order,
+          displayName: option.display_name,
+          status: option.status,
+        }) as PlpSortOption,
+    );
+  }
+
+  return [];
+}
+
 export function transformSearchResponse(
   res: SearchResponse,
 ): PlpSearchRedirectResponse | PlpSearchResponse {
@@ -108,7 +124,7 @@ export function transformSearchResponse(
     results: response.results!.map((result) => transformResultItem(result, false)),
     facets: response.facets,
     groups: response.groups,
-    sortOptions: response.sort_options,
+    sortOptions: transformResponseSortOptions(response.sort_options),
     refinedContent: response.refined_content,
     rawResponse: res,
   } as PlpSearchResponse;
@@ -122,20 +138,8 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse) {
     results: res.response!.results!.map((result) => transformResultItem(result, false)),
     facets: res.response!.facets,
     groups: res.response!.groups,
-    sortOptions: res.response!.sort_options,
+    sortOptions: transformResponseSortOptions(res.response!.sort_options),
     refinedContent: res.response!.refined_content,
     rawResponse: res,
   } as PlpBrowseResponse;
-}
-
-export function transformSortOptionsResponse(options: SortOption[]): PlpSortOption[] {
-  return options.map(
-    (option) =>
-      ({
-        sortBy: option.sort_by,
-        sortOrder: option.sort_order,
-        displayName: option.display_name,
-        status: option.status,
-      }) as PlpSortOption,
-  );
 }

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Pagination from '../../Pagination';
 import KitchenSinkDecorator from '../../../../stories/utils/KitchenSinkDecorator';
+import '../../../../styles.css';
 
 const meta = {
   title: 'Components/Pagination',
