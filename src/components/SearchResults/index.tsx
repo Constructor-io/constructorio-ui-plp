@@ -4,12 +4,14 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
+import Spinner from '../Spinner';
 import ZeroResults from './ZeroResults';
 
 /**
  * Props for the SearchResults component.
  */
 interface SearchResultsProps {
+  spinner?: React.ReactNode;
   initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
 }
 
@@ -27,6 +29,7 @@ export type SearchResultsWithRenderProps = IncludeRenderProps<
  * @component
  * @param {Object} [props] - The component props.
  * @param {object} [props.initialSearchResponse] Initial value for search results
+ * @param {object} [props.spinner] An optional custom component to display as a spinner when fetching data
  * (Would be useful when passing initial state for the first render from the server
  *  to the client via something like getServerSideProps)
  * @returns {JSX.Element} The rendered search results.
@@ -44,10 +47,10 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
     initialSearchResponse,
   });
 
-  const { children } = props;
+  const { children, spinner } = props;
 
   if (status === 'fetching') {
-    return <>loading</>;
+    return spinner || <Spinner />;
   }
 
   return (
