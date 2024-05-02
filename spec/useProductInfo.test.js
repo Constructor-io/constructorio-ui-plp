@@ -37,7 +37,7 @@ describe('Testing Hook: useProductInfo', () => {
       expect(itemPrice).toEqual(transformedItem.data.price);
     });
   });
-  //
+
   it('Should return nothing properly with getters that return nothing', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
       initialProps: {
