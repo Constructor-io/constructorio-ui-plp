@@ -1,6 +1,10 @@
 .cio-swatch-selected {
-  outline: 2px solid black !important; 
-  z-index: 1000;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    outline-offset: 4px;
+    z-index: 1000;
+    filter: opacity(0.6);
 }
 
 .cio-swatch-button {

@@ -1,0 +1,33 @@
+.cio-product-card {
+    text-decoration: none;
+}
+
+.cio-image-container {
+    width: 306px;
+    height: 306px;
+}
+
+.cio-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cio-content {
+    width: 306px;
+}
+
+.cio-item-price {
+    margin-top: 16px;
+    font-weight: 700;
+    font-size: 32px;
+    color: black;
+    letter-spacing: 2px;
+}
+
+.cio-item-name {
+    margin-top: 6px;
+    font-weight: 300;
+    font-size: 20px;
+    color: black;
+}
