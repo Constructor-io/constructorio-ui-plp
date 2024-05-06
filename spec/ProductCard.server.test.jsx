@@ -36,7 +36,7 @@ describe('ProductCard: React Server-Side Rendering', () => {
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );
-    expect(html).toContain('$79.00');
+    expect(html).toContain('$90.00');
   });
 
   test('Should render custom price formatting if overridden at the PlpContext level', () => {
@@ -46,7 +46,7 @@ describe('ProductCard: React Server-Side Rendering', () => {
         <ProductCard item={transformResultItem(testItem)} />
       </CioPlp>,
     );
-    expect(html).toContain('USD$79.00');
+    expect(html).toContain('USD$90.00');
   });
 
   test('Should retrieve custom price if overridden at the PlpContext level', () => {
@@ -72,7 +72,7 @@ describe('ProductCard: React Server-Side Rendering', () => {
     );
 
     // React injects <!-- --> on the server to mark dynamic content for rehydration
-    expect(html).toContain('My Rendered Price: <!-- -->$79.00');
+    expect(html).toContain('My Rendered Price: <!-- -->$90.00');
   });
 
   test('Should throw error for invalid item format', () => {
