@@ -61,6 +61,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
                   }}>
                   {isSelected && (
                     <div
+                      data-cnstrc-variation-id={swatch.variationId}
                       className='cio-swatch-selected'
                       style={{ outline: `3px solid ${color}` }}
                     />

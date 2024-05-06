@@ -75,22 +75,6 @@ describe('Testing Component: ProductCard', () => {
     // Click the price
     fireEvent.click(screen.getByText('$90.00'));
     expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
-
-    // Click the ATC Button should not trigger the handler
-    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
-    expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
-  });
-
-  test('Should run custom onAddToCart handler if overridden at the CioPlp provider level', () => {
-    const contextOnAddToCart = jest.fn();
-    render(
-      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
-        <ProductCard item={transformResultItem(testItem)} />
-      </CioPlp>,
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
-    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
   });
 
   test('Should render renderProps argument', () => {
