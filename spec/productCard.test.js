@@ -77,7 +77,7 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
 
     // Click the ATC Button should not trigger the handler
-    fireEvent.click(screen.getByRole('button', { name: /add to basket/i }));
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
     expect(contextOnClickHandler).toHaveBeenCalledTimes(3);
   });
 

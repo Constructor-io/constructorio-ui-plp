@@ -98,7 +98,7 @@ export default function ProductCard(props: ProductCardProps) {
                 onClick={(e) =>
                   onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
                 }>
-                Add to Basket
+                Add to Cart
               </button>
             </div>
           </div>
