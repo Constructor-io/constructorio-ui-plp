@@ -57,7 +57,7 @@ describe('Testing Hook: useBrowseResults', () => {
 
     const url = getUrlFromState(
       { filterValue: '123', filters, resultsPerPage, page },
-      { baseUrl: 'https://example.com/browse/' },
+      { baseUrl: 'https://example.com/browse/123' },
     );
     mockLocation.href = url;
 
