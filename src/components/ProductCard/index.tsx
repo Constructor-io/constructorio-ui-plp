@@ -5,7 +5,6 @@ import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch/ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
 import './styles.css';
-import '../../styles.css';
 
 interface Props {
   /**
