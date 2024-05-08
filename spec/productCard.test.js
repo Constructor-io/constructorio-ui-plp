@@ -89,7 +89,7 @@ describe('Testing Component: ProductCard', () => {
       </CioPlp>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /add to basket/i }));
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
     expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
   });
 
