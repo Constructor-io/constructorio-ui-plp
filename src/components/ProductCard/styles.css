@@ -31,3 +31,13 @@
   font-size: 20px;
   color: black;
 }
+
+.cio-add-to-basket-button {
+  margin-top: 10px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  height: 40px;
+  font-size: 16px;
+  cursor: pointer;
+}
