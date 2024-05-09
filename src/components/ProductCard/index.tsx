@@ -4,7 +4,6 @@ import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch/ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
-import './styles.css';
 
 interface Props {
   /**
@@ -92,7 +91,7 @@ export default function ProductCard(props: ProductCardProps) {
             {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
             <div>
               <button
-                className='cio-add-to-basket-button'
+                className='cio-add-to-cart-button'
                 type='button'
                 onClick={(e) =>
                   onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)

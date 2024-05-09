@@ -2,6 +2,7 @@
 @import '../src/components/ProductSwatch/ProductSwatch.css';
 @import '../src/components/Pagination/pagination.css';
 @import '../src/components/Sort/sort.css';
+@import '../src/components/ProductCard/styles.css';
 
 @keyframes cio-spinner {
   0% {
