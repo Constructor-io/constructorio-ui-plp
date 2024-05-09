@@ -8,6 +8,8 @@ import { renderHookWithCioPlp } from './test-utils';
 describe('Testing Hook: useFilter', () => {
   let location;
   const mockLocation = new URL('https://example.com');
+  const testBrandA = 'UnderArmour';
+  const testBrandB = 'Constructor';
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
@@ -52,9 +54,9 @@ describe('Testing Hook: useFilter', () => {
         current: { applyFilter },
       } = result;
 
-      applyFilter('Brand', 'test-brand');
+      applyFilter('Brand', testBrandA);
 
-      expect(mockLocation.href.indexOf('test-brand')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
       expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
     });
   });
@@ -67,11 +69,10 @@ describe('Testing Hook: useFilter', () => {
         current: { applyFilter },
       } = result;
 
-      applyFilter('Brand', 'test-brand');
-      applyFilter('Brand', 'test-brand2');
+      applyFilter('Brand', [testBrandA, testBrandB]);
 
-      expect(mockLocation.href.indexOf('test-brand')).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('test-brand2')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf(testBrandB)).toBeGreaterThanOrEqual(0);
       expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
     });
   });
@@ -102,10 +103,10 @@ describe('Testing Hook: useFilter', () => {
         current: { applyFilter },
       } = result;
 
-      applyFilter('Brand', 'test-brand');
+      applyFilter('Brand', testBrandA);
       applyFilter('Brand', null);
 
-      expect(mockLocation.href.indexOf('test-brand')).toBe(-1);
+      expect(mockLocation.href.indexOf(testBrandA)).toBe(-1);
       expect(mockLocation.href.indexOf('Brand')).toBe(-1);
     });
   });
