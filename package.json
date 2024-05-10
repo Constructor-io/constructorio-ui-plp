@@ -16,8 +16,8 @@
   "module": "lib/mjs/index.js",
   "exports": {
     "./styles.css": {
-      "import": "./lib/styles.css",
-      "require": "./lib/styles.css"
+      "import": "./lib/mjs/styles.css",
+      "require": "./lib/cjs/styles.css"
     },
     "./constructorio-ui-plp-bundled": {
       "import": "./dist/constructorio-ui-plp-bundled.js",
@@ -43,7 +43,7 @@
   "scripts": {
     "lint": "eslint src --ext js,ts,jsx,tsx",
     "check-types": "npx tsc --noEmit",
-    "copy-styles": "cp src/styles.css lib/styles.css",
+    "copy-styles": "rsync -am --include='*/' --include='*.css' --exclude='*' src/ lib/mjs/ && rsync -am --include='*/' --include='*.css' --exclude='*' src/ lib/cjs/",
     "dev": "storybook dev -p 6006",
     "test": "jest",
     "storybook:ci": "storybook dev --ci --quiet -p 6006",
