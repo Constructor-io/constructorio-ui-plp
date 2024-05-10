@@ -131,10 +131,5 @@ export function getUrlFromState(
     }
   });
 
-  let groupPath = '';
-  if (state.filterValue) {
-    groupPath = `/${state.filterName}/${state.filterValue}`;
-  }
-
-  return `${baseUrl}${groupPath}?${params.toString()}`;
+  return `${baseUrl}?${params.toString()}`;
 }
