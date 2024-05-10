@@ -17,7 +17,7 @@ export default function useOnAddToCart(
   }
 
   return useCallback(
-    (event: React.MouseEvent, item: Item, revenue: number, selectedVariationId?: string) => {
+    (event: React.MouseEvent, item: Item, revenue?: number, selectedVariationId?: string) => {
       const { itemId, itemName, variationId } = item;
       const { query, section } = requestConfigs;
 

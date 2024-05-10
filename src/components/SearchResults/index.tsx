@@ -4,7 +4,7 @@ import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
-import Spinner from '../Spinner';
+import Spinner from '../Spinner/Spinner';
 import ZeroResults from './ZeroResults';
 
 /**

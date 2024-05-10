@@ -3,7 +3,6 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor } from '../../utils';
-import './ProductSwatch.css';
 
 type ProductSwatchProps = IncludeRenderProps<
   {
