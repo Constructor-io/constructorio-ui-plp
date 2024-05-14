@@ -1,10 +1,10 @@
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpBrowseResponse, PlpFacet, PlpSearchResponse } from '../types';
+import { PlpBrowseResponse, PlpFacet, PlpFilterValue, PlpSearchResponse } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
   facets: Array<PlpFacet>;
-  applyFilter: (facetName: string, facetValue: any) => void;
+  setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
 }
 
 export interface UseFilterProps {
@@ -25,20 +25,20 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs,
   } = useRequestConfigs();
 
-  const applyFilter = (facetGroupName: string, facetValue: any) => {
+  const setFilter = (filterName: string, filterValue: any) => {
     const newFilters = requestFilters || {};
 
-    newFilters[facetGroupName] = facetValue;
+    newFilters[filterName] = filterValue;
 
     // Remove filter entirely
-    if (facetValue === null) {
-      delete newFilters[facetGroupName];
+    if (filterValue === null) {
+      delete newFilters[filterName];
     }
     setRequestConfigs({ filters: newFilters });
   };
 
   return {
     facets,
-    applyFilter,
+    setFilter,
   };
 }

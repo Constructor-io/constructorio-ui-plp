@@ -304,6 +304,8 @@ export interface PlpMultipleFacet extends PlpFacet {
   options: Array<PlpFacetOption>;
 }
 
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
 

@@ -51,10 +51,10 @@ describe('Testing Hook: useFilter', () => {
 
     await waitFor(() => {
       const {
-        current: { applyFilter },
+        current: { setFilter },
       } = result;
 
-      applyFilter('Brand', testBrandA);
+      setFilter('Brand', testBrandA);
 
       expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
       expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
@@ -66,10 +66,10 @@ describe('Testing Hook: useFilter', () => {
 
     await waitFor(() => {
       const {
-        current: { applyFilter },
+        current: { setFilter },
       } = result;
 
-      applyFilter('Brand', [testBrandA, testBrandB]);
+      setFilter('Brand', [testBrandA, testBrandB]);
 
       expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
       expect(mockLocation.href.indexOf(testBrandB)).toBeGreaterThanOrEqual(0);
@@ -82,14 +82,14 @@ describe('Testing Hook: useFilter', () => {
 
     await waitFor(() => {
       const {
-        current: { applyFilter },
+        current: { setFilter },
       } = result;
 
-      applyFilter('Price', '2-150');
+      setFilter('Price', '2-150');
       expect(mockLocation.href.indexOf('Price')).toBeGreaterThanOrEqual(0);
       expect(mockLocation.href.indexOf('2-150')).toBeGreaterThanOrEqual(0);
 
-      applyFilter('Price', '100-150');
+      setFilter('Price', '100-150');
       expect(mockLocation.href.indexOf('2-150')).toBe(-1);
       expect(mockLocation.href.indexOf('100-150')).toBeGreaterThanOrEqual(0);
     });
@@ -100,11 +100,11 @@ describe('Testing Hook: useFilter', () => {
 
     await waitFor(() => {
       const {
-        current: { applyFilter },
+        current: { setFilter },
       } = result;
 
-      applyFilter('Brand', testBrandA);
-      applyFilter('Brand', null);
+      setFilter('Brand', testBrandA);
+      setFilter('Brand', null);
 
       expect(mockLocation.href.indexOf(testBrandA)).toBe(-1);
       expect(mockLocation.href.indexOf('Brand')).toBe(-1);

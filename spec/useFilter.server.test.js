@@ -42,11 +42,11 @@ describe('Testing Hook on the server: useFilter', () => {
 
   it('Should return a function to apply a filter', async () => {
     const {
-      result: { applyFilter },
+      result: { setFilter },
     } = renderHookServerSideWithCioPlp(() => useFilter({ response: searchResponse }), {
       apiKey: DEMO_API_KEY,
     });
 
-    expect(typeof applyFilter).toBe('function');
+    expect(typeof setFilter).toBe('function');
   });
 });
