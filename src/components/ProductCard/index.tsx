@@ -86,11 +86,14 @@ export default function ProductCard(props: ProductCardProps) {
           </div>
 
           <div className='cio-content'>
-            <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
+            {Number(itemPrice) >= 0 && (
+              <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
+            )}
             <div className='cio-item-name'>{itemName}</div>
             {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
             <div>
               <button
+                className='cio-add-to-cart-button'
                 type='button'
                 onClick={(e) =>
                   onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)

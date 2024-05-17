@@ -131,11 +131,5 @@ export function getUrlFromState(
     }
   });
 
-  let groupPath = '';
-  // There's a bug here
-  if (state.filterValue) {
-    groupPath = `/${state.filterName}/${state.filterValue}`;
-  }
-
-  return `${baseUrl}${groupPath}?${params.toString()}`;
+  return `${baseUrl}?${params.toString()}`;
 }
