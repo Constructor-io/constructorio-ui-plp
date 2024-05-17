@@ -61,6 +61,36 @@ describe('Testing Hook: useFilter', () => {
     });
   });
 
+  it('Should apply filter for number values correctly', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+
+    await waitFor(() => {
+      const {
+        current: { setFilter },
+      } = result;
+
+      setFilter('price', 23.2);
+
+      expect(mockLocation.href.indexOf('23.2')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf('price')).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('Should apply filter for boolean values correctly', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+
+    await waitFor(() => {
+      const {
+        current: { setFilter },
+      } = result;
+
+      setFilter('inStock', false);
+
+      expect(mockLocation.href.indexOf('false')).toBeGreaterThanOrEqual(0);
+      expect(mockLocation.href.indexOf('inStock')).toBeGreaterThanOrEqual(0);
+    });
+  });
+
   it('Should apply multiple-type filters correctly', async () => {
     const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
 

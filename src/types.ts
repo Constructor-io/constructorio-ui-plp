@@ -81,7 +81,7 @@ export interface RequestConfigs {
   filterValue?: string;
 
   // Others
-  filters?: Record<string, any>;
+  filters?: Record<string, PlpFilterValue>;
   sortOrder?: SortOrder;
   sortBy?: string;
   resultsPerPage?: number;
