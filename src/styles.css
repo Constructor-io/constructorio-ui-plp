@@ -2,6 +2,7 @@
 @import '../src/components/ProductSwatch/ProductSwatch.css';
 @import '../src/components/Pagination/pagination.css';
 @import '../src/components/Sort/sort.css';
+@import './components/Filters/index.css';
 
 @keyframes cio-spinner {
   0% {
@@ -29,4 +30,22 @@
 .cio-results .cio-product-card {
   flex: 0 0 calc(33.333% - 10px);
   text-align: center;
+}
+
+.cio-filter-multiple-options {
+  background-color: red;
+}
+
+.cio-collapsible-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease-out;
+}
+
+.cio-collapsible-wrapper.cio-collapsible-is-open {
+  grid-template-rows: 1fr;
+}
+
+.cio-collapsible-inner {
+  overflow: hidden;
 }

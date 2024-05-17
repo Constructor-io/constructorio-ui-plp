@@ -1,0 +1,824 @@
+[
+  {
+    "displayName": "Brand",
+    "name": "brand",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 84,
+        "displayName": "Etchell's Woman",
+        "value": "Etchell's Woman",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 73,
+        "displayName": "Etchell's",
+        "value": "Etchell's",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 30,
+        "displayName": "Etchell's Man",
+        "value": "Etchell's Man",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 17,
+        "displayName": "Etchell's Baby",
+        "value": "Etchell's Baby",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 4,
+        "displayName": "Mossimo",
+        "value": "Mossimo",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Graphite",
+        "value": "Graphite",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 40,
+        "displayName": "Fila",
+        "value": "Fila",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Pilbara",
+        "value": "Pilbara",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 36,
+        "displayName": "Etchell's Youth",
+        "value": "Etchell's Youth",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Etchell's Kids",
+        "value": "Etchell's Kids",
+        "data": null
+      },
+      {
+        "status": "",
+        "count": 5,
+        "displayName": "Etchell's Active",
+        "value": "Etchell's Active",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Etchell's essentials",
+        "value": "Etchell's essentials",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Etchell's Women",
+        "value": "Etchell's Women",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "Preview",
+        "value": "Preview",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 13,
+        "displayName": "Piping Hot",
+        "value": "Piping Hot",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Lonsdale London",
+        "value": "Lonsdale London",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Grosby",
+        "value": "Grosby",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Volley",
+        "value": "Volley",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Star Wars",
+        "value": "Star Wars",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Giaan by Spalding",
+        "value": "Giaan by Spalding",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Scholl",
+        "value": "Scholl",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Paw Patrol",
+        "value": "Paw Patrol",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Mockingbird",
+        "value": "Mockingbird",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Shopkins",
+        "value": "Shopkins",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Hot Options",
+        "value": "Hot Options",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Disney Frozen",
+        "value": "Disney Frozen",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Lily Loves",
+        "value": "Lily Loves",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Grosby Uggs",
+        "value": "Grosby Uggs",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Color",
+    "name": "color",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 155,
+        "displayName": "Black",
+        "value": "Black",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 45,
+        "displayName": "Blue",
+        "value": "Blue",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 54,
+        "displayName": "Brown",
+        "value": "Brown",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 47,
+        "displayName": "Neutral",
+        "value": "Neutral",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 33,
+        "displayName": "Grey",
+        "value": "Grey",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 43,
+        "displayName": "Pink",
+        "value": "Pink",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 49,
+        "displayName": "White",
+        "value": "White",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 14,
+        "displayName": "Gold",
+        "value": "Gold",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 23,
+        "displayName": "Green",
+        "value": "Green",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 15,
+        "displayName": "Multi",
+        "value": "Multi",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Tan",
+        "value": "Tan",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Silver",
+        "value": "Silver",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Red",
+        "value": "Red",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 8,
+        "displayName": "Yellow",
+        "value": "Yellow",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 7,
+        "displayName": "Purple",
+        "value": "Purple",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Orange",
+        "value": "Orange",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Natural",
+        "value": "Natural",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Metallic",
+        "value": "Metallic",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Cream",
+        "value": "Cream",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "No Colour",
+        "value": "No Colour",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Size",
+    "name": "size",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 241,
+        "displayName": "10",
+        "value": "10",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 239,
+        "displayName": "7",
+        "value": "7",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 238,
+        "displayName": "9",
+        "value": "9",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 234,
+        "displayName": "11",
+        "value": "11",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 234,
+        "displayName": "6",
+        "value": "6",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 232,
+        "displayName": "8",
+        "value": "8",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 103,
+        "displayName": "12",
+        "value": "12",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 76,
+        "displayName": "4",
+        "value": "4",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 73,
+        "displayName": "3",
+        "value": "3",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 70,
+        "displayName": "1",
+        "value": "1",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 69,
+        "displayName": "2",
+        "value": "2",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 77,
+        "displayName": "5",
+        "value": "5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 67,
+        "displayName": "13",
+        "value": "13",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "9/40",
+        "value": "9/40",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "8/39",
+        "value": "8/39",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "7/38",
+        "value": "7/38",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "6/37",
+        "value": "6/37",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "5/36",
+        "value": "5/36",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "11/41",
+        "value": "11/41",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 20,
+        "displayName": "10/41",
+        "value": "10/41",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 12,
+        "displayName": "M",
+        "value": "M",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 12,
+        "displayName": "L",
+        "value": "L",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 11,
+        "displayName": "S",
+        "value": "S",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "8.5",
+        "value": "8.5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "7.5",
+        "value": "7.5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "6.5",
+        "value": "6.5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 5,
+        "displayName": "9.5",
+        "value": "9.5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "XL",
+        "value": "XL",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "18",
+        "value": "18",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "16",
+        "value": "16",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "14",
+        "value": "14",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "6SNR",
+        "value": "6SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "5SNR",
+        "value": "5SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "4SNR",
+        "value": "4SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "3SNR",
+        "value": "3SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "2SNR",
+        "value": "2SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "1SNR",
+        "value": "1SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "13SNR",
+        "value": "13SNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "12JNR",
+        "value": "12JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "11JNR",
+        "value": "11JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "9-10",
+        "value": "9-10",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "7.5-8.5",
+        "value": "7.5-8.5",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "6-7",
+        "value": "6-7",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "0",
+        "value": "0",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "9JNR",
+        "value": "9JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "10JNR",
+        "value": "10JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "8JNR",
+        "value": "8JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "7JNR",
+        "value": "7JNR",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "6JNR",
+        "value": "6JNR",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Material",
+    "name": "material",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 13,
+        "displayName": "Leather",
+        "value": "Leather",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 5,
+        "displayName": "Recycled",
+        "value": "Recycled",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Genre",
+    "name": "genre",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 7,
+        "displayName": "Mens Shoes",
+        "value": "Mens Shoes",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 9,
+        "displayName": "First Walkers",
+        "value": "First Walkers",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 47,
+        "displayName": "Childrens Footwear",
+        "value": "Childrens Footwear",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Womens Shoes",
+        "value": "Womens Shoes",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Mens Footwear",
+        "value": "Mens Footwear",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Womens Footwear",
+        "value": "Womens Footwear",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Tags",
+    "name": "tags",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 62,
+        "displayName": "New Arrivals",
+        "value": "New Arrivals",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Type",
+    "name": "type",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Boys",
+        "value": "Boys",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Price",
+    "name": "price",
+    "type": "range",
+    "data": {},
+    "hidden": false,
+    "min": 1,
+    "max": 99,
+    "status": {}
+  }
+]

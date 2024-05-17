@@ -30,7 +30,6 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
     });
 
     setSelectedOptionMap(newSelectedOptionsMap);
-    console.log(newSelectedOptionsMap);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facet]);
 

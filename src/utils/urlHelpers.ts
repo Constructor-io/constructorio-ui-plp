@@ -132,6 +132,7 @@ export function getUrlFromState(
   });
 
   let groupPath = '';
+  // There's a bug here
   if (state.filterValue) {
     groupPath = `/${state.filterName}/${state.filterValue}`;
   }

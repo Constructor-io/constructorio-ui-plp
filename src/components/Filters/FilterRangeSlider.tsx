@@ -49,7 +49,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   return (
     <div className={`cio-collapsible-wrapper${!isCollapsed ? ' cio-collapsible-is-open' : ''}`}>
-      <ul className='cio-filter-multiple-options cio-collapsible-inner'>
+      <ul className='cio-filter-ranged-slider cio-collapsible-inner'>
         <div className='cio-slider-inputs'>
           <span>
             <span className='cio-slider-input-prefix'>from </span>
@@ -74,9 +74,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             />
           </span>
         </div>
+
         <div className='cio-doubly-ended-slider'>
           <input
-            className='min-slider'
+            className='cio-min-slider'
             type='range'
             step={sliderStep}
             min={facet.min}
@@ -85,7 +86,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             onChange={onMinSliderMove}
           />
           <input
-            className='max-slider'
+            className='cio-max-slider'
             type='range'
             min={facet.min}
             max={facet.max}

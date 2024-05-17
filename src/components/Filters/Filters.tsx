@@ -13,14 +13,14 @@ type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
 
 export default function Filters(props: FiltersWithRenderProps) {
   const { children, initialNumOptions, ...useFiltersProps } = props;
-  const { facets, applyFilter } = useFilter(useFiltersProps);
+  const { facets, setFilter } = useFilter(useFiltersProps);
 
   return (
     <>
       {typeof children === 'function' ? (
         children({
           facets,
-          applyFilter,
+          setFilter,
         })
       ) : (
         <div className='cio-filters'>
@@ -28,7 +28,7 @@ export default function Filters(props: FiltersWithRenderProps) {
             <FilterGroup
               facet={facet}
               initialNumOptions={initialNumOptions}
-              applyFilter={applyFilter}
+              setFilter={setFilter}
               key={facet.name}
             />
           ))}

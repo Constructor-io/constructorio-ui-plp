@@ -281,8 +281,8 @@ export interface PlpFacetOption {
   status: string;
   count: number;
   displayName: string;
-  value: PlpFacetValue;
-  data: any;
+  value: string;
+  data: object;
 }
 
 export interface PlpFacet {

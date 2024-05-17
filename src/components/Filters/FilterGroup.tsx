@@ -5,21 +5,21 @@ import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 // import { UseFilterReturn } from '../../hooks/useFilter';
 // Mock
-type UseFilterReturn = { applyFilter: (facetName: string, facetValue: any) => void };
+type UseFilterReturn = { setFilter: (facetName: string, facetValue: any) => void };
 
 export interface FilterGroupProps {
   facet: PlpFacet;
-  applyFilter: UseFilterReturn['applyFilter'];
+  setFilter: UseFilterReturn['setFilter'];
   initialNumOptions?: number;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
-  const { facet, applyFilter, initialNumOptions = 10 } = props;
+  const { facet, setFilter, initialNumOptions = 10 } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: any) => {
-    applyFilter(facetName, value);
+    setFilter(facetName, value);
   };
 
   return (
