@@ -5,6 +5,9 @@ import {
   RequestQueryParams,
   PlpSearchRedirectResponse,
   PlpSearchResponse,
+  PlpFacet,
+  PlpRangeFacet,
+  PlpMultipleFacet,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -120,4 +123,12 @@ export function getBrowseParamsFromRequestConfigs(requestConfigs: RequestConfigs
   const { query, filterValue = '', filterName = '', ...queryParams } = requestConfigs;
 
   return { filterName, filterValue, queryParams: removeNullValuesFromObject(queryParams) };
+}
+
+export function isRangeFacet(facet: PlpFacet): facet is PlpRangeFacet {
+  return facet.type === 'range';
+}
+
+export function isMultipleOrBucketedFacet(facet: PlpFacet): facet is PlpMultipleFacet {
+  return facet.type === 'multiple';
 }

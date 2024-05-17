@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
 import {
   ConstructorClientOptions,
-  Facet,
   Group as ApiGroup,
   Result,
   SearchResponse,
@@ -82,7 +81,7 @@ export interface RequestConfigs {
   filterValue?: string;
 
   // Others
-  filters?: Record<string, any>;
+  filters?: Record<string, PlpFilterValue>;
   sortOrder?: SortOrder;
   sortBy?: string;
   resultsPerPage?: number;
@@ -174,7 +173,7 @@ export interface PlpSearchResponse {
   totalNumResults: number;
   numResultsPerPage: number;
   results: Array<Item>;
-  facets: Array<Facet>;
+  facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
   sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
@@ -187,7 +186,7 @@ export interface PlpBrowseResponse {
   totalNumResults: number;
   numResultsPerPage: number;
   results: Array<Item>;
-  facets: Array<Facet>;
+  facets: Array<PlpFacet>;
   groups: Array<ApiGroup>;
   sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
@@ -276,6 +275,37 @@ export type UseProductInfoProps = {
 };
 
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
+
+export interface PlpFacetOption {
+  status: string;
+  count: number;
+  displayName: string;
+  value: string;
+  data: any;
+}
+
+export interface PlpFacet {
+  displayName: string;
+  name: string;
+  type: 'multiple' | 'range' | 'single' | 'hierarchical';
+  data: any;
+  hidden: boolean;
+}
+
+export interface PlpRangeFacet extends PlpFacet {
+  type: 'range';
+  min: number;
+  max: number;
+  status: any;
+}
+
+export interface PlpMultipleFacet extends PlpFacet {
+  type: 'multiple';
+  options: Array<PlpFacetOption>;
+}
+
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
 
