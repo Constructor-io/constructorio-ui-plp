@@ -144,52 +144,54 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   return (
     <div className={`cio-collapsible-wrapper${!isCollapsed ? ' cio-collapsible-is-open' : ''}`}>
-      <div className='cio-filter-ranged-slider cio-collapsible-inner'>
-        <div className='cio-slider-inputs'>
-          <span className='cio-slider-input'>
-            <span className='cio-slider-input-prefix'>from </span>
+      <div className='cio-collapsible-inner'>
+        <div className='cio-filter-ranged-slider'>
+          <div className='cio-slider-inputs'>
+            <span className='cio-slider-input'>
+              <span className='cio-slider-input-prefix'>from </span>
+              <input
+                type='number'
+                value={inputMinValue}
+                onChange={onMinInputValueChange}
+                min={facet.min}
+                max={maxValue}
+                step={sliderStep}
+              />
+            </span>
+            <div className='cio-slider-input'>
+              <span className='cio-slider-input-prefix'>to </span>
+              <input
+                type='number'
+                value={inputMaxValue}
+                onChange={onMaxInputValueChange}
+                min={minValue}
+                max={facet.max}
+                step={sliderStep}
+              />
+            </div>
+          </div>
+
+          <div className='cio-doubly-ended-slider' ref={visibleTrack}>
+            <div className='cio-slider-track-selected' style={selectedTrackStyles} />
             <input
-              type='number'
-              value={inputMinValue}
-              onChange={onMinInputValueChange}
+              className='cio-min-slider'
+              type='range'
+              step={sliderStep}
               min={facet.min}
-              max={maxValue}
-              step={sliderStep}
-            />
-          </span>
-          <div className='cio-slider-input'>
-            <span className='cio-slider-input-prefix'>to </span>
-            <input
-              type='number'
-              value={inputMaxValue}
-              onChange={onMaxInputValueChange}
-              min={minValue}
               max={facet.max}
+              value={minValue}
+              onChange={onMinSliderMove}
+            />
+            <input
+              className='cio-max-slider'
+              type='range'
               step={sliderStep}
+              min={facet.min}
+              max={facet.max}
+              value={maxValue}
+              onChange={onMaxSliderMove}
             />
           </div>
-        </div>
-
-        <div className='cio-doubly-ended-slider' ref={visibleTrack}>
-          <div className='cio-slider-track-selected' style={selectedTrackStyles} />
-          <input
-            className='cio-min-slider'
-            type='range'
-            step={sliderStep}
-            min={facet.min}
-            max={facet.max}
-            value={minValue}
-            onChange={onMinSliderMove}
-          />
-          <input
-            className='cio-max-slider'
-            type='range'
-            step={sliderStep}
-            min={facet.min}
-            max={facet.max}
-            value={maxValue}
-            onChange={onMaxSliderMove}
-          />
         </div>
       </div>
     </div>

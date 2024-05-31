@@ -32,10 +32,11 @@
   text-align: center;
 }
 
-.cio-filter-multiple-options {
-  background-color: red;
-}
 
+
+/** The following styles facilitates the creation of a collapsible component. 
+  * Simply add the two divs with the following classes, and toggle `cio-collapsible-is-open`.
+  */
 .cio-collapsible-wrapper {
   display: grid;
   grid-template-rows: 0fr;

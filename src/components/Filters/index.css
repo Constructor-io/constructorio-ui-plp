@@ -1,9 +1,3 @@
-.cio-filter-multiple-options {
-  overflow: hidden;
-  /* remove */
-  transition: max-height 2s ease-out;
-}
-
 .cio-filter-ranged-slider {
   --btn-radius-inner: 8px;
   --btn-radius-total: 20px;
@@ -12,10 +6,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
-  height: 100px;
+  padding: 0 20px 32px 20px;
   width: auto;
-  overflow: visible;
 }
 
 .cio-slider-inputs {
