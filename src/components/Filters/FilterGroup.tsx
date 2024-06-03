@@ -3,9 +3,7 @@ import type { PlpFacet } from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
-// import { UseFilterReturn } from '../../hooks/useFilter';
-// Mock
-type UseFilterReturn = { setFilter: (facetName: string, facetValue: any) => void };
+import { UseFilterReturn } from '../../hooks/useFilter';
 
 export interface FilterGroupProps {
   facet: PlpFacet;

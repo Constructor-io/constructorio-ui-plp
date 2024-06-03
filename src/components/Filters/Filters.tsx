@@ -2,8 +2,6 @@
 import React from 'react';
 import { IncludeRenderProps } from '../../types';
 import FilterGroup from './FilterGroup';
-
-// Mocking the Hooks implementation
 import useFilter, { UseFilterProps, UseFilterReturn } from '../../hooks/useFilter';
 
 export type FiltersProps = UseFilterProps & {

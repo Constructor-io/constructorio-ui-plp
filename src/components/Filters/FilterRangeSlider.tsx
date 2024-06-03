@@ -137,7 +137,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
     // Unmount
     return () => {
-      localRef.removeEventListener('click', onTrackClick);
+      localRef?.removeEventListener('click', onTrackClick);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleTrack]);
