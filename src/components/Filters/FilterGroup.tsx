@@ -23,14 +23,11 @@ export default function FilterGroup(props: FilterGroupProps) {
   };
 
   return (
-    <li className='filter-group'>
-      <h3 className='cio-filter-header'>
-        <button onClick={toggleIsCollapsed} type='button'>
-          <span>{isCollapsed ? '>' : '='}</span>
-          &nbsp;
-          <span>{facet.displayName}</span>
-        </button>
-      </h3>
+    <li className='cio-filter-group'>
+      <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
+        {facet.displayName}
+        <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
+      </button>
 
       {isMultipleOrBucketedFacet(facet) && (
         <FilterOptionsList

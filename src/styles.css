@@ -32,8 +32,6 @@
   text-align: center;
 }
 
-
-
 /** The following styles facilitates the creation of a collapsible component. 
   * Simply add the two divs with the following classes, and toggle `cio-collapsible-is-open`.
   */
@@ -49,4 +47,24 @@
 
 .cio-collapsible-inner {
   overflow: hidden;
+}
+
+.cio-arrow {
+  border: 1px solid #00000099;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  transition: transform 0.2s ease-in;
+}
+
+.cio-arrow-up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  margin-bottom: -6px;
+}
+
+.cio-arrow-down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-top: -6px;
 }

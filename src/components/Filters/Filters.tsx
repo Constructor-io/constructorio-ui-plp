@@ -21,6 +21,7 @@ export default function Filters(props: FiltersWithRenderProps) {
         children({
           facets,
           setFilter,
+          initialNumOptions,
         })
       ) : (
         <div className='cio-filters'>
