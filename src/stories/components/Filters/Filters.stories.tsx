@@ -3,8 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
-import { transformSearchResponse } from '../../../utils/transformers';
-import mockSearchResponse from '../../../../spec/local_examples/apiSearchResponse.json';
+import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
 import { PlpSearchResponse } from '../../../types';
 import '../../../styles.css';
 
@@ -31,7 +30,6 @@ function PrimaryStory({ args }: any) {
         },
         getUrl: () => currentUrl,
       }}>
-      <div>{decodeURI(currentUrl)}</div>
       <Filters {...args} />
     </CioPlp>
   );
@@ -40,7 +38,7 @@ function PrimaryStory({ args }: any) {
 export const Primary: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    response: transformSearchResponse(mockSearchResponse as any) as PlpSearchResponse,
+    response: { facets: mockTransformedFacets } as unknown as PlpSearchResponse,
   },
 };
 

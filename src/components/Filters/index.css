@@ -27,3 +27,11 @@
   border-bottom: 1px solid #E1E1E1;
   margin-bottom: 12px;
 }
+
+.cio-see-all {
+  background: none;
+  border: none;
+  text-decoration-style: dotted;
+  text-decoration-line: underline;
+  cursor: pointer;
+}

@@ -6,6 +6,8 @@ import CioPlp from '../src/components/CioPlp';
 import Filters from '../src/components/Filters';
 import mockTransformedFacets from './local_examples/sampleFacets.json';
 
+const mockSearchOrBrowseResponse = { facets: mockTransformedFacets };
+
 describe('Testing Component on the server: Filters', () => {
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
@@ -17,14 +19,14 @@ describe('Testing Component on the server: Filters', () => {
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
-  // it('Should throw error if used outside the CioPlp', () => {
-  //   expect(() => renderToString(<Filters facets={mockTransformedFacets} />)).toThrow();
-  // });
+  it('Should throw error if used outside the CioPlp', () => {
+    expect(() => renderToString(<Filters facets={mockTransformedFacets} />)).toThrow();
+  });
 
   it('Should render sort options based on search or browse response', async () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters facets={mockTransformedFacets} />
+        <Filters response={mockSearchOrBrowseResponse} />
       </CioPlp>,
     );
 
@@ -37,7 +39,7 @@ describe('Testing Component on the server: Filters', () => {
     const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
 
     const filterProps = {
-      facets: mockTransformedFacets,
+      response: mockSearchOrBrowseResponse,
       children: mockChildren,
     };
 

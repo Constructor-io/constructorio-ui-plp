@@ -6,6 +6,8 @@ import CioPlp from '../src/components/CioPlp';
 import Filters from '../src/components/Filters';
 import mockTransformedFacets from './local_examples/sampleFacets.json';
 
+const mockSearchOrBrowseResponse = { facets: mockTransformedFacets };
+
 describe('Testing Component: Sort', () => {
   let location;
   const mockLocation = new URL('https://example.com');
@@ -26,14 +28,14 @@ describe('Testing Component: Sort', () => {
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
-  // it('Should throw error if used outside the CioPlp', () => {
-  //   expect(() => render(<Filters facets={mockTransformedFacets} />)).toThrow();
-  // });
+  it('Should throw error if used outside the CioPlp', () => {
+    expect(() => render(<Filters facets={mockTransformedFacets} />)).toThrow();
+  });
 
   it('Should render filters based on list of facets', async () => {
     const { getByText, container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters facets={mockTransformedFacets} />
+        <Filters response={mockSearchOrBrowseResponse} />
       </CioPlp>,
     );
 
@@ -57,7 +59,7 @@ describe('Testing Component: Sort', () => {
     const initialNumOptions = 2;
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters facets={mockTransformedFacets} initialNumOptions={initialNumOptions} />
+        <Filters response={mockSearchOrBrowseResponse} initialNumOptions={initialNumOptions} />
       </CioPlp>,
     );
 
@@ -77,7 +79,7 @@ describe('Testing Component: Sort', () => {
   it('Should mark options if selected', async () => {
     const { container, getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters facets={mockTransformedFacets} />
+        <Filters response={mockSearchOrBrowseResponse} />
       </CioPlp>,
     );
 
@@ -96,7 +98,7 @@ describe('Testing Component: Sort', () => {
     const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
 
     const filtersProps = {
-      facets: mockTransformedFacets,
+      response: mockSearchOrBrowseResponse,
       children: mockChildren,
     };
 

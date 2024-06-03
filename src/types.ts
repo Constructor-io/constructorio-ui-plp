@@ -274,44 +274,7 @@ export type UseProductInfoProps = {
   item: Item;
 };
 
-export type PlpFacetValue = string | number | boolean;
-
-export interface PlpFacetOption {
-  status: string;
-  count: number;
-  displayName: string;
-  value: string;
-  data: object;
-}
-
-export interface PlpFacet {
-  displayName: string;
-  name: string;
-  type: 'multiple' | 'range' | 'single' | 'hierarchical';
-  hidden: boolean;
-}
-
-export interface PlpRangeFacet extends PlpFacet {
-  type: 'range';
-  min: number;
-  max: number;
-  status: any;
-}
-
-export interface PlpMultipleFacet extends PlpFacet {
-  type: 'multiple';
-  options: Array<PlpFacetOption>;
-}
-
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
-
-export interface PlpFacetOption {
-  status: string;
-  count: number;
-  displayName: string;
-  value: string;
-  data: any;
-}
 
 export interface PlpFacet {
   displayName: string;
@@ -334,6 +297,14 @@ export interface PlpMultipleFacet extends PlpFacet {
 }
 
 export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+
+export interface PlpFacetOption {
+  status: string;
+  count: number;
+  displayName: string;
+  value: string;
+  data: object;
+}
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
