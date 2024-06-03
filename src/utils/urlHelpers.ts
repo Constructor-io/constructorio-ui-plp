@@ -47,10 +47,10 @@ export function getFilterParamsFromState(
     Object.entries(filters)?.forEach(([filterName, filterValues]) => {
       if (Array.isArray(filterValues)) {
         filterValues.forEach((filterValue) => {
-          urlParams.append(`filters[${filterName}]`, filterValue);
+          urlParams.append(`filters[${filterName}]`, String(filterValue));
         });
       } else {
-        urlParams.append(`filters[${filterName}]`, filterValues);
+        urlParams.append(`filters[${filterName}]`, String(filterValues));
       }
     });
   }
@@ -131,11 +131,5 @@ export function getUrlFromState(
     }
   });
 
-  let groupPath = '';
-  // There's a bug here
-  if (state.filterValue) {
-    groupPath = `/${state.filterName}/${state.filterValue}`;
-  }
-
-  return `${baseUrl}${groupPath}?${params.toString()}`;
+  return `${baseUrl}?${params.toString()}`;
 }

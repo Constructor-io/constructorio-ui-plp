@@ -3,7 +3,6 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor } from '../../utils';
-import './ProductSwatch.css';
 
 type ProductSwatchProps = IncludeRenderProps<
   {
@@ -43,22 +42,32 @@ export default function ProductSwatch(props: ProductSwatchProps) {
       ) : (
         <div>
           <ul className='cio-swatch-container'>
-            {swatchList?.map((swatch) => (
-              <button
-                type='button'
-                key={swatch.variationId}
-                data-cnstrc-variation-id={swatch.variationId}
-                className={`cio-swatch-button cio-swatch-item ${
-                  selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
-                }`}
-                onClick={(e) => swatchClickHandler(e, swatch)}
-                style={{
-                  background: isHexColor(swatch?.swatchPreview)
-                    ? swatch?.swatchPreview
-                    : `url(${swatch?.swatchPreview})`,
-                }}
-              />
-            ))}
+            {swatchList?.map((swatch) => {
+              const isSelected = selectedVariation?.variationId === swatch.variationId;
+              const color = isHexColor(swatch?.swatchPreview)
+                ? swatch?.swatchPreview
+                : `url(${swatch?.swatchPreview})`;
+
+              return (
+                <button
+                  type='button'
+                  key={swatch.variationId}
+                  data-cnstrc-variation-id={swatch.variationId}
+                  className='cio-swatch-button cio-swatch-item'
+                  onClick={(e) => swatchClickHandler(e, swatch)}
+                  style={{
+                    background: color,
+                  }}>
+                  {isSelected && (
+                    <div
+                      data-cnstrc-variation-id={swatch.variationId}
+                      className='cio-swatch-selected'
+                      style={{ outline: `3px solid ${color}` }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </ul>
         </div>
       )}

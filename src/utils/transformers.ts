@@ -4,6 +4,8 @@ import {
   SearchResponse,
   SearchResponseType,
   SortOption,
+  Facet,
+  FacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PlpSearchResponse,
@@ -13,7 +15,9 @@ import {
   PlpSearchRedirectResponse,
   PlpSortOption,
   Variation,
+  PlpFacet,
 } from '../types';
+import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
 
 function isAPIRedirectSearchResponse(
   response: Partial<SearchResponseType | Redirect>,
@@ -88,6 +92,47 @@ export function transformResultItem(item: ApiItem, includeRaw = true): Item {
   return transformedItem;
 }
 
+export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
+  return facets.map((facet) => {
+    const {
+      display_name: displayName,
+      name,
+      type,
+      data,
+      hidden,
+      min,
+      max,
+      status,
+      options,
+    } = facet;
+
+    const transformedFacet = {
+      displayName,
+      name,
+      type,
+      data,
+      hidden,
+    };
+
+    if (isRangeFacet(transformedFacet)) {
+      transformedFacet.min = min;
+      transformedFacet.max = max;
+      transformedFacet.status = status;
+    }
+
+    if (isMultipleOrBucketedFacet(transformedFacet)) {
+      transformedFacet.options = options.map((option: FacetOption) => ({
+        status: option.status,
+        count: option.count,
+        displayName: option.display_name,
+        value: option.value,
+        data: option.data,
+      }));
+    }
+
+    return transformedFacet;
+  });
+}
 export function transformResponseSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
   if (options) {
     return options.map(
@@ -122,7 +167,7 @@ export function transformSearchResponse(
     resultId: res.result_id,
     totalNumResults: response.total_num_results,
     results: response.results!.map((result) => transformResultItem(result, false)),
-    facets: response.facets,
+    facets: transformResponseFacets(res.response!.facets),
     groups: response.groups,
     sortOptions: transformResponseSortOptions(response.sort_options),
     refinedContent: response.refined_content,
@@ -136,7 +181,7 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse) {
     totalNumResults: res.response!.total_num_results,
     numResultsPerPage: res.request?.num_results_per_page,
     results: res.response!.results!.map((result) => transformResultItem(result, false)),
-    facets: res.response!.facets,
+    facets: transformResponseFacets(res.response!.facets as any),
     groups: res.response!.groups,
     sortOptions: transformResponseSortOptions(res.response!.sort_options),
     refinedContent: res.response!.refined_content,

@@ -72,17 +72,6 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(params.has(testRequestState.filterName)).toBe(false);
     expect(params.has(testRequestState.filterValue)).toBe(false);
   });
-
-  test('Should encode filterName and filterValue as part of the path', () => {
-    const urlString = getUrlFromState(testRequestState as RequestConfigs, {
-      baseUrl: 'https://www.example.com/a/random/path',
-    });
-    const url = new URL(urlString);
-    const paths = url.pathname.split('/');
-
-    expect(paths.indexOf(testRequestState.filterName)).not.toBe(-1);
-    expect(paths.indexOf(testRequestState.filterValue)).not.toBe(-1);
-  });
 });
 
 describe('Testing Default UrlHelpers: getStateFromUrl', () => {

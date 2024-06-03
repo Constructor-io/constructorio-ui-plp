@@ -1,16 +1,44 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { PlpFacet } from '../types';
-import SampleFacets from '../../spec/local_examples/sampleFacets.json';
+import { useCioPlpContext } from './useCioPlpContext';
+import { PlpBrowseResponse, PlpFacet, PlpFilterValue, PlpSearchResponse } from '../types';
+import useRequestConfigs from './useRequestConfigs';
 
-export type UseFilterProps = any;
-export type UseFilterReturn = any;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function useFilter(props: any) {
+export interface UseFilterReturn {
+  facets: Array<PlpFacet>;
+  setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
+}
+
+export interface UseFilterProps {
+  response: PlpBrowseResponse | PlpSearchResponse;
+}
+
+export default function useFilter(props: UseFilterProps): UseFilterReturn {
+  const { response: searchOrBrowseResponse } = props;
+  const { facets } = searchOrBrowseResponse;
+  const contextValue = useCioPlpContext();
+
+  if (!contextValue) {
+    throw new Error('useFilter must be used within a component that is a child of <CioPlp />');
+  }
+
+  const {
+    requestConfigs: { filters: requestFilters },
+    setRequestConfigs,
+  } = useRequestConfigs();
+
+  const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
+    const newFilters = requestFilters || {};
+
+    newFilters[filterName] = filterValue;
+
+    // Remove filter entirely
+    if (filterValue === null) {
+      delete newFilters[filterName];
+    }
+    setRequestConfigs({ filters: newFilters });
+  };
+
   return {
-    facets: SampleFacets as Array<PlpFacet>,
-    setFilter: (
-      facetName: string,
-      value: string | number | boolean | Array<string | number | boolean>,
-    ) => {},
+    facets,
+    setFilter,
   };
 }
