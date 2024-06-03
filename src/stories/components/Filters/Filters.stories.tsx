@@ -13,6 +13,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    initialNumOptions: {
+      table: {
+        defaultValue: { summary: 10 },
+      },
+    },
+  },
 } satisfies Meta<typeof Filters>;
 
 export default meta;

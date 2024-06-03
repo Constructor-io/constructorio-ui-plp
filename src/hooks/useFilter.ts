@@ -8,6 +8,9 @@ export interface UseFilterReturn {
 }
 
 export interface UseFilterProps {
+  /**
+   * Used to build and render filters dynamically
+   */
   response: PlpBrowseResponse | PlpSearchResponse;
 }
 

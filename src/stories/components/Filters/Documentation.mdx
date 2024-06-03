@@ -1,0 +1,52 @@
+import { Meta, Canvas, Markdown } from '@storybook/blocks';
+import * as FiltersStories from './Filters.stories';
+/* This "?raw" import raw text form the md file */
+
+<Meta of={FiltersStories} />
+
+## `Filters`
+The Filters component is a dynamic component.
+It is responsible for displaying the filters available to the users. 
+
+**Dynamic Options Rendering:**
+- Automatically updates and displays selected filters based on user requests.
+
+### Basic Example
+```jsx
+  import React from 'react';
+  import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp';
+
+  const apiKey = 'MY_API_KEY';
+
+  function MyComponent() {
+
+    return (
+      <CioPlp apiKey={MY_API_KEY}>
+        <Filters />
+      </CioPlp>
+    );
+  }
+```
+
+<Canvas of={FiltersStories.Primary} />
+
+### Using RenderProps
+To override the default rendering of the filter component, you may pass a Render Props function to the component.
+
+```jsx
+import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
+
+const apiKey = 'MY_API_KEY';
+
+function myApp() {
+  ...
+
+  return (
+    <CioPlp apiKey={MY_API_KEY}>
+      <Filters />
+        {({facets, setFilter}) => facets.map((facetGroup) => <li>{facetGroup.displayName}</li>)}
+      </Filters>
+    </CioPlp>
+  )
+}
+```

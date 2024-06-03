@@ -7,6 +7,10 @@ import FilterGroup from './FilterGroup';
 import useFilter, { UseFilterProps, UseFilterReturn } from '../../hooks/useFilter';
 
 export type FiltersProps = UseFilterProps & {
+  /**
+   * The number of options to render for non-ranged facets.
+   * The remaining options will be hidden under a "Show All" button
+   */
   initialNumOptions?: number;
 };
 type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
