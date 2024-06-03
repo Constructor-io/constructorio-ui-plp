@@ -56,7 +56,7 @@
         "data": {}
       },
       {
-        "status": "",
+        "status": "selected",
         "count": 14,
         "displayName": "Gold",
         "value": "Gold",
