@@ -12,7 +12,7 @@ export interface FilterRangeSliderProps {
 /**
  * For consistency. Utility Function to extract value from an event.
  * @param e Change Event on an input element.
- * @returns Parsed float value of the new input value
+ * @returns Parsed float value of the new input value or NaN if empty
  */
 function getValueFromOnChangeEvent(e: React.ChangeEvent<HTMLInputElement>) {
   return parseFloat(e?.target?.value);
@@ -28,6 +28,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const [inputMinValue, setInputMinValue] = useState(facet.min);
   const [inputMaxValue, setInputMaxValue] = useState(facet.max);
   const [filterRange, setFilterRange] = useState('');
+  const [isSliderMoving, setIsSliderMoving] = useState(false);
   const debouncedFilterRange = useDebounce<string>(filterRange, 500);
 
   const [isModified, setIsModified] = useState(false);
@@ -53,6 +54,14 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       setInputMaxValue(sliderValue);
       setIsModified(true);
     }
+  };
+
+  const onSliderMoveStart = () => {
+    setIsSliderMoving(true);
+  };
+
+  const onSliderMoveEnd = () => {
+    setIsSliderMoving(false);
   };
 
   const onMaxInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,10 +113,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       setMinValue(facet.status.min);
       setMaxValue(facet.status.max);
       setFilterRange(`${facet.status.min}-${facet.status.max}`);
-    } else {
+    } else if (!isSliderMoving) {
       setFilterRange(`${minValue}-${maxValue}`);
     }
-  }, [minValue, maxValue, facet]);
+  }, [minValue, maxValue, facet, isSliderMoving]);
 
   // Update selected track styles
   useEffect(() => {
@@ -181,6 +190,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               max={facet.max}
               value={minValue}
               onChange={onMinSliderMove}
+              onMouseDown={onSliderMoveStart}
+              onMouseUp={onSliderMoveEnd}
             />
             <input
               className='cio-max-slider'
@@ -190,6 +201,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               max={facet.max}
               value={maxValue}
               onChange={onMaxSliderMove}
+              onMouseDown={onSliderMoveStart}
+              onMouseUp={onSliderMoveEnd}
             />
           </div>
         </div>
