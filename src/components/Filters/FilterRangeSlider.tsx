@@ -15,7 +15,12 @@ export interface FilterRangeSliderProps {
  * @returns Parsed float value of the new input value or NaN if empty
  */
 function getValueFromOnChangeEvent(e: React.ChangeEvent<HTMLInputElement>) {
-  return parseFloat(e?.target?.value);
+  const parsedValue = parseFloat(e?.target?.value);
+
+  if (Number.isNaN(parsedValue)) {
+    return '';
+  }
+  return parsedValue;
 }
 
 export default function FilterRangeSlider(props: FilterRangeSliderProps) {
@@ -25,16 +30,17 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   const [minValue, setMinValue] = useState(facet.min);
   const [maxValue, setMaxValue] = useState(facet.max);
-  const [inputMinValue, setInputMinValue] = useState(facet.min);
-  const [inputMaxValue, setInputMaxValue] = useState(facet.max);
+  const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.min);
+  const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.max);
   const [filterRange, setFilterRange] = useState('');
-  const [isSliderMoving, setIsSliderMoving] = useState(false);
-  const debouncedFilterRange = useDebounce<string>(filterRange, 500);
+  const debouncedFilterRange = useDebounce<string>(filterRange, 1000);
 
   const [isModified, setIsModified] = useState(false);
 
-  const isValidMinValue = (value: number) => value < maxValue && value >= facet.min;
-  const isValidMaxValue = (value: number) => value > minValue && value <= facet.max;
+  const isValidMinValue = (value: number | string): value is number =>
+    typeof value !== 'string' && value < maxValue && value >= facet.min;
+  const isValidMaxValue = (value: number | string): value is number =>
+    typeof value !== 'string' && value > minValue && value <= facet.max;
 
   const onMinSliderMove = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sliderValue = getValueFromOnChangeEvent(event);
@@ -56,12 +62,12 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
-  const onSliderMoveStart = () => {
-    setIsSliderMoving(true);
-  };
-
   const onSliderMoveEnd = () => {
-    setIsSliderMoving(false);
+    const newRange = `${minValue}-${maxValue}`;
+
+    setFilterRange(newRange);
+    updateFilterRange(newRange);
+    setIsModified(false);
   };
 
   const onMaxInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,26 +103,37 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     const distMaxToClicked = Math.abs(selectedValue - maxValue);
 
     if (distMinToClicked <= distMaxToClicked) {
+      const newRange = `${selectedValue}-${maxValue}`;
+
       setMinValue(selectedValue);
       setInputMinValue(selectedValue);
-      setIsModified(true);
+      setFilterRange(newRange);
+      updateFilterRange(newRange);
+      setIsModified(false);
     } else {
+      const newRange = `${minValue}-${selectedValue}`;
+
       setMaxValue(selectedValue);
       setInputMaxValue(selectedValue);
-      setIsModified(true);
+      setFilterRange(newRange);
+      updateFilterRange(newRange);
+      setIsModified(false);
     }
   };
 
   // Update internal state
   useEffect(() => {
-    if (facet.status.min) {
+    if (facet.status.min && !isModified) {
+      // Initial state
       setMinValue(facet.status.min);
       setMaxValue(facet.status.max);
       setFilterRange(`${facet.status.min}-${facet.status.max}`);
-    } else if (!isSliderMoving) {
+    } else if (isModified) {
+      // Future updates
       setFilterRange(`${minValue}-${maxValue}`);
     }
-  }, [minValue, maxValue, facet, isSliderMoving]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minValue, maxValue, facet]);
 
   // Update selected track styles
   useEffect(() => {
@@ -126,7 +143,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
   }, [minValue, maxValue, facet]);
 
-  // Call the callback on the new range
+  // Debounced callback for Slider Inputs
   useEffect(() => {
     if (isModified) {
       updateFilterRange(debouncedFilterRange);
@@ -190,7 +207,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               max={facet.max}
               value={minValue}
               onChange={onMinSliderMove}
-              onMouseDown={onSliderMoveStart}
               onMouseUp={onSliderMoveEnd}
             />
             <input
@@ -201,7 +217,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               max={facet.max}
               value={maxValue}
               onChange={onMaxSliderMove}
-              onMouseDown={onSliderMoveStart}
               onMouseUp={onSliderMoveEnd}
             />
           </div>
