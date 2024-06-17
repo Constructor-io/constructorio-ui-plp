@@ -52,7 +52,7 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
               <input
                 type='checkbox'
                 id={option.value}
-                value={`${option.displayName}`}
+                value={option.displayName}
                 checked={selectedOptionMap[option.value]}
                 onClick={() => onOptionSelect(option.value)}
               />

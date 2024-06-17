@@ -85,7 +85,7 @@
 .cio-slider-track-selected {
   position: relative;
   height: var(--track-height);
-  border-radius: .3rem;
+  border-radius: 4.8px;
   background-color: #eee;
   margin-top: 20px;
 

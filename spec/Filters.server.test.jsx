@@ -23,7 +23,7 @@ describe('Testing Component on the server: Filters', () => {
     expect(() => renderToString(<Filters facets={mockTransformedFacets} />)).toThrow();
   });
 
-  it('Should render sort options based on search or browse response', async () => {
+  it('Should render filters based on search or browse response', async () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Filters response={mockSearchOrBrowseResponse} />
