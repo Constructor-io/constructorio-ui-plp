@@ -158,8 +158,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     if (visibleTrack.current) {
       visibleTrack.current.addEventListener('click', onTrackClick);
       localRef = visibleTrack.current;
-    } else {
-      return () => {};
     }
 
     // Unmount
