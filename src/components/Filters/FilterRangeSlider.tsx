@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import classNames from 'classnames';
 import { PlpRangeFacet } from '../../types';
 import useDebounce from '../../hooks/useDebounce';
 
@@ -169,7 +170,11 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   }, [visibleTrack]);
 
   return (
-    <div className={`cio-collapsible-wrapper${!isCollapsed ? ' cio-collapsible-is-open' : ''}`}>
+    <div
+      className={classNames({
+        'cio-collapsible-wrapper': true,
+        'cio-collapsible-is-open': !isCollapsed,
+      })}>
       <div className='cio-collapsible-inner'>
         <div className='cio-filter-ranged-slider'>
           <div className='cio-slider-inputs'>

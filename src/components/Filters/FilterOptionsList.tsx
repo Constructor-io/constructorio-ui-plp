@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { PlpFacetOption, PlpMultipleFacet } from '../../types';
 
 export interface FilterOptionsListProps {
@@ -44,7 +45,11 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
   if (optionsToRender.length === 0) return null;
 
   return (
-    <div className={`cio-collapsible-wrapper${!isCollapsed ? ' cio-collapsible-is-open' : ''}`}>
+    <div
+      className={classNames({
+        'cio-collapsible-wrapper': true,
+        'cio-collapsible-is-open': !isCollapsed,
+      })}>
       <ul className='cio-filter-multiple-options-list cio-collapsible-inner'>
         {optionsToRender.map((option) => (
           <li className='cio-filter-multiple-option' key={option.value}>
