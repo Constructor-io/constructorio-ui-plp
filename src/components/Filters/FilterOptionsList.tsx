@@ -43,7 +43,6 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
   }, [isShowAll, facet.options, initialNumOptions]);
 
   if (optionsToRender.length === 0) return null;
-
   return (
     <div
       className={classNames({
@@ -58,8 +57,8 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
                 type='checkbox'
                 id={option.value}
                 value={option.displayName}
-                checked={selectedOptionMap[option.value]}
-                onClick={() => onOptionSelect(option.value)}
+                checked={selectedOptionMap[option.value] || false}
+                onChange={() => onOptionSelect(option.value)}
               />
               <div className='cio-checkbox'>
                 <svg
