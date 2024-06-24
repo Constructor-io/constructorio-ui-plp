@@ -41,9 +41,9 @@
 }
 
 /* On mouse-over, add a grey background color */
-.cio-filter-multiple-option:hover .cio-checkbox {
-  background-color: #ccc;
-  border-color: #bbb;
+.cio-filter-multiple-option:hover {
+  background-color: #f2f2f2;
+  border-radius: 4px;
 }
 
 .cio-filter-multiple-option-display {
