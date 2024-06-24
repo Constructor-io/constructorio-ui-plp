@@ -175,6 +175,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             <span className='cio-slider-input cio-slider-input-min'>
               <span className='cio-slider-input-prefix'>from </span>
               <input
+                required
                 type='number'
                 value={inputMinValue}
                 onChange={onMinInputValueChange}
@@ -187,6 +188,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             <div className='cio-slider-input cio-slider-input-max'>
               <span className='cio-slider-input-prefix'>to </span>
               <input
+                required
                 type='number'
                 value={inputMaxValue}
                 onChange={onMaxInputValueChange}
