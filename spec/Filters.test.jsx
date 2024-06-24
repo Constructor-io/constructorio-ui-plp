@@ -286,6 +286,27 @@ describe('Testing Component: Filters', () => {
       expect(filters.price[0].indexOf('75')).not.toBe(-1);
     });
 
+    it('SliderRange: Invalid inputs: if maxValue is invalid, updating minValue should not update requestFilters', async () => {
+      const { container } = render(<TestFiltersApplied />);
+      const sliderMinInput = container.querySelector('.cio-slider-input-min input');
+      const sliderMaxInput = container.querySelector('.cio-slider-input-max input');
+
+      // Sets minInput to 25, maxInput to 75
+      setDefaultSliderInputValues(container);
+
+      fireEvent.change(sliderMaxInput, { target: { value: 110 } });
+      fireEvent.blur(sliderMaxInput);
+
+      fireEvent.change(sliderMinInput, { target: { value: 50 } });
+      fireEvent.blur(sliderMaxInput);
+      const filters = getRequestFilters(container);
+
+      expect(filters.price[0].indexOf('110')).toBe(-1);
+      expect(filters.price[0].indexOf('50')).toBe(-1);
+      expect(filters.price[0].indexOf('25')).not.toBe(-1);
+      expect(filters.price[0].indexOf('75')).not.toBe(-1);
+    });
+
     it('SliderRange: Upon moving the slider buttons, requestFilters should be updated', async () => {
       const { container } = render(<TestFiltersApplied />);
       const cioMinSlider = container.querySelector('.cio-min-slider');
