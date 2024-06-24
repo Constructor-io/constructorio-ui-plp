@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
 import { PlpRangeFacet } from '../../types';
-import useDebounce from '../../hooks/useDebounce';
 
 export interface FilterRangeSliderProps {
   rangedFacet: PlpRangeFacet;
@@ -34,7 +33,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.min);
   const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.max);
   const [filterRange, setFilterRange] = useState('');
-  const debouncedFilterRange = useDebounce<string>(filterRange, 1000);
 
   const [isModified, setIsModified] = useState(false);
 
@@ -93,6 +91,12 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
+  const onInputBlurApplyFilter = () => {
+    if (isModified && isValidMaxValue(inputMaxValue) && isValidMinValue(inputMinValue)) {
+      updateFilterRange(filterRange);
+    }
+  };
+
   const onTrackClick = (event: MouseEvent) => {
     if (visibleTrack.current === null) return;
     if (event.target !== visibleTrack.current) return;
@@ -144,14 +148,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
   }, [minValue, maxValue, facet]);
 
-  // Debounced callback for Slider Inputs
-  useEffect(() => {
-    if (isModified) {
-      updateFilterRange(debouncedFilterRange);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFilterRange]);
-
   // When the component mounts, attach the click listeners
   useEffect(() => {
     let localRef: HTMLDivElement | null;
@@ -176,23 +172,25 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       <div className='cio-collapsible-inner'>
         <div className='cio-filter-ranged-slider'>
           <div className='cio-slider-inputs'>
-            <span className='cio-slider-input'>
+            <span className='cio-slider-input cio-slider-input-min'>
               <span className='cio-slider-input-prefix'>from </span>
               <input
                 type='number'
                 value={inputMinValue}
                 onChange={onMinInputValueChange}
+                onBlur={onInputBlurApplyFilter}
                 min={facet.min}
                 max={maxValue}
                 step={sliderStep}
               />
             </span>
-            <div className='cio-slider-input'>
+            <div className='cio-slider-input cio-slider-input-max'>
               <span className='cio-slider-input-prefix'>to </span>
               <input
                 type='number'
                 value={inputMaxValue}
                 onChange={onMaxInputValueChange}
+                onBlur={onInputBlurApplyFilter}
                 min={minValue}
                 max={facet.max}
                 step={sliderStep}
