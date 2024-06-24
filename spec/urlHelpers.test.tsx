@@ -84,6 +84,7 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
     expect(typeof state.filters).toBe('object');
     expect(state.filters).toEqual({
       price: ['5-100'],
+      color: ['Gold'],
       test: ['testValue', 'testValue2', 'testValue3'],
       lowestPrice: ['100', '300'],
     });
