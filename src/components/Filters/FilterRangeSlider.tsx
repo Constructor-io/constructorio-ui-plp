@@ -4,7 +4,7 @@ import { PlpRangeFacet } from '../../types';
 
 export interface FilterRangeSliderProps {
   rangedFacet: PlpRangeFacet;
-  updateFilterRange: (selectedOptions: string) => void;
+  modifyRequestRangeFilter: (selectedOptions: string) => void;
   isCollapsed: boolean;
   sliderStep?: number;
 }
@@ -24,7 +24,7 @@ function getValueFromOnChangeEvent(e: React.ChangeEvent<HTMLInputElement>) {
 }
 
 export default function FilterRangeSlider(props: FilterRangeSliderProps) {
-  const { rangedFacet: facet, updateFilterRange, isCollapsed, sliderStep = 0.1 } = props;
+  const { rangedFacet: facet, modifyRequestRangeFilter, isCollapsed, sliderStep = 0.1 } = props;
   const visibleTrack = useRef<HTMLDivElement>(null);
   const [selectedTrackStyles, setSelectedTrackStyles] = useState({});
 
@@ -64,9 +64,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const onSliderMoveEnd = () => {
     const newRange = `${minValue}-${maxValue}`;
 
-    setFilterRange(newRange);
-    updateFilterRange(newRange);
-    setIsModified(false);
+    modifyRequestRangeFilter(newRange);
   };
 
   const onMaxInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,15 +91,15 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   const onInputBlurApplyFilter = () => {
     if (isModified && isValidMaxValue(inputMaxValue) && isValidMinValue(inputMinValue)) {
-      updateFilterRange(filterRange);
+      modifyRequestRangeFilter(filterRange);
     }
   };
 
-  const onTrackClick = (event: MouseEvent) => {
+  const onTrackClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (visibleTrack.current === null) return;
     if (event.target !== visibleTrack.current) return;
     const totalWidth = visibleTrack.current!.offsetWidth;
-    const clickedX = event.offsetX;
+    const clickedX = event.nativeEvent.offsetX;
 
     const selectedValue = Math.round((clickedX / totalWidth) * facet.max);
     const distMinToClicked = Math.abs(selectedValue - minValue);
@@ -112,17 +110,13 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
       setMinValue(selectedValue);
       setInputMinValue(selectedValue);
-      setFilterRange(newRange);
-      updateFilterRange(newRange);
-      setIsModified(false);
+      modifyRequestRangeFilter(newRange);
     } else {
       const newRange = `${minValue}-${selectedValue}`;
 
       setMaxValue(selectedValue);
       setInputMaxValue(selectedValue);
-      setFilterRange(newRange);
-      updateFilterRange(newRange);
-      setIsModified(false);
+      modifyRequestRangeFilter(newRange);
     }
   };
 
@@ -147,21 +141,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
   }, [minValue, maxValue, facet]);
-
-  // When the component mounts, attach the click listeners
-  useEffect(() => {
-    let localRef: HTMLDivElement | null;
-    if (visibleTrack.current) {
-      visibleTrack.current.addEventListener('click', onTrackClick);
-      localRef = visibleTrack.current;
-    }
-
-    // Unmount
-    return () => {
-      localRef?.removeEventListener('click', onTrackClick);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleTrack]);
 
   return (
     <div
@@ -200,7 +179,11 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             </div>
           </div>
 
-          <div className='cio-doubly-ended-slider' ref={visibleTrack}>
+          <div
+            className='cio-doubly-ended-slider'
+            ref={visibleTrack}
+            role='presentation'
+            onClick={(e) => onTrackClick(e)}>
             <div className='cio-slider-track-selected' style={selectedTrackStyles} />
             <input
               className='cio-min-slider'

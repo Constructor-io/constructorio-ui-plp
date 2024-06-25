@@ -31,7 +31,7 @@ export default function FilterGroup(props: FilterGroupProps) {
         <FilterOptionsList
           isCollapsed={isCollapsed}
           multipleFacet={facet}
-          updateSelectedOptions={onFilterSelect(facet.name)}
+          modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
         />
       )}
@@ -40,7 +40,7 @@ export default function FilterGroup(props: FilterGroupProps) {
         <FilterRangeSlider
           isCollapsed={isCollapsed}
           rangedFacet={facet}
-          updateFilterRange={onFilterSelect(facet.name)}
+          modifyRequestRangeFilter={onFilterSelect(facet.name)}
         />
       )}
     </li>

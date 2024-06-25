@@ -4,13 +4,18 @@ import { PlpFacetOption, PlpMultipleFacet } from '../../types';
 
 export interface FilterOptionsListProps {
   multipleFacet: PlpMultipleFacet;
-  updateSelectedOptions: (selectedOptions: Array<string> | null) => void;
+  modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
 }
 
 export default function FilterOptionsList(props: FilterOptionsListProps) {
-  const { multipleFacet: facet, initialNumOptions, updateSelectedOptions, isCollapsed } = props;
+  const {
+    multipleFacet: facet,
+    initialNumOptions,
+    modifyRequestMultipleFilter,
+    isCollapsed,
+  } = props;
   const [isShowAll, setIsShowAll] = useState(false);
   const [optionsToRender, setOptionsToRender] = useState<Array<PlpFacetOption>>(facet.options);
   const [selectedOptionMap, setSelectedOptionMap] = useState({});
@@ -21,7 +26,7 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
 
     const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
     setSelectedOptionMap(newMap);
-    updateSelectedOptions(selectedOptions.length ? selectedOptions : null);
+    modifyRequestMultipleFilter(selectedOptions.length ? selectedOptions : null);
   };
 
   useEffect(() => {
