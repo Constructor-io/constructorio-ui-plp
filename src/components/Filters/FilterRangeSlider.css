@@ -24,6 +24,7 @@
   align-items: center;
   justify-content: start;
   height: 32px;
+  min-width: 90px;
   cursor: default;
   color: #999;
   font-size: 12px;
@@ -59,6 +60,8 @@
   background: none;
   display: block;
   font-weight: 500;
+  text-wrap: nowrap;
+  resize: none;
 
   /* Stretch the selectable container */
   flex-grow: 1;
