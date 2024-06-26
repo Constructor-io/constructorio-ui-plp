@@ -30,6 +30,8 @@
   background-color: #fff;
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   border-radius: 4px;
   transition: 0.25s ease;
   border: 1px solid #00000033;
