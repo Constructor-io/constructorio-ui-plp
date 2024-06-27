@@ -159,6 +159,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 value={inputMinValue}
                 onChange={onMinInputValueChange}
                 onBlur={onInputBlurApplyFilter}
+                placeholder={facet.min.toString()}
                 min={facet.min}
                 max={maxValue}
                 step={sliderStep}
@@ -172,6 +173,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 value={inputMaxValue}
                 onChange={onMaxInputValueChange}
                 onBlur={onInputBlurApplyFilter}
+                placeholder={facet.max.toString()}
                 min={minValue}
                 max={facet.max}
                 step={sliderStep}

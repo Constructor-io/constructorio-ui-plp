@@ -118,7 +118,7 @@ describe('Testing Component: Filters', () => {
     });
   });
 
-  describe(' - Integration Tests', () => {
+  describe(' - Behavior Tests', () => {
     function TestFiltersApplied() {
       const [currentUrl, setCurrentUrl] = useState(testJsonEncodedUrl);
       const [filters, setFilters] = useState('');

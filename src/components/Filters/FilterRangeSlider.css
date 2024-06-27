@@ -49,6 +49,10 @@
   color: red;
 }
 
+.cio-slider-input input::placeholder {
+  opacity: 50%;
+}
+
 .cio-slider-input-prefix {
   height: fit-content;
   margin-right: 8px;
