@@ -4,6 +4,7 @@
 @import './components/ProductCard/styles.css';
 @import './components/Spinner/Spinner.css';
 @import './components/Sort/Sort.css';
+@import './components/Filters/index.css';
 
 @keyframes cio-spinner {
   0% {
@@ -31,4 +32,41 @@
 .cio-results .cio-product-card {
   flex: 0 0 calc(33.333% - 10px);
   text-align: center;
+}
+
+/** The following styles facilitates the creation of a collapsible component. 
+  * Simply add the two divs with the following classes, and toggle `cio-collapsible-is-open`.
+  */
+.cio-collapsible-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease-out;
+}
+
+.cio-collapsible-wrapper.cio-collapsible-is-open {
+  grid-template-rows: 1fr;
+}
+
+.cio-collapsible-inner {
+  overflow: hidden;
+}
+
+.cio-arrow {
+  border: 1px solid #00000099;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  transition: transform 0.2s ease-in;
+}
+
+.cio-arrow-up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  margin-bottom: -6px;
+}
+
+.cio-arrow-down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-top: -6px;
 }

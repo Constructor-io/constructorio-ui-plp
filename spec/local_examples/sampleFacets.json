@@ -1,0 +1,161 @@
+[
+  {
+    "displayName": "Color",
+    "name": "color",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 155,
+        "displayName": "Black",
+        "value": "Black",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 45,
+        "displayName": "Blue",
+        "value": "Blue",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 54,
+        "displayName": "Brown",
+        "value": "Brown",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 47,
+        "displayName": "Neutral",
+        "value": "Neutral",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 33,
+        "displayName": "Grey",
+        "value": "Grey",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 43,
+        "displayName": "Pink",
+        "value": "Pink",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 49,
+        "displayName": "White",
+        "value": "White",
+        "data": {}
+      },
+      {
+        "status": "selected",
+        "count": 14,
+        "displayName": "Gold",
+        "value": "Gold",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 23,
+        "displayName": "Green",
+        "value": "Green",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 15,
+        "displayName": "Multi",
+        "value": "Multi",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 2,
+        "displayName": "Tan",
+        "value": "Tan",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 3,
+        "displayName": "Silver",
+        "value": "Silver",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Red",
+        "value": "Red",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 8,
+        "displayName": "Yellow",
+        "value": "Yellow",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 7,
+        "displayName": "Purple",
+        "value": "Purple",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 6,
+        "displayName": "Orange",
+        "value": "Orange",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Natural",
+        "value": "Natural",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Metallic",
+        "value": "Metallic",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "Cream",
+        "value": "Cream",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 1,
+        "displayName": "No Colour",
+        "value": "No Colour",
+        "data": {}
+      }
+    ]
+  },
+  {
+    "displayName": "Price",
+    "name": "price",
+    "type": "range",
+    "data": {},
+    "hidden": false,
+    "min": 1,
+    "max": 100,
+    "status": {}
+  }
+]

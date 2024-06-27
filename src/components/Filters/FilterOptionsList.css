@@ -1,0 +1,65 @@
+.cio-filter-multiple-options-list {
+  margin: 0;
+  padding: 0;
+}
+
+.cio-filter-multiple-option {
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+}
+
+.cio-filter-multiple-option label {
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.cio-filter-multiple-option input {
+  display: none;
+}
+
+.cio-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 8px;
+  background-color: #fff;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  border: 1px solid #00000033;
+}
+
+/* Apply a radial transition, similar to sort options */
+.cio-filter-multiple-option:has(input:checked) .cio-checkbox {
+  box-shadow: inset 0 0 0 32px #000000;
+}
+
+/* On mouse-over, add a grey background color */
+.cio-filter-multiple-option:hover {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+}
+
+.cio-filter-multiple-option-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.cio-filter-option-name {
+  flex-grow: 1;
+}
+
+.cio-filter-option-count {
+  color: #999;
+}

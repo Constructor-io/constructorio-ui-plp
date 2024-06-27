@@ -1,0 +1,187 @@
+.cio-filter-ranged-slider {
+  --btn-radius-inner: 8px;
+  --btn-radius-total: 20px;
+  --track-height: 6px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 32px 20px;
+  width: auto;
+}
+
+.cio-slider-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  padding: 2px;
+}
+
+.cio-slider-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  height: 32px;
+  min-width: 90px;
+  cursor: default;
+  color: #999;
+  font-size: 12px;
+  border: 1.4px solid #999;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.cio-slider-input:focus-within,
+.cio-slider-input:focus-visible {
+  border-color: black;
+  color: black;
+}
+
+/* Validation Styling */
+.cio-slider-input:has(input:invalid) {
+  border-color: red;
+  color: red;
+}
+
+.cio-slider-input input:invalid {
+  color: red;
+}
+
+.cio-slider-input input::placeholder {
+  opacity: 50%;
+}
+
+.cio-slider-input-prefix {
+  height: fit-content;
+  margin-right: 8px;
+  padding-left: 8px;
+}
+
+.cio-slider-input input {
+  border: none;
+  background: none;
+  display: block;
+  font-weight: 500;
+  text-wrap: nowrap;
+  resize: none;
+
+  /* Stretch the selectable container */
+  flex-grow: 1;
+  height: 100%;
+}
+
+.cio-slider-input input:focus {
+  outline: none;
+}
+
+/* Remove the spin buttons */
+.cio-slider-inputs input::-webkit-outer-spin-button,
+.cio-slider-inputs input::-webkit-inner-spin-button {
+  display: none;
+}
+
+/* Remove the spin buttons - Firefox */
+.cio-slider-inputs input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* This serves as the slider's clickable track & selected range */
+.cio-doubly-ended-slider,
+.cio-slider-track-selected {
+  position: relative;
+  height: var(--track-height);
+  border-radius: 4.8px;
+  background-color: #eee;
+  margin-top: 20px;
+
+  /* Track is clickable */
+  cursor: pointer;
+}
+
+/* The selected range should be overlayed and made non-interactive */
+.cio-slider-track-selected {
+  position: absolute;
+  top: 0;
+  height: var(--track-height);
+  left: 0;
+  width: 100%;
+  background-color: black;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+/* Slider buttons */
+.cio-doubly-ended-slider .cio-min-slider,
+.cio-doubly-ended-slider .cio-max-slider {
+  /* We overlay the two inputs, using the parent container as the track */
+  position: absolute;
+  background-color: none;
+  background: none;
+  width: 100%;
+
+  /* Center the buttons to the parent-div */
+  top: calc(-0.5 * (var(--btn-radius-total) - var(--track-height)));
+
+  margin: 0;
+
+  /* We're hiding everything except the slider btns */
+  box-sizing: border-box;
+  appearance: none;
+  border: 0;
+  outline: none;
+  pointer-events: none;
+  border-radius: 1px;
+}
+
+/* Styles for the slider knob */
+.cio-min-slider::-webkit-slider-thumb,
+.cio-max-slider::-webkit-slider-thumb {
+  position: relative;
+  height: var(--btn-radius-inner);
+  width: var(--btn-radius-inner);
+  border-radius: 100%;
+  appearance: none;
+
+  /* Inner circle color */
+  background-color: black;
+
+  /* White outer circle should be clickable */
+  box-sizing: content-box;
+  border: calc((var(--btn-radius-total) - var(--btn-radius-inner)) / 2) white solid;
+
+  /* Outer grey circle */
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1), 0px 0px 0px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+
+  /* Pointer events were disabled in the parent component */
+  cursor: pointer;
+  pointer-events: all;
+}
+
+/* Styles for the slider knob - Firefox (they don't work if stacked on each other for some reason) */
+.cio-min-slider::-moz-range-thumb,
+.cio-max-slider::-moz-range-thumb {
+  position: relative;
+  height: var(--btn-radius-inner);
+  width: var(--btn-radius-inner);
+  border-radius: 100%;
+  appearance: none;
+
+  /* Inner circle color */
+  background-color: black;
+
+  /* White outer circle should be clickable */
+  box-sizing: content-box;
+  border: calc((var(--btn-radius-total) - var(--btn-radius-inner)) / 2) white solid;
+
+  /* Outer grey circle */
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1), 0px 0px 0px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+
+  /* Pointer events were disabled in the parent component */
+  cursor: pointer;
+  pointer-events: all;
+}
