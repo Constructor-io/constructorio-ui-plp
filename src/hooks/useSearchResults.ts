@@ -2,7 +2,7 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useReducer } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
-import { PaginationObject, PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
+import { PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
 import {
   RequestStatus,
   searchReducer,
@@ -10,9 +10,8 @@ import {
   SearchData,
   initialState,
   initFunction,
-} from '../components/SearchResults/reducer';
+} from '../components/CioPlpGrid/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
-import usePagination from '../components/Pagination/usePagination';
 import useRequestConfigs from './useRequestConfigs';
 import { getSearchParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
@@ -25,7 +24,6 @@ export interface UseSearchResultsReturn {
   status: RequestStatus | null;
   message?: string;
   data: SearchData;
-  pagination: PaginationObject;
   refetch: () => void;
 }
 
@@ -98,27 +96,18 @@ export default function useSearchResults(
 
   const { search: data, status, message } = state;
 
-  const pagination = usePagination({
-    initialPage: data.request?.page,
-    totalNumResults: data.response?.totalNumResults,
-    resultsPerPage: data.response?.numResultsPerPage,
-  });
-
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
     if (cioClient && (!initialSearchResponse || !isFirstRender)) {
-      if (pagination.currentPage) searchParams.page = pagination.currentPage;
-
       fetchSearchResults(cioClient, query, searchParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.currentPage]);
+  }, [requestConfigs?.page]);
 
   return {
     status,
     message,
     data,
-    pagination,
     refetch: () => cioClient && fetchSearchResults(cioClient, query, searchParams || {}, dispatch),
   };
 }

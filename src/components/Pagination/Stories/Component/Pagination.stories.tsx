@@ -1,6 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Pagination from '../../Pagination';
 import KitchenSinkDecorator from '../../../../stories/utils/KitchenSinkDecorator';
+import CioPlp from '../../../CioPlp';
+import { DEMO_API_KEY } from '../../../../constants';
 import '../../../../styles.css';
 
 const meta = {
@@ -14,30 +17,43 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Todo: Add wrapper context that returns pagination controls
+function PrimaryStory({ args }: any) {
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+  // This is used for reactivity, updating this key will force CioPlpGrid to re-render
+  const [paginationKey, setPaginationKey] = useState(1);
+
+  useEffect(() => {
+    setPaginationKey(paginationKey + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUrl]);
+
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
+      <Pagination {...args} key={paginationKey} />
+    </CioPlp>
+  );
+}
+
 export const Primary: Story = {
+  render: (args) => <PrimaryStory args={args} />,
   args: {
-    pagination: {
-      currentPage: 1,
-      goToPage: () => {},
-      nextPage: () => {},
-      prevPage: () => {},
-      pages: [1, -1, 4, 5, 6, -1, 10],
-      totalPages: 10,
-    },
+    totalNumResults: 200,
+    resultsPerPage: 10,
   },
 };
 
 export const KitchenSink: Story = {
-  decorators: [KitchenSinkDecorator],
-  args: {
-    pagination: {
-      currentPage: 1,
-      goToPage: () => {},
-      nextPage: () => {},
-      prevPage: () => {},
-      pages: [1, -1, 4, 5, 6, -1, 10],
-      totalPages: 10,
-    },
-  },
+  decorators: [
+    () =>
+      KitchenSinkDecorator(() =>
+        PrimaryStory({ args: { totalNumResults: 200, resultsPerPage: 10 } }),
+      ),
+  ],
 };

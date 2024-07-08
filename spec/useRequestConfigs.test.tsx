@@ -8,20 +8,23 @@ import { DEMO_API_KEY } from '../src/constants';
 import { getStateFromUrl as defaultGetStateFromUrl } from '../src/utils/urlHelpers';
 import { RequestConfigs } from '../src/types';
 
-describe('Testing Hook: useRequestConfigs', () => {
-  let location;
-  const mockLocation = new URL('https://example.com/');
+const originalWindowLocation = window.location;
 
+describe('Testing Hook: useRequestConfigs', () => {
   beforeEach(() => {
-    location = window.location;
-    delete window.location;
-    // @ts-ignore
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/';
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      enumerable: true,
+      value: new URL('https://example.com'),
+    });
   });
 
-  afterEach(() => {
-    window.location = location;
+  afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      enumerable: true,
+      value: originalWindowLocation,
+    });
   });
 
   it('Should throw error if called outside of PlpContext', () => {
@@ -31,12 +34,12 @@ describe('Testing Hook: useRequestConfigs', () => {
     spy.mockRestore();
   });
 
-  it('Should return an empty object if no defaults have been specified', () => {
+  it('Should return an object with page only if no defaults have been specified', () => {
     function TestReactComponent() {
       const { requestConfigs, setRequestConfigs } = useRequestConfigs();
-      expect(requestConfigs).toEqual({});
+      expect(requestConfigs).toEqual({ page: 1 });
       expect(typeof setRequestConfigs).toEqual('function');
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(
@@ -51,7 +54,7 @@ describe('Testing Hook: useRequestConfigs', () => {
     function TestReactComponent() {
       const { requestConfigs } = useRequestConfigs();
       expect(requestConfigs).toEqual(testRequestState);
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(
@@ -75,7 +78,7 @@ describe('Testing Hook: useRequestConfigs', () => {
 
       expect(requestConfigs).toEqual(sampleRequestState);
 
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(
@@ -95,7 +98,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       decodedRequestState.filterName = 'group_id';
       decodedRequestState.filterValue = 'fall';
       expect(requestConfigs).toEqual(decodedRequestState);
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(
@@ -128,7 +131,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       expect(decodedRequestState.query).toBeUndefined();
       expect(decodedRequestState.filterName).toBe('collection_id');
       expect(decodedRequestState.filterValue).toBe('testing-collection-id');
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(
@@ -157,7 +160,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       // Check the remaining query parameters are the same
       expect(newUrlObj.searchParams.get('q')).toEqual(oldUrlObj.searchParams.get('q'));
 
-      return <div>hello</div>;
+      return <div>test</div>;
     }
 
     render(

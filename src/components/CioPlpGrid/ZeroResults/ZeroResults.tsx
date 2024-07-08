@@ -1,5 +1,5 @@
 import React from 'react';
-import useRequestConfigs from '../../hooks/useRequestConfigs';
+import useRequestConfigs from '../../../hooks/useRequestConfigs';
 
 /**
  * Renders the 'no results' component if search results returns no items.

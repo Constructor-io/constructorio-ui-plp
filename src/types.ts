@@ -200,6 +200,7 @@ export interface CioPlpProviderProps {
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
   urlHelpers?: Partial<UrlHelpers>;
+  initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
@@ -218,7 +219,6 @@ export type UseSortReturn = {
  * @returns An object containing pagination information and methods.
  */
 export type UsePaginationProps = {
-  initialPage?: number;
   totalNumResults?: number;
   resultsPerPage?: number;
   windowSize?: number;

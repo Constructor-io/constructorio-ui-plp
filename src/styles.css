@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 @import './components/ProductSwatch/ProductSwatch.css';
-@import './components/SearchResults/ZeroResults.css';
+@import './components/CioPlpGrid/ZeroResults/ZeroResults.css';
+@import './components/Pagination/Pagination.css';
 @import './components/ProductCard/styles.css';
+@import './components//CioPlpGrid/CioPlpGrid.css';
 @import './components/Spinner/Spinner.css';
 @import './components/Sort/Sort.css';
 @import './components/Filters/index.css';

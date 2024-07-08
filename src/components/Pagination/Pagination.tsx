@@ -1,17 +1,18 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { IncludeRenderProps, PaginationObject } from '../../types';
+import { IncludeRenderProps, PaginationObject, UsePaginationProps } from '../../types';
+import usePagination from './usePagination';
 
-type PaginationWithRenderProps = IncludeRenderProps<
-  { pagination: PaginationObject },
-  PaginationObject
->;
+type PaginationWithRenderProps = IncludeRenderProps<UsePaginationProps, PaginationObject>;
 
-// Todo:
-//   Pagination component should get PaginationProps from context and accept configuration props same as usePagination
 export default function Pagination(props: PaginationWithRenderProps) {
-  const { pagination, children } = props;
-  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = pagination;
+  const { totalNumResults, resultsPerPage, windowSize, children } = props;
+  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = usePagination({
+    totalNumResults,
+    resultsPerPage,
+    windowSize,
+  });
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -24,17 +25,21 @@ export default function Pagination(props: PaginationWithRenderProps) {
           totalPages,
         })
       ) : (
-        <div>
-          <button onClick={() => prevPage()} type='button'>
-            Previous
+        <div className='cio-pagination'>
+          <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
+            &lt;
           </button>
           {pages.map((page, i) => (
-            <button onClick={() => goToPage(page)} type='button' key={`${page},${i}`}>
+            <button
+              onClick={() => goToPage(page)}
+              type='button'
+              key={`${page},${i}`}
+              className={currentPage === page ? 'selected' : ''}>
               {page === -1 ? <span>...</span> : page}
             </button>
           ))}
-          <button onClick={() => nextPage()} type='button'>
-            Next
+          <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
+            &gt;
           </button>
         </div>
       )}

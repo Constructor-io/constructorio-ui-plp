@@ -22,12 +22,20 @@ describe('CioPlp React Client-Side Rendering', () => {
     }).toThrow();
   });
 
+  // TODO: remove query
   it('renders CioPlp provider without children on the client without error', () => {
-    expect(() => render(<CioPlp apiKey={DEMO_API_KEY} />)).not.toThrow();
+    expect(() =>
+      render(<CioPlp apiKey={DEMO_API_KEY} staticRequestConfigs={{ query: 'red' }} />),
+    ).not.toThrow();
   });
 
+  // TODO: remove query
   it('renders CioPlp provider without children on the client without error, if client is provided', () => {
-    expect(() => render(<CioPlp cioClient={mockConstructorIOClient} />)).not.toThrow();
+    expect(() =>
+      render(
+        <CioPlp cioClient={mockConstructorIOClient} staticRequestConfigs={{ query: 'red' }} />,
+      ),
+    ).not.toThrow();
   });
 
   it('renders CioPlp provider with children correctly on the client', () => {

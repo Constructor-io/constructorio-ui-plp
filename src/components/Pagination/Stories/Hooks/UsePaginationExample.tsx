@@ -1,10 +1,22 @@
-import React from 'react';
-import usePagination from '../../usePagination';
+import React, { useState } from 'react';
 import { UsePaginationProps } from '../../../../types';
 import Pagination from '../../Pagination';
+import CioPlp from '../../../CioPlp';
+import { DEMO_API_KEY } from '../../../../constants';
 
 export default function UsePaginationExample(props: UsePaginationProps) {
-  const pagination = usePagination(props);
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
 
-  return <Pagination pagination={pagination} />;
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
+      <Pagination {...props} />
+    </CioPlp>
+  );
 }

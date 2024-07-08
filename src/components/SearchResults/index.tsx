@@ -5,7 +5,7 @@ import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
 import Spinner from '../Spinner/Spinner';
-import ZeroResults from './ZeroResults';
+import ZeroResults from '../CioPlpGrid/ZeroResults/ZeroResults';
 
 /**
  * Props for the SearchResults component.
@@ -43,7 +43,7 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
     throw new Error('<SearchResults /> component must be rendered within CioPlpContext');
   }
 
-  const { status, data, pagination, refetch } = useSearchResults({
+  const { status, data, refetch } = useSearchResults({
     initialSearchResponse,
   });
 
@@ -56,7 +56,7 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
   return (
     <>
       {typeof children === 'function' ? (
-        children({ status, data, pagination, refetch })
+        children({ status, data, refetch })
       ) : (
         <>
           {data.response?.results?.length ? (

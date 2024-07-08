@@ -46,7 +46,7 @@ export default function Sort({
       ) : (
         <div className='cio-plp-sort'>
           <button type='button' className='collapsible' onClick={toggleCollapsible}>
-            Sort
+            {selectedSort?.displayName ? `Sort by: ${selectedSort.displayName}` : 'Sort'}
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
           {isOpen && (
