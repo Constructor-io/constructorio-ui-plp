@@ -1,0 +1,25 @@
+.cio-pagination {
+    display: inline-block;
+}
+
+.cio-pagination button {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    background-color: #fff;
+    transition: background-color .3s;
+    border: 1px solid #eee;
+    margin: 0 4px;
+    cursor: pointer;
+}
+
+.cio-pagination button.selected {
+    background-color: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.cio-pagination button:hover:not(.selected) {
+    background-color: #eee;
+}

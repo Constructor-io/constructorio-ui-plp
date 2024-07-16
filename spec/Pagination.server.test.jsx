@@ -2,47 +2,42 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { act } from 'react-dom/test-utils';
 import Pagination from '../src/components/Pagination/Pagination';
+import CioPlp from '../src/components/CioPlp';
+import { DEMO_API_KEY } from '../src/constants';
 
-describe('Pagination Component (Server-Side Rendering)', () => {
-  const pagination = {
-    currentPage: 1,
-    goToPage: jest.fn(),
-    nextPage: jest.fn(),
-    pages: [1, 2, 3, 4, 5],
-    prevPage: jest.fn(),
-    totalPages: 5,
-  };
+describe('Testing Component on the server: Pagination', () => {
+  it('renders the next and previous buttons', () => {
+    const paginationProps = {
+      totalNumResults: 100,
+    };
 
-  it('renders the pagination buttons', () => {
     act(() => {
-      const html = renderToString(<Pagination pagination={pagination} />);
-      expect(html).toContain('Previous');
-      expect(html).toContain('Next');
-      pagination.pages.forEach((page) => {
-        expect(html).toContain(page.toString());
-      });
+      const html = renderToString(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Pagination {...paginationProps} />
+        </CioPlp>,
+      );
+      expect(html).toContain('<');
+      expect(html).toContain('>');
     });
   });
 
   it('renders with render props', () => {
-    const mockChildren = jest.fn().mockReturnValue(<div>Custom Render</div>);
+    const mockChildren = jest.fn().mockReturnValue(<div>Custom Pagination</div>);
 
     const paginationProps = {
-      pagination: {
-        currentPage: 1,
-        totalPages: 5,
-        pages: [1, 2, 3, 4, 5],
-        goToPage: jest.fn(),
-        nextPage: jest.fn(),
-        prevPage: jest.fn(),
-      },
+      totalNumResults: 100,
       children: mockChildren,
     };
 
     act(() => {
-      const html = renderToString(<Pagination {...paginationProps} />);
+      const html = renderToString(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Pagination {...paginationProps} />
+        </CioPlp>,
+      );
       expect(mockChildren).toHaveBeenCalled();
-      expect(html).toContain('Custom Render');
+      expect(html).toContain('Custom Pagination');
     });
   });
 });

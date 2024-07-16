@@ -35,7 +35,7 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
 
   const changeSelectedSort = (sortOption: PlpSortOption) => {
     setSelectedSort(sortOption);
-    setRequestConfigs({ sortBy: sortOption.sortBy, sortOrder: sortOption.sortOrder });
+    setRequestConfigs({ sortBy: sortOption.sortBy, sortOrder: sortOption.sortOrder, page: 1 });
   };
 
   return {

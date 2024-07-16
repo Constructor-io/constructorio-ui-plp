@@ -1,12 +1,11 @@
 .cio-plp-sort {
-  background-color: #FFFFFF;
-  width: 100%;
+  background: none;
   box-sizing: border-box;
-  padding: 10px;
+  position: relative;
 }
 
 .cio-plp-sort .collapsible {
-  background-color: #FFFFFF;
+  background: none;
   border: none;
   border-bottom: 1px solid #0000001A;
   cursor: pointer;
@@ -15,13 +14,17 @@
   min-width: 180px;
   text-align: left;
   outline: none;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 }
 
 .cio-plp-sort .collapsible-content {
+  position: absolute;
+  left: 0;
+  right: 0;
   padding: 10px;
   background-color: #FFFFFF;
   display: flex;

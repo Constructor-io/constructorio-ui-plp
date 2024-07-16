@@ -2,7 +2,6 @@
 @import './FilterRangeSlider.css';
 
 .cio-filters {
-  padding: 20px;
   display: flex;
   flex-direction: column;
   row-gap: 24px;

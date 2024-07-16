@@ -17,8 +17,9 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
 
   const url = getUrl();
   const urlRequestConfigs = url ? getStateFromUrl(url) : {};
+  const page = urlRequestConfigs?.page || staticRequestConfigs?.page || 1;
 
-  const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs };
+  const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs, page };
 
   if (!requestConfigs.filterValue || requestConfigs.filterValue === '') {
     delete requestConfigs.filterName;

@@ -6,13 +6,23 @@ import { DEMO_API_KEY } from '../../src/constants';
 import '@testing-library/jest-dom';
 import { mockConstructorIOClient } from '../test-utils';
 
+const originalWindowLocation = window.location;
+
 describe('CioPlp React Client-Side Rendering', () => {
   beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com?q=red'),
+    });
+
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
+
     jest.resetAllMocks();
   });
 

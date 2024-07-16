@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
 import { transformBrowseResponse } from '../utils/transformers';
-import usePagination from '../components/Pagination/usePagination';
-import { PaginationProps, PlpBrowseResponse } from '../types';
+import { PlpBrowseResponse } from '../types';
 import { getBrowseParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
 
@@ -14,7 +13,6 @@ export interface UseBrowseResultsProps {
 export type UseBrowseResultsReturn = {
   browseResults: PlpBrowseResponse | null;
   handleSubmit: () => void;
-  pagination: PaginationProps;
 };
 
 /* eslint-disable max-len */
@@ -57,34 +55,27 @@ export default function useBrowseResults(
     initialBrowseResponse || null,
   );
 
-  const pagination = usePagination({
-    initialPage: browseResponse?.rawResponse.request?.page,
-    totalNumResults: browseResponse?.totalNumResults,
-    resultsPerPage: browseResponse?.numResultsPerPage,
-  });
-
   const handleSubmit = () => {
     if (client && filterName && filterValue) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
-          page: pagination.currentPage || browseParams?.page,
         })
         .then((res) => setBrowseResponse(transformBrowseResponse(res)));
     }
   };
 
+  // Get browse results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
     if (client && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
       client.browse
         .getBrowseResults(filterName, filterValue, {
           ...browseParams,
-          page: pagination.currentPage || browseParams?.page,
         })
         .then((res) => setBrowseResponse(transformBrowseResponse(res)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.currentPage]);
+  }, []);
 
-  return { browseResults: browseResponse, handleSubmit, pagination };
+  return { browseResults: browseResponse, handleSubmit };
 }

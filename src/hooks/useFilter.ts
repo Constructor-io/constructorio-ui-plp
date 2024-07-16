@@ -37,7 +37,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     if (filterValue === null) {
       delete newFilters[filterName];
     }
-    setRequestConfigs({ filters: newFilters });
+    setRequestConfigs({ filters: newFilters, page: 1 });
   };
 
   return {

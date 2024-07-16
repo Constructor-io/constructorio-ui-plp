@@ -1,10 +1,11 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import SearchResults from '../src/components/SearchResults';
+import CioPlpGrid from '../src/components/CioPlpGrid';
 import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import { transformSearchResponse } from '../src/utils/transformers';
 import mockSearchResponse from './local_examples/apiSearchResponse.json';
+import { RequestStatus } from '../src/components/CioPlpGrid/reducer';
 
 jest.mock('../src/styles.css', () => ({}));
 jest.mock('../src/hooks/useSearchResults');
@@ -13,7 +14,7 @@ jest.mock('../src/hooks/useRequestConfigs', () => ({
   default: jest.fn(() => ({ requestConfigs: { query: 'red' } })),
 }));
 
-describe('SearchResults Component (Server-Side Rendering)', () => {
+describe('Testing Component on the server: CioPlpGrid', () => {
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
@@ -24,16 +25,16 @@ describe('SearchResults Component (Server-Side Rendering)', () => {
   });
 
   it('Should throw error if used outside the CioPlp', () => {
-    expect(() => renderToString(<SearchResults />)).toThrow();
+    expect(() => renderToString(<CioPlpGrid />)).toThrow();
   });
 
   it('Should render loading state while fetching data', () => {
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({ status: 'fetching' });
+    mockUseSearchResults.mockReturnValue({ status: RequestStatus.FETCHING });
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <SearchResults />
+        <CioPlpGrid />
       </CioPlp>,
     );
 
@@ -44,17 +45,16 @@ describe('SearchResults Component (Server-Side Rendering)', () => {
     const mockData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
-      status: 'success',
+      status: RequestStatus.SUCCESS,
       data: { response: { ...mockData } },
     });
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <SearchResults />
+        <CioPlpGrid />
       </CioPlp>,
     );
 
-    expect(html).toContain('Search Results');
     expect(html).toContain(mockData.results[0].itemName);
   });
 
@@ -63,11 +63,10 @@ describe('SearchResults Component (Server-Side Rendering)', () => {
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <SearchResults initialSearchResponse={initialSearchResponse} />
+        <CioPlpGrid initialSearchResponse={initialSearchResponse} />
       </CioPlp>,
     );
 
-    expect(html).toContain('Search Results');
     expect(html).toContain(initialSearchResponse.results[0].itemName);
   });
 });

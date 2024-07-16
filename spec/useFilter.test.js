@@ -6,8 +6,7 @@ import { transformSearchResponse } from '../src/utils/transformers';
 import { renderHookWithCioPlp } from './test-utils';
 
 describe('Testing Hook: useFilter', () => {
-  let location;
-  const mockLocation = new URL('https://example.com');
+  const originalWindowLocation = window.location;
   const testBrandA = 'UnderArmour';
   const testBrandB = 'Constructor';
 
@@ -16,14 +15,15 @@ describe('Testing Hook: useFilter', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    location = window.location;
-    delete window.location;
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/';
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com'),
+    });
   });
 
   afterEach(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
@@ -56,8 +56,8 @@ describe('Testing Hook: useFilter', () => {
 
       setFilter('Brand', testBrandA);
 
-      expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -71,8 +71,8 @@ describe('Testing Hook: useFilter', () => {
 
       setFilter('price', 23.2);
 
-      expect(mockLocation.href.indexOf('23.2')).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('price')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('23.2')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('price')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -86,8 +86,8 @@ describe('Testing Hook: useFilter', () => {
 
       setFilter('inStock', false);
 
-      expect(mockLocation.href.indexOf('false')).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('inStock')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('false')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('inStock')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -101,9 +101,9 @@ describe('Testing Hook: useFilter', () => {
 
       setFilter('Brand', [testBrandA, testBrandB]);
 
-      expect(mockLocation.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf(testBrandB)).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf(testBrandB)).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -116,12 +116,12 @@ describe('Testing Hook: useFilter', () => {
       } = result;
 
       setFilter('Price', '2-150');
-      expect(mockLocation.href.indexOf('Price')).toBeGreaterThanOrEqual(0);
-      expect(mockLocation.href.indexOf('2-150')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('Price')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('2-150')).toBeGreaterThanOrEqual(0);
 
       setFilter('Price', '100-150');
-      expect(mockLocation.href.indexOf('2-150')).toBe(-1);
-      expect(mockLocation.href.indexOf('100-150')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('2-150')).toBe(-1);
+      expect(window.location.href.indexOf('100-150')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -136,8 +136,8 @@ describe('Testing Hook: useFilter', () => {
       setFilter('Brand', testBrandA);
       setFilter('Brand', null);
 
-      expect(mockLocation.href.indexOf(testBrandA)).toBe(-1);
-      expect(mockLocation.href.indexOf('Brand')).toBe(-1);
+      expect(window.location.href.indexOf(testBrandA)).toBe(-1);
+      expect(window.location.href.indexOf('Brand')).toBe(-1);
     });
   });
 });

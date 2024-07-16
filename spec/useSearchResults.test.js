@@ -7,25 +7,28 @@ import { transformSearchResponse } from '../src/utils/transformers';
 import { getUrlFromState } from '../src/utils/urlHelpers';
 
 describe('Testing Hook: useSearchResults', () => {
-  let location;
-  const mockLocation = new URL('https://example.com/');
+  const originalWindowLocation = window.location;
+  const mockUrl = 'https://example.com/search?q=Linen';
+  const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    location = window.location;
-    delete window.location;
-    // @ts-ignore
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/search?q=Linen';
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+    });
   });
 
   afterEach(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
+
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
+    jest.clearAllTimers(); // Clear all timers after each test
   });
 
   it('Should return a PlpSearchResponse Object', async () => {
@@ -74,7 +77,7 @@ describe('Testing Hook: useSearchResults', () => {
       { baseUrl: 'https://example.com/search' },
     );
 
-    mockLocation.href = url;
+    window.location.href = url;
 
     renderHookWithCioPlp(() => useSearchResults());
 
