@@ -4,7 +4,7 @@ import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import Sort from '../Sort/Sort';
 import Pagination from '../Pagination';
-import useSearchResults from '../../hooks/useSearchResults';
+import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner/Spinner';
 import { RequestStatus } from './reducer';
@@ -13,7 +13,7 @@ type CioPlpGridProps = {
   initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
   spinner?: React.ReactNode;
 };
-type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, {}>;
+type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const { spinner, initialResponse, children } = props;

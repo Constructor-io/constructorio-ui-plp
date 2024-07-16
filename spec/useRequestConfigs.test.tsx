@@ -13,16 +13,12 @@ const originalWindowLocation = window.location;
 describe('Testing Hook: useRequestConfigs', () => {
   beforeEach(() => {
     Object.defineProperty(window, 'location', {
-      configurable: true,
-      enumerable: true,
       value: new URL('https://example.com'),
     });
   });
 
   afterAll(() => {
     Object.defineProperty(window, 'location', {
-      configurable: true,
-      enumerable: true,
       value: originalWindowLocation,
     });
   });

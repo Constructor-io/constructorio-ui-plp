@@ -6,13 +6,23 @@ import { DEMO_API_KEY } from '../../src/constants';
 import '@testing-library/jest-dom';
 import { mockConstructorIOClient } from '../test-utils';
 
+const originalWindowLocation = window.location;
+
 describe('CioPlp React Client-Side Rendering', () => {
   beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com?q=red'),
+    });
+
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
+
     jest.resetAllMocks();
   });
 
@@ -22,20 +32,12 @@ describe('CioPlp React Client-Side Rendering', () => {
     }).toThrow();
   });
 
-  // TODO: remove query
   it('renders CioPlp provider without children on the client without error', () => {
-    expect(() =>
-      render(<CioPlp apiKey={DEMO_API_KEY} staticRequestConfigs={{ query: 'red' }} />),
-    ).not.toThrow();
+    expect(() => render(<CioPlp apiKey={DEMO_API_KEY} />)).not.toThrow();
   });
 
-  // TODO: remove query
   it('renders CioPlp provider without children on the client without error, if client is provided', () => {
-    expect(() =>
-      render(
-        <CioPlp cioClient={mockConstructorIOClient} staticRequestConfigs={{ query: 'red' }} />,
-      ),
-    ).not.toThrow();
+    expect(() => render(<CioPlp cioClient={mockConstructorIOClient} />)).not.toThrow();
   });
 
   it('renders CioPlp provider with children correctly on the client', () => {

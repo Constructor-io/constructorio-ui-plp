@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import CioPlpGrid from '../src/components/CioPlpGrid/CioPlpGrid';
+import CioPlpGrid from '../src/components/CioPlpGrid';
 import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import { transformSearchResponse } from '../src/utils/transformers';

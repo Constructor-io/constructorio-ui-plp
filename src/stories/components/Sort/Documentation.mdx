@@ -1,4 +1,4 @@
-import { Meta, Canvas, Markdown } from '@storybook/blocks';
+import { Meta, Story, Canvas, Markdown } from '@storybook/blocks';
 import * as SortStories from './Sort.stories';
 /* This "?raw" import raw text form the md file */
 
@@ -28,7 +28,12 @@ It is responsible for displaying the sort options based on user's search or brow
   }
 ```
 
-<Canvas of={SortStories.Primary} />
+
+<Canvas>
+  <div style={{ height: '180px', width: 'fit-content', margin: 'auto' }}>
+    <Story of={SortStories.Primary} />
+  </div>
+</Canvas>
 
 ### Using RenderProps
 If you prefer to handle the rendering of the sort yourself, you may pass a Render Props function to the component.

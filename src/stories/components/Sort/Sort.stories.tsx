@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
 import CioPlp from '../../../components/CioPlp';
@@ -25,13 +25,25 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
-  render: (args) => (
-    // eslint-disable-next-line no-console
-    <CioPlp apiKey={DEMO_API_KEY} urlHelpers={{ setUrl: (url) => console.log('navigate:', url) }}>
+function PrimaryStory({ args }: any) {
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
       <Sort {...args} />
     </CioPlp>
-  ),
+  );
+}
+
+export const Primary: Story = {
+  render: (args) => <PrimaryStory args={args} />,
   args: {
     searchOrBrowseResponse: transformSearchResponse(
       mockSearchResponse as SearchResponse,

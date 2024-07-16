@@ -6,19 +6,20 @@ import { getUrlFromState } from '../src/utils/urlHelpers';
 import { transformBrowseResponse } from '../src/utils/transformers';
 
 describe('Testing Hook: useBrowseResults', () => {
-  let location;
-  const mockLocation = new URL('https://example.com/');
+  const originalWindowLocation = window.location;
+  const mockUrl = 'https://example.com/browse/123';
+  const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
-    location = window.location;
-    delete window.location;
-    // @ts-ignore
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/browse/123';
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+    });
   });
 
   afterEach(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
   });
@@ -59,7 +60,8 @@ describe('Testing Hook: useBrowseResults', () => {
       { filterValue: '123', filters, resultsPerPage, page },
       { baseUrl: 'https://example.com/browse/123' },
     );
-    mockLocation.href = url;
+
+    window.location.href = url;
 
     renderHookWithCioPlp(() => useBrowseResults());
 

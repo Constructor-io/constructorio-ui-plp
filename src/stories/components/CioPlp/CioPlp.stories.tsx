@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 import '../../../styles.css';
-import CioPlpGrid from '../../../components/CioPlpGrid/CioPlpGrid';
+import CioPlpGrid from '../../../components/CioPlpGrid';
 
 const meta = {
   title: 'Components/CioPlp',

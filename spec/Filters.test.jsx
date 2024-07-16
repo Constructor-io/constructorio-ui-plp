@@ -11,22 +11,22 @@ import { getStateFromUrl } from '../src/utils/urlHelpers';
 const mockSearchOrBrowseResponse = { facets: mockTransformedFacets };
 
 describe('Testing Component: Filters', () => {
-  let location;
-  const mockLocation = new URL('https://example.com');
+  const originalWindowLocation = window.location;
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    location = window.location;
-    delete window.location;
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/';
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com'),
+    });
   });
 
   afterAll(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 

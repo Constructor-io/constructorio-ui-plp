@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import CioPlpGrid from '../src/components/CioPlpGrid/CioPlpGrid';
+import CioPlpGrid from '../src/components/CioPlpGrid';
 import CioPlp from '../src/components/CioPlp';
 import { DEMO_API_KEY } from '../src/constants';
 import '@testing-library/jest-dom';
@@ -15,22 +15,22 @@ jest.mock('../src/hooks/useRequestConfigs', () => ({
   default: jest.fn(() => ({ requestConfigs: { query: 'red' }, setRequestConfigs: jest.fn() })),
 }));
 
-let location;
-const mockLocation = new URL('https://example.com');
+const originalWindowLocation = window.location;
 
 describe('Testing Component: CioPlpGrid', () => {
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    location = window.location;
-    delete window.location;
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/';
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com'),
+    });
   });
 
   afterAll(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
     jest.resetAllMocks();
   });
 

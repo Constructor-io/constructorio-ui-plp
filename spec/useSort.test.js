@@ -6,22 +6,22 @@ import mockSearchResponse from './local_examples/apiSearchResponse.json';
 import { renderHookWithCioPlp } from './test-utils';
 
 describe('Testing Hook: useSort', () => {
-  let location;
-  const mockLocation = new URL('https://example.com');
+  const originalWindowLocation = window.location;
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    location = window.location;
-    delete window.location;
-    window.location = mockLocation;
-    mockLocation.href = 'https://example.com/';
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com'),
+    });
   });
 
   afterEach(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 

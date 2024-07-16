@@ -1,7 +1,7 @@
 import React from 'react';
 import { CioPlpProps, IncludeRenderProps, PlpContextValue } from '../../types';
 import CioPlpProvider from './CioPlpProvider';
-import CioPlpGrid from '../CioPlpGrid/CioPlpGrid';
+import CioPlpGrid from '../CioPlpGrid';
 
 // Wrapper component for CioPlpProvider with default Markup
 export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContextValue>) {
