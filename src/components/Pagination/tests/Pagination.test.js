@@ -23,9 +23,13 @@ afterAll(() => {
 
 describe('Pagination Component', () => {
   it('renders the pagination buttons', () => {
+    const paginationProps = {
+      totalNumResults: 100,
+    };
+
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Pagination totalNumResults={100} />
+        <Pagination {...paginationProps} />
       </CioPlp>,
     );
 

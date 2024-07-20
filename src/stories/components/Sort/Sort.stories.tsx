@@ -6,7 +6,7 @@ import Sort from '../../../components/Sort/Sort';
 import { DEMO_API_KEY } from '../../../constants';
 import { transformSearchResponse } from '../../../utils/transformers';
 import mockSearchResponse from '../../../../spec/local_examples/apiSearchResponse.json';
-import { PlpSearchResponse } from '../../../types';
+import { PlpSearchDataResults } from '../../../types';
 import '../../../styles.css';
 
 const meta = {
@@ -45,8 +45,8 @@ function PrimaryStory({ args }: any) {
 export const Primary: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    searchOrBrowseResponse: transformSearchResponse(
-      mockSearchResponse as SearchResponse,
-    ) as PlpSearchResponse,
+    sortOptions: (
+      transformSearchResponse(mockSearchResponse as SearchResponse) as PlpSearchDataResults
+    ).response.sortOptions,
   },
 };

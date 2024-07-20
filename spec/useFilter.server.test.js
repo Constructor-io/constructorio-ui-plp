@@ -15,15 +15,16 @@ describe('Testing Hook on the server: useFilter', () => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  const searchResponse = transformSearchResponse(mockSearchResponse);
+  const searchData = transformSearchResponse(mockSearchResponse);
+  const useFilterProps = { facets: searchData.response.facets };
 
   it('Should throw an error if called outside of PlpContext', () => {
-    expect(() => renderHookServerSide(() => useFilter({ response: searchResponse }))).toThrow();
+    expect(() => renderHookServerSide(() => useFilter(useFilterProps))).toThrow();
   });
 
   it('Should not break if window is undefined', async () => {
     expect(() =>
-      renderHookServerSideWithCioPlp(() => useFilter({ response: searchResponse }), {
+      renderHookServerSideWithCioPlp(() => useFilter(useFilterProps), {
         apiKey: DEMO_API_KEY,
       }),
     ).not.toThrow();
@@ -32,18 +33,18 @@ describe('Testing Hook on the server: useFilter', () => {
   it('Should return facets array', async () => {
     const {
       result: { facets },
-    } = renderHookServerSideWithCioPlp(() => useFilter({ response: searchResponse }), {
+    } = renderHookServerSideWithCioPlp(() => useFilter(useFilterProps), {
       apiKey: DEMO_API_KEY,
     });
 
-    expect(facets).toHaveLength(searchResponse.facets.length);
-    expect(facets).toEqual(searchResponse.facets);
+    expect(facets).toHaveLength(searchData.response.facets.length);
+    expect(facets).toEqual(searchData.response.facets);
   });
 
   it('Should return a function to apply a filter', async () => {
     const {
       result: { setFilter },
-    } = renderHookServerSideWithCioPlp(() => useFilter({ response: searchResponse }), {
+    } = renderHookServerSideWithCioPlp(() => useFilter(useFilterProps), {
       apiKey: DEMO_API_KEY,
     });
 

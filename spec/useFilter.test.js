@@ -27,27 +27,28 @@ describe('Testing Hook: useFilter', () => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  const searchResponse = transformSearchResponse(mockSearchResponse);
+  const searchData = transformSearchResponse(mockSearchResponse);
+  const useFilterProps = { facets: searchData.response.facets };
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useFilter())).toThrow();
   });
 
   it('Should return facets array', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
         current: { facets },
       } = result;
 
-      expect(facets).toHaveLength(searchResponse.facets.length);
-      expect(facets).toEqual(searchResponse.facets);
+      expect(facets).toHaveLength(searchData.response.facets.length);
+      expect(facets).toEqual(searchData.response.facets);
     });
   });
 
   it('Should apply filter correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
@@ -62,7 +63,7 @@ describe('Testing Hook: useFilter', () => {
   });
 
   it('Should apply filter for number values correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
@@ -77,7 +78,7 @@ describe('Testing Hook: useFilter', () => {
   });
 
   it('Should apply filter for boolean values correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
@@ -92,7 +93,7 @@ describe('Testing Hook: useFilter', () => {
   });
 
   it('Should apply multiple-type filters correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
@@ -108,7 +109,7 @@ describe('Testing Hook: useFilter', () => {
   });
 
   it('Should apply range-type filters correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {
@@ -126,7 +127,7 @@ describe('Testing Hook: useFilter', () => {
   });
 
   it('Should remove a filter if value == null', async () => {
-    const { result } = renderHookWithCioPlp(() => useFilter({ response: searchResponse }));
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
 
     await waitFor(() => {
       const {

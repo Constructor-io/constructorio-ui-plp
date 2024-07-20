@@ -16,16 +16,20 @@ describe('Testing Hook on the server: useSort', () => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  const searchResponse = transformSearchResponse(mockSearchResponse);
-  const responseSortOptions = searchResponse.sortOptions;
+  const searchResponseData = transformSearchResponse(mockSearchResponse);
+  const responseSortOptions = searchResponseData.response.sortOptions;
+
+  const useSortOptionsProps = {
+    sortOptions: responseSortOptions,
+  };
 
   it('Should throw an error if called outside of PlpContext', () => {
-    expect(() => renderHookServerSide(() => useSort(searchResponse))).toThrow();
+    expect(() => renderHookServerSide(() => useSort(useSortOptionsProps))).toThrow();
   });
 
   it('Should not break if window is undefined', async () => {
     expect(() =>
-      renderHookServerSideWithCioPlp(() => useSort(searchResponse), {
+      renderHookServerSideWithCioPlp(() => useSort(useSortOptionsProps), {
         apiKey: DEMO_API_KEY,
       }),
     ).not.toThrow();
@@ -34,7 +38,7 @@ describe('Testing Hook on the server: useSort', () => {
   it('Should return sortOptions array', async () => {
     const {
       result: { sortOptions },
-    } = renderHookServerSideWithCioPlp(() => useSort(searchResponse), {
+    } = renderHookServerSideWithCioPlp(() => useSort(useSortOptionsProps), {
       apiKey: DEMO_API_KEY,
     });
 
@@ -45,7 +49,7 @@ describe('Testing Hook on the server: useSort', () => {
   it('Should return null sort option', async () => {
     const {
       result: { selectedSort },
-    } = renderHookServerSideWithCioPlp(() => useSort(searchResponse), {
+    } = renderHookServerSideWithCioPlp(() => useSort(useSortOptionsProps), {
       apiKey: DEMO_API_KEY,
     });
 
@@ -55,7 +59,7 @@ describe('Testing Hook on the server: useSort', () => {
   it('Should return a function to change selected sort', async () => {
     const {
       result: { changeSelectedSort },
-    } = renderHookServerSideWithCioPlp(() => useSort(searchResponse), {
+    } = renderHookServerSideWithCioPlp(() => useSort(useSortOptionsProps), {
       apiKey: DEMO_API_KEY,
     });
 

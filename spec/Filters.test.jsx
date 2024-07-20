@@ -8,7 +8,7 @@ import mockTransformedFacets from './local_examples/sampleFacets.json';
 import testJsonEncodedUrl from './local_examples/testJsonEncodedUrl.json';
 import { getStateFromUrl } from '../src/utils/urlHelpers';
 
-const mockSearchOrBrowseResponse = { facets: mockTransformedFacets };
+const filterProps = { facets: mockTransformedFacets };
 
 describe('Testing Component: Filters', () => {
   const originalWindowLocation = window.location;
@@ -38,7 +38,7 @@ describe('Testing Component: Filters', () => {
     it('Should render filters based on list of facets', async () => {
       const { getByText, container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters response={mockSearchOrBrowseResponse} />
+          <Filters {...filterProps} />
         </CioPlp>,
       );
 
@@ -63,7 +63,7 @@ describe('Testing Component: Filters', () => {
       const initialNumOptions = 2;
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters response={mockSearchOrBrowseResponse} initialNumOptions={initialNumOptions} />
+          <Filters {...filterProps} initialNumOptions={initialNumOptions} />
         </CioPlp>,
       );
 
@@ -83,7 +83,7 @@ describe('Testing Component: Filters', () => {
     it('Should mark options if selected', async () => {
       const { container, getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters response={mockSearchOrBrowseResponse} />
+          <Filters {...filterProps} />
         </CioPlp>,
       );
 
@@ -103,14 +103,14 @@ describe('Testing Component: Filters', () => {
     it('Should render correctly with render props', () => {
       const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
 
-      const filtersProps = {
-        response: mockSearchOrBrowseResponse,
+      const filtersPropsWithChildren = {
+        ...filterProps,
         children: mockChildren,
       };
 
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters {...filtersProps} />
+          <Filters {...filtersPropsWithChildren} />
         </CioPlp>,
       );
       expect(mockChildren).toHaveBeenCalled();
@@ -134,7 +134,7 @@ describe('Testing Component: Filters', () => {
         <CioPlp
           apiKey={DEMO_API_KEY}
           urlHelpers={{ setUrl: setCurrentUrl, getUrl: () => currentUrl }}>
-          <Filters response={mockSearchOrBrowseResponse} />
+          <Filters {...filterProps} />
           <div id='request-filters'>{filters}</div>;
         </CioPlp>
       );

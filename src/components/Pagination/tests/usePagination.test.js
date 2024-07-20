@@ -4,7 +4,6 @@ import usePagination from '../usePagination';
 import { renderHookWithCioPlp } from '../../../../spec/test-utils';
 
 const paginationProps = {
-  initialPage: 1,
   resultsPerPage: 10,
   totalNumResults: 1000,
   windowSize: 10,

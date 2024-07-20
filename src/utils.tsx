@@ -1,13 +1,17 @@
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  Nullable,
+  SearchParameters,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PrimaryColorStyles,
   RequestConfigs,
   RequestQueryParams,
-  PlpSearchRedirectResponse,
-  PlpSearchResponse,
   PlpFacet,
   PlpRangeFacet,
   PlpMultipleFacet,
+  PlpSearchDataResults,
+  PlpSearchDataRedirect,
+  PlpSearchData,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -93,16 +97,16 @@ export function getPreferredColorScheme() {
   return colorScheme;
 }
 
-export function isPlpSearchResponse(
-  response: PlpSearchRedirectResponse | PlpSearchResponse,
-): response is PlpSearchResponse {
-  return 'results' in response;
+export function isPlpSearchDataResults(
+  response: Nullable<PlpSearchData>,
+): response is PlpSearchDataResults {
+  return 'response' in (response || {});
 }
 
-export function isPlpRedirectSearchResponse(
-  response: PlpSearchRedirectResponse | PlpSearchResponse,
-): response is PlpSearchRedirectResponse {
-  return 'redirect' in response;
+export function isPlpSearchDataRedirect(
+  response: Nullable<PlpSearchData>,
+): response is PlpSearchDataRedirect {
+  return 'redirect' in (response || {});
 }
 
 export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
