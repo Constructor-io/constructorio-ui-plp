@@ -12,15 +12,15 @@ import { RequestStatus } from './reducer';
 import { isPlpSearchDataRedirect } from '../../utils';
 
 type CioPlpGridProps = {
-  initialSearchResponse?: SearchResponse;
+  initialResponse?: SearchResponse;
   spinner?: React.ReactNode;
 };
 type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
-  const { spinner, initialSearchResponse, children } = props;
+  const { spinner, initialResponse, children } = props;
 
-  const { data, status, refetch } = useSearchResults({ initialSearchResponse });
+  const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
   if (isPlpSearchDataRedirect(data)) {
     // Do redirect
     return '';

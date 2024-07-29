@@ -59,7 +59,6 @@ export function transformResultVariation(variation: ApiItem, includeRaw = true):
   return transformedVariation;
 }
 
-// TODO: transform variations as well
 export function transformResultItem(
   item: ApiItem,
   includeRaw = true,
@@ -162,7 +161,6 @@ export function transformSearchResponse(res: SearchResponse): Nullable<PlpSearch
 
   if (!response || !request) return null;
 
-  // Return PlpSearchRedirectResponse
   if (isAPIRedirectSearchResponse(response as SearchResponseType | Redirect)) {
     return {
       resultId,
@@ -172,7 +170,6 @@ export function transformSearchResponse(res: SearchResponse): Nullable<PlpSearch
     } as PlpSearchDataRedirect; // Type override due to partials in client-js
   }
 
-  // Return PlpSearchResponse
   return {
     resultId,
     request,
