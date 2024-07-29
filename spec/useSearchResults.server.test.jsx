@@ -37,20 +37,18 @@ describe('Testing Hook on the server: useSearchResults with initial search resul
   });
 
   it('Should return a PlpSearchResponse Object when provided initialSearchResponse', async () => {
-    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
-
     const { result } = renderHookServerSideWithCioPlp(
-      () => useSearchResults({ initialSearchResponse }),
+      () => useSearchResults({ initialSearchResponse: mockSearchResponse }),
       {
         apiKey: DEMO_API_KEY,
       },
     );
 
     const {
-      data: { response, rawApiResponse },
+      data: { response, rawApiResponse, resultId },
     } = result;
 
-    expect(response?.resultId).not.toBeUndefined();
+    expect(resultId).not.toBeUndefined();
     expect(response?.totalNumResults).not.toBeUndefined();
     expect(response?.refinedContent).not.toBeUndefined();
     expect(response?.groups).not.toBeUndefined();
@@ -82,13 +80,11 @@ describe('Testing Hook on the server: useSearchResults with no initialSearchResp
 
   it('Should return null when called with no initialSearchResponse', async () => {
     const {
-      result: {
-        data: { response },
-      },
+      result: { data },
     } = renderHookServerSideWithCioPlp(() => useSearchResults(), {
       apiKey: DEMO_API_KEY,
     });
 
-    expect(response).toBeNull();
+    expect(data).toBeNull();
   });
 });

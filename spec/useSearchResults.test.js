@@ -37,10 +37,10 @@ describe('Testing Hook: useSearchResults', () => {
     await waitFor(() => {
       const { current } = result;
       const {
-        data: { response, rawApiResponse, request },
+        data: { response, rawApiResponse, request, resultId },
       } = current;
 
-      expect(response?.resultId).not.toBeUndefined();
+      expect(resultId).not.toBeUndefined();
       expect(response?.totalNumResults).not.toBeUndefined();
       expect(response?.refinedContent).not.toBeUndefined();
       expect(response?.groups).not.toBeUndefined();

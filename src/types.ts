@@ -42,17 +42,32 @@ export interface Callbacks {
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
 }
 
-export interface PlpSearchRedirectResponse {
+export type PlpSearchData = PlpSearchDataResults | PlpSearchDataRedirect;
+
+export interface PlpSearchDataResults {
   resultId: string;
-  redirect: Partial<Redirect>;
-  rawResponse: SearchResponse;
+  request: SearchRequestType;
+  rawApiResponse: SearchResponse;
+  response: PlpSearchResponse;
 }
 
-export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
-export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
-export type RedirectResponseState = Nullable<
-  Omit<Partial<PlpSearchRedirectResponse>, 'rawResponse'>
->;
+export interface PlpSearchDataRedirect {
+  resultId: string;
+  request: SearchRequestType;
+  rawApiResponse: SearchResponse;
+  redirect: Redirect;
+}
+
+export interface PlpSearchResponse {
+  totalNumResults: number;
+  numResultsPerPage: number;
+  results: Array<Item>;
+  facets: Array<PlpFacet>;
+  groups: Array<ApiGroup>;
+  sortOptions: Array<PlpSortOption>;
+  refinedContent: Record<string, any>[];
+}
+
 export type DefaultQueryStringMap = {
   query: 'q';
   page: 'page';
@@ -168,18 +183,6 @@ export interface SwatchItem {
   variationId?: string;
 }
 
-export interface PlpSearchResponse {
-  resultId: string;
-  totalNumResults: number;
-  numResultsPerPage: number;
-  results: Array<Item>;
-  facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
-  sortOptions: Array<PlpSortOption>;
-  refinedContent: Record<string, any>[];
-  rawResponse: SearchResponse;
-}
-
 export type PaginationProps = PaginationObject;
 export interface PlpBrowseResponse {
   resultId: string;
@@ -200,11 +203,12 @@ export interface CioPlpProviderProps {
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
   urlHelpers?: Partial<UrlHelpers>;
-  initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialResponse?: SearchResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
 export type CioPlpProps = CioPlpProviderProps;
+export type UseCioPlpProps = CioPlpProviderProps;
 
 export type UseSortReturn = {
   sortOptions: PlpSortOption[];
@@ -316,4 +320,13 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
  */
 export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
   children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
+};
+
+/**
+ * Composes a type includes the original untransformed type, in the transformed one
+ * - Transformed Type T,
+ * - OriginalType from which T was derived
+ */
+export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType & {
+  rawResponse?: OriginalType;
 };

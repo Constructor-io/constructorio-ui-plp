@@ -52,11 +52,11 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render spinner if data has been fetched', async () => {
-    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.SUCCESS,
-      data: { response: { ...mockData } },
+      data: { response: mockSearchData.response },
     });
 
     const { queryByTestId } = render(
@@ -105,11 +105,11 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render custom spinner if data has been fetched', async () => {
-    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.SUCCESS,
-      data: { response: { ...mockData } },
+      data: { response: mockSearchData.response },
     });
 
     const { queryByText } = render(
@@ -138,11 +138,11 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should render results when data is fetched', async () => {
-    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.SUCCESS,
-      data: { response: { ...mockData } },
+      data: { response: mockSearchData.response },
     });
 
     const { getByText } = render(
@@ -151,20 +151,22 @@ describe('Testing Component: CioPlpGrid', () => {
       </CioPlp>,
     );
 
-    await waitFor(() => expect(getByText(mockData.results[0].itemName)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByText(mockSearchData.response.results[0].itemName)).toBeInTheDocument(),
+    );
   });
 
   it('Should render results when provided with initialSearchResponse', async () => {
-    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
 
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <CioPlpGrid initialSearchResponse={initialSearchResponse} />
+        <CioPlpGrid initialSearchResponse={mockSearchResponse} />
       </CioPlp>,
     );
 
     await waitFor(() =>
-      expect(getByText(initialSearchResponse.results[0].itemName)).toBeInTheDocument(),
+      expect(getByText(mockSearchData.response.results[0].itemName)).toBeInTheDocument(),
     );
   });
 });

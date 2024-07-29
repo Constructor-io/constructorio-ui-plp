@@ -25,15 +25,19 @@ describe('Testing Hook: useSort', () => {
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
-  const searchResponse = transformSearchResponse(mockSearchResponse);
-  const responseSortOptions = searchResponse.sortOptions;
+  const searchResponseData = transformSearchResponse(mockSearchResponse);
+  const responseSortOptions = searchResponseData.response.sortOptions;
+
+  const useSortOptionsProps = {
+    sortOptions: responseSortOptions,
+  };
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useSort())).toThrow();
   });
 
   it('Should return sortOptions array', async () => {
-    const { result } = renderHookWithCioPlp(() => useSort(searchResponse));
+    const { result } = renderHookWithCioPlp(() => useSort(useSortOptionsProps));
 
     await waitFor(() => {
       const {
@@ -46,7 +50,7 @@ describe('Testing Hook: useSort', () => {
   });
 
   it('Should return the default sort option if none is already selected in request configs', async () => {
-    const { result } = renderHookWithCioPlp(() => useSort(searchResponse));
+    const { result } = renderHookWithCioPlp(() => useSort(useSortOptionsProps));
 
     await waitFor(() => {
       const {
@@ -63,7 +67,7 @@ describe('Testing Hook: useSort', () => {
     const sortOrder = 'ascending';
     window.location.href = `https://www.example.com/group_id/test?sortBy=${sortBy}&sortOrder=${sortOrder}`;
 
-    const { result } = renderHookWithCioPlp(() => useSort(searchResponse));
+    const { result } = renderHookWithCioPlp(() => useSort(useSortOptionsProps));
 
     await waitFor(() => {
       const {
@@ -76,7 +80,7 @@ describe('Testing Hook: useSort', () => {
   });
 
   it('Should change selected sort option correctly', async () => {
-    const { result } = renderHookWithCioPlp(() => useSort(searchResponse));
+    const { result } = renderHookWithCioPlp(() => useSort(useSortOptionsProps));
 
     await waitFor(() => {
       const {

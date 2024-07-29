@@ -1,13 +1,16 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  Nullable,
+  SearchParameters,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useReducer } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
-import { PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
+import { PlpSearchData } from '../types';
 import {
   RequestStatus,
   searchReducer,
   SearchAction,
-  SearchData,
   initialState,
   initFunction,
 } from '../components/CioPlpGrid/reducer';
@@ -17,13 +20,13 @@ import { getSearchParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
-  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialSearchResponse?: SearchResponse;
 }
 
 export interface UseSearchResultsReturn {
   status: RequestStatus | null;
   message?: string;
-  data: SearchData;
+  data: Nullable<PlpSearchData>;
   refetch: () => void;
 }
 

@@ -27,17 +27,17 @@ describe('Testing Component: Sort', () => {
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
-  const searchResponse = transformSearchResponse(mockSearchResponse);
-  const responseSortOptions = searchResponse.sortOptions;
+  const searchData = transformSearchResponse(mockSearchResponse);
+  const responseSortOptions = searchData.response.sortOptions;
 
   it('Should throw error if used outside the CioPlp', () => {
-    expect(() => render(<Sort searchOrBrowseResponse={searchResponse} />)).toThrow();
+    expect(() => render(<Sort sortOptions={searchData.response.sortOptions} />)).toThrow();
   });
 
   it('Should render sort options based on search or browse response', async () => {
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Sort searchOrBrowseResponse={searchResponse} />
+        <Sort sortOptions={searchData.response.sortOptions} />
       </CioPlp>,
     );
 
@@ -51,7 +51,7 @@ describe('Testing Component: Sort', () => {
   it('Should change selected sort option in component correctly', async () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Sort searchOrBrowseResponse={searchResponse} />
+        <Sort sortOptions={searchData.response.sortOptions} />
       </CioPlp>,
     );
 
@@ -71,7 +71,7 @@ describe('Testing Component: Sort', () => {
   it('Should change selected sort option in url correctly', async () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Sort searchOrBrowseResponse={searchResponse} />
+        <Sort sortOptions={searchData.response.sortOptions} />
       </CioPlp>,
     );
 
@@ -89,7 +89,7 @@ describe('Testing Component: Sort', () => {
     const mockChildren = jest.fn().mockReturnValue(<div>Custom Sort</div>);
 
     const sortProps = {
-      searchOrBrowseResponse: searchResponse,
+      sortOptions: searchData.response.sortOptions,
       children: mockChildren,
     };
 

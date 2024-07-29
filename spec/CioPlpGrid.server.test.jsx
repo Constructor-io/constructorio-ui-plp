@@ -42,11 +42,11 @@ describe('Testing Component on the server: CioPlpGrid', () => {
   });
 
   it('Should render title and search results when data is fetched', () => {
-    const mockData = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.SUCCESS,
-      data: { response: { ...mockData } },
+      data: { response: mockSearchData.response },
     });
 
     const html = renderToString(
@@ -55,18 +55,18 @@ describe('Testing Component on the server: CioPlpGrid', () => {
       </CioPlp>,
     );
 
-    expect(html).toContain(mockData.results[0].itemName);
+    expect(html).toContain(mockSearchData.response.results[0].itemName);
   });
 
   it('Should render title and search results when when provided initialSearchResponse', async () => {
-    const initialSearchResponse = transformSearchResponse(mockSearchResponse);
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <CioPlpGrid initialSearchResponse={initialSearchResponse} />
+        <CioPlpGrid initialSearchResponse={mockSearchResponse} />
       </CioPlp>,
     );
 
-    expect(html).toContain(initialSearchResponse.results[0].itemName);
+    expect(html).toContain(mockSearchData.response.results[0].itemName);
   });
 });

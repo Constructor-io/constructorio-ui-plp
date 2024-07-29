@@ -6,7 +6,7 @@ import CioPlp from '../src/components/CioPlp';
 import Filters from '../src/components/Filters';
 import mockTransformedFacets from './local_examples/sampleFacets.json';
 
-const mockSearchOrBrowseResponse = { facets: mockTransformedFacets };
+const filterProps = { facets: mockTransformedFacets };
 
 describe('Testing Component on the server: Filters', () => {
   beforeEach(() => {
@@ -20,13 +20,13 @@ describe('Testing Component on the server: Filters', () => {
   });
 
   it('Should throw error if used outside the CioPlp', () => {
-    expect(() => renderToString(<Filters facets={mockTransformedFacets} />)).toThrow();
+    expect(() => renderToString(<Filters {...filterProps} />)).toThrow();
   });
 
   it('Should render filters based on search or browse response', async () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters response={mockSearchOrBrowseResponse} />
+        <Filters {...filterProps} />
       </CioPlp>,
     );
 
@@ -38,14 +38,14 @@ describe('Testing Component on the server: Filters', () => {
   it('Should render correctly with render props', () => {
     const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
 
-    const filterProps = {
-      response: mockSearchOrBrowseResponse,
+    const filterPropsWithChildren = {
+      ...filterProps,
       children: mockChildren,
     };
 
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters {...filterProps} />
+        <Filters {...filterPropsWithChildren} />
       </CioPlp>,
     );
     expect(mockChildren).toHaveBeenCalled();
