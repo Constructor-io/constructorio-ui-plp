@@ -6,14 +6,12 @@ import {
   SortOption,
   Facet,
   FacetOption,
-  Group,
   Result,
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   Item,
   ApiItem,
-  PlpBrowseResponse,
   PlpSortOption,
   Variation,
   PlpFacet,
@@ -21,6 +19,7 @@ import {
   PlpSearchDataRedirect,
   PlpSearchDataResults,
   PlpSearchData,
+  PlpBrowseData,
 } from '../types';
 import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
 
@@ -186,22 +185,23 @@ export function transformSearchResponse(res: SearchResponse): Nullable<PlpSearch
   } as PlpSearchDataResults; // Type override due to partials in client-js
 }
 
-export function transformBrowseResponse(
-  res: GetBrowseResultsResponse,
-): IncludeRawResponse<PlpBrowseResponse, GetBrowseResultsResponse> | null {
+export function transformBrowseResponse(res: GetBrowseResultsResponse): Nullable<PlpBrowseData> {
   const { response, request, result_id: resultId } = res;
 
   if (!response || !request) return null;
 
   return {
     resultId,
-    totalNumResults: response.total_num_results,
-    numResultsPerPage: request.num_results_per_page,
-    results: (response.results as Result[]).map((result) => transformResultItem(result, false)),
-    facets: transformResponseFacets(response.facets as Facet[]),
-    groups: response.groups as Group[],
-    sortOptions: transformResponseSortOptions(response.sort_options),
-    refinedContent: response.refined_content,
-    rawResponse: res,
-  } as PlpBrowseResponse; // Type override due to partials in client-js
+    request,
+    rawApiResponse: res,
+    response: {
+      totalNumResults: response.total_num_results,
+      numResultsPerPage: request.num_results_per_page,
+      results: (response.results as Result[]).map((result) => transformResultItem(result, false)),
+      facets: transformResponseFacets(response.facets as Facet[]),
+      groups: response.groups,
+      sortOptions: transformResponseSortOptions(response.sort_options),
+      refinedContent: response.refined_content,
+    },
+  } as PlpBrowseData; // Type override due to partials in client-js
 }

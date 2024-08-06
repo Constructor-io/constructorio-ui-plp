@@ -31,13 +31,13 @@ describe('Testing Hook: useBrowseResults', () => {
       const response = result?.current.browseResults;
 
       expect(response?.resultId).not.toBeUndefined();
-      expect(response?.totalNumResults).not.toBeUndefined();
-      expect(response?.refinedContent).not.toBeUndefined();
-      expect(response?.groups).not.toBeUndefined();
-      expect(response?.results?.length).not.toBeUndefined();
-      expect(response?.facets?.length).not.toBeUndefined();
-      expect(response?.sortOptions?.length).not.toBeUndefined();
-      expect(response?.rawResponse).not.toBeUndefined();
+      expect(response?.response?.totalNumResults).not.toBeUndefined();
+      expect(response?.response?.refinedContent).not.toBeUndefined();
+      expect(response?.response?.groups).not.toBeUndefined();
+      expect(response?.response?.results?.length).not.toBeUndefined();
+      expect(response?.response?.facets?.length).not.toBeUndefined();
+      expect(response?.response?.sortOptions?.length).not.toBeUndefined();
+      expect(response?.rawApiResponse).not.toBeUndefined();
     });
   });
 

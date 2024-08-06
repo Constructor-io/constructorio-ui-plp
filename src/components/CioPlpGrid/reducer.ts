@@ -1,6 +1,9 @@
-import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { Nullable, PlpSearchData } from '../../types';
-import { transformSearchResponse } from '../../utils/transformers';
+import {
+  GetBrowseResultsResponse,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { Nullable, PlpBrowseData, PlpSearchData } from '../../types';
+import { transformBrowseResponse, transformSearchResponse } from '../../utils/transformers';
 
 export enum RequestStatus {
   STALE = 'stale',
@@ -9,33 +12,41 @@ export enum RequestStatus {
   ERROR = 'error',
 }
 
-export interface SearchState {
+export enum RequestType {
+  SEARCH = 'search',
+  BROWSE = 'browse',
+}
+
+export interface RequestState {
   status: RequestStatus;
   message?: string;
   search: Nullable<PlpSearchData>;
+  browse: Nullable<PlpBrowseData>;
 }
 
-type SearchActionSuccess = {
+type RequestActionSuccess = {
   type: RequestStatus.SUCCESS;
-  payload: SearchState['search'];
+  requestType: RequestType;
+  payload: RequestState['search'] | RequestState['browse'];
 };
 
-type SearchActionError = {
+type RequestActionError = {
   type: RequestStatus.ERROR;
   payload: string;
 };
 
-export type SearchAction =
+export type RequestAction =
   | { type: RequestStatus.STALE | RequestStatus.FETCHING }
-  | SearchActionError
-  | SearchActionSuccess;
+  | RequestActionError
+  | RequestActionSuccess;
 
-export const initialState: SearchState = {
+export const initialState: RequestState = {
   status: RequestStatus.STALE,
   search: null,
+  browse: null,
 };
 
-export function searchReducer(state: SearchState, action: SearchAction) {
+export function requestReducer(state: RequestState, action: RequestAction) {
   switch (action.type) {
     case RequestStatus.FETCHING: {
       return {
@@ -45,17 +56,23 @@ export function searchReducer(state: SearchState, action: SearchAction) {
     }
 
     case RequestStatus.SUCCESS: {
-      const { payload } = action;
-      let search: Nullable<SearchState['search']> = null;
+      const { payload, requestType } = action;
+      let search: Nullable<RequestState['search']> = null;
+      let browse: Nullable<RequestState['browse']> = null;
 
       if (payload) {
-        search = transformSearchResponse(payload.rawApiResponse);
+        if (requestType === RequestType.SEARCH) {
+          search = transformSearchResponse(payload.rawApiResponse as SearchResponse);
+        } else if (requestType === RequestType.BROWSE) {
+          browse = transformBrowseResponse(payload.rawApiResponse as GetBrowseResultsResponse);
+        }
       }
 
       return {
         ...state,
         status: RequestStatus.SUCCESS,
         search,
+        browse,
       };
     }
 
@@ -73,13 +90,14 @@ export function searchReducer(state: SearchState, action: SearchAction) {
 }
 
 export function initFunction(
-  defaultState: SearchState,
+  defaultState: RequestState,
   initialSearchResponse?: SearchResponse,
-): SearchState {
+): RequestState {
   if (initialSearchResponse) {
     return {
       status: RequestStatus.STALE,
       search: transformSearchResponse(initialSearchResponse),
+      browse: null,
     };
   }
 

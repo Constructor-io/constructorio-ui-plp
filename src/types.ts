@@ -15,6 +15,7 @@ import {
   SearchResponseType,
   Redirect,
   SearchParameters,
+  BrowseRequestType,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -184,17 +185,15 @@ export interface SwatchItem {
 }
 
 export type PaginationProps = PaginationObject;
-export interface PlpBrowseResponse {
+
+export interface PlpBrowseData {
   resultId: string;
-  totalNumResults: number;
-  numResultsPerPage: number;
-  results: Array<Item>;
-  facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
-  sortOptions: Array<PlpSortOption>;
-  refinedContent: Record<string, any>[];
-  rawResponse: GetBrowseResultsResponse;
+  request: BrowseRequestType;
+  rawApiResponse: GetBrowseResultsResponse;
+  response: PlpBrowseResponse;
 }
+
+export interface PlpBrowseResponse extends PlpSearchResponse {}
 
 export interface CioPlpProviderProps {
   apiKey: string;
