@@ -46,3 +46,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
     </>
   );
 }
+
+Pagination.defaultProps = {
+  resultsPerPage: 20,
+  windowSize: 5,
+};

@@ -216,17 +216,21 @@ export type UseSortReturn = {
   changeSelectedSort: (sortOption: PlpSortOption) => void;
 };
 
-/**
- * Represents a function that handles pagination logic.
- * @param searchResponse - The search response data.
- * @param windowSize - The number of pages to display in the pagination window.
- * @returns An object containing pagination information and methods.
- */
 export type UsePaginationProps = {
-  totalNumResults?: number;
+  /**
+   * Total number of results
+   */
+  totalNumResults: number;
+  /**
+   * Number of results returned per page
+   */
   resultsPerPage?: number;
+  /**
+   * Number of pages to display in the pagination window
+   */
   windowSize?: number;
 };
+
 export type UsePagination = (props: UsePaginationProps) => PaginationObject;
 
 export interface PaginationObject {
