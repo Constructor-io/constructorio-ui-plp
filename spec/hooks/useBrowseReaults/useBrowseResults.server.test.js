@@ -31,15 +31,15 @@ describe('Testing Hook on the server: useBrowseResults with initial browse resul
       },
     );
 
-    const response = result.browseResults;
-    expect(response?.resultId).not.toBeUndefined();
-    expect(response?.response?.totalNumResults).not.toBeUndefined();
-    expect(response?.response?.refinedContent).not.toBeUndefined();
-    expect(response?.response?.groups).not.toBeUndefined();
-    expect(response?.response?.results?.length).not.toBeUndefined();
-    expect(response?.response?.facets?.length).not.toBeUndefined();
-    expect(response?.response?.sortOptions?.length).not.toBeUndefined();
-    expect(response?.rawApiResponse).not.toBeUndefined();
+    const { response, resultId, rawApiResponse } = result.browseResults;
+    expect(resultId).not.toBeUndefined();
+    expect(response.totalNumResults).not.toBeUndefined();
+    expect(response.refinedContent).not.toBeUndefined();
+    expect(response.groups).not.toBeUndefined();
+    expect(response.results?.length).not.toBeUndefined();
+    expect(response.facets?.length).not.toBeUndefined();
+    expect(response.sortOptions?.length).not.toBeUndefined();
+    expect(rawApiResponse).not.toBeUndefined();
   });
 });
 

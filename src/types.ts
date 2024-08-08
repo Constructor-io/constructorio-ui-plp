@@ -217,7 +217,7 @@ export type UseSortReturn = {
 
 export type UsePaginationProps = {
   /**
-   * Total number of results
+   * Total number of results returned by the API response
    */
   totalNumResults: number;
   /**
