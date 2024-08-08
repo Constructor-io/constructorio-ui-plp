@@ -12,15 +12,15 @@ function MyCustomBrowseResultsComponent(props: UseBrowseResultsProps) {
       <h2>Result Id </h2>
       <div>{JSON.stringify(browseResults?.resultId)}</div>
       <h2>Total Number of Results </h2>
-      <div>{JSON.stringify(browseResults?.totalNumResults)}</div>
+      <div>{JSON.stringify(browseResults?.response?.totalNumResults)}</div>
       <h2>Array of Groups</h2>
-      <div>{JSON.stringify(browseResults?.groups)}</div>
+      <div>{JSON.stringify(browseResults?.response?.groups)}</div>
       <h2>Array of Facets</h2>
-      <div>{JSON.stringify(browseResults?.facets)}</div>
+      <div>{JSON.stringify(browseResults?.response?.facets)}</div>
       <h2>Array of Sort Options</h2>
-      <div>{JSON.stringify(browseResults?.sortOptions)}</div>
+      <div>{JSON.stringify(browseResults?.response?.sortOptions)}</div>
       <h2>Array of Results</h2>
-      <div>{JSON.stringify(browseResults?.results)}</div>
+      <div>{JSON.stringify(browseResults?.response?.results)}</div>
     </>
   );
 }

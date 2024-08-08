@@ -1,4 +1,4 @@
-import { Meta, Canvas } from '@storybook/blocks';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
 import * as PaginationStories from './Pagination.stories';
 
 <Meta of={PaginationStories} />
@@ -8,7 +8,6 @@ A Component to manage pagination interactions and UI.
 
 <Canvas of={PaginationStories.Primary} />
 
-{/* Todo: Update examples */}
 ## Basic Example
   ```jsx
   import React from 'react';
@@ -22,13 +21,12 @@ A Component to manage pagination interactions and UI.
     return (
       <>
         <CioPlp apiKey={MY_API_KEY}>
-          <Pagination pagination={{ currentPage, goToPage, nextPage, pages, prevPage, totalPages }}>
+          <Pagination pagination={{ currentPage, goToPage, nextPage, pages, prevPage, totalPages }} />
         </CioPlp>
       </>
     );
   }
   ```
-
 
 ## Using RenderProps
 If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
@@ -74,8 +72,5 @@ function myApp() {
 }
 ```
 
-  
-
-{/* Todo: add control once props are updated to usePaginationProps */}
-{/* <h2>Controls</h2> */}
-{/* <Controls /> */}
+## Controls
+<Controls />

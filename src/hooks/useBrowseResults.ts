@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PlpBrowseResponse } from '../types';
+import { PlpBrowseData } from '../types';
 import { getBrowseParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
 
 export interface UseBrowseResultsProps {
-  initialBrowseResponse?: PlpBrowseResponse;
+  initialBrowseResponse?: PlpBrowseData;
 }
 
 export type UseBrowseResultsReturn = {
-  browseResults: PlpBrowseResponse | null;
+  browseResults: PlpBrowseData | null;
   handleSubmit: () => void;
 };
 
@@ -51,7 +51,7 @@ export default function useBrowseResults(
     throw new Error('CioClient required');
   }
 
-  const [browseResponse, setBrowseResponse] = useState<PlpBrowseResponse | null>(
+  const [browseResponse, setBrowseResponse] = useState<PlpBrowseData | null>(
     initialBrowseResponse || null,
   );
 
