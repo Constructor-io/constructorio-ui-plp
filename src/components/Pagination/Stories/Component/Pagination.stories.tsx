@@ -56,4 +56,8 @@ export const KitchenSink: Story = {
         PrimaryStory({ args: { totalNumResults: 200, resultsPerPage: 10 } }),
       ),
   ],
+  args: {
+    totalNumResults: 200,
+    resultsPerPage: 10,
+  },
 };

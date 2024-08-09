@@ -23,7 +23,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
   if (isPlpSearchDataRedirect(data)) {
     // Do redirect
-    return '';
+    return null;
   }
 
   const response = data?.response;

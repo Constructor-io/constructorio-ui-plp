@@ -9,10 +9,11 @@ import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchData } from '../types';
 import {
   RequestStatus,
-  searchReducer,
-  SearchAction,
+  requestReducer,
+  RequestAction,
   initialState,
   initFunction,
+  RequestType,
 } from '../components/CioPlpGrid/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
@@ -34,7 +35,7 @@ const fetchSearchResults = async (
   client: ConstructorIOClient,
   query: string,
   searchParams: SearchParameters,
-  dispatch: React.Dispatch<SearchAction>,
+  dispatch: React.Dispatch<RequestAction>,
 ) => {
   dispatch({
     type: RequestStatus.FETCHING,
@@ -45,6 +46,7 @@ const fetchSearchResults = async (
 
     dispatch({
       type: RequestStatus.SUCCESS,
+      requestType: RequestType.SEARCH,
       payload: transformSearchResponse(res),
     });
   } catch (err) {
@@ -89,7 +91,7 @@ export default function useSearchResults(
     throw new Error('CioClient required');
   }
 
-  const [state, dispatch] = useReducer(searchReducer, initialState, (defaultState) =>
+  const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
     initFunction(defaultState, initialSearchResponse),
   );
 
