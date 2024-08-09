@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import useCioPlp from '../src/hooks/useCioPlp';
-import { mockConstructorIOClient, renderHookWithCioPlp } from './test-utils';
-import { PlpSearchDataResults, PlpSortOption } from '../src/types';
-import apiSearchResponse from './local_examples/apiSearchResponse.json';
+import useCioPlp from '../../../src/hooks/useCioPlp';
+import { mockConstructorIOClient, renderHookWithCioPlp } from '../../test-utils';
+import { PlpSearchDataResults, PlpSortOption } from '../../../src/types';
+import apiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
 const originalWindowLocation = window.location;
 
