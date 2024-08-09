@@ -208,7 +208,6 @@ export interface CioPlpProviderProps {
 }
 
 export type CioPlpProps = CioPlpProviderProps;
-export type UseCioPlpProps = CioPlpProviderProps;
 
 export type UseSortReturn = {
   sortOptions: PlpSortOption[];

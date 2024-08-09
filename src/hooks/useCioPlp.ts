@@ -10,8 +10,17 @@ import { isPlpSearchDataResults } from '../utils';
 export interface UseCioPlpHook extends PlpContextValue {}
 
 export interface UseCioPlpProps extends UseSearchResultsProps {
+  /**
+   * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+   */
   paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+  /**
+   * No configurations available yet.
+   */
   sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
+  /**
+   * No configurations available yet.
+   */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
 }
 
