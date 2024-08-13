@@ -45,14 +45,13 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
   // If Search
   const { data: searchData, refetch } = useSearchResults({ initialSearchResponse });
 
-  const data = searchData;
   useEffect(() => {
-    if (isPlpSearchDataResults(data)) {
-      setFacets(data.response.facets);
-      setSortOptions(data.response.sortOptions);
-      setTotalNumResults(data.response.totalNumResults);
+    if (isPlpSearchDataResults(searchData)) {
+      setFacets(searchData.response.facets);
+      setSortOptions(searchData.response.sortOptions);
+      setTotalNumResults(searchData.response.totalNumResults);
     }
-  }, [data]);
+  }, [searchData]);
 
   const filters = useFilter({ facets, ...filterConfigs });
   const sort = useSort({ sortOptions, ...sortConfigs });

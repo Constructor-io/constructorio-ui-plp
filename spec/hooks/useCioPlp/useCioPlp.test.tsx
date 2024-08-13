@@ -139,8 +139,7 @@ describe('Testing Hook: useCioPlp', () => {
       expect(window.location.href.indexOf('page=4')).toBeGreaterThan(-1);
 
       filters.setFilter('color', 'red');
-      // eslint-disable-next-line @cspell/spellchecker
-      expect(window.location.href.indexOf('filters%5Bcolor%5D=red')).toBeGreaterThan(-1);
+      expect(decodeURI(window.location.href).indexOf('filters[color]=red')).toBeGreaterThan(-1);
     });
   });
 });
