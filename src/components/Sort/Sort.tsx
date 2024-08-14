@@ -1,32 +1,25 @@
 import React, { useState } from 'react';
-import useSort from '../../hooks/useSort';
-import {
-  IncludeRenderProps,
-  PlpBrowseResponse,
-  PlpSearchResponse,
-  UseSortReturn,
-} from '../../types';
+import useSort, { UseSortProps } from '../../hooks/useSort';
+import { IncludeRenderProps, UseSortReturn } from '../../types';
 import MobileModal from '../MobileModal/MobileModal';
 
-type SortProps = {
+type SortProps = UseSortProps & {
   /**
    * Default open state of dropdown
    */
   isOpen?: boolean;
-  /**
-   * Used to build and render sort options dynamically
-   */
-  searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse;
 };
 type SortWithRenderProps = IncludeRenderProps<SortProps, UseSortReturn>;
 
 export default function Sort({
   isOpen: defaultOpen = true,
-  searchOrBrowseResponse,
+  sortOptions: sortOptionsFromProps,
   children,
 }: SortWithRenderProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const { sortOptions, selectedSort, changeSelectedSort } = useSort(searchOrBrowseResponse);
+  const { sortOptions, selectedSort, changeSelectedSort } = useSort({
+    sortOptions: sortOptionsFromProps,
+  });
 
   const toggleCollapsible = () => {
     setIsOpen(!isOpen);

@@ -4,25 +4,26 @@ import useRequestConfigs from '../../hooks/useRequestConfigs';
 
 const usePagination: UsePagination = ({
   totalNumResults,
-  resultsPerPage: resultsPerPageFromProps = 20,
+  resultsPerPage: resultsPerPageFromProps,
   windowSize = 5,
 }) => {
   const [totalPages, setTotalPages] = useState(0);
+
   const {
-    requestConfigs: { page: currentPage, resultsPerPage },
+    requestConfigs: { page: currentPage, resultsPerPage: resultsPerPageFromConfigs },
     setRequestConfigs,
   } = useRequestConfigs();
 
-  const numResultsPerPage = resultsPerPageFromProps || resultsPerPage;
-  const setCurrentPage = (page: number) =>
-    setRequestConfigs({ page, resultsPerPage: numResultsPerPage });
+  const resultsPerPage = resultsPerPageFromProps || resultsPerPageFromConfigs || 20;
+
+  const setCurrentPage = (page: number) => setRequestConfigs({ page, resultsPerPage });
 
   // Calculate total number of pages
   useEffect(() => {
-    if (totalNumResults && numResultsPerPage) {
-      setTotalPages(Math.ceil(totalNumResults / numResultsPerPage));
+    if (totalNumResults && resultsPerPage) {
+      setTotalPages(Math.ceil(totalNumResults / resultsPerPage));
     }
-  }, [totalNumResults, numResultsPerPage]);
+  }, [totalNumResults, resultsPerPage]);
 
   const goToPage = (page: number) => {
     if (currentPage && page >= 1 && page <= totalPages) {

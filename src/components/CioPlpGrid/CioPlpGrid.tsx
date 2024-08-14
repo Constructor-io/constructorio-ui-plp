@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from '../../types';
+import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
+import { IncludeRenderProps } from '../../types';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import FiltersIcon from '../Filters/FiltersIcon';
@@ -10,21 +11,27 @@ import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchR
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner/Spinner';
 import { RequestStatus } from './reducer';
+import { isPlpSearchDataRedirect } from '../../utils';
 
 type CioPlpGridProps = {
-  initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialResponse?: SearchResponse;
   spinner?: React.ReactNode;
 };
 type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const { spinner, initialResponse, children } = props;
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
-  const response = data?.response as unknown as PlpSearchResponse;
-  const searchTerm = data?.request?.term;
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  if (isPlpSearchDataRedirect(data)) {
+    // Do redirect
+    return null;
+  }
+
+  const response = data?.response;
+  const searchTerm = data?.request?.term;
 
   const renderTitle = (
     <span className='cio-products-header-title'>
@@ -54,7 +61,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container'>
-                    <Filters response={response} />
+                    <Filters facets={response.facets} />
                   </div>
                   <div className='cio-products-container'>
                     <div className='cio-mobile-products-header-container'>{renderTitle}</div>
@@ -67,11 +74,11 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         Filters
                       </button>
                       {renderTitle}
-                      <Sort searchOrBrowseResponse={response} isOpen={false} />
+                      <Sort sortOptions={response.sortOptions} isOpen={false} />
                     </div>
                     <div className='cio-product-tiles-container'>
                       <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
-                        <Filters response={response} />
+                        <Filters facets={response.facets} />
                       </MobileModal>
                       {response?.results?.map((item) => (
                         <div className='cio-product-tile'>
@@ -80,7 +87,10 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                       ))}
                     </div>
                     <div className='cio-pagination-container'>
-                      <Pagination totalNumResults={response?.totalNumResults} />
+                      <Pagination
+                        totalNumResults={response.totalNumResults}
+                        resultsPerPage={response.numResultsPerPage}
+                      />
                     </div>
                   </div>
                 </div>

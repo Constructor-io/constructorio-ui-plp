@@ -1,5 +1,5 @@
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpBrowseResponse, PlpFacet, PlpFilterValue, PlpSearchResponse } from '../types';
+import { PlpFacet, PlpFilterValue } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
@@ -11,12 +11,11 @@ export interface UseFilterProps {
   /**
    * Used to build and render filters dynamically
    */
-  response: PlpBrowseResponse | PlpSearchResponse;
+  facets: Array<PlpFacet>;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
-  const { response: searchOrBrowseResponse } = props;
-  const { facets } = searchOrBrowseResponse;
+  const { facets } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {

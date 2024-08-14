@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpBrowseResponse, PlpSearchResponse, PlpSortOption, UseSortReturn } from '../types';
+import { PlpSortOption, UseSortReturn } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
-const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse): UseSortReturn => {
+export interface UseSortProps {
+  /**
+   * Used to build and render sort options dynamically
+   */
+  sortOptions: Array<PlpSortOption>;
+}
+
+const useSort = ({ sortOptions }: UseSortProps): UseSortReturn => {
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -12,7 +19,6 @@ const useSort = (searchOrBrowseResponse: PlpBrowseResponse | PlpSearchResponse):
 
   const [selectedSort, setSelectedSort] = useState<PlpSortOption | null>(null);
 
-  const { sortOptions } = searchOrBrowseResponse;
   const {
     requestConfigs: { sortBy, sortOrder },
     setRequestConfigs,
