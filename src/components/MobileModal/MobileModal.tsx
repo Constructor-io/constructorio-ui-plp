@@ -1,8 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 
 type MobileModalProps = {
+  /**
+   * where to animate the modal from
+   */
   side?: 'left' | 'right';
+  /**
+   * open state of modal
+   */
   isOpen?: boolean;
+  /**
+   * function to update open state of modal
+   */
   setIsOpen?: (b: boolean) => void;
 };
 
