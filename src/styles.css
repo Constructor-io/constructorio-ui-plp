@@ -6,6 +6,7 @@
 @import './components//CioPlpGrid/CioPlpGrid.css';
 @import './components/Spinner/Spinner.css';
 @import './components/Sort/Sort.css';
+@import './components/MobileModal/MobileModal.css';
 @import './components/Filters/index.css';
 
 @keyframes cio-spinner {

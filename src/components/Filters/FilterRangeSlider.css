@@ -17,6 +17,13 @@
   padding: 2px;
 }
 
+@media (max-width: 320px) {
+  .cio-slider-inputs {
+    row-gap: 20px;
+    grid-template-columns: 1fr;
+  }
+}
+
 .cio-slider-input {
   position: relative;
   display: flex;

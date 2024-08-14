@@ -6,6 +6,7 @@ import {
   PlpSearchResponse,
   UseSortReturn,
 } from '../../types';
+import MobileModal from '../MobileModal/MobileModal';
 
 type SortProps = {
   /**
@@ -35,6 +36,24 @@ export default function Sort({
     changeSelectedSort(JSON.parse(event.target.value));
   };
 
+  const renderOptions = sortOptions.map((option) => (
+    <label
+      htmlFor={`${option.sortBy}-${option.sortOrder}`}
+      key={`${option.sortBy}-${option.sortOrder}`}>
+      <input
+        id={`${option.sortBy}-${option.sortOrder}`}
+        type='radio'
+        name={`${option.sortBy}-${option.sortOrder}`}
+        value={JSON.stringify(option)}
+        checked={
+          selectedSort?.sortBy === option.sortBy && selectedSort.sortOrder === option.sortOrder
+        }
+        onChange={handleOptionChange}
+      />
+      <span>{option.displayName}</span>
+    </label>
+  ));
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -46,31 +65,20 @@ export default function Sort({
       ) : (
         <div className='cio-plp-sort'>
           <button type='button' className='collapsible' onClick={toggleCollapsible}>
-            {selectedSort?.displayName ? `Sort by: ${selectedSort.displayName}` : 'Sort'}
+            {selectedSort?.displayName ? (
+              <span className='cio-plp-sort-button-label'>
+                <b>Sort by:</b>
+                <b>By</b> {selectedSort.displayName}
+              </span>
+            ) : (
+              'Sort'
+            )}
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
-          {isOpen && (
-            <div className='collapsible-content'>
-              {sortOptions.map((option) => (
-                <label
-                  htmlFor={`${option.sortBy}-${option.sortOrder}`}
-                  key={`${option.sortBy}-${option.sortOrder}`}>
-                  <input
-                    id={`${option.sortBy}-${option.sortOrder}`}
-                    type='radio'
-                    name={`${option.sortBy}-${option.sortOrder}`}
-                    value={JSON.stringify(option)}
-                    checked={
-                      selectedSort?.sortBy === option.sortBy &&
-                      selectedSort.sortOrder === option.sortOrder
-                    }
-                    onChange={handleOptionChange}
-                  />
-                  <span>{option.displayName}</span>
-                </label>
-              ))}
-            </div>
-          )}
+          <MobileModal side='right' isOpen={isOpen} setIsOpen={setIsOpen}>
+            {renderOptions}
+          </MobileModal>
+          {isOpen && <div className='collapsible-content'>{renderOptions}</div>}
         </div>
       )}
     </>

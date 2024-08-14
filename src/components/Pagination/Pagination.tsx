@@ -1,17 +1,38 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps, PaginationObject, UsePaginationProps } from '../../types';
 import usePagination from './usePagination';
 
 type PaginationWithRenderProps = IncludeRenderProps<UsePaginationProps, PaginationObject>;
 
 export default function Pagination(props: PaginationWithRenderProps) {
-  const { totalNumResults, resultsPerPage, windowSize, children } = props;
-  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = usePagination({
+  const { totalNumResults, resultsPerPage, windowSize = 5, children } = props;
+  const [pageWindowSize, setPageWindowSize] = useState(windowSize);
+  const pagesRef = useRef<HTMLDivElement>(null);
+
+  const { currentPage, goToPage, nextPage, prevPage, pages, totalPages } = usePagination({
     totalNumResults,
     resultsPerPage,
-    windowSize,
+    windowSize: pageWindowSize,
   });
+
+  useEffect(() => {
+    setPageWindowSize(windowSize);
+  }, [windowSize]);
+
+  // Calculate windowSize on resize event
+  useEffect(() => {
+    const resize = () => {
+      const parentSize = Number(pagesRef.current?.parentElement?.clientWidth);
+      setPageWindowSize(Math.max(1, Math.min(Math.floor(parentSize / 60) - 4, windowSize)));
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, [windowSize]);
 
   return (
     <>
@@ -25,7 +46,7 @@ export default function Pagination(props: PaginationWithRenderProps) {
           totalPages,
         })
       ) : (
-        <div className='cio-pagination'>
+        <div ref={pagesRef} className='cio-pagination'>
           <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
             &lt;
           </button>

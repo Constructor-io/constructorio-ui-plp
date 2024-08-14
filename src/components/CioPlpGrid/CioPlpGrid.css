@@ -1,40 +1,91 @@
 .cio-plp-grid {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 20px;
+  padding: 20px;
 }
 
 .cio-filters-container {
-    padding: 20px;
+  padding: 20px;
+}
+
+.cio-filters-modal-button {
+  display: none;
+  gap: 10px;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+}
+
+.cio-mobile-products-header-container {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .cio-plp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cio-plp-grid .cio-product-tiles-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cio-filters-container,
+  .cio-products-header-container .cio-products-header-title {
+    display: none;
+  }
+
+  .cio-filters-modal-button,
+  .cio-mobile-products-header-container {
+    display: flex;
+  }
+
+  .cio-products-header-title {
+    width: 100%;
+    flex-grow: 1;
+    text-align: center;
+  }
 }
 
 .cio-products-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .cio-products-header-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cio-mobile-products-header-container {
+  justify-content: center;
+}
+
+.cio-products-header-container,
+.cio-mobile-products-header-container {
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 5px;
 }
 
 .cio-product-tiles-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
 }
 
 .cio-products-container .cio-product-tile {
-    padding: 5px;
+  padding: 5px;
 }
 
 .cio-products-container .cio-pagination-container {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 20px;
 }
