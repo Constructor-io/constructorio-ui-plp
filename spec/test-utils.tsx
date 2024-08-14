@@ -4,6 +4,8 @@ import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { DEMO_API_KEY } from '../src/constants';
 import apiBrowseResponse from './local_examples/apiBrowseResponse.json';
 import apiSearchResponse from './local_examples/apiSearchResponse.json';
+import CioPlp from '../src/components/CioPlp';
+import CioPlpProvider from '../src/components/CioPlp/CioPlpProvider';
 
 // ConstructorIO Client Mock
 class MockConstructorIO extends ConstructorIO {
@@ -26,9 +28,6 @@ jest.mock('../src/hooks/useCioClient', () => ({
   default: () => (() => mockConstructorIOClient)(),
 }));
 
-// eslint-disable-next-line import/first
-import CioPlp from '../src/components/CioPlp';
-
 // Context Wrapper
 function CioPlpWrapper({ children }: { children: any }) {
   return <CioPlp apiKey={DEMO_API_KEY}>{children}</CioPlp>;
@@ -39,9 +38,9 @@ const customRender = (ui, options) => render(ui, { wrapper: CioPlpWrapper, ...op
 const customRenderHook: typeof renderHook = (callback, options) =>
   renderHook(callback, {
     wrapper: ({ children }) => (
-      <CioPlp apiKey={DEMO_API_KEY} {...options?.initialProps}>
+      <CioPlpProvider apiKey={DEMO_API_KEY} {...options?.initialProps}>
         {children}
-      </CioPlp>
+      </CioPlpProvider>
     ),
   });
 

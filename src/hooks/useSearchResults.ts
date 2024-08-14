@@ -91,10 +91,6 @@ export default function useSearchResults(
     throw new Error('CioClient required');
   }
 
-  if (!query && typeof window !== 'undefined') {
-    throw new Error('Unable to retrieve query from the url.');
-  }
-
   const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
     initFunction(defaultState, initialSearchResponse),
   );
@@ -103,7 +99,7 @@ export default function useSearchResults(
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient && (!initialSearchResponse || !isFirstRender)) {
+    if (query && cioClient && (!initialSearchResponse || !isFirstRender)) {
       fetchSearchResults(cioClient, query, searchParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
