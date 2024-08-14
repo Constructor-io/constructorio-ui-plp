@@ -12,12 +12,7 @@ describe('Testing Hook: useCioPlp', () => {
       value: new URL('https://example.com'),
     });
 
-    if (mockConstructorIOClient) {
-      // This resets the mock call count
-      mockConstructorIOClient.search.getSearchResults = jest
-        .fn()
-        .mockResolvedValue(apiSearchResponse);
-    }
+    jest.clearAllMocks();
 
     window.location.href = 'https://example.com?q=shirts';
   });
