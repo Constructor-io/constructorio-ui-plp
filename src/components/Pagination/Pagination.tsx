@@ -23,7 +23,7 @@ export default function Pagination(props: PaginationWithRenderProps) {
   // Calculate windowSize on resize event
   useEffect(() => {
     const resize = () => {
-      const parentSize = Number(pagesRef.current?.parentElement?.clientWidth);
+      const parentSize = Number(pagesRef.current?.parentElement?.clientWidth) || window.innerWidth;
       setPageWindowSize(Math.max(1, Math.min(Math.floor(parentSize / 60) - 4, windowSize)));
     };
     resize();

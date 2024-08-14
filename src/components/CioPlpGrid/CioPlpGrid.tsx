@@ -22,7 +22,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
   const response = data?.response as unknown as PlpSearchResponse;
-  const searchTerm = data.request?.term;
+  const searchTerm = data?.request?.term;
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
