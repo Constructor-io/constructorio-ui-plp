@@ -15,6 +15,7 @@ import {
   SearchResponseType,
   Redirect,
   SearchParameters,
+  BrowseRequestType,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
@@ -42,17 +43,32 @@ export interface Callbacks {
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
 }
 
-export interface PlpSearchRedirectResponse {
+export type PlpSearchData = PlpSearchDataResults | PlpSearchDataRedirect;
+
+export interface PlpSearchDataResults {
   resultId: string;
-  redirect: Partial<Redirect>;
-  rawResponse: SearchResponse;
+  request: SearchRequestType;
+  rawApiResponse: SearchResponse;
+  response: PlpSearchResponse;
 }
 
-export type SearchResponseState = Nullable<Omit<Partial<PlpSearchResponse>, 'rawResponse'>>;
-export type SearchRequestState = Nullable<Partial<SearchRequestType>>;
-export type RedirectResponseState = Nullable<
-  Omit<Partial<PlpSearchRedirectResponse>, 'rawResponse'>
->;
+export interface PlpSearchDataRedirect {
+  resultId: string;
+  request: SearchRequestType;
+  rawApiResponse: SearchResponse;
+  redirect: Redirect;
+}
+
+export interface PlpSearchResponse {
+  totalNumResults: number;
+  numResultsPerPage: number;
+  results: Array<Item>;
+  facets: Array<PlpFacet>;
+  groups: Array<ApiGroup>;
+  sortOptions: Array<PlpSortOption>;
+  refinedContent: Record<string, any>[];
+}
+
 export type DefaultQueryStringMap = {
   query: 'q';
   page: 'page';
@@ -168,30 +184,16 @@ export interface SwatchItem {
   variationId?: string;
 }
 
-export interface PlpSearchResponse {
+export type PaginationProps = PaginationObject;
+
+export interface PlpBrowseData {
   resultId: string;
-  totalNumResults: number;
-  numResultsPerPage: number;
-  results: Array<Item>;
-  facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
-  sortOptions: Array<PlpSortOption>;
-  refinedContent: Record<string, any>[];
-  rawResponse: SearchResponse;
+  request: BrowseRequestType;
+  rawApiResponse: GetBrowseResultsResponse;
+  response: PlpBrowseResponse;
 }
 
-export type PaginationProps = PaginationObject;
-export interface PlpBrowseResponse {
-  resultId: string;
-  totalNumResults: number;
-  numResultsPerPage: number;
-  results: Array<Item>;
-  facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
-  sortOptions: Array<PlpSortOption>;
-  refinedContent: Record<string, any>[];
-  rawResponse: GetBrowseResultsResponse;
-}
+export interface PlpBrowseResponse extends PlpSearchResponse {}
 
 export interface CioPlpProviderProps {
   apiKey: string;
@@ -200,7 +202,7 @@ export interface CioPlpProviderProps {
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
   urlHelpers?: Partial<UrlHelpers>;
-  initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialResponse?: SearchResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
@@ -212,17 +214,21 @@ export type UseSortReturn = {
   changeSelectedSort: (sortOption: PlpSortOption) => void;
 };
 
-/**
- * Represents a function that handles pagination logic.
- * @param searchResponse - The search response data.
- * @param windowSize - The number of pages to display in the pagination window.
- * @returns An object containing pagination information and methods.
- */
 export type UsePaginationProps = {
-  totalNumResults?: number;
+  /**
+   * Total number of results returned by the API response
+   */
+  totalNumResults: number;
+  /**
+   * Number of results returned per page
+   */
   resultsPerPage?: number;
+  /**
+   * Number of pages to display in the pagination window
+   */
   windowSize?: number;
 };
+
 export type UsePagination = (props: UsePaginationProps) => PaginationObject;
 
 export interface PaginationObject {
@@ -316,4 +322,13 @@ export type PropsWithChildren<P> = P & { children?: ReactNode };
  */
 export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = ComponentProps & {
   children?: ((props: ChildrenFunctionProps) => ReactNode) | React.ReactNode;
+};
+
+/**
+ * Composes a type includes the original untransformed type, in the transformed one
+ * - Transformed Type T,
+ * - OriginalType from which T was derived
+ */
+export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType & {
+  rawResponse?: OriginalType;
 };

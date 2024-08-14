@@ -1,15 +1,19 @@
 import ConstructorIOClient from '@constructor-io/constructorio-client-javascript';
-import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
+import {
+  Nullable,
+  SearchParameters,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useEffect, useReducer } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
-import { PlpSearchRedirectResponse, PlpSearchResponse } from '../types';
+import { PlpSearchData } from '../types';
 import {
   RequestStatus,
-  searchReducer,
-  SearchAction,
-  SearchData,
+  requestReducer,
+  RequestAction,
   initialState,
   initFunction,
+  RequestType,
 } from '../components/CioPlpGrid/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
@@ -17,13 +21,13 @@ import { getSearchParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
-  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialSearchResponse?: SearchResponse;
 }
 
 export interface UseSearchResultsReturn {
   status: RequestStatus | null;
   message?: string;
-  data: SearchData;
+  data: Nullable<PlpSearchData>;
   refetch: () => void;
 }
 
@@ -31,7 +35,7 @@ const fetchSearchResults = async (
   client: ConstructorIOClient,
   query: string,
   searchParams: SearchParameters,
-  dispatch: React.Dispatch<SearchAction>,
+  dispatch: React.Dispatch<RequestAction>,
 ) => {
   dispatch({
     type: RequestStatus.FETCHING,
@@ -42,6 +46,7 @@ const fetchSearchResults = async (
 
     dispatch({
       type: RequestStatus.SUCCESS,
+      requestType: RequestType.SEARCH,
       payload: transformSearchResponse(res),
     });
   } catch (err) {
@@ -86,11 +91,7 @@ export default function useSearchResults(
     throw new Error('CioClient required');
   }
 
-  if (!query && typeof window !== 'undefined') {
-    throw new Error('Unable to retrieve query from the url.');
-  }
-
-  const [state, dispatch] = useReducer(searchReducer, initialState, (defaultState) =>
+  const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
     initFunction(defaultState, initialSearchResponse),
   );
 
@@ -98,7 +99,7 @@ export default function useSearchResults(
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient && (!initialSearchResponse || !isFirstRender)) {
+    if (query && cioClient && (!initialSearchResponse || !isFirstRender)) {
       fetchSearchResults(cioClient, query, searchParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

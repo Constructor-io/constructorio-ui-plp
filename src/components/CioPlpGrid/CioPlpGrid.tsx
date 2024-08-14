@@ -1,5 +1,6 @@
 import React from 'react';
-import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from '../../types';
+import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
+import { IncludeRenderProps } from '../../types';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import Sort from '../Sort/Sort';
@@ -8,9 +9,10 @@ import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchR
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner/Spinner';
 import { RequestStatus } from './reducer';
+import { isPlpSearchDataRedirect } from '../../utils';
 
 type CioPlpGridProps = {
-  initialResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialResponse?: SearchResponse;
   spinner?: React.ReactNode;
 };
 type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
@@ -19,7 +21,12 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const { spinner, initialResponse, children } = props;
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
-  const response = data?.response as unknown as PlpSearchResponse;
+  if (isPlpSearchDataRedirect(data)) {
+    // Do redirect
+    return null;
+  }
+
+  const response = data?.response;
 
   return (
     <>
@@ -37,14 +44,14 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container'>
-                    <Filters response={response} />
+                    <Filters facets={response.facets} />
                   </div>
                   <div className='cio-products-container'>
                     <div className='cio-products-header-container'>
                       <span>
                         <b>{response?.totalNumResults}</b> results
                       </span>
-                      <Sort searchOrBrowseResponse={response} isOpen={false} />
+                      <Sort sortOptions={response.sortOptions} isOpen={false} />
                     </div>
                     <div className='cio-product-tiles-container'>
                       {response?.results?.map((item) => (
@@ -54,7 +61,10 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                       ))}
                     </div>
                     <div className='cio-pagination-container'>
-                      <Pagination totalNumResults={response?.totalNumResults} />
+                      <Pagination
+                        totalNumResults={response.totalNumResults}
+                        resultsPerPage={response.numResultsPerPage}
+                      />
                     </div>
                   </div>
                 </div>

@@ -1,13 +1,9 @@
-import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
-  SearchResponseState,
-  RedirectResponseState,
-  SearchRequestState,
-  PlpSearchRedirectResponse,
-  PlpSearchResponse,
-  Nullable,
-} from '../../types';
-import { isPlpRedirectSearchResponse, isPlpSearchResponse } from '../../utils';
+  GetBrowseResultsResponse,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { Nullable, PlpBrowseData, PlpSearchData } from '../../types';
+import { transformBrowseResponse, transformSearchResponse } from '../../utils/transformers';
 
 export enum RequestStatus {
   STALE = 'stale',
@@ -16,45 +12,41 @@ export enum RequestStatus {
   ERROR = 'error',
 }
 
-export interface SearchData {
-  rawApiResponse: Nullable<SearchResponse>;
-  request: SearchRequestState;
-  response: SearchResponseState;
-  redirect: RedirectResponseState;
+export enum RequestType {
+  SEARCH = 'search',
+  BROWSE = 'browse',
 }
 
-export interface SearchState {
+export interface RequestState {
   status: RequestStatus;
   message?: string;
-  search: SearchData;
+  search: Nullable<PlpSearchData>;
+  browse: Nullable<PlpBrowseData>;
 }
 
-type SearchActionSuccess = {
+type RequestActionSuccess = {
   type: RequestStatus.SUCCESS;
-  payload: PlpSearchResponse | PlpSearchRedirectResponse;
+  requestType: RequestType;
+  payload: RequestState['search'] | RequestState['browse'];
 };
 
-type SearchActionError = {
+type RequestActionError = {
   type: RequestStatus.ERROR;
   payload: string;
 };
 
-export type SearchAction =
+export type RequestAction =
   | { type: RequestStatus.STALE | RequestStatus.FETCHING }
-  | SearchActionError
-  | SearchActionSuccess;
+  | RequestActionError
+  | RequestActionSuccess;
 
-export const initialState: SearchState = {
+export const initialState: RequestState = {
   status: RequestStatus.STALE,
-  search: {
-    rawApiResponse: null,
-    request: null,
-    response: null,
-    redirect: null,
-  },
+  search: null,
+  browse: null,
 };
 
-export function searchReducer(state: SearchState, action: SearchAction) {
+export function requestReducer(state: RequestState, action: RequestAction) {
   switch (action.type) {
     case RequestStatus.FETCHING: {
       return {
@@ -62,30 +54,28 @@ export function searchReducer(state: SearchState, action: SearchAction) {
         status: RequestStatus.FETCHING,
       };
     }
-    case RequestStatus.SUCCESS: {
-      const { payload } = action;
-      let redirect: Nullable<Omit<PlpSearchRedirectResponse, 'rawResponse'>> = null;
-      let search: Nullable<Omit<PlpSearchResponse, 'rawResponse'>> = null;
 
-      if (isPlpRedirectSearchResponse(payload)) {
-        const { rawResponse, ...otherFields } = payload;
-        redirect = otherFields;
-      } else {
-        const { rawResponse, ...otherFields } = payload;
-        search = otherFields;
+    case RequestStatus.SUCCESS: {
+      const { payload, requestType } = action;
+      let search: Nullable<RequestState['search']> = null;
+      let browse: Nullable<RequestState['browse']> = null;
+
+      if (payload) {
+        if (requestType === RequestType.SEARCH) {
+          search = transformSearchResponse(payload.rawApiResponse as SearchResponse);
+        } else if (requestType === RequestType.BROWSE) {
+          browse = transformBrowseResponse(payload.rawApiResponse as GetBrowseResultsResponse);
+        }
       }
 
       return {
         ...state,
         status: RequestStatus.SUCCESS,
-        search: {
-          rawApiResponse: payload.rawResponse,
-          request: payload.rawResponse.request,
-          response: search,
-          redirect,
-        },
+        search,
+        browse,
       };
     }
+
     case RequestStatus.ERROR: {
       return {
         ...state,
@@ -100,35 +90,15 @@ export function searchReducer(state: SearchState, action: SearchAction) {
 }
 
 export function initFunction(
-  defaultState: SearchState,
-  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse,
-): SearchState {
+  defaultState: RequestState,
+  initialSearchResponse?: SearchResponse,
+): RequestState {
   if (initialSearchResponse) {
-    if (isPlpRedirectSearchResponse(initialSearchResponse)) {
-      const { rawResponse, redirect, resultId } = initialSearchResponse;
-
-      return {
-        status: RequestStatus.STALE,
-        search: {
-          rawApiResponse: rawResponse,
-          request: rawResponse.request,
-          response: { resultId },
-          redirect,
-        },
-      };
-    }
-    if (isPlpSearchResponse(initialSearchResponse)) {
-      const { rawResponse, ...restResponse } = initialSearchResponse;
-      return {
-        status: RequestStatus.STALE,
-        search: {
-          rawApiResponse: rawResponse,
-          request: rawResponse.request,
-          response: restResponse,
-          redirect: null,
-        },
-      };
-    }
+    return {
+      status: RequestStatus.STALE,
+      search: transformSearchResponse(initialSearchResponse),
+      browse: null,
+    };
   }
 
   return defaultState;

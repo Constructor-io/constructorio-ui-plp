@@ -4,7 +4,7 @@ import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
-import { PlpSearchResponse } from '../../../types';
+import { PlpFacet } from '../../../types';
 import '../../../styles.css';
 
 const meta = {
@@ -45,6 +45,6 @@ function PrimaryStory({ args }: any) {
 export const Primary: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    response: { facets: mockTransformedFacets } as unknown as PlpSearchResponse,
+    facets: mockTransformedFacets as Array<PlpFacet>,
   },
 };

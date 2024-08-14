@@ -1,0 +1,62 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks';
+import * as UseCioPlpStories from './UseCioPlp.stories';
+
+<Meta of={UseCioPlpStories} />
+
+## Code Example
+```jsx
+export default function UseCioPlpExample(props: UseCioPlpProps) {
+  return (
+    <>
+      <h1>useCioPlp</h1>
+      <CioPlpProvider apiKey={DEMO_API_KEY} >
+        <MyCustomCioPlpComponent {...props} />
+      </CioPlpProvider>
+    </>
+  );
+}
+
+function MyCustomCioPlpComponent() {
+  const { filters, pagination, sort, searchData } = useCioPlp();
+
+  return (
+    <>
+      <div>
+        <h2>Filter Groups</h2>
+        {filters.facets.map((facet) => (
+          <div>{facet.displayName}</div>
+        ))}
+      </div>
+
+      <div>
+        <h2>Sort Options</h2>
+        {sort.sortOptions.map((sortOption) => (
+          <div>{sortOption.displayName}</div>
+        ))}
+      </div>
+
+      <div>
+        <h2>Pagination</h2>
+        {pagination.pages.map((page) => {
+          if (page === -1) {
+            return '...';
+          }
+          return <div>Page: {page}</div>;
+        })}
+      </div>
+
+      <div>
+        <h2>Results</h2>
+        <ul>
+          {isPlpSearchDataResults(searchData) &&
+            searchData.response.results.map((item) => <li>{item.itemName}</li>)}
+        </ul>
+      </div>
+    </>
+  );
+}
+```
+<Canvas of={UseCioPlpStories.Primary} />
+
+## Controls
+<Controls />
