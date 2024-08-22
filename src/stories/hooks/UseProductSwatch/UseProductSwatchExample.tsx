@@ -1,5 +1,5 @@
 import React from 'react';
-import useProductSwatch from '../../../components/ProductSwatch/useProductSwatch';
+import useProductSwatch from '../../../hooks/useProductSwatch';
 import { UseProductSwatchProps } from '../../../types';
 import ProductSwatch from '../../../components/ProductSwatch/ProductSwatch';
 import CioPlp from '../../../components/CioPlp';

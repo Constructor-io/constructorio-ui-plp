@@ -1,7 +1,7 @@
 import React from 'react';
-import useBrowseResults, { UseBrowseResultsProps } from '../../hooks/useBrowseResults';
-import CioPlp from '../../components/CioPlp';
-import { DEMO_API_KEY } from '../../constants';
+import useBrowseResults, { UseBrowseResultsProps } from '../../../hooks/useBrowseResults';
+import CioPlp from '../../../components/CioPlp';
+import { DEMO_API_KEY } from '../../../constants';
 
 // A simple React Component to showcase use with CioPlp provider
 function MyCustomBrowseResultsComponent(props: UseBrowseResultsProps) {

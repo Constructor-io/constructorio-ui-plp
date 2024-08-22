@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { act, waitFor } from '@testing-library/react';
-import usePagination from '../../../src/components/Pagination/usePagination';
+import usePagination from '../../../src/hooks/usePagination';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 const paginationProps = {

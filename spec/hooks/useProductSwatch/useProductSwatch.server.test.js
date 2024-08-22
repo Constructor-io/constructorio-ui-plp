@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import useProductSwatch from '../../../src/components/ProductSwatch/useProductSwatch';
+import useProductSwatch from '../../../src/hooks/useProductSwatch';
 import { DEMO_API_KEY } from '../../../src/constants';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';

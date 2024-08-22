@@ -1,18 +1,22 @@
 import React from 'react';
-import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
-import { IncludeRenderProps, PlpSearchRedirectResponse, PlpSearchResponse } from '../../types';
+import useSearchResults, {
+  UseSearchResultsProps,
+  UseSearchResultsReturn,
+} from '../../hooks/useSearchResults';
+import { IncludeRenderProps } from '../../types';
 import ProductCard from '../ProductCard';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import '../../styles.css';
 import Spinner from '../Spinner/Spinner';
 import ZeroResults from '../CioPlpGrid/ZeroResults/ZeroResults';
+import { isPlpSearchDataResults } from '../../utils';
 
 /**
  * Props for the SearchResults component.
  */
 interface SearchResultsProps {
   spinner?: React.ReactNode;
-  initialSearchResponse?: PlpSearchResponse | PlpSearchRedirectResponse;
+  initialSearchResponse?: UseSearchResultsProps['initialSearchResponse'];
 }
 
 /**
@@ -59,7 +63,7 @@ export default function SearchResults(props: SearchResultsWithRenderProps = {}) 
         children({ status, data, refetch })
       ) : (
         <>
-          {data.response?.results?.length ? (
+          {isPlpSearchDataResults(data) && data.response?.results?.length ? (
             <>
               <div>Search Results</div>
               <div className='cio-results data-results-search' data-cnstrc-search>

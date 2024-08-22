@@ -1,4 +1,4 @@
-import usePagination from '../../../src/components/Pagination/usePagination';
+import usePagination from '../../../src/hooks/usePagination';
 import { DEMO_API_KEY } from '../../../src/constants';
 import { renderHookServerSideWithCioPlp } from '../../test-utils.server';
 
