@@ -7,9 +7,9 @@ export { default as useSort } from './hooks/useSort';
 export * from './hooks/callbacks';
 
 // Components
-export { default as CioPlp } from './components/CioPlp/CioPlp';
-export { default as ProductCard, ProductCardProps } from './components/ProductCard/ProductCard';
-export { default as Sort } from './components/Sort/Sort';
+export { default as CioPlp } from './components/CioPlp';
+export { default as ProductCard, ProductCardProps } from './components/ProductCard';
+export { default as Sort } from './components/Sort';
 
 export { useCioPlpContext } from './hooks/useCioPlpContext';
 export * from './types';

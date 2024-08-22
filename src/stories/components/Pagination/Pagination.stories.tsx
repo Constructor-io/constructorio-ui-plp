@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from '../../../components/Pagination';
 import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
-import CioPlp from '../../../components/CioPlp/CioPlp';
+import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 import '../../../styles.css';
 

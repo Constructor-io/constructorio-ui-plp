@@ -1,14 +1,14 @@
 import React from 'react';
 import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { IncludeRenderProps } from '../../types';
-import ProductCard from '../ProductCard/ProductCard';
-import Filters from '../Filters';
-import Sort from '../Sort/Sort';
-import Pagination from '../Pagination';
 import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
+import ProductCard from '../ProductCard';
+import Filters from '../Filters';
+import Sort from '../Sort';
+import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
+import { IncludeRenderProps } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 
 export type CioPlpGridProps = {

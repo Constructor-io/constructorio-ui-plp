@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UsePaginationProps } from '../../../types';
-import Pagination from '../../../components/Pagination/Pagination';
-import CioPlp from '../../../components/CioPlp/CioPlp';
+import Pagination from '../../../components/Pagination';
+import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 
 export default function UsePaginationExample(props: UsePaginationProps) {

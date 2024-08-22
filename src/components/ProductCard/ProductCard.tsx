@@ -2,7 +2,7 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
-import ProductSwatch from '../ProductSwatch/ProductSwatch';
+import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
 
 interface Props {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
 import CioPlp from '../../../components/CioPlp';
-import Sort from '../../../components/Sort/Sort';
+import Sort from '../../../components/Sort';
 import { DEMO_API_KEY } from '../../../constants';
 import { transformSearchResponse } from '../../../utils/transformers';
 import mockSearchResponse from '../../../../spec/local_examples/apiSearchResponse.json';

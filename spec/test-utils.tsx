@@ -4,8 +4,7 @@ import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { DEMO_API_KEY } from '../src/constants';
 import apiBrowseResponse from './local_examples/apiBrowseResponse.json';
 import apiSearchResponse from './local_examples/apiSearchResponse.json';
-import CioPlp from '../src/components/CioPlp';
-import CioPlpProvider from '../src/components/CioPlp/CioPlpProvider';
+import CioPlp, { CioPlpProvider } from '../src/components/CioPlp';
 
 // ConstructorIO Client Mock
 class MockConstructorIO extends ConstructorIO {

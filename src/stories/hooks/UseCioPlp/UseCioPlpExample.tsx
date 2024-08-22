@@ -1,7 +1,7 @@
 import React from 'react';
 import { DEMO_API_KEY } from '../../../constants';
 import { isPlpSearchDataResults } from '../../../utils';
-import CioPlpProvider from '../../../components/CioPlp/CioPlpProvider';
+import { CioPlpProvider } from '../../../components/CioPlp';
 import useCioPlp, { UseCioPlpProps } from '../../../hooks/useCioPlp';
 
 // A simple React Component to showcase useCioPlp with PlpContext
