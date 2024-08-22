@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import useSort, { UseSortProps } from '../../hooks/useSort';
 import { IncludeRenderProps, UseSortReturn } from '../../types';
 
-type SortProps = UseSortProps & {
+export type SortProps = UseSortProps & {
   /**
    * Default open state of dropdown
    */
   isOpen?: boolean;
 };
-type SortWithRenderProps = IncludeRenderProps<SortProps, UseSortReturn>;
+export type SortWithRenderProps = IncludeRenderProps<SortProps, UseSortReturn>;
 
 export default function Sort({
   isOpen: defaultOpen = true,

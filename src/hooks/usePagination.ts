@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { UsePagination } from '../../types';
-import useRequestConfigs from '../../hooks/useRequestConfigs';
+import { UsePagination } from '../types';
+import useRequestConfigs from './useRequestConfigs';
 
 const usePagination: UsePagination = ({
   totalNumResults,

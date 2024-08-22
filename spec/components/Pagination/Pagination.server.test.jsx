@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { act } from 'react-dom/test-utils';
-import Pagination from '../../../src/components/Pagination/Pagination';
+import Pagination from '../../../src/components/Pagination';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 

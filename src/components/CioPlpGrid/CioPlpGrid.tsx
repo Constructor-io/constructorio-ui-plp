@@ -1,21 +1,21 @@
 import React from 'react';
 import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { IncludeRenderProps } from '../../types';
+import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
-import Sort from '../Sort/Sort';
+import Sort from '../Sort';
 import Pagination from '../Pagination';
-import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
 import ZeroResults from './ZeroResults/ZeroResults';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
+import { IncludeRenderProps } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 
-type CioPlpGridProps = {
+export type CioPlpGridProps = {
   initialResponse?: SearchResponse;
   spinner?: React.ReactNode;
 };
-type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
+export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const { spinner, initialResponse, children } = props;

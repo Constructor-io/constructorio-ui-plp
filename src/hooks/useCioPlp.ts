@@ -4,7 +4,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
-import { usePagination } from '../components/Pagination';
+import usePagination from './usePagination';
 import { isPlpSearchDataResults } from '../utils';
 
 export interface UseCioPlpHook extends PlpContextValue {}

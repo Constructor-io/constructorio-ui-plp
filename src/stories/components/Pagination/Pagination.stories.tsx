@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Pagination from '../../Pagination';
-import KitchenSinkDecorator from '../../../../stories/utils/KitchenSinkDecorator';
-import CioPlp from '../../../CioPlp';
-import { DEMO_API_KEY } from '../../../../constants';
-import '../../../../styles.css';
+import Pagination from '../../../components/Pagination';
+import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
+import CioPlp from '../../../components/CioPlp';
+import { DEMO_API_KEY } from '../../../constants';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/Pagination',

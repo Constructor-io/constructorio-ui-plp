@@ -4,7 +4,7 @@ import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor } from '../../utils';
 
-type ProductSwatchProps = IncludeRenderProps<
+export type ProductSwatchProps = IncludeRenderProps<
   {
     swatchObject: ProductSwatchObject;
   },
