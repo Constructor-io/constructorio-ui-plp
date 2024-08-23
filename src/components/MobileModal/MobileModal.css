@@ -1,5 +1,4 @@
 .cio-mobile-modal-container {
-  display: none;
   position: fixed;
   left: 0;
   top: 0;
@@ -23,7 +22,7 @@
   justify-content: right;
 }
 
-body.cio-mobile-modal-backdrop-no-scroll {
+.cio-mobile-modal-backdrop-no-scroll {
   overflow: hidden;
 }
 

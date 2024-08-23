@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useRef, useState } from 'react';
 
 type MobileModalProps = {
   /**
@@ -8,34 +9,33 @@ type MobileModalProps = {
   /**
    * open state of modal
    */
-  isOpen?: boolean;
+  isOpen: boolean;
   /**
    * function to update open state of modal
    */
-  setIsOpen?: (b: boolean) => void;
+  setIsOpen: (b: boolean) => void;
 };
 
 export default function MobileModal(props: React.PropsWithChildren<MobileModalProps>) {
   const { side = 'left', isOpen, setIsOpen, children } = props;
   const modalRef = useRef<HTMLElement>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setIsAnimating(true);
       document.body.classList.add('cio-mobile-modal-backdrop-no-scroll');
-      setTimeout(() => {
-        modalRef.current?.classList.add('cio-mobile-modal-open');
-      }, 100);
     } else {
       document.body.classList.remove('cio-mobile-modal-backdrop-no-scroll');
     }
   }, [isOpen]);
 
   const onClose = () => {
-    modalRef.current?.classList.remove('cio-mobile-modal-open');
+    setIsAnimating(false);
     modalRef.current
       ?.querySelector('.cio-mobile-modal-wrapper')
       ?.addEventListener('transitionend', () => {
-        setIsOpen?.(false);
+        setIsOpen(false);
       });
   };
 
@@ -44,7 +44,11 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
   }
 
   return (
-    <aside ref={modalRef} className={`cio-mobile-modal-container cio-mobile-modal-${side}`}>
+    <aside
+      ref={modalRef}
+      className={classNames(`cio-mobile-modal-container cio-mobile-only cio-mobile-modal-${side}`, {
+        'cio-mobile-modal-open': isAnimating,
+      })}>
       <div className='cio-mobile-modal-backdrop' role='presentation' onClick={onClose} />
       <div className='cio-mobile-modal-wrapper'>
         <div className='cio-mobile-modal-content'>{children}</div>

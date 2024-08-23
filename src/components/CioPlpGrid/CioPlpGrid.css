@@ -10,7 +10,6 @@
 }
 
 .cio-filters-modal-button {
-  display: none;
   gap: 10px;
   align-items: center;
   background: none;
@@ -22,10 +21,6 @@
   font-size: 16px;
 }
 
-.cio-mobile-products-header-container {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .cio-plp-grid {
     grid-template-columns: 1fr;
@@ -35,13 +30,8 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .cio-filters-container,
-  .cio-products-header-container .cio-products-header-title {
-    display: none;
-  }
-
   .cio-filters-modal-button,
-  .cio-mobile-products-header-container {
+  .cio-mobile-products-header-wrapper {
     display: flex;
   }
 
@@ -57,17 +47,17 @@
   flex-direction: column;
 }
 
-.cio-products-header-container {
+.cio-products-header-wrapper {
   display: flex;
   justify-content: space-between;
 }
 
-.cio-mobile-products-header-container {
+.cio-mobile-products-header-wrapper {
   justify-content: center;
 }
 
-.cio-products-header-container,
-.cio-mobile-products-header-container {
+.cio-products-header-wrapper,
+.cio-mobile-products-header-wrapper {
   flex-direction: row;
   align-items: center;
   padding: 10px 5px;

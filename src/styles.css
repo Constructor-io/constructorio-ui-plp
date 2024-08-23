@@ -73,3 +73,15 @@
   -webkit-transform: rotate(45deg);
   margin-top: -6px;
 }
+
+@media (min-width: 769px) {
+  .cio-mobile-only {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .cio-large-screen-only {
+    display: none; 
+  }
+}

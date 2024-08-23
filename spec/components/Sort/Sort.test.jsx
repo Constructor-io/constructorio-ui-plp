@@ -43,7 +43,7 @@ describe('Testing Component: Sort', () => {
 
     await waitFor(() => {
       responseSortOptions.forEach((option) => {
-        expect(getAllByText(option.displayName).at(-1)).toBeInTheDocument();
+        expect(getAllByText(option.displayName).length).toBeGreaterThanOrEqual(2);
       });
     });
   });

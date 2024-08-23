@@ -29,7 +29,7 @@ export default function Sort({
     changeSelectedSort(JSON.parse(event.target.value));
   };
 
-  const renderOptions = sortOptions.map((option) => (
+  const defaultMarkup = sortOptions.map((option) => (
     <label
       htmlFor={`${option.sortBy}-${option.sortOrder}`}
       key={`${option.sortBy}-${option.sortOrder}`}>
@@ -60,8 +60,8 @@ export default function Sort({
           <button type='button' className='collapsible' onClick={toggleCollapsible}>
             {selectedSort?.displayName ? (
               <span className='cio-plp-sort-button-label'>
-                <b>Sort by:</b>
-                <b>By</b> {selectedSort.displayName}
+                <span className='cio-large-screen-only'>Sort by:</span>
+                <span className='cio-mobile-only'>By</span> {selectedSort.displayName}
               </span>
             ) : (
               'Sort'
@@ -69,9 +69,11 @@ export default function Sort({
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
           <MobileModal side='right' isOpen={isOpen} setIsOpen={setIsOpen}>
-            {renderOptions}
+            {defaultMarkup}
           </MobileModal>
-          {isOpen && <div className='collapsible-content'>{renderOptions}</div>}
+          {isOpen && (
+            <div className='collapsible-content cio-large-screen-only'>{defaultMarkup}</div>
+          )}
         </div>
       )}
     </>

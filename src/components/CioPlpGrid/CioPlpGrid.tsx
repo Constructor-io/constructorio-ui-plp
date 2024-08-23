@@ -38,8 +38,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
       <b>{response?.totalNumResults}</b> results
       {searchTerm && (
         <>
-          {' '}
-          for <b>&quot;{searchTerm}&quot;</b>
+          &nbsp;for <b>&quot;{searchTerm}&quot;</b>
         </>
       )}
     </span>
@@ -60,21 +59,25 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
             <>
               {response?.results?.length ? (
                 <div className='cio-plp-grid'>
-                  <div className='cio-filters-container'>
+                  <div className='cio-filters-container cio-large-screen-only'>
                     <Filters facets={response.facets} />
                   </div>
                   <div className='cio-products-container'>
-                    <div className='cio-mobile-products-header-container'>{renderTitle}</div>
                     <div className='cio-products-header-container'>
-                      <button
-                        type='button'
-                        className='cio-filters-modal-button'
-                        onClick={() => setIsFilterOpen(!isFilterOpen)}>
-                        {FiltersIcon}
-                        Filters
-                      </button>
-                      {renderTitle}
-                      <Sort sortOptions={response.sortOptions} isOpen={false} />
+                      <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
+                        {renderTitle}
+                      </div>
+                      <div className='cio-products-header-wrapper'>
+                        <button
+                          type='button'
+                          className='cio-filters-modal-button cio-mobile-only'
+                          onClick={() => setIsFilterOpen(!isFilterOpen)}>
+                          {FiltersIcon}
+                          Filters
+                        </button>
+                        <span className='cio-large-screen-only'>{renderTitle}</span>
+                        <Sort sortOptions={response.sortOptions} isOpen={false} />
+                      </div>
                     </div>
                     <div className='cio-product-tiles-container'>
                       <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
