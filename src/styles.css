@@ -2,7 +2,7 @@
 @import './components/ProductSwatch/ProductSwatch.css';
 @import './components/CioPlpGrid/ZeroResults/ZeroResults.css';
 @import './components/Pagination/Pagination.css';
-@import './components/ProductCard/styles.css';
+@import './components/ProductCard/ProductCard.css';
 @import './components//CioPlpGrid/CioPlpGrid.css';
 @import './components/Spinner/Spinner.css';
 @import './components/Sort/Sort.css';

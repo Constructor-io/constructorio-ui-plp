@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
-import Sort from '../../../src/components/Sort/Sort';
+import Sort from '../../../src/components/Sort';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import '@testing-library/jest-dom';

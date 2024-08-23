@@ -4,7 +4,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, screen } from '@testing-library/react';
-import ProductSwatch from '../../../src/components/ProductSwatch/ProductSwatch';
+import ProductSwatch from '../../../src/components/ProductSwatch';
 import UseProductSwatchExample from '../../../src/stories/hooks/UseProductSwatch/UseProductSwatchExample';
 import { transformResultItem } from '../../../src/utils/transformers';
 import SampleItem from '../../local_examples/item.json';

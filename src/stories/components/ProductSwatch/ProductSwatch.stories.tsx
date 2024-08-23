@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
-import ProductSwatch from '../../../components/ProductSwatch/ProductSwatch';
+import ProductSwatch from '../../../components/ProductSwatch';
 import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
 import '../../../styles.css';
 

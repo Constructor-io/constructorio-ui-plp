@@ -1,4 +1,4 @@
-import useProductSwatch from '../components/ProductSwatch/useProductSwatch';
+import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
 import { tryCatchify } from '../utils';

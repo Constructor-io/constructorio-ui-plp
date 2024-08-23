@@ -3,7 +3,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import Pagination from '../../../src/components/Pagination/Pagination'; // Adjust the import path as needed
+import Pagination from '../../../src/components/Pagination';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 

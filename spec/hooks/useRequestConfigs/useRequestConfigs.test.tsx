@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, renderHook } from '@testing-library/react';
 import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
-import CioPlpProvider from '../../../src/components/CioPlp/CioPlpProvider';
+import { CioPlpProvider } from '../../../src/components/CioPlp';
 import testRequestState from '../../local_examples/sampleRequestState.json';
 import testUrl from '../../local_examples/testJsonEncodedUrl.json';
 import { DEMO_API_KEY } from '../../../src/constants';

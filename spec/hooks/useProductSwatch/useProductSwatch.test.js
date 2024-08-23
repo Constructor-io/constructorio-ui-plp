@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
-import useProductSwatch from '../../../src/components/ProductSwatch/useProductSwatch';
+import useProductSwatch from '../../../src/hooks/useProductSwatch';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import { renderHookWithCioPlp } from '../../test-utils';

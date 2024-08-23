@@ -69,6 +69,11 @@ export interface PlpSearchResponse {
   refinedContent: Record<string, any>[];
 }
 
+export interface PlpSearchRedirectResponse {
+  resultId: string;
+  redirect: Partial<Redirect>;
+}
+
 export type DefaultQueryStringMap = {
   query: 'q';
   page: 'page';
