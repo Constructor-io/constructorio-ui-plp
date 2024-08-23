@@ -10,6 +10,7 @@
 }
 
 .cio-filters-modal-button {
+  display: flex;
   gap: 10px;
   align-items: center;
   background: none;
@@ -30,11 +31,6 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .cio-filters-modal-button,
-  .cio-mobile-products-header-wrapper {
-    display: flex;
-  }
-
   .cio-products-header-title {
     width: 100%;
     flex-grow: 1;
@@ -48,7 +44,6 @@
 }
 
 .cio-products-header-wrapper {
-  display: flex;
   justify-content: space-between;
 }
 
@@ -58,6 +53,7 @@
 
 .cio-products-header-wrapper,
 .cio-mobile-products-header-wrapper {
+  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 10px 5px;

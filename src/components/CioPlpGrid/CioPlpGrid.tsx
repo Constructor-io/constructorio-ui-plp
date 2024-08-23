@@ -4,7 +4,7 @@ import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchR
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import FiltersIcon from '../Filters/FiltersIcon';
-import MobileModal from '../MobileModal/MobileModal';
+import MobileModal from '../MobileModal';
 import Sort from '../Sort';
 import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';

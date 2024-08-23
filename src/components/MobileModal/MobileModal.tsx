@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 
-type MobileModalProps = {
+export type MobileModalProps = {
   /**
    * where to animate the modal from
    */

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useSort, { UseSortProps } from '../../hooks/useSort';
 import { IncludeRenderProps, UseSortReturn } from '../../types';
-import MobileModal from '../MobileModal/MobileModal';
+import MobileModal from '../MobileModal';
 
 export type SortProps = UseSortProps & {
   /**
