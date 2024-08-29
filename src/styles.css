@@ -6,6 +6,7 @@
 @import './components//CioPlpGrid/CioPlpGrid.css';
 @import './components/Spinner/Spinner.css';
 @import './components/Sort/Sort.css';
+@import './components/MobileModal/MobileModal.css';
 @import './components/Filters/index.css';
 
 @keyframes cio-spinner {
@@ -71,4 +72,16 @@
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   margin-top: -6px;
+}
+
+@media (min-width: 769px) {
+  .cio-mobile-only {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .cio-large-screen-only {
+    display: none; 
+  }
 }

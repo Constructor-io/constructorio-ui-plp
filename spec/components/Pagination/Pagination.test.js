@@ -10,6 +10,8 @@ import { DEMO_API_KEY } from '../../../src/constants';
 const originalWindowLocation = window.location;
 
 beforeEach(() => {
+  window.innerWidth = 1024;
+  fireEvent(window, new Event('resize'));
   Object.defineProperty(window, 'location', {
     value: new URL('https://example.com'),
   });
@@ -40,6 +42,24 @@ describe('Pagination Component', () => {
     expect(getByText('3')).toBeInTheDocument();
     expect(getByText('4')).toBeInTheDocument();
     expect(getByText('5')).toBeInTheDocument();
+  });
+
+  it('rerenders the pagination buttons on window resize', () => {
+    const { getByText, queryByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} />
+      </CioPlp>,
+    );
+
+    expect(getByText('1')).toBeInTheDocument();
+    expect(getByText('2')).toBeInTheDocument();
+
+    window.innerWidth = 500;
+    fireEvent(window, new Event('resize'));
+
+    waitFor(() => {
+      expect(queryByText('2')).not.toBeInTheDocument();
+    });
   });
 
   it('renders with render props', () => {

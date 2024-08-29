@@ -32,6 +32,16 @@
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .cio-plp-sort .collapsible-content.cio-large-screen-only {
+    display: none; 
+  }
+
+  .cio-plp-sort-button-label .cio-mobile-only {
+    display: inline-block;
+  }
+}
+
 .cio-plp-sort label {
   cursor: pointer;
   overflow: hidden;

@@ -35,7 +35,7 @@ describe('Testing Component: Sort', () => {
   });
 
   it('Should render sort options based on search or browse response', async () => {
-    const { getByText } = render(
+    const { getAllByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Sort sortOptions={searchData.response.sortOptions} />
       </CioPlp>,
@@ -43,7 +43,7 @@ describe('Testing Component: Sort', () => {
 
     await waitFor(() => {
       responseSortOptions.forEach((option) => {
-        expect(getByText(option.displayName)).toBeInTheDocument();
+        expect(getAllByText(option.displayName).length).toBeGreaterThanOrEqual(2);
       });
     });
   });
