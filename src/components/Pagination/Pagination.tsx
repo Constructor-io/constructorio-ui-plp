@@ -1,9 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useRef, useState } from 'react';
-import { IncludeRenderProps, PaginationObject, UsePaginationProps } from '../../types';
-import usePagination from '../../hooks/usePagination';
+import { IncludeRenderProps } from '../../types';
+import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
 
-export type PaginationWithRenderProps = IncludeRenderProps<UsePaginationProps, PaginationObject>;
+export type PaginationProps = UsePaginationProps;
+export type PaginationWithRenderProps = IncludeRenderProps<PaginationProps, UsePaginationReturn>;
 
 export default function Pagination(props: PaginationWithRenderProps) {
   const { totalNumResults, resultsPerPage, windowSize = 5, children } = props;
