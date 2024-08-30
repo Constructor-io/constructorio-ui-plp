@@ -189,8 +189,6 @@ export interface SwatchItem {
   variationId?: string;
 }
 
-export type PaginationProps = PaginationObject;
-
 export interface PlpBrowseData {
   resultId: string;
   request: BrowseRequestType;
@@ -211,55 +209,11 @@ export interface CioPlpProviderProps {
   staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
-export type CioPlpProps = CioPlpProviderProps;
-
 export type UseSortReturn = {
   sortOptions: PlpSortOption[];
   selectedSort: PlpSortOption | null;
   changeSelectedSort: (sortOption: PlpSortOption) => void;
 };
-
-export type UsePaginationProps = {
-  /**
-   * Total number of results returned by the API response
-   */
-  totalNumResults: number;
-  /**
-   * Number of results returned per page
-   */
-  resultsPerPage?: number;
-  /**
-   * Number of pages to display in the pagination window
-   */
-  windowSize?: number;
-};
-
-export type UsePagination = (props: UsePaginationProps) => PaginationObject;
-
-export interface PaginationObject {
-  // Represents the current page number in the pagination
-  // It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display
-  currentPage: number | undefined;
-
-  // Allows you to navigate to a specific page and takes a page number as an argument
-  goToPage: (page: number) => void;
-
-  // Navigate to the next page. Used to implement "Next" button in a pagination control.
-  nextPage: () => void;
-
-  // Navigate to the previous page. Used to implement "Previous" button in a pagination control.
-  prevPage: () => void;
-
-  // The total number of pages available in the pagination object
-  totalPages: number;
-
-  /**
-   *  Returns an array of numbers [1,2,3,4,-1,10]
-   *  1,10 are first and last page
-   *  -1 indicates a break (e.g., to show "...")
-   *  [1, 2, 3, 4, ..., 10] */
-  pages: number[];
-}
 
 export interface ProductSwatchObject {
   swatchList: SwatchItem[] | undefined;

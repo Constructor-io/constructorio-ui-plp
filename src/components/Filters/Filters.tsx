@@ -11,7 +11,7 @@ export type FiltersProps = UseFilterProps & {
    */
   initialNumOptions?: number;
 };
-type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
+export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
 
 export default function Filters(props: FiltersWithRenderProps) {
   const { children, initialNumOptions, ...useFiltersProps } = props;

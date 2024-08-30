@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { PlpContextValue, PlpFacet, PlpSortOption, UsePaginationProps } from '../types';
+import { PlpContextValue, PlpFacet, PlpSortOption } from '../types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
-import usePagination from './usePagination';
+import usePagination, { UsePaginationProps } from './usePagination';
 import { isPlpSearchDataResults } from '../utils';
 
 export interface UseCioPlpHook extends PlpContextValue {}
