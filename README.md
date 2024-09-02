@@ -16,7 +16,7 @@ npm i @constructor-io/constructorio-ui-plp
 
 ## Usage
 
-### Using the React component
+### Using the React Component
 
 The `CioPlp` component handles state management, data fetching, and rendering logic for the entire PLP.
 
@@ -32,7 +32,7 @@ function YourComponent() {
 }
 ```
 
-### Using the JavaScript bundle
+### Using the JavaScript Bundle
 
 This is a framework agnostic method that can be used in any JavaScript project. The `CioPlp` function provides a simple interface to inject an entire PLP UI into the provided `selector`.
 
@@ -49,9 +49,9 @@ CioPlp({
 });
 ```
 
-## Custom styling
+## Custom Styling
 
-### Library defaults
+### Library Defaults
 
 By default, importing React components from this library does not pull any CSS into your project.
 
@@ -71,7 +71,7 @@ import '@constructor-io/constructorio-ui-plp/styles.css';
 
 ## Troubleshooting
 
-### Known issues
+### Known Issues
 
 **Older JavaScript environments**
 
@@ -95,9 +95,9 @@ There is a known issue with ESLint where it fails to resolve the paths exposed i
 
 Relevant open issues: [Issue 1868](https://github.com/import-js/eslint-plugin-import/issues/1868), [Issue 1810](https://github.com/import-js/eslint-plugin-import/issues/1810)
 
-## Local development
+## Local Development
 
-### Development scripts
+### Development Scripts
 
 ```bash
 npm ci                  # Install dependencies for local dev
@@ -105,14 +105,14 @@ npm run dev             # Start a local dev server for Storybook
 npm run lint            # Run lint
 ```
 
-### Library maintenance
+### Library Maintenance
 
 ```bash
 npm run compile           # Generate lib folder for publishing to npm
 npm run build-storybook   # Generate Storybook static bundle for deploy with GitHub Pages
 ```
 
-## Supporting docs
+## Supporting Docs
 
 - [Storybook 7 Introduction](https://storybook.js.org/docs/7.0/react/get-started/introduction)
 - [Typescript Docs](https://www.typescriptlang.org/docs/)
