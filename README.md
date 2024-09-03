@@ -1,5 +1,6 @@
 # Constructor.io PLP UI Library
 
+[![npm](https://img.shields.io/npm/v/@constructor-io/constructorio-ui-plp)](https://www.npmjs.com/package/@constructor-io/constructorio-ui-plp)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Constructor-io/constructorio-ui-plp/blob/main/LICENSE)
 
 ## Introduction
