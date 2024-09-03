@@ -17,8 +17,11 @@
   justify-content: right;
 }
 
-.cio-mobile-modal-backdrop-no-scroll {
-  overflow: hidden;
+
+@media (max-width: 768px) {
+  .cio-mobile-modal-backdrop-no-scroll {
+    overflow: hidden;
+  }
 }
 
 .cio-mobile-modal-wrapper {
