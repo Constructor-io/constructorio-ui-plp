@@ -7,7 +7,7 @@ import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useFilter', () => {
   const originalWindowLocation = window.location;
-  const testBrandA = 'UnderArmour';
+  const testBrandA = 'AnonymousCompany';
   const testBrandB = 'Constructor';
 
   beforeEach(() => {
