@@ -1,13 +1,28 @@
-import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import { Meta, Canvas, Story, Controls, Markdown } from '@storybook/blocks';
 import meta, { Primary } from './ProductCard.stories';
+import RenderProps from './RenderProps.md?raw'
+/* This "?raw" import raw text form the md file */
 
 <Meta of={meta} />
 
 # `ProductCard`
-A Component to manage Product Card Interactions.
+A Component to manage Product Card Interactions. 
 
-## Basic Usage
 The Product Card component comes bundled with Constructor.io tracking and default rendering built-in.
+
+<style>
+{`
+  .docs-story div.innerZoomElementWrapper {
+    max-height: 100vh;
+  }
+`}
+</style>
+<Canvas sourceState="none">
+  <Story of={Primary} />
+</Canvas>
+
+
+## Basic example
 ```jsx
 import { useCioClient, ProductCard, CioPlp } from '@constructor-io/constructorio-ui-plp'
 
@@ -22,8 +37,8 @@ function myApp() {
 }
 ```
 
-## Using RenderProps
-If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+## Render Props pattern
+If you prefer handle the rendering of the ProductCard component, you may pass a Render Props function to the component.
 ```jsx
 import { ProductCardComponent, useOnAddToCart, useOnProductCardClick } from '@constructor-io/constructorio-ui-plp'
 
@@ -54,37 +69,7 @@ function myApp() {
 }
 ```
 
+### Arguments passed to children via Render Props
+>Accessible to children of the ProductCard component via render props.
 
-## Working Example
-This is an example of how the `ProductCard` might look like.
-
-<Canvas sourceState="none">
-  <Story of={Primary} />
-</Canvas>
-
-<Controls of={Primary} />
-
-### Working Example - Source Code 
-```jsx
-  import React from 'react';
-  import { CioPlp, ProductCard } from '@constructor-io/constructorio-ui-plp';
-
-  const apiKey = 'MY_API_KEY'
-
-
-  function ProductCardExample() {
-    const items = ... // Items retrieved, transformed
-
-    return (
-      <>
-        <CioPlp apiKey={MY_API_KEY}>
-          {
-            items.map((item) => (
-              <ProductCard item={item} />
-            ))
-          }
-        </CioPlp>
-      </>
-    );
-  }
-```
+<Markdown>{RenderProps}</Markdown>

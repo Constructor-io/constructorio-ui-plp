@@ -7,41 +7,19 @@ import meta from './ProductCard.stories';
 <ArgTypes />
 
 ### Item
-  | Name              | type                   | description       | 
+  | property              | type                   | description       | 
   | :-----------------| :----------------------| :---------------- |
-  | itemName          | `string`               | Item name         |
-  | description       | `string`               | Item description  |
-  | itemId            | `string`               | Item ID           |
+  | itemName*         | `string`               | Item name         |
+  | itemId*           | `string`               | Item ID           |
+  | isSlotted*        | `boolean`              | Whether the item has a slotting rule applied to it or not |
   | url               | `string`               | Item product details page url |
   | imageUrl          | `string`               | Item image url                |
+  | description       | `string`               | Item description  |
   | groupIds          | `string[]`             | Array of strings of associated item group IDs |
   | groups            | `ApiGroup[]`           | Array of group objects laying out the associated groups hierarchy  |
-  | facets            | `any[]`                | Array of the item facets/filters |
+  | facets            | `PlpFacet[]`           | Array of the item facets/filters |
   | variationId       | `string`               | The rolled up variation ID      |
-  | isSlotted         | `Boolean`              | Whether the item has a slotting rule applied to it or not |
   | variations        | `Variation[]`          | Array of variations of the item. Null if variationsMap exists. |
   | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the variations_map parameter. Null if variations exists. (https://docs.constructor.io/rest_api/variations_mapping/#aggregations-explained)  |
   | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
-
-
-## Render function accessible Props
-The ProductCard component uses the render props pattern to expose various properties (props),
-allowing developers to customize how product cards are displayed.
-These props enable access to both item data and related methods,
-facilitating flexible and dynamic rendering.
-
-```jsx  
-<ProductCard item={item}>
-  {({ item, formatPrice, getPrice, onAddToCart, onClick }) => ()}
-</ProductCard>
-```
-
-  | Name              | type                 | description|
-  | :-----------------| :--------------------| :--------- |
-  | item              | `Item`               | Item to be rendered as the Product Card. |
-  | formatPrice       | `function(price: number) => string` | Function to format the price. Defaults to "$0.00". Set globally at the CioPlp provider level. |
-  | getPrice          | `function(item: Item) => number` | Function to retrieve the price. Defaults to `item.data.price`. Set globally at the CioPlp provider level. |
-  | onAddToCart       | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on add-to-cart event. Set globally at the CioPlp provider level. |
-  | onClick           | `function(event: React.MouseEvent, item: Item) => void` | Callback to run on Product Card Click. Set globally at the CioPlp provider level. |
-
 

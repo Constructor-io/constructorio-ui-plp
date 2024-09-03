@@ -1,9 +1,11 @@
-import { Meta, Canvas } from '@storybook/blocks';
+import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as ProductSwatchStories from './ProductSwatch.stories';
+import RenderProps from './RenderProps.md?raw'
+/* This "?raw" import raw text form the md file */
 
 <Meta of={ProductSwatchStories} />
 
-# `Product Swatch`
+# `ProductSwatch`
 A Component to manage Product Swatch interactions and UI.
 
 <Canvas of={ProductSwatchStories.Primary} />
@@ -30,8 +32,8 @@ A Component to manage Product Swatch interactions and UI.
   ```
 
 
-## Using RenderProps
-If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+## Render Props pattern
+If you prefer handle the rendering of the ProductSwatch component, you may pass a Render Props function to the component.
 ```jsx
 import { CioPlp, ProductSwatch } from '@constructor-io/constructorio-ui-plp'
 
@@ -68,3 +70,9 @@ function myApp() {
   )
 }
 ```
+
+### Arguments passed to children via Render Props
+>Accessible to children of the ProductSwatch component via render props.
+
+`ProductSwatch`
+<Markdown>{RenderProps}</Markdown>

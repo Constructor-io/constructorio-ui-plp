@@ -1,0 +1,8 @@
+| property    | type                     | description                                                                                                                                                              |
+| :---------- | ------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| currentPage | `number`                 | Represents the current page number in the pagination. It's typically used to highlight the current page in the UI and to determine which set of data to fetch or display |
+| goToPage    | `(page: number) => void` | Allows you to navigate to a specific page and takes a page number as an argument                                                                                         |
+| nextPage    | `() => void`             | Navigate to the next page. Used to implement "Next" button in a pagination control                                                                                       |
+| prevPage    | `() => void`             | Navigate to the previous page. Used to implement "Previous" button in a pagination control                                                                               |
+| totalPages  | `number`                 | The total number of pages available in the pagination object                                                                                                             |
+| pages       | `number[]`               | Returns an array of numbers [1,2,3,4,-1,10] <br/> `1,10` are first and last page <br/> `-1` indicates a break (e.g., to show "...") <br/> [1, 2, 3, 4, ..., 10]          |

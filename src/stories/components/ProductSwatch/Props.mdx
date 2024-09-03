@@ -10,16 +10,6 @@ import * as ProductSwatchStories from './ProductSwatch.stories';
 ### ProductSwatchObject
   | property          | type                          | description|
   | :-----------------| ------------------------------| :--------- |
-  | swatchList        | `SwatchItem[]`                | Represents the List of Swatch items to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
-  | selectedVariation | `SwatchItem`                  | Currently Selected SwatchItem object |
+  | swatchList        | [SwatchItem[]](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props)                | Represents the List of Swatch items to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
+  | selectedVariation | [SwatchItem](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props)                  | Currently Selected SwatchItem object |
   | selectVariation   | `(swatch: SwatchItem) => void`| Function to change the currently selected SwatchItem object |
-
-#### SwatchItem
-  | Name              | type                   | description       | 
-  | :-----------------| :----------------------| :---------------- |
-  | itemName          | `string`               | Item name         |
-  | variationId       | `string`               | ID of the swatch variation |
-  | url               | `string`               | Item product details page url |
-  | imageUrl          | `string`               | Image url associated with swatch, will override ProductCard image if provided |
-  | price             | `number`               | Price associated with swatch, will override ProductCard price if provided |
-  | swatchPreview     | `string`               | Either a url, or hexcode (Ex: #FFFFFF). Will be used as swatch icon |

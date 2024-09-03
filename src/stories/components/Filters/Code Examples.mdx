@@ -1,17 +1,20 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as FiltersStories from './Filters.stories';
+import UseFilterReturn from '../../hooks/UseFilter/UseFilterReturn.md?raw'
 /* This "?raw" import raw text form the md file */
 
 <Meta of={FiltersStories} />
 
-## `Filters`
-The Filters component is a dynamic component.
-It is responsible for displaying the filters available to the users. 
+# `Filters`
+The Filters component is a dynamic component that 
+is responsible for displaying the filters available to the users.
 
 **Dynamic Options Rendering:**
-- Automatically updates and displays selected filters based on user requests.
+- Automatically updates and displays selected filters based on user requests
 
-### Basic Example
+<Canvas of={FiltersStories.Primary} />
+
+## Basic example
 ```jsx
 import React from 'react';
 import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp';
@@ -28,10 +31,8 @@ function MyComponent() {
 }
 ```
 
-<Canvas of={FiltersStories.Primary} />
-
-### Using RenderProps
-To override the default rendering of the filter component, you may pass a Render Props function to the component.
+## Render Props pattern
+To override the default rendering of the Filters component, you may pass a Render Props function to the component.
 
 ```jsx
 import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
@@ -50,3 +51,9 @@ function myApp() {
   )
 }
 ```
+
+### Arguments passed to children via Render Props
+>Accessible to children of the Filters component via render props.
+
+`UseFilterReturn`
+<Markdown>{UseFilterReturn}</Markdown>

@@ -164,7 +164,7 @@ export interface Item {
   imageUrl?: string;
   groupIds?: Array<string>;
   groups?: Array<ApiGroup>;
-  facets?: Array<any>;
+  facets?: Array<PlpFacet>;
   variationId?: string;
 
   // Remaining unmapped metadata fields
