@@ -21,7 +21,7 @@ const meta = {
       },
     },
     cioClient: {
-      description: 'The Constructor IO client instance',
+      description: 'The Constructor client instance',
       table: {
         type: {
           summary: 'Nullable<ConstructorIOClient>',
