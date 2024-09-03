@@ -137,7 +137,7 @@ The library version is tracked by releases and git tags. We intentionally keep t
 
 Dispatch the [Deploy Storybook](https://github.com/Constructor-io/constructorio-ui-plp/actions/workflows/deploy-storybook.yml) workflow in GitHub Actions.
 
-#### ℹ️Note: This is already done automatically when publishing a new version.
+#### ℹ️ Note: This is already done automatically when publishing a new version.
 
 ## Supporting Docs
 
