@@ -9,7 +9,7 @@ interface UseRequestConfigsReturn {
 export default function useRequestConfigs(): UseRequestConfigsReturn {
   const context = useCioPlpContext();
   if (!context) {
-    throw new Error('This Hook needs to be called within the C.io PLP Context Provider.');
+    throw new Error('This Hook needs to be called within the Constructor PLP Context Provider.');
   }
 
   const { urlHelpers, staticRequestConfigs } = context;

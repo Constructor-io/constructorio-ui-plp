@@ -61,7 +61,7 @@ const fetchSearchResults = async (
 
 /* eslint-disable max-len */
 /**
- * A React Hook to call to utilize Constructor.io Search
+ * A React Hook to call to utilize Constructor Search
  * @param {Object} [props] - The component props.
  * @param {object} [props.initialSearchResponse] Initial value for search results
  * (Would be useful when passing initial state for the first render from the server

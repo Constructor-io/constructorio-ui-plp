@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
 import { PlpFacet } from '../../../types';
+import { DEMO_API_KEY } from '../../../constants';
 import '../../../styles.css';
 
 const meta = {

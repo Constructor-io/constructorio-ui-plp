@@ -1,22 +1,23 @@
 import { Meta } from '@storybook/blocks';
-import Code from './assets/code-brackets.svg';
-import Colors from './assets/colors.svg';
-import Comments from './assets/comments.svg';
-import Direction from './assets/direction.svg';
-import Flow from './assets/flow.svg';
-import Plugin from './assets/plugin.svg';
-import Repo from './assets/repo.svg';
-import StackAlt from './assets/stackalt.svg';
-import './assets/storybook-styles.css'
+import Code from './../assets/code-brackets.svg';
+import Colors from './../assets/colors.svg';
+import Comments from './../assets/comments.svg';
+import Direction from './../assets/direction.svg';
+import Flow from './../assets/flow.svg';
+import Plugin from './../assets/plugin.svg';
+import Repo from './../assets/repo.svg';
+import StackAlt from './../assets/stackalt.svg';
+import '../assets/storybook-styles.css'
 
-<Meta title="General/Introduction" />
+<Meta title="Components/Introduction" />
 
-# Welcome to Constructor's PLP UI
+# Using Components
+Choose to integrate simply using the component [CioPlp](./?path=/docs/components-cioplp--code-examples) that takes in a set of configuration options.
 
-Integration with Constructor's APIs has never been easier with **comprehensive components** that take care of both the tracking and results retrieval, 
-allowing you to focus on developing your own unique site experience.
-
-If you prefer hooks, we provide the **useCioPlp** hook that accepts a suite of configuration paramters and returns all the underlying logic that powers all our components.
+Alternatively, utilize the suite of sub-components* that make up the [CioPlp](./?path=/docs/components-cioplp--code-examples) and create your own PLP layout. 
+<div>
+  <span className="badge note">Note</span>*These sub-components must be nested under the CioPlp component to access the required context.
+</div>
 
 <div className="subheading">Components</div>
 
@@ -71,20 +72,4 @@ If you prefer hooks, we provide the **useCioPlp** hook that accepts a suite of c
       Allows the shopper to modify the sorting mechanism that ranks your products
     </span>
   </a>
-</div>
-
-<div className="subheading">Hooks</div>
-
-<div className="link-list">
-  <a className="link-item" href="./?path=/docs/hooks-usecioplp--code-examples" >
-    <img src={Code} alt="repo" />
-    <span>
-      <strong>useCioPlp</strong>
-      A Hook that surfaces the relevant functions needed to render a PLP with Constructor
-    </span>
-  </a>
-</div>
-
-<div className="badge-wrapper tip-wrapper">
-  <span className="badge tip">Tip</span>Having trouble with a unique use case? Contact your friendly Integration Engineers for support!
 </div>

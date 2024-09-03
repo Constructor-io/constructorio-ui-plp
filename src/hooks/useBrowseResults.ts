@@ -17,7 +17,7 @@ export type UseBrowseResultsReturn = {
 
 /* eslint-disable max-len */
 /**
- * A React Hook to call to utilize Constructor.io Browse
+ * A React Hook to call to utilize Constructor Browse
  * @param {object} [props.initialBrowseResponse] Initial value for browse results. Results will not be re-fetched on first render if this is provided
  */
 /* eslint-enable max-len */
