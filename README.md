@@ -1,4 +1,4 @@
-# Constructor.io PLP UI Library
+# Constructor PLP UI Library
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Constructor-io/constructorio-ui-plp/blob/main/LICENSE)
 
