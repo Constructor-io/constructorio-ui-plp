@@ -5,7 +5,7 @@
 
 ## Introduction
 
-A UI library that provides React components to manage the fetching and rendering logic for [Search](https://constructor.io/products/search/) & [Browse](https://constructor.io/products/browse/) (Coming soon) product listing pages powered by Constructor. Typescript support is available.
+A UI library that provides React components to manage the fetching and rendering logic for [Search](https://constructor.io/products/search/) & [Browse](https://constructor.io/products/browse/) (Coming Soon) product listing pages powered by Constructor. Typescript support is available.
 
 Our [Storybook Docs](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/general-introduction--documentation) are the best place to explore the behavior and the available configuration options for this UI library.
 
