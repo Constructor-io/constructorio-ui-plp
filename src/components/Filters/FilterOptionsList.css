@@ -4,7 +4,6 @@
 }
 
 .cio-filter-multiple-option {
-  padding: 4px;
   cursor: pointer;
   display: flex;
 }
@@ -15,6 +14,7 @@
   flex-direction: row;
   cursor: pointer;
   flex-grow: 1;
+  padding: 4px;
 }
 
 .cio-filter-multiple-option input {
