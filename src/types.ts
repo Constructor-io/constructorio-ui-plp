@@ -41,6 +41,7 @@ export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
+  onRedirect?: (url: string) => void;
 }
 
 export type PlpSearchData = PlpSearchDataResults | PlpSearchDataRedirect;

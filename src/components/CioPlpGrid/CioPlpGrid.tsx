@@ -12,6 +12,7 @@ import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
 export type CioPlpGridProps = {
   initialResponse?: SearchResponse;
@@ -24,9 +25,17 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
+  const {
+    callbacks: { onRedirect = (redirectUrl) => window.location.replace(redirectUrl) },
+  } = useCioPlpContext();
 
   if (isPlpSearchDataRedirect(data)) {
-    // Do redirect
+    const redirectUrl = data.redirect.redirect.data.url;
+
+    if (onRedirect) {
+      onRedirect(redirectUrl);
+    }
+
     return null;
   }
 
