@@ -44,13 +44,23 @@ import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp'
 
 const apiKey = 'MY_API_KEY';
 
+function MyCustomSort(props) {
+  const {sortOptions, selectedSort, changeSelectedSort} = props
+
+  return (
+    <>
+      {/* CUSTOM_MARKUP_HERE */}
+    </>
+  );
+}
+
 function myApp() {
   ...
 
   return (
     <CioPlp apiKey={MY_API_KEY}>
       <Sort />
-        {({sortOptions, selectedSort, changeSelectedSort}) => sortOptions.map((option) => <li>{option.displayName}</li>)}
+        <MyCustomSort />
       </Sort>
     </CioPlp>
   )

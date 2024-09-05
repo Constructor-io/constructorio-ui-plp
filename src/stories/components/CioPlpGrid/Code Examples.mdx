@@ -63,13 +63,23 @@ import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp'
 
 const apiKey = 'MY_API_KEY';
 
+function MyCustomRender(props) {
+  const {data, status, refetch} = props
+
+  return (
+    <>
+      {/* CUSTOM_MARKUP_HERE */}
+    </>
+  );
+}
+
 function myApp() {
   ...
 
   return (
     <CioPlp apiKey={MY_API_KEY}>
       <CioPlpGrid />
-        {({data, status, refetch}) => data?.response?.results?.map((item) => <li>{item.itemName}</li>)}
+        <MyCustomRender />
       </CioPlpGrid>
     </CioPlp>
   )

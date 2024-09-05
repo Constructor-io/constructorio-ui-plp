@@ -35,39 +35,43 @@ If you prefer handle the rendering of the Pagination component, you may pass a R
 ```jsx
 import { CioPlp, Pagination } from '@constructor-io/constructorio-ui-plp'
 
+function MyCustomPagination(props) {
+  const {
+    currentPage,
+    goToPage,
+    nextPage,
+    pages,
+    prevPage,
+    totalPages,
+  } = props
+  
+  return (
+    <div>
+      <div>Current Page: {currentPage}</div>
+      <div>Total: {totalPages}</div>
+      <button onClick={() => prevPage()} type='button'>
+        Previous
+      </button>
+
+      {pages.map((page) => (
+        <button onClick={() => goToPage(page)} type='button'>
+          {page}
+        </button>
+      ))}
+      <button onClick={() => nextPage()} type='button'>
+        Next
+      </button>
+    </div>
+  )
+}
+
 function myApp() {
   ...
   
   return (
     <CioPlp apiKey={YOUR_API_KEY}>
       <Pagination>
-        {
-          ({
-            currentPage,
-            goToPage,
-            nextPage,
-            pages,
-            prevPage,
-            totalPages,
-          }) => (
-            <div>
-              <div>Current Page: {currentPage}</div>
-              <div>Total: {totalPages}</div>
-              <button onClick={() => prevPage()} type='button'>
-                Previous
-              </button>
-
-              {pages.map((page) => (
-                <button onClick={() => goToPage(page)} type='button'>
-                  {page}
-                </button>
-              ))}
-              <button onClick={() => nextPage()} type='button'>
-                Next
-              </button>
-            </div>
-           )
-        }
+        <MyCustomPagination />
       </Pagination>
     </CioPlp>
   )

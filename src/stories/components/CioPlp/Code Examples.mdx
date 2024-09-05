@@ -47,10 +47,20 @@ The [context](..?path=/docs/components-cioplp--code-examples#cioplp-context-valu
 ```jsx
 import { CioPlp } from '@constructor-io/constructorio-ui-plp';
 
+function MyGrid(props) {
+  const { cioClient, cioClientOptions, setCioClientOptions, formatters, itemFieldGetters, urlHelpers } = props
+
+  return (
+    <>
+      {/* CUSTOM_MARKUP_HERE */}
+    </>
+  );
+}
+
 function MyComponent() {
   return (
     <CioPlp apiKey={apiKey}>
-      {({ cioClient, cioClientOptions, setCioClientOptions, formatters, itemFieldGetters, urlHelpers }) => <div />}
+      <MyGrid />
     </CioPlp>
   );
 }
