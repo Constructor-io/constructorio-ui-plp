@@ -23,4 +23,4 @@ Callbacks will be composed with the library's internal tracking calls for a give
 | onAddToCart        | `(event: React.MouseEvent, item: Item) => void`            | Product add to cart callback function  |
 | onProductCardClick | `(event: React.MouseEvent, item: Item) => void`            | Product click callback function        |
 | onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void` | Product swatch click callback function |
-| onRedirect         | `(url: string) => void`                                    | Redirect function                      |
+| onRedirect         | `(url: string) => void`                                    | Redirect callback function             |
