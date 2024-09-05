@@ -1,14 +1,16 @@
-import { Meta, Canvas, Controls } from '@storybook/blocks';
+import { Meta, Canvas, Controls, Markdown } from '@storybook/blocks';
 import * as PaginationStories from './Pagination.stories';
+import UsePaginationReturn from '../../hooks/UsePagination/UsePaginationReturn.md?raw'
+/* This "?raw" import raw text form the md file */
 
 <Meta of={PaginationStories} />
 
 # `Pagination`
-A Component to manage pagination interactions and UI.
+The Pagination component is a dynamic component that manages pagination interactions.
 
 <Canvas of={PaginationStories.Primary} />
 
-## Basic Example
+## Basic example
   ```jsx
   import React from 'react';
   import { CioPlp, Pagination, usePagination } from '@constructor-io/constructorio-ui-plp';
@@ -28,8 +30,8 @@ A Component to manage pagination interactions and UI.
   }
   ```
 
-## Using RenderProps
-If you prefer handle the rendering yourself, you may pass a Render Props function to the component.
+## Render Props pattern
+If you prefer handle the rendering of the Pagination component, you may pass a Render Props function to the component.
 ```jsx
 import { CioPlp, Pagination } from '@constructor-io/constructorio-ui-plp'
 
@@ -72,5 +74,8 @@ function myApp() {
 }
 ```
 
-## Controls
-<Controls />
+### Arguments passed to children via Render Props
+>Accessible to children of the Pagination component via render props.
+
+`UsePaginationReturn`
+<Markdown>{UsePaginationReturn}</Markdown>

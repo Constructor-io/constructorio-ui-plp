@@ -16,6 +16,19 @@ const preview: Preview = {
         ignoreSelector: '.docs-story h2, .docs-story h3'
       }
     },
+    options: {
+      // Requires rebuild
+      storySort: {
+        order: [
+          'General',
+          ['Introduction'],
+          'Components',
+          ['Introduction'],
+          'Hooks', 
+          ['Introduction'],
+        ]
+      }
+    },
   },
 };
 

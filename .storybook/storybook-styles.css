@@ -98,3 +98,13 @@
   flex: 100%;
 }
 
+/* Removes the "view code" option on Storybook Canvas */
+.docblock-code-toggle {
+  display: none !important;
+}
+
+/* Prevents CioPlpGrid from taking up the whole page */
+.docs-story div.innerZoomElementWrapper {
+  max-height: 50vh;
+  overflow-y: auto;
+}

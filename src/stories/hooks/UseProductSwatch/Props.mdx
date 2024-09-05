@@ -10,7 +10,7 @@ Hook takes an item `Item` as a parameter and returns product swatch state and co
 <ArgTypes />
 
 ### Item
-  | Name              | type                   | description       | 
+  | property              | type                   | description       | 
   | :-----------------| :----------------------| :---------------- |
   | itemName          | `string`               | Item name         |
   | description       | `string`               | Item description  |
@@ -22,8 +22,8 @@ Hook takes an item `Item` as a parameter and returns product swatch state and co
   | facets            | `any[]`                | Array of the item facets/filters |
   | variationId       | `string`               | The rolled up variation ID      |
   | isSlotted         | `Boolean`              | Whether the item has a slotting rule applied to it or not |
-  | variations        | `Variation[]`          | Array of variations of the item. Null if variationsMap exists. |
-  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the variations_map parameter. Null if variations exists. (https://docs.constructor.io/rest_api/variations_mapping/#aggregations-explained)  |
+  | variations        | `Variation[]`          | Array of variations of the item. Null if `variationsMap` exists |
+  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the [variations_map](https://docs-beta.constructor.io/reference/shared-variations-mapping) parameter. Null if `variations` exists  |
   | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
 
 ## Returns

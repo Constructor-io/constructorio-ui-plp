@@ -1,17 +1,18 @@
 import { Meta, Story, Canvas, Markdown } from '@storybook/blocks';
 import * as SortStories from './Sort.stories';
+import UseSortReturn from '../../hooks/UseSort/UseSortReturn.md?raw'
 /* This "?raw" import raw text form the md file */
 
 <Meta of={SortStories} />
 
-## `Sort`
+# `Sort`
 The Sort component is a dynamic component.
 It is responsible for displaying the sort options based on user's search or browse response. 
 
 **Dynamic Options Rendering:**
-- Automatically updates and displays sort options based on user requests.
+- Automatically updates and displays sort options based on user requests
 
-### Basic Example
+## Basic Example
 ```jsx
   import React from 'react';
   import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp';
@@ -35,8 +36,8 @@ It is responsible for displaying the sort options based on user's search or brow
   </div>
 </Canvas>
 
-### Using RenderProps
-If you prefer to handle the rendering of the sort yourself, you may pass a Render Props function to the component.
+## Render Props pattern
+If you prefer to handle the rendering of the Sort component, you may pass a Render Props function to the component.
 
 ```jsx
 import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp'
@@ -55,3 +56,9 @@ function myApp() {
   )
 }
 ```
+
+### Arguments passed to children via Render Props
+>Accessible to children of the Sort component via render props.
+
+`UseSortReturn`
+<Markdown>{UseSortReturn}</Markdown>

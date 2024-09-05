@@ -45,7 +45,7 @@ export interface ProductCardRenderProps extends ProductCardProps {
 export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>;
 
 /**
- * ProductCard component that has ConstructorIO tracking built-in.
+ * ProductCard component that has Constructor tracking built-in.
  */
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;

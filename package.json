@@ -1,8 +1,8 @@
 {
   "name": "@constructor-io/constructorio-ui-plp",
   "version": "0.0.0",
-  "description": "Constructor.io PLP UI library for web applications",
-  "author": "constructor.io",
+  "description": "Constructor PLP UI library for web applications",
+  "author": "Constructor.io Corporation",
   "license": "MIT",
   "homepage": "https://github.com/Constructor-io/constructorio-ui-plp#readme",
   "repository": {
