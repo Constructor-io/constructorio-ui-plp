@@ -44,7 +44,7 @@ import { ProductCardComponent, useOnAddToCart, useOnProductCardClick } from '@co
 
 function MyCustomProductCard(props) {
   const { onClick, formatPrice, productInfo, onAddToCart, item } = props
-  const price = productInfo.price
+  const price = productInfo.itemPrice
 
   return (
     <div class="cio-product-card" onClick={(e) => onClick(e, item)}>
