@@ -13,15 +13,31 @@ import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { UsePaginationProps } from '../../hooks/usePagination';
+import { UseSortProps } from '../../hooks/useSort';
+import { UseFilterProps } from '../../hooks/useFilter';
 
 export type CioPlpGridProps = {
   initialResponse?: SearchResponse;
   spinner?: React.ReactNode;
+  /**
+   * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+   */
+  paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+  /**
+   * No configurations available yet.
+   */
+  sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
+  /**
+   * No configurations available yet.
+   */
+  filterConfigs?: Omit<UseFilterProps, 'facets'>;
 };
 export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
-  const { spinner, initialResponse, children } = props;
+  const { spinner, initialResponse, filterConfigs, sortConfigs, paginationConfigs, children } =
+    props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
@@ -69,7 +85,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
-                    <Filters facets={response.facets} />
+                    <Filters facets={response.facets} {...filterConfigs} />
                   </div>
                   <div className='cio-products-container'>
                     <div className='cio-products-header-container'>
@@ -85,7 +101,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                           Filters
                         </button>
                         <span className='cio-large-screen-only'>{renderTitle}</span>
-                        <Sort sortOptions={response.sortOptions} isOpen={false} />
+                        <Sort sortOptions={response.sortOptions} isOpen={false} {...sortConfigs} />
                       </div>
                     </div>
                     <div className='cio-product-tiles-container'>
@@ -102,6 +118,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                       <Pagination
                         totalNumResults={response.totalNumResults}
                         resultsPerPage={response.numResultsPerPage}
+                        {...paginationConfigs}
                       />
                     </div>
                   </div>

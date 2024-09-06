@@ -8,8 +8,16 @@ export type CioPlpProps = CioPlpProviderProps & UseCioPlpProps;
 
 // Wrapper component for CioPlpProvider with default Markup
 export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContextValue>) {
-  const { children, initialResponse, ...rest } = props;
-  const defaultMarkup = <CioPlpGrid initialResponse={initialResponse} />;
+  const { children, initialResponse, sortConfigs, paginationConfigs, filterConfigs, ...rest } =
+    props;
+  const defaultMarkup = (
+    <CioPlpGrid
+      initialResponse={initialResponse}
+      sortConfigs={sortConfigs}
+      paginationConfigs={paginationConfigs}
+      filterConfigs={filterConfigs}
+    />
+  );
 
   return (
     <div className='cio-plp'>
