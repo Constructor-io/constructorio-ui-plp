@@ -1,18 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
+import {
+  Nullable,
+  IBrowseParameters as BrowseParameters,
+  GetBrowseResultsResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
 import { transformBrowseResponse } from '../utils/transformers';
-import { PlpBrowseData } from '../types';
+import { ConstructorIOClient, PlpBrowseData } from '../types';
 import { getBrowseParamsFromRequestConfigs } from '../utils';
 import useFirstRender from './useFirstRender';
+import {
+  RequestStatus,
+  requestReducer,
+  RequestAction,
+  initialState,
+  initFunction,
+  RequestType,
+} from '../components/CioPlpGrid/reducer';
 
 export interface UseBrowseResultsProps {
-  initialBrowseResponse?: PlpBrowseData;
+  initialBrowseResponse?: GetBrowseResultsResponse;
 }
 
 export type UseBrowseResultsReturn = {
-  browseResults: PlpBrowseData | null;
-  handleSubmit: () => void;
+  status: RequestStatus | null;
+  message?: string;
+  data: Nullable<PlpBrowseData>;
+  refetch: () => void;
+};
+
+const fetchBrowseResults = async (
+  client: ConstructorIOClient,
+  filterName: string,
+  filterValue: string,
+  browseParameters: BrowseParameters,
+  dispatch: React.Dispatch<RequestAction>,
+  // eslint-disable-next-line max-params
+) => {
+  dispatch({
+    type: RequestStatus.FETCHING,
+  });
+
+  try {
+    const res = await client.browse.getBrowseResults(filterName, filterValue, {
+      ...browseParameters,
+    });
+
+    dispatch({
+      type: RequestStatus.SUCCESS,
+      requestType: RequestType.BROWSE,
+      payload: transformBrowseResponse(res),
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      dispatch({
+        type: RequestStatus.ERROR,
+        payload: err.message,
+      });
+    }
+  }
 };
 
 /* eslint-disable max-len */
@@ -34,7 +81,7 @@ export default function useBrowseResults(
     );
   }
 
-  const { cioClient: client } = contextValue;
+  const { cioClient } = contextValue;
   const { requestConfigs } = useRequestConfigs();
   const {
     filterName,
@@ -47,35 +94,30 @@ export default function useBrowseResults(
   }
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
-  if (!client && typeof window !== 'undefined') {
+  if (!cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
-  const [browseResponse, setBrowseResponse] = useState<PlpBrowseData | null>(
-    initialBrowseResponse || null,
+  const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
+    initFunction(defaultState, undefined, initialBrowseResponse),
   );
 
-  const handleSubmit = () => {
-    if (client && filterName && filterValue) {
-      client.browse
-        .getBrowseResults(filterName, filterValue, {
-          ...browseParams,
-        })
-        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
-    }
-  };
+  const { browse: data, status, message } = state;
 
   // Get browse results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (client && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
-      client.browse
-        .getBrowseResults(filterName, filterValue, {
-          ...browseParams,
-        })
-        .then((res) => setBrowseResponse(transformBrowseResponse(res)));
+    if (cioClient && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
+      fetchBrowseResults(cioClient, filterName, filterValue, browseParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [requestConfigs?.page]);
 
-  return { browseResults: browseResponse, handleSubmit };
+  return {
+    status,
+    message,
+    data,
+    refetch: () =>
+      cioClient &&
+      fetchBrowseResults(cioClient, filterName, filterValue, browseParams || {}, dispatch),
+  };
 }
