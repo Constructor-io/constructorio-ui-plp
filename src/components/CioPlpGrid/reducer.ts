@@ -92,12 +92,21 @@ export function requestReducer(state: RequestState, action: RequestAction) {
 export function initFunction(
   defaultState: RequestState,
   initialSearchResponse?: SearchResponse,
+  initialBrowseResponse?: GetBrowseResultsResponse,
 ): RequestState {
   if (initialSearchResponse) {
     return {
       status: RequestStatus.STALE,
       search: transformSearchResponse(initialSearchResponse),
       browse: null,
+    };
+  }
+
+  if (initialBrowseResponse) {
+    return {
+      status: RequestStatus.STALE,
+      search: null,
+      browse: transformBrowseResponse(initialBrowseResponse),
     };
   }
 
