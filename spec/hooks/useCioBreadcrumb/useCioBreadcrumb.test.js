@@ -48,7 +48,7 @@ describe('Testing Hook: useBreadCrumb', () => {
     },
   ];
   const filterValue = 'men-shoes-boots';
-  const useBreadCrumbProps = { groups, filterValue };
+  const useBreadcrumbProps = { groups, filterValue };
 
   it('Should return crumbs array', async () => {
     const { result } = renderHookWithCioPlp(() => useCioBreadcrumb(useBreadCrumbProps));
