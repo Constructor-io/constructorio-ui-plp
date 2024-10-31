@@ -65,7 +65,7 @@ export interface PlpSearchResponse {
   numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
+  groups: Array<PlpItemGroup>;
   sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
 }
@@ -270,6 +270,15 @@ export interface PlpFacetOption {
   displayName: string;
   value: string;
   data: object;
+}
+
+export interface PlpItemGroup {
+  groupId: string;
+  displayName: string;
+  count: number;
+  data: object;
+  children: PlpItemGroup[];
+  parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 
 // Type Extenders
