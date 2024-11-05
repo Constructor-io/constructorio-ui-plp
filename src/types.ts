@@ -19,7 +19,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect, ApiGroup };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
