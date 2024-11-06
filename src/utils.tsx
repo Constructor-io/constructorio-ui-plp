@@ -147,6 +147,8 @@ export function isHierarchicalFacet(facet: PlpFacet): facet is PlpHierarchicalFa
   return facet.type === 'hierarchical';
 }
 
-export function isOptionFacet(facet: PlpFacet) {
+export function isOptionFacet(
+  facet: PlpFacet,
+): facet is PlpMultipleFacet | PlpSingleFacet | PlpHierarchicalFacet {
   return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
 }
