@@ -20,8 +20,9 @@ import {
   PlpSearchDataResults,
   PlpSearchData,
   PlpBrowseData,
+  PlpFacetOption,
 } from '../types';
-import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
+import { isHierarchicalFacet, isOptionFacet, isRangeFacet } from '../utils';
 
 function isAPIRedirectSearchResponse(
   response: SearchResponseType | Redirect,
@@ -126,14 +127,29 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
       transformedFacet.status = status;
     }
 
-    if (isMultipleOrBucketedFacet(transformedFacet)) {
-      transformedFacet.options = options.map((option: FacetOption) => ({
-        status: option.status,
-        count: option.count,
-        displayName: option.display_name,
-        value: option.value,
-        data: option.data,
-      }));
+    if (isOptionFacet(transformedFacet)) {
+      transformedFacet.options = options.map((option: FacetOption) => {
+        const transformedFacetOption: PlpFacetOption = {
+          status: option.status,
+          count: option.count,
+          displayName: option.display_name,
+          value: option.value,
+          data: option.data,
+        };
+
+        if (option.range) {
+          transformedFacetOption.range = option.range;
+        }
+
+        if (isHierarchicalFacet(transformedFacet)) {
+          return {
+            ...transformedFacetOption,
+            options: option.options,
+          };
+        }
+
+        return transformedFacetOption;
+      });
     }
 
     return transformedFacet;

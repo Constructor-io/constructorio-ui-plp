@@ -4,6 +4,7 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import {
   ConstructorClientOptions,
   Group as ApiGroup,
+  Facet as ApiFacet,
   Result,
   SearchResponse,
   GetBrowseResultsResponse,
@@ -19,7 +20,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect, ApiFacet };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -262,14 +263,24 @@ export interface PlpMultipleFacet extends PlpFacet {
   options: Array<PlpFacetOption>;
 }
 
-export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+export interface PlpSingleFacet extends PlpFacet {
+  type: 'single';
+  options: Array<PlpFacetOption>;
+}
 
+export interface PlpHierarchicalFacet extends PlpFacet {
+  type: 'hierarchical';
+  options: Array<PlpFacetOption & { options: object }>;
+}
+
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
 export interface PlpFacetOption {
   status: string;
   count: number;
   displayName: string;
   value: string;
   data: object;
+  range?: ['-inf' | number, 'inf' | number];
 }
 
 // Type Extenders
