@@ -1,17 +1,17 @@
-import { Group } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useMemo } from 'react';
+import { PlpItemGroup } from '../types';
 
-const generateBreadcrumbs = (groups: Partial<Group>[], filterValue: string) => {
-  const currentGroup = groups.find((group) => filterValue === group.group_id);
+const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: string) => {
+  const currentGroup = groups.find((group) => filterValue === group.groupId);
 
   let pathAccumulator = '';
 
   const crumbs = currentGroup?.parents?.map((parent) => {
-    pathAccumulator += `/${parent.group_id}`;
+    pathAccumulator += `/${parent.groupId}`;
 
     return {
       path: pathAccumulator,
-      breadcrumb: parent.display_name,
+      breadcrumb: parent.displayName,
     };
   });
 
@@ -19,7 +19,7 @@ const generateBreadcrumbs = (groups: Partial<Group>[], filterValue: string) => {
 };
 
 export interface UseCioBreadcrumbProps {
-  groups: Partial<Group>[];
+  groups: Partial<PlpItemGroup>[];
   filterValue: string;
 }
 
