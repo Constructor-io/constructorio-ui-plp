@@ -43,9 +43,7 @@ const fetchBrowseResults = async (
   });
 
   try {
-    const res = await client.browse.getBrowseResults(filterName, filterValue, {
-      ...browseParameters,
-    });
+    const res = await client.browse.getBrowseResults(filterName, filterValue, browseParameters);
 
     dispatch({
       type: RequestStatus.SUCCESS,
