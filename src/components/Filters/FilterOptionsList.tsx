@@ -1,51 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { PlpFacetOption, PlpMultipleFacet } from '../../types';
+import useFilterOptionsList, { UseFilterOptionsListProps } from './UseFilterOptionsList';
 
-export interface FilterOptionsListProps {
-  multipleFacet: PlpMultipleFacet;
-  modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
-  initialNumOptions: number;
-  isCollapsed: boolean;
-}
-
-export default function FilterOptionsList(props: FilterOptionsListProps) {
+export default function FilterOptionsList(props: UseFilterOptionsListProps) {
   const {
-    multipleFacet: facet,
+    facet,
     initialNumOptions,
-    modifyRequestMultipleFilter,
     isCollapsed,
-  } = props;
-  const [isShowAll, setIsShowAll] = useState(false);
-  const [optionsToRender, setOptionsToRender] = useState<Array<PlpFacetOption>>(facet.options);
-  const [selectedOptionMap, setSelectedOptionMap] = useState({});
-
-  const onOptionSelect = (optionValue: string) => {
-    const newMap = { ...selectedOptionMap };
-    newMap[optionValue] = !newMap[optionValue];
-
-    const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
-    setSelectedOptionMap(newMap);
-    modifyRequestMultipleFilter(selectedOptions.length ? selectedOptions : null);
-  };
-
-  useEffect(() => {
-    const newSelectedOptionsMap = {};
-    facet.options.forEach((option) => {
-      newSelectedOptionsMap[option.value] = option.status === 'selected';
-    });
-
-    setSelectedOptionMap(newSelectedOptionsMap);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [facet]);
-
-  useEffect(() => {
-    if (isShowAll) {
-      setOptionsToRender(facet.options);
-    } else {
-      setOptionsToRender(facet.options.slice(0, initialNumOptions));
-    }
-  }, [isShowAll, facet.options, initialNumOptions]);
+    isShowAll,
+    setIsShowAll,
+    optionsToRender,
+    selectedOptionMap,
+    onOptionSelect,
+  } = useFilterOptionsList(props);
 
   if (optionsToRender.length === 0) return null;
   return (

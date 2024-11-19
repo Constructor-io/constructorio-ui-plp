@@ -276,8 +276,8 @@ export interface PlpItemGroup {
   groupId: string;
   displayName: string;
   count: number;
-  data: object;
-  children: PlpItemGroup[];
+  data: object | null;
+  children: Array<PlpItemGroup>;
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 

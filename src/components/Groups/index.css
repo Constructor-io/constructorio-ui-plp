@@ -1,0 +1,19 @@
+.cio-filter-groups-options-list .cio-crumb {
+  font-size: 14px;
+  background: none;
+	color: inherit;
+	border: none;
+  font-family: inherit;
+	cursor: pointer;
+	outline: inherit;
+	padding: 2px 4px;
+  border-radius: 4px;
+
+  &:hover:not(:last-child) {
+  background-color: #f2f2f2;
+  }
+}
+
+.cio-filter-groups-options-list .cio-crumb:last-child {
+	cursor:auto;
+}

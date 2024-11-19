@@ -19,7 +19,7 @@ const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: strin
 };
 
 export interface UseCioBreadcrumbProps {
-  groups: Partial<PlpItemGroup>[];
+  groups: PlpItemGroup[];
   filterValue: string;
 }
 
