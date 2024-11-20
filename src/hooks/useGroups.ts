@@ -1,24 +1,20 @@
+import { useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useFilter from './useFilter';
 import { PlpItemGroup } from '../types';
 import useRequestConfigs from './useRequestConfigs';
+import useOptionsList, { UseOptionsListProps } from './useOptionsList';
+import useCioBreadcrumb from './useCioBreadcrumb';
 
-export interface UseGroupReturn {
-  groups: Array<PlpItemGroup>;
-  groupOptions: Array<PlpItemGroup>;
-  setGroup: (groupId: string) => void;
-  currentGroupId: string | null;
-}
-
-export interface UseGroupProps {
+export interface UseGroupProps extends Omit<UseOptionsListProps<PlpItemGroup>, 'options'> {
   /**
    * Used to build and render the groups filter dynamically
    */
   groups: Array<PlpItemGroup>;
 }
 
-export default function useGroups(props: UseGroupProps): UseGroupReturn {
-  const { groups } = props;
+export default function useGroups(props: UseGroupProps) {
+  const { groups, initialNumOptions: numOptionsProps } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -39,10 +35,44 @@ export default function useGroups(props: UseGroupProps): UseGroupReturn {
     setFilter('groupId', groupId);
   };
 
+  const breadcrumbs = useCioBreadcrumb({ groups, filterValue: currentGroupId || 'all' }) || [];
+  const { initialNumOptions, isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } =
+    useOptionsList({
+      options: groupOptions,
+      initialNumOptions: numOptionsProps,
+    });
+
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
+
+  const onOptionSelect = (groupId: string) => {
+    setSelectedGroupId(groupId);
+    setGroup(groupId);
+  };
+
+  const goToGroupFilter = (breadcrumb) => {
+    const groupIds = breadcrumb?.path?.split('/');
+    const targetGroupId = groupIds[groupIds.length - 1];
+    onOptionSelect(targetGroupId);
+  };
+
   return {
     groups,
     groupOptions,
     setGroup,
     currentGroupId,
+    selectedGroupId,
+    setSelectedGroupId,
+    onOptionSelect,
+    goToGroupFilter,
+
+    // useCioBreadcrumbs
+    breadcrumbs,
+
+    // useOptionsList
+    initialNumOptions,
+    isShowAll,
+    setIsShowAll,
+    optionsToRender,
+    setOptionsToRender,
   };
 }

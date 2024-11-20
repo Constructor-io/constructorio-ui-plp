@@ -1,3 +1,8 @@
+.cio-filter-groups-options-list ul {
+  padding-left: 0;
+  margin-top: 0;
+}
+
 .cio-filter-groups-options-list .cio-crumb {
   font-size: 14px;
   background: none;

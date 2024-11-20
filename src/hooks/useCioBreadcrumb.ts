@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
 import { PlpItemGroup } from '../types';
 
+export interface Breadcrumb {
+  path: string;
+  breadcrumb: string;
+}
+
 const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: string) => {
   const currentGroup = groups.find((group) => filterValue === group.groupId);
 
@@ -15,7 +20,7 @@ const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: strin
     };
   });
 
-  return crumbs;
+  return crumbs || [];
 };
 
 export interface UseCioBreadcrumbProps {
@@ -26,7 +31,7 @@ export interface UseCioBreadcrumbProps {
 export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
   const { groups, filterValue } = props;
 
-  const breadcrumbs = useMemo(
+  const breadcrumbs = useMemo<Array<Breadcrumb>>(
     () => generateBreadcrumbs(groups, filterValue),
     [groups, filterValue],
   );

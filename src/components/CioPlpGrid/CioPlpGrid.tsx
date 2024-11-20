@@ -16,6 +16,7 @@ import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
+import { UseGroupProps } from '../../hooks/useGroups';
 
 export type CioPlpGridProps = {
   initialResponse?: SearchResponse;
@@ -32,6 +33,10 @@ export type CioPlpGridProps = {
    * No configurations available yet.
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
+  /**
+   * Used to set the `initialNumOptions` to limit the number of options shown initially.
+   */
+  groupsConfigs: Omit<UseGroupProps, 'groups'>;
 };
 export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 

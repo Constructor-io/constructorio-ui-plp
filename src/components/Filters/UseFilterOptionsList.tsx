@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { PlpMultipleFacet, PlpFacetOption } from '../../types';
+import { PlpMultipleFacet } from '../../types';
+import useOptionsList from '../../hooks/useOptionsList';
 
 export interface UseFilterOptionsListProps {
   multipleFacet: PlpMultipleFacet;
@@ -16,8 +17,11 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     isCollapsed,
   } = props;
 
-  const [isShowAll, setIsShowAll] = useState(false);
-  const [optionsToRender, setOptionsToRender] = useState<Array<PlpFacetOption>>(facet.options);
+  const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
+    options: facet.options,
+    initialNumOptions,
+  });
+
   const [selectedOptionMap, setSelectedOptionMap] = useState({});
 
   const onOptionSelect = (optionValue: string) => {
@@ -39,19 +43,14 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facet]);
 
-  useEffect(() => {
-    if (isShowAll) {
-      setOptionsToRender(facet.options);
-    } else {
-      setOptionsToRender(facet.options.slice(0, initialNumOptions));
-    }
-  }, [isShowAll, facet.options, initialNumOptions]);
-
   return {
+    // props
     facet,
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
+
+    // useFilterOptionsList
     isShowAll,
     setIsShowAll,
     optionsToRender,
