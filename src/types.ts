@@ -262,7 +262,7 @@ export interface PlpMultipleFacet extends PlpFacet {
   options: Array<PlpFacetOption>;
 }
 
-export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number> | null;
 
 export interface PlpFacetOption {
   status: string;

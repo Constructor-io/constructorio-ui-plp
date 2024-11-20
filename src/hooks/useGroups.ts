@@ -4,7 +4,7 @@ import useFilter from './useFilter';
 import { PlpItemGroup } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 import useOptionsList, { UseOptionsListProps } from './useOptionsList';
-import useCioBreadcrumb from './useCioBreadcrumb';
+import useCioBreadcrumb, { Breadcrumb } from './useCioBreadcrumb';
 
 export interface UseGroupProps extends Omit<UseOptionsListProps<PlpItemGroup>, 'options'> {
   /**
@@ -31,7 +31,7 @@ export default function useGroups(props: UseGroupProps) {
     groupOptions = groups[0].children;
   }
 
-  const setGroup = (groupId: string) => {
+  const setGroup = (groupId: string | null) => {
     setFilter('groupId', groupId);
   };
 
@@ -45,11 +45,16 @@ export default function useGroups(props: UseGroupProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
 
   const onOptionSelect = (groupId: string) => {
-    setSelectedGroupId(groupId);
-    setGroup(groupId);
+    if (groupId === currentGroupId || groupId === selectedGroupId) {
+      setSelectedGroupId(null);
+      setGroup(null);
+    } else {
+      setSelectedGroupId(groupId);
+      setGroup(groupId);
+    }
   };
 
-  const goToGroupFilter = (breadcrumb) => {
+  const goToGroupFilter = (breadcrumb: Breadcrumb) => {
     const groupIds = breadcrumb?.path?.split('/');
     const targetGroupId = groupIds[groupIds.length - 1];
     onOptionSelect(targetGroupId);

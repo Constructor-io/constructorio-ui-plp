@@ -38,4 +38,13 @@ describe('Testing Hook: useBreadCrumb', () => {
       expect(breadcrumb.path).toBe(breadcrumbs[index].path);
     });
   });
+
+  it('Should return an empty array if there are no breadcrumbs', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioBreadcrumb({ groups, filterValue: 'All' }));
+
+    const { current: crumbs } = result;
+
+    expect(crumbs).not.toBeNull();
+    expect(crumbs).toHaveLength(0);
+  });
 });

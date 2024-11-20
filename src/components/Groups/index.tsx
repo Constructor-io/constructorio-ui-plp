@@ -28,7 +28,7 @@ export default function Groups(props: GroupsProps) {
         'cio-collapsible-is-open': !isCollapsed,
       })}>
       <div className='cio-collapsible-inner cio-filter-groups-options-list'>
-        <div className='cio-groups' key={selectedGroupId}>
+        <div className='cio-groups'>
           {breadcrumbs.map((crumb) => (
             <>
               <button className='cio-crumb' onClick={() => goToGroupFilter(crumb)} type='button'>
