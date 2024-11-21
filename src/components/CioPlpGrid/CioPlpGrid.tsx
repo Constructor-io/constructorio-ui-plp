@@ -37,7 +37,7 @@ export type CioPlpGridProps = {
   /**
    * Used to set the `initialNumOptions` to limit the number of options shown initially.
    */
-  groupsConfigs: Omit<UseGroupProps, 'groups'>;
+  groupsConfigs?: Omit<UseGroupProps, 'groups'>;
 };
 export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
