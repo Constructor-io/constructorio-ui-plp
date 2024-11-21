@@ -1,0 +1,76 @@
+import { Meta, Canvas, Markdown } from '@storybook/blocks';
+import * as GroupsStories from './Groups.stories';
+import UseGroupsReturn from '../../hooks/UseGroups/UseGroupsReturn.md?raw';
+/* This "?raw" import raw text form the md file */
+
+<Meta of={GroupsStories} />
+
+# `Groups`
+
+A separate filter component that allows you to filter down by groups.
+
+> Note: In Constructor, groups are typically categories and are created via the `item_groups.csv` feed.
+
+**Dynamic Hierarchical Options Rendering:**
+
+- Automatically updates and displays selected filters based on user requests
+- Displays the current selected group hierarchy, and allows for backward navigation
+
+<Canvas of={GroupsStories.Primary} />
+
+## Basic example
+
+```jsx
+import React from 'react';
+import { CioPlp, Groups } from '@constructor-io/constructorio-ui-plp';
+
+const apiKey = 'MY_API_KEY';
+
+function MyComponent() {
+  return (
+    <CioPlp apiKey={MY_API_KEY}>
+      <Groups />
+    </CioPlp>
+  );
+}
+```
+
+## Render Props pattern
+
+To override the default rendering of the Groups component, you may pass a Render Props function to the component.
+
+```jsx
+import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
+
+const apiKey = 'MY_API_KEY';
+
+function MyCustomGroupFilter(props) {
+  const {groups, initialNumOptions} = props
+
+  return (
+    <>
+      {/* CUSTOM_MARKUP_HERE */}
+    </>
+  );
+}
+
+function myApp() {
+  ...
+
+  return (
+    <CioPlp apiKey={MY_API_KEY}>
+      <Groups>
+        <MyCustomGroupFilter />
+      </Groups>
+    </CioPlp>
+  )
+}
+```
+
+### Arguments passed to children via Render Props
+
+> Accessible to children of the Filters component via render props.
+
+`UseGroupReturn`
+
+<Markdown>{UseGroupsReturn}</Markdown>
