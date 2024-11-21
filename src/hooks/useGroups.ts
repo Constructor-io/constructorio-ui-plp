@@ -32,7 +32,7 @@ export default function useGroups(props: UseGroupProps) {
   }
 
   const setGroup = (groupId: string | null) => {
-    setFilter('groupId', groupId);
+    setFilter('group_id', groupId);
   };
 
   const breadcrumbs = useCioBreadcrumb({ groups, filterValue: currentGroupId || 'all' }) || [];
@@ -44,8 +44,8 @@ export default function useGroups(props: UseGroupProps) {
 
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
 
-  const onOptionSelect = (groupId: string) => {
-    if (groupId === currentGroupId || groupId === selectedGroupId || groupId === 'all') {
+  const onOptionSelect = (groupId: string | null) => {
+    if (groupId === currentGroupId || groupId === selectedGroupId) {
       setSelectedGroupId(null);
       setGroup(null);
     } else {
@@ -57,7 +57,14 @@ export default function useGroups(props: UseGroupProps) {
   const goToGroupFilter = (breadcrumb: Breadcrumb) => {
     const groupIds = breadcrumb?.path?.split('/');
     const targetGroupId = groupIds[groupIds.length - 1];
-    onOptionSelect(targetGroupId);
+
+    // If there are no parents, remove the filter entirely.
+    // This assumes a one-root-node hierarchy
+    if (groupIds.length > 2) {
+      onOptionSelect(targetGroupId);
+    } else {
+      onOptionSelect(null);
+    }
   };
 
   return {

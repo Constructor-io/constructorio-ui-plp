@@ -158,7 +158,7 @@ describe('Testing Component: Groups', () => {
 
       // Use mocks instead of relying on API requests for demo
       const { filters: requestFilters } = getStateFromUrl(currentUrl);
-      const currentGroupId = requestFilters?.groupId?.[0]?.toString() || 'all';
+      const currentGroupId = requestFilters?.group_id?.[0]?.toString() || 'all';
       let mockedGroups = groupsProps.groups;
       if (currentGroupId) {
         const currentGroup = findGroup(mockedGroups, currentGroupId);
@@ -194,7 +194,7 @@ describe('Testing Component: Groups', () => {
 
       await waitFor(() => {
         const requestFilters = getRequestFilters(container);
-        expect(requestFilters.groupId[0]).toBe(firstLevelGroup.groupId);
+        expect(requestFilters.group_id[0]).toBe(firstLevelGroup.groupId);
         const firstLevelGroupCrumb = container.querySelectorAll('.cio-crumb')[1];
         const secondLevelGroupEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
@@ -227,7 +227,7 @@ describe('Testing Component: Groups', () => {
         const breadcrumbs = container.querySelectorAll('.cio-crumb');
         const firstLevelOptionEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
-        expect(requestFilters.groupId).toBeUndefined();
+        expect(requestFilters.group_id).toBeUndefined();
         expect(breadcrumbs.length).toBe(1);
         expect(breadcrumbs[0].textContent).toBe(currentGroup.displayName);
         expect(firstLevelOptionEl).not.toBeUndefined();
@@ -269,8 +269,8 @@ describe('Testing Component: Groups', () => {
         const breadcrumbs = container.querySelectorAll('.cio-crumb');
         const secondLevelGroupEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
-        expect(requestFilters.groupId[0]).not.toBeUndefined();
-        expect(requestFilters.groupId[0]).toBe(firstLevelGroup.groupId);
+        expect(requestFilters.group_id[0]).not.toBeUndefined();
+        expect(requestFilters.group_id[0]).toBe(firstLevelGroup.groupId);
         expect(breadcrumbs.length).toBe(2);
         expect(breadcrumbs[0].textContent).toBe(currentGroup.displayName);
         expect(breadcrumbs[1].textContent).toBe(firstLevelGroup.displayName);

@@ -59,7 +59,7 @@ describe('Testing Hook: useGroups', () => {
       setGroup(testGroupA);
 
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -73,14 +73,14 @@ describe('Testing Hook: useGroups', () => {
         current: { setGroup },
       } = result;
 
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
       expect(window.location.href.indexOf(testGroupB)).toBe(-1);
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
 
       setGroup(testGroupB);
     });
 
-    expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+    expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
     expect(window.location.href.indexOf(testGroupA)).toBe(-1);
     expect(window.location.href.indexOf(testGroupB)).toBeGreaterThanOrEqual(0);
   });
@@ -96,12 +96,12 @@ describe('Testing Hook: useGroups', () => {
       } = result;
 
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
 
       setGroup(null);
     });
 
-    expect(window.location.href.indexOf('groupId')).toBe(-1);
+    expect(window.location.href.indexOf('group_id')).toBe(-1);
     expect(window.location.href.indexOf(testGroupA)).toBe(-1);
   });
 
@@ -143,7 +143,7 @@ describe('Testing Hook: useGroups', () => {
 
       expect(selectedGroupId).toBe(testGroupA);
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -158,7 +158,7 @@ describe('Testing Hook: useGroups', () => {
       } = result;
 
       expect(selectedGroupId).toBe(null);
-      expect(window.location.href.indexOf('groupId')).toBe(-1);
+      expect(window.location.href.indexOf('group_id')).toBe(-1);
       expect(window.location.href.indexOf(currentGroup)).toBe(-1);
     });
   });
@@ -175,7 +175,7 @@ describe('Testing Hook: useGroups', () => {
 
       expect(selectedGroupId).toBe(testGroupA);
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
 
       onOptionSelect(testGroupA);
     });
@@ -186,7 +186,7 @@ describe('Testing Hook: useGroups', () => {
       } = result;
 
       expect(selectedGroupId).toBe(null);
-      expect(window.location.href.indexOf('groupId')).toBe(-1);
+      expect(window.location.href.indexOf('group_id')).toBe(-1);
       expect(window.location.href.indexOf(testGroupA)).toBe(-1);
     });
   });
@@ -203,7 +203,7 @@ describe('Testing Hook: useGroups', () => {
 
       expect(selectedGroupId).toBe(testGroupA);
       expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
 
       onOptionSelect(testGroupB);
     });
@@ -215,13 +215,32 @@ describe('Testing Hook: useGroups', () => {
 
       expect(selectedGroupId).toBe(testGroupB);
       expect(window.location.href.indexOf(testGroupB)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
     });
   });
 
   it('goToGroupFilter should replace the current filter given a breadcrumb', async () => {
     const { result } = renderHookWithCioPlp(() =>
-      useGroups({ groups: [searchData.response.groups[0].children[0]] }),
+      useGroups({ groups: [searchData.response.groups[0].children[0].children[0]] }),
+    );
+
+    const breadcrumb = { path: `/${currentGroup}/${testGroupA}` };
+    result.current.goToGroupFilter(breadcrumb);
+
+    await waitFor(() => {
+      const {
+        current: { selectedGroupId },
+      } = result;
+
+      expect(selectedGroupId).toBe(testGroupA);
+      expect(window.location.href.indexOf(testGroupA)).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('group_id')).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('goToGroupFilter should omit group_id filter given the root breadcrumb', async () => {
+    const { result } = renderHookWithCioPlp(() =>
+      useGroups({ groups: [searchData.response.groups[0].children[0].children[0]] }),
     );
 
     const breadcrumb = { path: `/${currentGroup}` };
@@ -232,9 +251,9 @@ describe('Testing Hook: useGroups', () => {
         current: { selectedGroupId },
       } = result;
 
-      expect(selectedGroupId).toBe(currentGroup);
-      expect(window.location.href.indexOf(currentGroup)).toBeGreaterThanOrEqual(0);
-      expect(window.location.href.indexOf('groupId')).toBeGreaterThanOrEqual(0);
+      expect(selectedGroupId).toBe(null);
+      expect(window.location.href.indexOf(testGroupA)).toBe(-1);
+      expect(window.location.href.indexOf('group_id')).toBe(-1);
     });
   });
 

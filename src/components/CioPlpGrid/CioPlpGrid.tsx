@@ -3,6 +3,7 @@ import { SearchResponse } from '@constructor-io/constructorio-client-javascript/
 import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
+import Groups from '../Groups';
 import FiltersIcon from '../Filters/FiltersIcon';
 import MobileModal from '../MobileModal';
 import Sort from '../Sort';
@@ -41,8 +42,15 @@ export type CioPlpGridProps = {
 export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
-  const { spinner, initialResponse, filterConfigs, sortConfigs, paginationConfigs, children } =
-    props;
+  const {
+    spinner,
+    initialResponse,
+    filterConfigs,
+    sortConfigs,
+    paginationConfigs,
+    groupsConfigs,
+    children,
+  } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
@@ -90,6 +98,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
+                    <Groups groups={response.groups} {...groupsConfigs} />
                     <Filters facets={response.facets} {...filterConfigs} />
                   </div>
                   <div className='cio-products-container'>
