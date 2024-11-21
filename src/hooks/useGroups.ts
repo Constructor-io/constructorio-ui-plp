@@ -45,7 +45,7 @@ export default function useGroups(props: UseGroupProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
 
   const onOptionSelect = (groupId: string) => {
-    if (groupId === currentGroupId || groupId === selectedGroupId) {
+    if (groupId === currentGroupId || groupId === selectedGroupId || groupId === 'all') {
       setSelectedGroupId(null);
       setGroup(null);
     } else {
