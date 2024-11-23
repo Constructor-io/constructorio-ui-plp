@@ -17,10 +17,24 @@ import {
   Redirect,
   SearchParameters,
   BrowseRequestType,
+  FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect, ApiFacet };
+export {
+  Nullable,
+  ConstructorIOClient,
+  SearchResponseType,
+  SearchParameters,
+  Redirect,
+  ApiFacet,
+  ApiFacetOption,
+};
+
+export interface ApiHierarchicalFacetOption extends ApiFacetOption {
+  options: Array<ApiHierarchicalFacetOption>;
+  data: Record<string, any> & { parent_value: string | null };
+}
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -270,7 +284,7 @@ export interface PlpSingleFacet extends PlpFacet {
 
 export interface PlpHierarchicalFacet extends PlpFacet {
   type: 'hierarchical';
-  options: Array<PlpFacetOption & { options: object }>;
+  options: Array<PlpHierarchicalFacetOption>;
 }
 
 export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
@@ -281,6 +295,12 @@ export interface PlpFacetOption {
   value: string;
   data: object;
   range?: ['-inf' | number, 'inf' | number];
+  options?: Array<PlpHierarchicalFacetOption>;
+}
+
+export interface PlpHierarchicalFacetOption extends PlpFacetOption {
+  options: Array<PlpHierarchicalFacetOption>;
+  data: object & { parentValue: string | null };
 }
 
 // Type Extenders

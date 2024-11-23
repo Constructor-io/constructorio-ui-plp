@@ -1,8 +1,14 @@
 import testItem from './local_examples/item.json';
 import testRequest from './local_examples/apiSearchResponse.json';
 import { transformResponseFacets, transformResultItem } from '../src/utils/transformers';
-import { ApiFacet, ApiItem } from '../src/types';
-import { isOptionFacet, isRangeFacet } from '../src/utils';
+import {
+  ApiFacet,
+  ApiHierarchicalFacetOption,
+  ApiItem,
+  PlpFacetOption,
+  PlpHierarchicalFacetOption,
+} from '../src/types';
+import { isHierarchicalFacet, isOptionFacet, isRangeFacet } from '../src/utils';
 
 describe('Testing Transformers: transformResultItem', () => {
   test('Should return all base properties as camelCased properties', () => {
@@ -120,6 +126,11 @@ describe('Testing Transformers: transformResponseFacets', () => {
 
         expect(typeof facet.options).toBe('object');
       }
+
+      if (isHierarchicalFacet(facet)) {
+        expect(facet.type).toBe('hierarchical');
+        expect(typeof facet.options).toBe('object');
+      }
     });
   });
 
@@ -127,30 +138,57 @@ describe('Testing Transformers: transformResponseFacets', () => {
     const apiFacets = testRequest.response.facets as ApiFacet[];
     const facets = transformResponseFacets(apiFacets);
 
+    function testFacetOptions(
+      transformedFacetOptions: Array<PlpFacetOption>,
+      apiFacetOptions: Array<ApiHierarchicalFacetOption>,
+    ) {
+      transformedFacetOptions.forEach((facetOption, j) => {
+        const apiFacetOption = apiFacetOptions[j];
+
+        expect(typeof facetOption.displayName).toBe('string');
+        expect(facetOption.displayName).toBe(apiFacetOption.display_name);
+
+        expect(typeof facetOption.value).toBe('string');
+        expect(facetOption.value).toBe(apiFacetOption.value);
+
+        expect(typeof facetOption.count).toBe('number');
+        expect(facetOption.count).toBe(apiFacetOption.count);
+
+        expect(typeof facetOption.status).toBe('string');
+        expect(facetOption.status).toBe(apiFacetOption.status);
+
+        expect(Object.keys(facetOption).length).toBe(Object.keys(apiFacetOption).length);
+
+        if (facetOption.options) {
+          const {
+            options: secondLevelOptions,
+            data: { parentValue, ...otherDataFields },
+          } = facetOption as PlpHierarchicalFacetOption;
+          const {
+            options: secondLevelRawOptions,
+            data: { parent_value: rawParentValue, ...otherRawDataFields },
+          } = apiFacetOption;
+
+          expect(typeof secondLevelOptions).toBe('object');
+          expect(secondLevelOptions.length).toBe(secondLevelRawOptions?.length);
+          expect(parentValue).toBe(rawParentValue);
+          expect(otherDataFields).toEqual(otherRawDataFields);
+
+          testFacetOptions(
+            facetOption.options,
+            apiFacetOption.options as Array<ApiHierarchicalFacetOption>,
+          );
+        } else {
+          expect(typeof facetOption.data).toBe('object');
+          expect(facetOption.data).toEqual(apiFacetOption.data);
+        }
+      });
+    }
+
     facets.forEach((facet, i) => {
       if (isOptionFacet(facet)) {
         expect(facet.options.length).toBe(apiFacets[i].options.length);
-
-        facet.options.forEach((facetOption, j) => {
-          const apiFacetOption = apiFacets[i].options[j];
-
-          expect(typeof facetOption.displayName).toBe('string');
-          expect(facetOption.displayName).toBe(apiFacetOption.display_name);
-
-          expect(typeof facetOption.value).toBe('string');
-          expect(facetOption.value).toBe(apiFacetOption.value);
-
-          expect(typeof facetOption.count).toBe('number');
-          expect(facetOption.count).toBe(apiFacetOption.count);
-
-          expect(typeof facetOption.status).toBe('string');
-          expect(facetOption.status).toBe(apiFacetOption.status);
-
-          expect(typeof facetOption.data).toBe('object');
-          expect(facetOption.data).toEqual(apiFacetOption.data);
-
-          expect(Object.keys(facetOption).length).toBe(Object.keys(apiFacetOption).length);
-        });
+        testFacetOptions(facet.options, apiFacets[i].options);
       }
     });
   });

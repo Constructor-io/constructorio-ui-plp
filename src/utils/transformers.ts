@@ -5,7 +5,6 @@ import {
   SearchResponseType,
   SortOption,
   Facet,
-  FacetOption,
   Result,
   Nullable,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
@@ -21,8 +20,11 @@ import {
   PlpSearchData,
   PlpBrowseData,
   PlpFacetOption,
+  PlpHierarchicalFacetOption,
+  ApiHierarchicalFacetOption,
+  ApiFacetOption,
 } from '../types';
-import { isHierarchicalFacet, isOptionFacet, isRangeFacet } from '../utils';
+import { isOptionFacet, isRangeFacet } from '../utils';
 
 function isAPIRedirectSearchResponse(
   response: SearchResponseType | Redirect,
@@ -99,6 +101,29 @@ export function transformResultItem(
   return transformedItem;
 }
 
+export function transformHierarchicalFacetOptions(
+  facetOptions: Array<ApiHierarchicalFacetOption>,
+): Array<PlpHierarchicalFacetOption> {
+  if (facetOptions.length === 0) return [];
+
+  const transformedOptions = facetOptions.map((option) => {
+    const { display_name: displayName, data, options, ...otherFields } = option;
+    const { parent_value: parentValue, ...otherDataFields } = data;
+
+    return {
+      ...otherFields,
+      data: {
+        ...otherDataFields,
+        parentValue,
+      },
+      displayName,
+      options: transformHierarchicalFacetOptions(options as Array<ApiHierarchicalFacetOption>),
+    } as PlpHierarchicalFacetOption;
+  });
+
+  return transformedOptions;
+}
+
 export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
   return facets.map((facet) => {
     const {
@@ -128,7 +153,7 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
     }
 
     if (isOptionFacet(transformedFacet)) {
-      transformedFacet.options = options.map((option: FacetOption) => {
+      transformedFacet.options = options.map((option: ApiFacetOption) => {
         const transformedFacetOption: PlpFacetOption = {
           status: option.status,
           count: option.count,
@@ -141,11 +166,12 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
           transformedFacetOption.range = option.range;
         }
 
-        if (isHierarchicalFacet(transformedFacet)) {
-          return {
-            ...transformedFacetOption,
-            options: option.options,
-          };
+        if (option.options) {
+          const { parent_value: parentValue, ...otherDataFields } = option.data;
+          transformedFacetOption.data = { ...otherDataFields, parentValue };
+          transformedFacetOption.options = transformHierarchicalFacetOptions(
+            option.options as Array<ApiHierarchicalFacetOption>,
+          );
         }
 
         return transformedFacetOption;
@@ -155,6 +181,7 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
     return transformedFacet;
   });
 }
+
 export function transformResponseSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
   if (options) {
     return options.map(
