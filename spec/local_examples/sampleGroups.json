@@ -1,0 +1,325 @@
+[
+  {
+      "groupId": "all",
+      "displayName": "All",
+      "count": 241,
+      "data": null,
+      "children": [
+          {
+              "groupId": "1",
+              "displayName": "All Greeting Cards",
+              "count": 241,
+              "data": null,
+              "children": [
+                {
+                    "groupId": "12",
+                    "displayName": "Halloween Greeting Cards",
+                    "count": 100,
+                    "data": null,
+                    "children": [
+                        {
+                            "groupId": "121",
+                            "displayName": "Scary Greeting Cards",
+                            "count": 23,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Halloween Greeting Cards",
+                                    "groupId": "12"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": "122",
+                            "displayName": "Cute Greeting Cards",
+                            "count": 33,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Halloween Greeting Cards",
+                                    "groupId": "12"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": "123",
+                            "displayName": "Plain Greeting Cards",
+                            "count": 3,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Halloween Greeting Cards",
+                                    "groupId": "12"
+                                }
+                            ]
+                        }
+                    ],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "All Greeting Cards",
+                            "groupId": "1"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "13",
+                    "displayName": "Christmas Greeting Cards",
+                    "count": 95,
+                    "data": null,
+                    "children": [
+                        {
+                            "groupId": "131",
+                            "displayName": "Snow Cards",
+                            "count": 24,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Christmas Greeting Cards",
+                                    "groupId": "13"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": "132",
+                            "displayName": "Bunny Cards",
+                            "count": 21,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Christmas Greeting Cards",
+                                    "groupId": "13"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": "133",
+                            "displayName": "Fire Cards",
+                            "count": 5,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Christmas Greeting Cards",
+                                    "groupId": "13"
+                                }
+                            ]
+                        }
+                    ],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "All Greeting Cards",
+                            "groupId": "1"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "14",
+                    "displayName": "Easter Greeting Cards",
+                    "count": 23,
+                    "data": null,
+                    "children": [
+                        {
+                            "groupId": "141",
+                            "displayName": "Bunny Greeting Cards",
+                            "count": 15,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Easter Greeting Cards",
+                                    "groupId": "14"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": "142",
+                            "displayName": "Carrot Greeting Cards",
+                            "count": 35,
+                            "data": null,
+                            "children": [],
+                            "parents": [
+                                {
+                                    "displayName": "All",
+                                    "groupId": "all"
+                                },
+                                {
+                                    "displayName": "All Greeting Cards",
+                                    "groupId": "1"
+                                },
+                                {
+                                    "displayName": "Easter Greeting Cards",
+                                    "groupId": "14"
+                                }
+                            ]
+                        }
+                    ],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "All Greeting Cards",
+                            "groupId": "1"
+                        }
+                    ]
+                }
+              ],
+              "parents": [
+                  {
+                      "displayName": "All",
+                      "groupId": "all"
+                  }
+              ]
+          },
+          {
+              "groupId": "2",
+              "displayName": "Souvenirs",
+              "count": 110,
+              "data": null,
+              "children": [
+                {
+                    "groupId": "21",
+                    "displayName": "Souvenirs - Keychains",
+                    "count": 25,
+                    "data": null,
+                    "children": [],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "Souvenirs",
+                            "groupId": "2"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "22",
+                    "displayName": "Souvenirs - Postcards",
+                    "count": 12,
+                    "data": { "some_arbitrary_data": "data" },
+                    "children": [],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "Souvenirs",
+                            "groupId": "2"
+                        }
+                    ]
+                },
+                {
+                    "groupId": "23",
+                    "displayName": "Souvenirs - Magnets",
+                    "count": 42,
+                    "data": null,
+                    "children": [],
+                    "parents": [
+                        {
+                            "displayName": "All",
+                            "groupId": "all"
+                        },
+                        {
+                            "displayName": "Souvenirs",
+                            "groupId": "2"
+                        }
+                    ]
+                }
+              ],
+              "parents": [
+                  {
+                      "displayName": "All",
+                      "groupId": "all"
+                  }
+              ]
+          },
+          {
+              "groupId": "3",
+              "displayName": "Deals",
+              "count": 5,
+              "data": null,
+              "children": [],
+              "parents": [
+                  {
+                      "displayName": "All",
+                      "groupId": "all"
+                  }
+              ]
+          }
+      ],
+      "parents": []
+  }
+]

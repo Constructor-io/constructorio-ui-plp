@@ -36,17 +36,25 @@ describe('Testing Hook: useCioPlp', () => {
     const { result } = renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
-      const { searchData, filters, pagination, sort, refetch } = result.current;
+      const { searchData, filters, pagination, sort, groups, refetch } = result.current;
 
       expect(searchData?.rawApiResponse).toBeUndefined();
       expect(searchData?.request).toBeUndefined();
       expect(searchData?.resultId).toBeUndefined();
       expect(filters.facets).toEqual([]);
+      expect(groups.groups).toEqual([]);
+      expect(groups.groupOptions).toEqual([]);
+      expect(groups.optionsToRender).toEqual([]);
+      expect(groups.breadcrumbs).toEqual([]);
+      expect(groups.initialNumOptions).toEqual(5);
       expect(pagination.currentPage).toEqual(1);
       expect(pagination.totalPages).toEqual(0);
       expect(sort.selectedSort).toEqual(null);
 
       expect(typeof filters.setFilter).toEqual('function');
+      expect(typeof groups.onOptionSelect).toEqual('function');
+      expect(typeof groups.goToGroupFilter).toEqual('function');
+      expect(typeof groups.setOptionsToRender).toEqual('function');
       expect(typeof pagination.goToPage).toEqual('function');
       expect(typeof pagination.nextPage).toEqual('function');
       expect(typeof pagination.prevPage).toEqual('function');
@@ -62,7 +70,7 @@ describe('Testing Hook: useCioPlp', () => {
     const { result } = renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
-      const { searchData, filters, pagination, sort, refetch } = result.current;
+      const { searchData, filters, pagination, sort, groups, refetch } = result.current;
 
       expect(searchData?.rawApiResponse.request.term).toEqual('shoes');
       expect(searchData?.rawApiResponse).not.toBeUndefined();
@@ -70,6 +78,7 @@ describe('Testing Hook: useCioPlp', () => {
       expect((searchData as PlpSearchDataResults)?.response.results.length).toBeGreaterThan(0);
       expect(searchData?.resultId).not.toBeUndefined();
       expect(filters.facets.length).not.toEqual(0);
+      expect(groups.groups.length).not.toEqual(0);
       expect(pagination.currentPage).toEqual(1);
       expect(pagination.totalPages).toEqual(18);
       expect(sort.selectedSort).toEqual(null);
@@ -121,7 +130,7 @@ describe('Testing Hook: useCioPlp', () => {
     });
 
     await waitFor(() => {
-      const { searchData, sort, pagination, filters } = result.current;
+      const { searchData, sort, pagination, filters, groups } = result.current;
       expect(searchData?.request.term).toEqual('shoes');
 
       sort.changeSelectedSort({ sortBy: 'price', sortOrder: 'descending' } as PlpSortOption);
@@ -135,6 +144,14 @@ describe('Testing Hook: useCioPlp', () => {
 
       filters.setFilter('color', 'red');
       expect(decodeURI(window.location.href).indexOf('filters[color]=red')).toBeGreaterThan(-1);
+
+      groups.setGroup('123-ab');
+      expect(decodeURI(window.location.href).indexOf('filters[group_id]=123-ab')).toBeGreaterThan(
+        -1,
+      );
+
+      groups.onOptionSelect('6');
+      expect(decodeURI(window.location.href).indexOf('filters[group_id]=6')).toBeGreaterThan(-1);
     });
   });
 });

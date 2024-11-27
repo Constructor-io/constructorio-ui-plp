@@ -19,7 +19,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect };
+export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect, ApiGroup };
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -65,7 +65,7 @@ export interface PlpSearchResponse {
   numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
+  groups: Array<PlpItemGroup>;
   sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
 }
@@ -262,7 +262,7 @@ export interface PlpMultipleFacet extends PlpFacet {
   options: Array<PlpFacetOption>;
 }
 
-export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number> | null;
 
 export interface PlpFacetOption {
   status: string;
@@ -270,6 +270,15 @@ export interface PlpFacetOption {
   displayName: string;
   value: string;
   data: object;
+}
+
+export interface PlpItemGroup {
+  groupId: string;
+  displayName: string;
+  count: number;
+  data: object | null;
+  children: Array<PlpItemGroup>;
+  parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 
 // Type Extenders

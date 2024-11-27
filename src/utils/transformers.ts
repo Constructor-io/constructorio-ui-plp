@@ -8,6 +8,7 @@ import {
   FacetOption,
   Result,
   Nullable,
+  Group,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   Item,
@@ -20,6 +21,7 @@ import {
   PlpSearchDataResults,
   PlpSearchData,
   PlpBrowseData,
+  PlpItemGroup,
 } from '../types';
 import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
 
@@ -139,6 +141,7 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
     return transformedFacet;
   });
 }
+
 export function transformResponseSortOptions(options?: Partial<SortOption>[]): PlpSortOption[] {
   if (options) {
     return options.map(
@@ -149,6 +152,24 @@ export function transformResponseSortOptions(options?: Partial<SortOption>[]): P
           displayName: option.display_name,
           status: option.status,
         }) as PlpSortOption,
+    );
+  }
+
+  return [];
+}
+
+export function transformItemGroups(groups?: Group[]): PlpItemGroup[] {
+  if (groups) {
+    return groups.map(
+      (itemGroup) =>
+        ({
+          groupId: itemGroup.group_id,
+          displayName: itemGroup.display_name,
+          count: itemGroup.count,
+          data: itemGroup.data,
+          children: transformItemGroups(itemGroup.children),
+          parents: transformItemGroups(itemGroup.parents),
+        }) as PlpItemGroup,
     );
   }
 
@@ -178,7 +199,7 @@ export function transformSearchResponse(res: SearchResponse): Nullable<PlpSearch
       numResultsPerPage: request.num_results_per_page,
       results: (response.results as Result[]).map((result) => transformResultItem(result, false)),
       facets: transformResponseFacets(response.facets as Facet[]),
-      groups: response.groups,
+      groups: transformItemGroups(response.groups),
       sortOptions: transformResponseSortOptions(response.sort_options),
       refinedContent: response.refined_content,
     },
@@ -199,7 +220,7 @@ export function transformBrowseResponse(res: GetBrowseResultsResponse): Nullable
       numResultsPerPage: request.num_results_per_page,
       results: (response.results as Result[]).map((result) => transformResultItem(result, false)),
       facets: transformResponseFacets(response.facets as Facet[]),
-      groups: response.groups,
+      groups: transformItemGroups(response.groups as Group[]),
       sortOptions: transformResponseSortOptions(response.sort_options),
       refinedContent: response.refined_content,
     },
