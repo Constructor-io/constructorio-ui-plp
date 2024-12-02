@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import { waitFor } from '@testing-library/react';
 import { renderHookWithCioPlp } from '../../test-utils';
 import useCioBreadcrumb from '../../../src/hooks/useCioBreadcrumb';
 
@@ -53,7 +52,9 @@ describe('Testing Hook: useBreadCrumb', () => {
   it('Should return crumbs array', async () => {
     const { result } = renderHookWithCioPlp(() => useCioBreadcrumb(useBreadcrumbProps));
 
-    const { current: crumbs } = result;
+    const {
+      current: { breadcrumbs: crumbs },
+    } = result;
 
     expect(crumbs).toHaveLength(groups[0].parents.length);
 
@@ -63,5 +64,15 @@ describe('Testing Hook: useBreadCrumb', () => {
       expect(breadcrumb.breadcrumb).toBe(groups[0].parents[index].display_name);
       expect(breadcrumb.path).toBe(breadcrumbs[index].path);
     });
+  });
+
+  it('Should return the current page display name', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioBreadcrumb(useBreadcrumbProps));
+
+    const {
+      current: { currentPage },
+    } = result;
+
+    expect(currentPage).toBe(groups[0].display_name);
   });
 });
