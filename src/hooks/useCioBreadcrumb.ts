@@ -25,7 +25,13 @@ const getCurrentGroup = (groups: Partial<Group>[], filterValue: string) =>
   groups.find((group) => filterValue === group.group_id);
 
 export interface UseCioBreadcrumbProps {
+  /**
+   * An array with all groups on the application.
+   */
   groups: Partial<Group>[];
+  /**
+   * Filter value of the current group the user is in.
+   */
   filterValue: string;
 }
 

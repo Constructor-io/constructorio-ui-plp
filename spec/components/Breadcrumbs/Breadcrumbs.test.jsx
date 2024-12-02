@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { DEMO_API_KEY } from '../../../src/constants';
 import CioPlp from '../../../src/components/CioPlp';
-import Breadcrumbs from '../../../src/components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from '../../../src/components/Breadcrumbs';
 
 describe('Testing Component: Breadcrumbs', () => {
   const originalWindowLocation = window.location;

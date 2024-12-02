@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import '@testing-library/jest-dom';
 import { DEMO_API_KEY } from '../../../src/constants';
 import CioPlp from '../../../src/components/CioPlp';
-import Breadcrumbs from '../../../src/components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from '../../../src/components/Breadcrumbs';
 
 const groups = [
   {

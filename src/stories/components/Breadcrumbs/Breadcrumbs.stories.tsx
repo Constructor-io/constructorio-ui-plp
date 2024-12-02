@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from '../../../components/Breadcrumbs';
 import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 
