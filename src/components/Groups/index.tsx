@@ -39,7 +39,7 @@ export default function Groups(props: GroupsWithRenderProps) {
           <div className='cio-collapsible-inner cio-groups cio-filter-groups-options-list'>
             <div className='cio-groups-breadcrumbs'>
               {breadcrumbs.map((crumb) => (
-                <>
+                <span key={crumb.path}>
                   <button
                     className='cio-crumb'
                     onClick={() => goToGroupFilter(crumb)}
@@ -47,13 +47,14 @@ export default function Groups(props: GroupsWithRenderProps) {
                     {crumb.breadcrumb}
                   </button>
                   {' > '}
-                </>
+                </span>
               ))}
               <span className='cio-crumb'>{groups[0].displayName}</span>
             </div>
             <ul>
               {optionsToRender.map((option) => (
                 <FilterOptionListRow
+                  key={option.groupId}
                   id={option.groupId}
                   displayValue={option.displayName}
                   displayCountValue={option.count.toString()}
