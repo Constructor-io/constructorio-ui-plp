@@ -1,8 +1,7 @@
 | property           | type                                | description                                                                                                                 |
 | ------------------ | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| groups             | `Array<PlpItemGroup>`               | List of transformed groups returned in the API                                                                              |
 | groupOptions       | `Array<PlpItemGroup>`               | List of transformed child groups that can be used as options                                                                |
-| optionsToRender    | `boolean`                           | Dynamic list of child groups to be rendered as options                                                                      |
+| optionsToRender    | `Array<PlpItemGroup>`               | Dynamic list of child groups to be rendered as options                                                                      |
 | setOptionsToRender | `(Array<PlpItemGroup>) => void`     | Setter function for `optionsToRender`                                                                                       |
 | setGroup           | `(groupId: string \| null) => void` | Function to update the groupFilter in the url. This triggers a page refresh by default                                      |
 | currentGroupId     | `string`                            | The current group_id of the query. Defaults to the root group                                                               |

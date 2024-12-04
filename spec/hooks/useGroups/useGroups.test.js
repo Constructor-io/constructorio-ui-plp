@@ -35,19 +35,6 @@ describe('Testing Hook: useGroups', () => {
     expect(() => renderHook(() => useGroups())).toThrow();
   });
 
-  it('Should return groups array', async () => {
-    const { result } = renderHookWithCioPlp(() => useGroups(useGroupsProps));
-
-    await waitFor(() => {
-      const {
-        current: { groups },
-      } = result;
-
-      expect(groups).toHaveLength(searchData.response.groups.length);
-      expect(groups).toEqual(searchData.response.groups);
-    });
-  });
-
   it('setGroup should apply group filter correctly', async () => {
     const { result } = renderHookWithCioPlp(() => useGroups(useGroupsProps));
 

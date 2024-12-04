@@ -42,7 +42,8 @@ describe('Testing Hook: useCioPlp', () => {
       expect(searchData?.request).toBeUndefined();
       expect(searchData?.resultId).toBeUndefined();
       expect(filters.facets).toEqual([]);
-      expect(groups.groups).toEqual([]);
+      expect(groups.groupOptions).toEqual([]);
+      expect(groups.optionsToRender).toEqual([]);
       expect(groups.groupOptions).toEqual([]);
       expect(groups.optionsToRender).toEqual([]);
       expect(groups.breadcrumbs).toEqual([]);
@@ -78,7 +79,7 @@ describe('Testing Hook: useCioPlp', () => {
       expect((searchData as PlpSearchDataResults)?.response.results.length).toBeGreaterThan(0);
       expect(searchData?.resultId).not.toBeUndefined();
       expect(filters.facets.length).not.toEqual(0);
-      expect(groups.groups.length).not.toEqual(0);
+      expect(groups.optionsToRender.length).not.toEqual(0);
       expect(pagination.currentPage).toEqual(1);
       expect(pagination.totalPages).toEqual(18);
       expect(sort.selectedSort).toEqual(null);

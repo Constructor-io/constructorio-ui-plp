@@ -68,7 +68,6 @@ export default function useGroups(props: UseGroupProps) {
   };
 
   return {
-    groups,
     groupOptions,
     setGroup,
     currentGroupId,

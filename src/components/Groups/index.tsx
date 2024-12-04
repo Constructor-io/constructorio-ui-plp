@@ -11,10 +11,9 @@ export interface GroupsProps extends UseGroupProps {
 export type GroupsWithRenderProps = IncludeRenderProps<GroupsProps, ReturnType<typeof useGroups>>;
 
 export default function Groups(props: GroupsWithRenderProps) {
-  const { isCollapsed = false, children } = props;
+  const { isCollapsed = false, children, groups } = props;
   const useGroupsReturn = useGroups(props);
   const {
-    groups,
     optionsToRender,
     breadcrumbs,
     initialNumOptions,
