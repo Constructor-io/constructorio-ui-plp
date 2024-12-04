@@ -3,7 +3,7 @@ import { SearchResponse } from '@constructor-io/constructorio-client-javascript/
 import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
-import Groups from '../Groups';
+import Groups, { GroupsProps } from '../Groups';
 import FiltersIcon from '../Filters/FiltersIcon';
 import MobileModal from '../MobileModal';
 import Sort from '../Sort';
@@ -37,7 +37,7 @@ export type CioPlpGridProps = {
   /**
    * Used to set the `initialNumOptions` to limit the number of options shown initially.
    */
-  groupsConfigs?: Omit<UseGroupProps, 'groups'>;
+  groupsConfigs?: Omit<GroupsProps, 'groups'>;
 };
 export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
 
