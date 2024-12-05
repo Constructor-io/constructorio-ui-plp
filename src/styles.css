@@ -8,6 +8,7 @@
 @import './components/Sort/Sort.css';
 @import './components/MobileModal/MobileModal.css';
 @import './components/Filters/index.css';
+@import './components/Breadcrumbs/Breadcrumbs.css';
 
 @keyframes cio-spinner {
   0% {
