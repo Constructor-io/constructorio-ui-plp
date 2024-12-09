@@ -25,6 +25,7 @@ export interface UseSearchResultsProps {
 }
 
 export interface UseSearchResultsReturn {
+  query?: string | null;
   status: RequestStatus | null;
   message?: string;
   data: Nullable<PlpSearchData>;
@@ -106,6 +107,7 @@ export default function useSearchResults(
   }, [requestConfigs?.page]);
 
   return {
+    query,
     status,
     message,
     data,
