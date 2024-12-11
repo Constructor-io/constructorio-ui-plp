@@ -19,6 +19,6 @@
     "importHelpers": true
   },
   "lib": ["dom"],
-  "include": ["src/**/*.ts", "generateVersion.js"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "generateVersion.js", "src/declarations.d.ts"],
   "exclude": ["src/stories/**", "node_modules", "lib", "storybook-static", ".storybook"]
 }

@@ -6,6 +6,7 @@ module.exports = {
       testEnvironment: 'jsdom',
       moduleNameMapper: {
         '\\.css$': require.resolve('./spec/mock-styles.js'),
+        '\\.svg$': require.resolve('./spec/mock-icons.js'),
       },
       testMatch: ['**/**/*.test.(js|jsx|ts|tsx)', '!**/**/*.server.test.(js|jsx|ts|tsx)'],
     },
@@ -15,6 +16,7 @@ module.exports = {
       testMatch: ['**/**/*.server.test.(js|jsx)'],
       moduleNameMapper: {
         '\\.css$': require.resolve('./spec/mock-styles.js'),
+        '\\.svg$': require.resolve('./spec/mock-icons.js'),
       },
     },
   ],
