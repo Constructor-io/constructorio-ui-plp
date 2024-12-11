@@ -71,6 +71,7 @@ export function transformResultItem(
     group_ids: groupIds,
     description,
     facets,
+    groups,
     variation_id: variationId,
     ...otherMetadataFields
   }: any = item.data;
@@ -88,6 +89,7 @@ export function transformResultItem(
     url,
     imageUrl,
     groupIds,
+    groups,
     description,
     facets,
     variationId,
