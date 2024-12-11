@@ -20,6 +20,11 @@ const meta = {
         defaultValue: { summary: 10 },
       },
     },
+    isCollapsed: {
+      table: {
+        defaultValue: { summary: false },
+      },
+    },
   },
 } satisfies Meta<typeof Groups>;
 
