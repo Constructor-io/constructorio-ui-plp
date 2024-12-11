@@ -104,7 +104,7 @@ export function FourOrLessParentBreadcrumbs() {
   );
 }
 
-export function FourOrMoreParentBreadcrumbs() {
+export function MoreThanFourParentBreadcrumbs() {
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
       <Breadcrumbs groups={groups} filterValue='coffee-manual-grinders-espresso-ceramic' />

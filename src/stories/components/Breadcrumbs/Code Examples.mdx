@@ -2,7 +2,7 @@ import { Meta, Canvas, Story, Controls, Markdown } from '@storybook/blocks';
 import meta, {
   Primary,
   FourOrLessParentBreadcrumbs,
-  FourOrMoreParentBreadcrumbs,
+  MoreThanFourParentBreadcrumbs
 } from './Breadcrumbs.stories';
 
 <Meta of={meta} />
@@ -105,7 +105,7 @@ When more than four parent breadcrumbs are present relative to the current group
 
 <Canvas sourceState='none'>
   <div style={{ height: '200px' }}>
-    <Story of={FourOrMoreParentBreadcrumbs} />
+    <Story of={MoreThanFourParentBreadcrumbs} />
   </div>
 </Canvas>
 ```jsx

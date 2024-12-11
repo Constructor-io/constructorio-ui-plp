@@ -9,7 +9,7 @@ export default function BreadcrumbElement({
   isCurrentPage = false,
 }: BreadcrumbProps) {
   // If it's a parent breadcrumb but doesn't have a path and label OR
-  // Tt is a current page and it doesn't have a label, don't render.
+  // It is a current page and it doesn't have a label, don't render.
   if ((!isCurrentPage && !path && !breadcrumb) || (isCurrentPage && !breadcrumb)) {
     return null;
   }
