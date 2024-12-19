@@ -11,9 +11,24 @@ export default function ZeroResults() {
   const config = useRequestConfigs();
   const { query } = config.requestConfigs;
 
+  if (query) {
+    return (
+      <>
+        <div className='cio-zero-results-header'>Sorry, we didn’t find: “{query}”</div>
+        <ul className='cio-zero-results-option-list'>
+          <li>Check for typos</li>
+          <li>Use fewer keywords</li>
+          <li>Broaden your search terms</li>
+        </ul>
+      </>
+    );
+  }
+
   return (
     <>
-      <div className='cio-zero-results-header'>Sorry, we didn’t find: “{query}”</div>
+      <div className='cio-zero-results-header'>
+        Sorry, we were unable to find what you were looking for.
+      </div>
       <ul className='cio-zero-results-option-list'>
         <li>Check for typos</li>
         <li>Use fewer keywords</li>
