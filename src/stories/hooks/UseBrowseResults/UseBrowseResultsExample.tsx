@@ -1,26 +1,46 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import useBrowseResults, { UseBrowseResultsProps } from '../../../hooks/useBrowseResults';
 import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 
-// A simple React Component to showcase use with CioPlp provider
+function Code({ children }: { children: ReactNode }) {
+  return (
+    <section
+      style={{
+        backgroundColor: 'lightgrey',
+        padding: '5px',
+        borderRadius: '2px',
+        fontFamily: 'monospace',
+      }}>
+      <pre>{children}</pre>
+    </section>
+  );
+}
+
 function MyCustomBrowseResultsComponent(props: UseBrowseResultsProps) {
-  const { browseResults } = useBrowseResults(props);
+  const { data, status, refetch } = useBrowseResults(props);
 
   return (
     <>
+      <h2>Request status</h2>
+      <div style={{ display: 'flex', gap: '5px', width: '20%' }}>
+        {status}
+        <button onClick={refetch} type='button'>
+          Refetch
+        </button>
+      </div>
       <h2>Result Id </h2>
-      <div>{JSON.stringify(browseResults?.resultId)}</div>
+      <Code>{JSON.stringify(data?.resultId, null, 2)}</Code>
       <h2>Total Number of Results </h2>
-      <div>{JSON.stringify(browseResults?.response?.totalNumResults)}</div>
+      <Code>{JSON.stringify(data?.response?.totalNumResults, null, 2)}</Code>
       <h2>Array of Groups</h2>
-      <div>{JSON.stringify(browseResults?.response?.groups)}</div>
+      <Code>{JSON.stringify(data?.response?.groups, null, 2)}</Code>
       <h2>Array of Facets</h2>
-      <div>{JSON.stringify(browseResults?.response?.facets)}</div>
+      <Code>{JSON.stringify(data?.response?.facets, null, 2)}</Code>
       <h2>Array of Sort Options</h2>
-      <div>{JSON.stringify(browseResults?.response?.sortOptions)}</div>
+      <Code>{JSON.stringify(data?.response?.sortOptions, null, 2)}</Code>
       <h2>Array of Results</h2>
-      <div>{JSON.stringify(browseResults?.response?.results)}</div>
+      <Code>{JSON.stringify(data?.response?.results, null, 2)}</Code>
     </>
   );
 }
