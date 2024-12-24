@@ -109,7 +109,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         <Filters facets={response.facets} />
                       </MobileModal>
                       {response?.results?.map((item) => (
-                        <div className='cio-product-tile'>
+                        <div className='cio-product-tile' key={item.itemId}>
                           <ProductCard key={item.itemId} item={item} />
                         </div>
                       ))}
