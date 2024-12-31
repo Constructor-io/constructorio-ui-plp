@@ -5,7 +5,6 @@ import {
   SearchResponseType,
   SortOption,
   Facet,
-  FacetOption,
   Result,
   Nullable,
   Group,
@@ -22,8 +21,12 @@ import {
   PlpSearchData,
   PlpBrowseData,
   PlpItemGroup,
+  PlpFacetOption,
+  PlpHierarchicalFacetOption,
+  ApiHierarchicalFacetOption,
+  ApiFacetOption,
 } from '../types';
-import { isMultipleOrBucketedFacet, isRangeFacet } from '../utils';
+import { isOptionFacet, isRangeFacet } from '../utils';
 
 function isAPIRedirectSearchResponse(
   response: SearchResponseType | Redirect,
@@ -102,6 +105,29 @@ export function transformResultItem(
   return transformedItem;
 }
 
+export function transformHierarchicalFacetOptions(
+  facetOptions: Array<ApiHierarchicalFacetOption>,
+): Array<PlpHierarchicalFacetOption> {
+  if (facetOptions.length === 0) return [];
+
+  const transformedOptions = facetOptions.map((option) => {
+    const { display_name: displayName, data, options, ...otherFields } = option;
+    const { parent_value: parentValue, ...otherDataFields } = data;
+
+    return {
+      ...otherFields,
+      data: {
+        ...otherDataFields,
+        parentValue,
+      },
+      displayName,
+      options: transformHierarchicalFacetOptions(options as Array<ApiHierarchicalFacetOption>),
+    } as PlpHierarchicalFacetOption;
+  });
+
+  return transformedOptions;
+}
+
 export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
   return facets.map((facet) => {
     const {
@@ -130,14 +156,30 @@ export function transformResponseFacets(facets: Array<Facet>): Array<PlpFacet> {
       transformedFacet.status = status;
     }
 
-    if (isMultipleOrBucketedFacet(transformedFacet)) {
-      transformedFacet.options = options.map((option: FacetOption) => ({
-        status: option.status,
-        count: option.count,
-        displayName: option.display_name,
-        value: option.value,
-        data: option.data,
-      }));
+    if (isOptionFacet(transformedFacet)) {
+      transformedFacet.options = options.map((option: ApiFacetOption) => {
+        const transformedFacetOption: PlpFacetOption = {
+          status: option.status,
+          count: option.count,
+          displayName: option.display_name,
+          value: option.value,
+          data: option.data,
+        };
+
+        if (option.range) {
+          transformedFacetOption.range = option.range;
+        }
+
+        if (option.options) {
+          const { parent_value: parentValue, ...otherDataFields } = option.data;
+          transformedFacetOption.data = { ...otherDataFields, parentValue };
+          transformedFacetOption.options = transformHierarchicalFacetOptions(
+            option.options as Array<ApiHierarchicalFacetOption>,
+          );
+        }
+
+        return transformedFacetOption;
+      });
     }
 
     return transformedFacet;

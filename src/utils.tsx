@@ -12,6 +12,8 @@ import {
   PlpSearchDataResults,
   PlpSearchDataRedirect,
   PlpSearchData,
+  PlpSingleFacet,
+  PlpHierarchicalFacet,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -135,4 +137,18 @@ export function isRangeFacet(facet: PlpFacet): facet is PlpRangeFacet {
 
 export function isMultipleOrBucketedFacet(facet: PlpFacet): facet is PlpMultipleFacet {
   return facet.type === 'multiple';
+}
+
+export function isSingleFacet(facet: PlpFacet): facet is PlpSingleFacet {
+  return facet.type === 'single';
+}
+
+export function isHierarchicalFacet(facet: PlpFacet): facet is PlpHierarchicalFacet {
+  return facet.type === 'hierarchical';
+}
+
+export function isOptionFacet(
+  facet: PlpFacet,
+): facet is PlpMultipleFacet | PlpSingleFacet | PlpHierarchicalFacet {
+  return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
 }

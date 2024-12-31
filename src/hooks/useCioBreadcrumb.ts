@@ -6,12 +6,10 @@ export interface Breadcrumb {
   breadcrumb: string;
 }
 
-const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: string) => {
-  const currentGroup = groups.find((group) => filterValue === group.groupId);
-
+const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {
   let pathAccumulator = '';
 
-  const crumbs = currentGroup?.parents?.map((parent) => {
+  const crumbs = currentGroup?.parents?.map<Breadcrumb>((parent) => {
     pathAccumulator += `/${parent.groupId}`;
 
     return {
@@ -23,18 +21,25 @@ const generateBreadcrumbs = (groups: Partial<PlpItemGroup>[], filterValue: strin
   return crumbs || [];
 };
 
+const getCurrentGroup = (groups: PlpItemGroup[], filterValue: string) =>
+  groups.find((group) => filterValue === group.groupId);
+
 export interface UseCioBreadcrumbProps {
+  /**
+   * An array with all groups on the application.
+   */
   groups: PlpItemGroup[];
+  /**
+   * Filter value of the current group the user is in.
+   */
   filterValue: string;
 }
 
 export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
   const { groups, filterValue } = props;
 
-  const breadcrumbs = useMemo<Array<Breadcrumb>>(
-    () => generateBreadcrumbs(groups, filterValue),
-    [groups, filterValue],
-  );
+  const currentGroup = useMemo(() => getCurrentGroup(groups, filterValue), [groups, filterValue]);
+  const breadcrumbs = generateBreadcrumbs(currentGroup);
 
-  return breadcrumbs;
+  return { breadcrumbs, currentPage: currentGroup?.displayName };
 }

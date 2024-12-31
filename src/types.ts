@@ -4,6 +4,7 @@ import ConstructorIOClient from '@constructor-io/constructorio-client-javascript
 import {
   ConstructorClientOptions,
   Group as ApiGroup,
+  Facet as ApiFacet,
   Result,
   SearchResponse,
   GetBrowseResultsResponse,
@@ -16,10 +17,25 @@ import {
   Redirect,
   SearchParameters,
   BrowseRequestType,
+  FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { MakeOptional } from './utils/typeHelpers';
 
-export { Nullable, ConstructorIOClient, SearchResponseType, SearchParameters, Redirect, ApiGroup };
+export {
+  Nullable,
+  ConstructorIOClient,
+  SearchResponseType,
+  SearchParameters,
+  Redirect,
+  ApiFacet,
+  ApiFacetOption,
+  ApiGroup,
+};
+
+export interface ApiHierarchicalFacetOption extends ApiFacetOption {
+  options: Array<ApiHierarchicalFacetOption>;
+  data: Record<string, any> & { parent_value: string | null };
+}
 
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
@@ -262,14 +278,30 @@ export interface PlpMultipleFacet extends PlpFacet {
   options: Array<PlpFacetOption>;
 }
 
-export type PlpFilterValue = string | number | boolean | Array<string | boolean | number> | null;
+export interface PlpSingleFacet extends PlpFacet {
+  type: 'single';
+  options: Array<PlpFacetOption>;
+}
 
+export interface PlpHierarchicalFacet extends PlpFacet {
+  type: 'hierarchical';
+  options: Array<PlpHierarchicalFacetOption>;
+}
+
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number> | null;
 export interface PlpFacetOption {
   status: string;
   count: number;
   displayName: string;
   value: string;
   data: object;
+  range?: ['-inf' | number, 'inf' | number];
+  options?: Array<PlpHierarchicalFacetOption>;
+}
+
+export interface PlpHierarchicalFacetOption extends PlpFacetOption {
+  options: Array<PlpHierarchicalFacetOption>;
+  data: object & { parentValue: string | null };
 }
 
 export interface PlpItemGroup {

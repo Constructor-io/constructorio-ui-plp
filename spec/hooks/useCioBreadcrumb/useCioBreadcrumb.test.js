@@ -27,7 +27,9 @@ describe('Testing Hook: useBreadCrumb', () => {
   it('Should return crumbs array', async () => {
     const { result } = renderHookWithCioPlp(() => useCioBreadcrumb(useBreadcrumbProps));
 
-    const { current: crumbs } = result;
+    const {
+      current: { breadcrumbs: crumbs },
+    } = result;
 
     expect(crumbs).toHaveLength(groups[0].parents.length);
 
@@ -42,9 +44,21 @@ describe('Testing Hook: useBreadCrumb', () => {
   it('Should return an empty array if there are no breadcrumbs', async () => {
     const { result } = renderHookWithCioPlp(() => useCioBreadcrumb({ groups, filterValue: 'All' }));
 
-    const { current: crumbs } = result;
+    const {
+      current: { breadcrumbs: crumbs },
+    } = result;
 
     expect(crumbs).not.toBeNull();
     expect(crumbs).toHaveLength(0);
+  });
+
+  it('Should return the current page display name', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioBreadcrumb(useBreadcrumbProps));
+
+    const {
+      current: { currentPage },
+    } = result;
+
+    expect(currentPage).toBe(groups[0].display_name);
   });
 });

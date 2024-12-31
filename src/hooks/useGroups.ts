@@ -35,7 +35,8 @@ export default function useGroups(props: UseGroupProps) {
     setFilter('group_id', groupId);
   };
 
-  const breadcrumbs = useCioBreadcrumb({ groups, filterValue: currentGroupId || 'all' }) || [];
+  const { breadcrumbs, currentPage } =
+    useCioBreadcrumb({ groups, filterValue: currentGroupId || 'all' }) || [];
   const { initialNumOptions, isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } =
     useOptionsList({
       options: groupOptions,
@@ -78,6 +79,7 @@ export default function useGroups(props: UseGroupProps) {
 
     // useCioBreadcrumbs
     breadcrumbs,
+    currentPage,
 
     // useOptionsList
     initialNumOptions,
