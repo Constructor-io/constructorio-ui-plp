@@ -14,73 +14,73 @@ const meta = {
 
 const groups = [
   {
-    group_id: 'coffee',
-    display_name: 'Coffee',
+    groupId: 'coffee',
+    displayName: 'Coffee',
     count: 2,
     data: {},
     children: [],
     parents: [
       {
-        display_name: 'All',
-        group_id: 'all',
+        displayName: 'All',
+        groupId: 'all',
       },
     ],
   },
   {
-    group_id: 'coffee-accessories',
-    display_name: 'Coffee Accessories',
+    groupId: 'coffee-accessories',
+    displayName: 'Coffee Accessories',
     count: 2,
     data: {},
     children: [],
     parents: [
       {
-        display_name: 'All',
-        group_id: 'all',
+        displayName: 'All',
+        groupId: 'all',
       },
       {
-        display_name: 'Coffee',
-        group_id: 'coffee',
+        displayName: 'Coffee',
+        groupId: 'coffee',
       },
       {
-        display_name: 'Coffee Tools',
-        group_id: 'coffee-tools',
+        displayName: 'Coffee Tools',
+        groupId: 'coffee-tools',
       },
     ],
   },
   {
-    group_id: 'coffee-manual-grinders-espresso-ceramic',
-    display_name: 'Manual Ceramic Conical Grinders',
+    groupId: 'coffee-manual-grinders-espresso-ceramic',
+    displayName: 'Manual Ceramic Conical Grinders',
     count: 2,
     data: {},
     children: [],
     parents: [
       {
-        display_name: 'All',
-        group_id: 'all',
+        displayName: 'All',
+        groupId: 'all',
       },
       {
-        display_name: 'Coffee',
-        group_id: 'coffee',
+        displayName: 'Coffee',
+        groupId: 'coffee',
       },
       {
-        display_name: 'Coffee Tools',
-        group_id: 'coffee-tools',
+        displayName: 'Coffee Tools',
+        groupId: 'coffee-tools',
       },
       {
-        display_name: 'Coffee Grinders',
-        group_id: 'coffee-grinders',
+        displayName: 'Coffee Grinders',
+        groupId: 'coffee-grinders',
       },
       {
-        display_name: 'Manual Grinders',
-        group_id: 'manual-coffee-grinders',
+        displayName: 'Manual Grinders',
+        groupId: 'manual-coffee-grinders',
       },
       {
-        display_name: 'Manual Espresso Grinders',
-        group_id: 'manual-espresso-grinders',
+        displayName: 'Manual Espresso Grinders',
+        groupId: 'manual-espresso-grinders',
       },
       {
-        display_name: 'Manual Conical Grinders',
-        group_id: 'manual-espresso-grinders-conical',
+        displayName: 'Manual Conical Grinders',
+        groupId: 'manual-espresso-grinders-conical',
       },
     ],
   },

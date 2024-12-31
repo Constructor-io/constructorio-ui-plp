@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { renderHookWithCioPlp } from '../../test-utils';
 import useCioBreadcrumb from '../../../src/hooks/useCioBreadcrumb';
+import groups from '../../local_examples/sampleGroups.json';
 
 describe('Testing Hook: useBreadCrumb', () => {
   beforeEach(() => {
@@ -19,33 +20,7 @@ describe('Testing Hook: useBreadCrumb', () => {
     { path: '/all/men/men-accessories', breadcrumb: 'Accessories' },
     { path: '/all/men/men-accessories/men-shoes', breadcrumb: 'Shoes' },
   ];
-  const groups = [
-    {
-      group_id: 'men-shoes-boots',
-      display_name: 'Boots',
-      count: 2,
-      data: {},
-      children: [],
-      parents: [
-        {
-          display_name: 'All',
-          group_id: 'all',
-        },
-        {
-          display_name: "Men's",
-          group_id: 'men',
-        },
-        {
-          display_name: 'Accessories',
-          group_id: 'men-accessories',
-        },
-        {
-          display_name: 'Shoes',
-          group_id: 'men-shoes',
-        },
-      ],
-    },
-  ];
+
   const filterValue = 'men-shoes-boots';
   const useBreadcrumbProps = { groups, filterValue };
 
@@ -61,9 +36,20 @@ describe('Testing Hook: useBreadCrumb', () => {
     crumbs.forEach((breadcrumb, index) => {
       expect(breadcrumb).toHaveProperty('path');
       expect(breadcrumb).toHaveProperty('breadcrumb');
-      expect(breadcrumb.breadcrumb).toBe(groups[0].parents[index].display_name);
+      expect(breadcrumb.breadcrumb).toBe(groups[0].parents[index].displayName);
       expect(breadcrumb.path).toBe(breadcrumbs[index].path);
     });
+  });
+
+  it('Should return an empty array if there are no breadcrumbs', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioBreadcrumb({ groups, filterValue: 'All' }));
+
+    const {
+      current: { breadcrumbs: crumbs },
+    } = result;
+
+    expect(crumbs).not.toBeNull();
+    expect(crumbs).toHaveLength(0);
   });
 
   it('Should return the current page display name', async () => {

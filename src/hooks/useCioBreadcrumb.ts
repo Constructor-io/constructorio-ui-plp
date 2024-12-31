@@ -1,34 +1,34 @@
-import { Group } from '@constructor-io/constructorio-client-javascript/lib/types';
 import { useMemo } from 'react';
+import { PlpItemGroup } from '../types';
 
 export interface Breadcrumb {
   path: string;
   breadcrumb: string;
 }
 
-const generateBreadcrumbs = (currentGroup?: Partial<Group>) => {
+const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {
   let pathAccumulator = '';
 
   const crumbs = currentGroup?.parents?.map<Breadcrumb>((parent) => {
-    pathAccumulator += `/${parent.group_id}`;
+    pathAccumulator += `/${parent.groupId}`;
 
     return {
       path: pathAccumulator,
-      breadcrumb: parent.display_name,
+      breadcrumb: parent.displayName,
     };
   });
 
-  return crumbs;
+  return crumbs || [];
 };
 
-const getCurrentGroup = (groups: Partial<Group>[], filterValue: string) =>
-  groups.find((group) => filterValue === group.group_id);
+const getCurrentGroup = (groups: PlpItemGroup[], filterValue: string) =>
+  groups.find((group) => filterValue === group.groupId);
 
 export interface UseCioBreadcrumbProps {
   /**
    * An array with all groups on the application.
    */
-  groups: Partial<Group>[];
+  groups: PlpItemGroup[];
   /**
    * Filter value of the current group the user is in.
    */
@@ -41,5 +41,5 @@ export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
   const currentGroup = useMemo(() => getCurrentGroup(groups, filterValue), [groups, filterValue]);
   const breadcrumbs = generateBreadcrumbs(currentGroup);
 
-  return { breadcrumbs, currentPage: currentGroup?.display_name };
+  return { breadcrumbs, currentPage: currentGroup?.displayName };
 }
