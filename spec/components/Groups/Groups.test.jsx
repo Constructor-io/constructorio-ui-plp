@@ -82,7 +82,7 @@ describe('Testing Component: Groups', () => {
         </CioPlp>,
       );
 
-      const allBreadcrumbEl = container.querySelectorAll('.cio-crumb')[0];
+      const allBreadcrumbEl = container.querySelectorAll('.cio-groups-crumb')[0];
       expect(allBreadcrumbEl).not.toBeUndefined();
       expect(allBreadcrumbEl.textContent).toBe('All');
     });
@@ -98,11 +98,11 @@ describe('Testing Component: Groups', () => {
         </CioPlp>,
       );
 
-      const allBreadcrumbEl = container.querySelectorAll('.cio-crumb')[0];
+      const allBreadcrumbEl = container.querySelectorAll('.cio-groups-crumb')[0];
       expect(allBreadcrumbEl).not.toBeUndefined();
       expect(allBreadcrumbEl.textContent).toBe('All');
 
-      const allGreetingCardsCrumbEl = container.querySelectorAll('.cio-crumb')[1];
+      const allGreetingCardsCrumbEl = container.querySelectorAll('.cio-groups-crumb')[1];
       expect(allGreetingCardsCrumbEl).not.toBeUndefined();
       expect(allGreetingCardsCrumbEl.textContent).toBe('All Greeting Cards');
     });
@@ -195,7 +195,7 @@ describe('Testing Component: Groups', () => {
       await waitFor(() => {
         const requestFilters = getRequestFilters(container);
         expect(requestFilters.group_id[0]).toBe(firstLevelGroup.groupId);
-        const firstLevelGroupCrumb = container.querySelectorAll('.cio-crumb')[1];
+        const firstLevelGroupCrumb = container.querySelectorAll('.cio-groups-crumb')[1];
         const secondLevelGroupEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
         expect(firstLevelGroupCrumb).not.toBeUndefined();
@@ -212,7 +212,7 @@ describe('Testing Component: Groups', () => {
       fireEvent.click(getByText(firstLevelGroup.displayName));
 
       await waitFor(() => {
-        const baseGroupCrumb = container.querySelectorAll('.cio-crumb')[0];
+        const baseGroupCrumb = container.querySelectorAll('.cio-groups-crumb')[0];
 
         expect(baseGroupCrumb.nodeName).toBe('BUTTON');
 
@@ -224,7 +224,7 @@ describe('Testing Component: Groups', () => {
 
       await waitFor(() => {
         const requestFilters = getRequestFilters(container);
-        const breadcrumbs = container.querySelectorAll('.cio-crumb');
+        const breadcrumbs = container.querySelectorAll('.cio-groups-crumb');
         const firstLevelOptionEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
         expect(requestFilters.group_id).toBeUndefined();
@@ -253,7 +253,7 @@ describe('Testing Component: Groups', () => {
       });
 
       await waitFor(() => {
-        const breadcrumbs = container.querySelectorAll('.cio-crumb');
+        const breadcrumbs = container.querySelectorAll('.cio-groups-crumb');
         expect(breadcrumbs.length).toBe(3);
 
         if (breadcrumbs.length === 3) {
@@ -266,7 +266,7 @@ describe('Testing Component: Groups', () => {
 
       await waitFor(() => {
         const requestFilters = getRequestFilters(container);
-        const breadcrumbs = container.querySelectorAll('.cio-crumb');
+        const breadcrumbs = container.querySelectorAll('.cio-groups-crumb');
         const secondLevelGroupEl = container.querySelectorAll('.cio-filter-option-name')[0];
 
         expect(requestFilters.group_id[0]).not.toBeUndefined();
