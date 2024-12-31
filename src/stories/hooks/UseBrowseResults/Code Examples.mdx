@@ -4,13 +4,15 @@ import meta, { Primary } from './UseBrowseResults.stories';
 
 <Meta of={meta} />
 
-# `[BETA] UseBrowseResults`
+# `UseBrowseResults`
+
 A React Hook to retrieve browse results using Constructor.
 
 ## Usage with CioPlp provider
+
 ```jsx
 function MyCustomBrowseResultsComponent() {
-  const { browseResults } = useBrowseResults();
+  const { data, message, status, refetch } = useBrowseResults();
   ...
 }
 
@@ -26,44 +28,58 @@ function myApp() {
 }
 ```
 
-
 ## Working Example
+
 This is an example of how you might utilize the `useBrowseResults` hook in tandem with the `CioPlp` to retrieve browse results.
 
-<Canvas withSource="none">
+<Canvas withSource='none'>
   <Story of={Primary} />
 </Canvas>
 
 <Controls of={Primary} />
 
-### Working Example - Source Code 
+### Working Example - Source Code
+
 ```jsx
   import React from 'react';
   import { CioPlp, useBrowseResults }from '@constructor-io/constructorio-ui-plp'
 
   const apiKey = 'MY_API_KEY'
+function Code({ children }: { children: ReactNode }) {
+  return (
+    <section style={{ backgroundColor: 'lightgrey', padding: '5px', borderRadius: '2px' }}>
+      <pre>{children}</pre>
+    </section>
+  );
+}
 
-  // A simple React Component to showcase useBrowseResults with CioPlp provider
-  function MyCustomBrowseResultsComponent() {
-    const { browseResults } = useBrowseResults();
+function MyCustomBrowseResultsComponent(props: UseBrowseResultsProps) {
+  const { data, status, refetch } = useBrowseResults(props);
 
-    return (
-      <>
-        <h2>Result Id </h2>
-        <div>{JSON.stringify(browseResults?.resultId)}</div>
-        <h2>Total Number of Results </h2>
-        <div>{JSON.stringify(browseResults?.response?.totalNumResults)}</div>
-        <h2>Array of Groups</h2>
-        <div>{JSON.stringify(browseResults?.response?.groups)}</div>
-        <h2>Array of Facets</h2>
-        <div>{JSON.stringify(browseResults?.response?.facets)}</div>
-        <h2>Array of Sort Options</h2>
-        <div>{JSON.stringify(browseResults?.response?.sortOptions)}</div>
-        <h2>Array of Results</h2>
-        <div>{JSON.stringify(browseResults?.response?.results)}</div>
-      </>
-    );
-  }
+  return (
+    <>
+      <h2>Request status</h2>
+      <div style={{ display: 'flex', gap: '5px', width: '20%' }}>
+        {status}
+        <button onClick={refetch} type='button'>
+          Refetch
+        </button>
+      </div>
+      <h2>Result Id </h2>
+      <Code>{JSON.stringify(data?.resultId, null, 2)}</Code>
+      <h2>Total Number of Results </h2>
+      <Code>{JSON.stringify(data?.response?.totalNumResults, null, 2)}</Code>
+      <h2>Array of Groups</h2>
+      <Code>{JSON.stringify(data?.response?.groups, null, 2)}</Code>
+      <h2>Array of Facets</h2>
+      <Code>{JSON.stringify(data?.response?.facets, null, 2)}</Code>
+      <h2>Array of Sort Options</h2>
+      <Code>{JSON.stringify(data?.response?.sortOptions, null, 2)}</Code>
+      <h2>Array of Results</h2>
+      <Code>{JSON.stringify(data?.response?.results, null, 2)}</Code>
+    </>
+  );
+}
 
   // Main Component
   function useBrowseResultsExample() {

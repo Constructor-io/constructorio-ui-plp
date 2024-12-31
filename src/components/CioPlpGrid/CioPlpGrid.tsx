@@ -40,7 +40,12 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const { data, status, refetch } = useSearchResults({ initialSearchResponse: initialResponse });
+  const {
+    query: searchQuery,
+    data,
+    status,
+    refetch,
+  } = useSearchResults({ initialSearchResponse: initialResponse });
   const {
     callbacks: { onRedirect = (redirectUrl) => window.location.replace(redirectUrl) },
   } = useCioPlpContext();
@@ -68,6 +73,12 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
       )}
     </span>
   );
+
+  if (!searchQuery) {
+    // Render Zero results page in the case where no query is provided
+    // TODO: Allow customers to override default page
+    return <ZeroResults />;
+  }
 
   return (
     <>
@@ -109,7 +120,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         <Filters facets={response.facets} />
                       </MobileModal>
                       {response?.results?.map((item) => (
-                        <div className='cio-product-tile'>
+                        <div className='cio-product-tile' key={item.itemId}>
                           <ProductCard key={item.itemId} item={item} />
                         </div>
                       ))}
