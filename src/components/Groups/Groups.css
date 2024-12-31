@@ -3,7 +3,11 @@
   margin-top: 0;
 }
 
-.cio-filter-groups-options-list .cio-crumb {
+.cio-groups-breadcrumbs {
+  margin-bottom: 8px;
+}
+
+.cio-filter-groups-options-list .cio-groups-crumb {
   font-size: 14px;
   background: none;
   color: inherit;
@@ -13,12 +17,13 @@
   outline: inherit;
   padding: 2px 4px;
   border-radius: 4px;
+  font-weight: 500;
 
-  &:hover:not(:last-child) {
+  &:hover:not(span) {
     background-color: #f2f2f2;
   }
 }
 
-.cio-filter-groups-options-list .cio-crumb:last-child {
+.cio-filter-groups-options-list span.cio-groups-crumb {
   cursor: auto;
 }
