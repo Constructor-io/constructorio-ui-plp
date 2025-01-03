@@ -5,28 +5,32 @@ import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
 import usePagination, { UsePaginationProps } from './usePagination';
-import { isPlpSearchDataResults } from '../utils';
+import { isBrowseUrl, isPlpBrowseDataResults, isPlpSearchDataResults, isSearchUrl } from '../utils';
+import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
+import useRequestConfigs from './useRequestConfigs';
 
 export interface UseCioPlpHook extends PlpContextValue {}
 
-export interface UseCioPlpProps extends UseSearchResultsProps {
-  /**
-   * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
-   */
-  paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
-  /**
-   * No configurations available yet.
-   */
-  sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
-  /**
-   * No configurations available yet.
-   */
-  filterConfigs?: Omit<UseFilterProps, 'facets'>;
-}
+export type UseCioPlpProps = UseSearchResultsProps &
+  UseBrowseResultsProps & {
+    /**
+     * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+     */
+    paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+    /**
+     * No configurations available yet.
+     */
+    sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
+    /**
+     * No configurations available yet.
+     */
+    filterConfigs?: Omit<UseFilterProps, 'facets'>;
+  };
 
 export default function useCioPlp(props: UseCioPlpProps = {}) {
   const {
     initialSearchResponse,
+    initialBrowseResponse,
     paginationConfigs = {},
     sortConfigs = {},
     filterConfigs = {},
@@ -42,24 +46,38 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     );
   }
 
-  // If Search
-  const { data: searchData, refetch } = useSearchResults({ initialSearchResponse });
+  const { requestConfigs } = useRequestConfigs();
+  const isSearchPage = isSearchUrl(requestConfigs) || initialSearchResponse;
+  const isBrowsePage = isBrowseUrl(requestConfigs) || initialBrowseResponse;
+
+  const search = useSearchResults({ initialSearchResponse });
+  const browse = useBrowseResults({ initialBrowseResponse });
 
   useEffect(() => {
-    if (isPlpSearchDataResults(searchData)) {
-      setFacets(searchData.response.facets);
-      setSortOptions(searchData.response.sortOptions);
-      setTotalNumResults(searchData.response.totalNumResults);
+    if (isSearchPage && isPlpSearchDataResults(search.data)) {
+      setFacets(search.data.response.facets);
+      setSortOptions(search.data.response.sortOptions);
+      setTotalNumResults(search.data.response.totalNumResults);
+    } else if (isBrowsePage && isPlpBrowseDataResults(browse.data)) {
+      setFacets(browse.data.response.facets);
+      setSortOptions(browse.data.response.sortOptions);
+      setTotalNumResults(browse.data.response.totalNumResults);
     }
-  }, [searchData]);
+  }, [search.data, isSearchPage, browse.data, isBrowsePage]);
 
   const filters = useFilter({ facets, ...filterConfigs });
   const sort = useSort({ sortOptions, ...sortConfigs });
   const pagination = usePagination({ totalNumResults, ...paginationConfigs });
 
   return {
-    searchData,
-    refetch,
+    isSearchPage,
+    isBrowsePage,
+    searchQuery: search.query,
+    browseFilterName: browse.filterName,
+    browseFilterValue: browse.filterValue,
+    status: isSearchPage ? search.status : browse.status,
+    refetch: isSearchPage ? search.refetch : browse.refetch,
+    data: isSearchPage ? search.data : browse.data,
     filters,
     sort,
     pagination,

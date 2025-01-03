@@ -17,7 +17,7 @@ import {
 } from '../components/CioPlpGrid/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
-import { getSearchParamsFromRequestConfigs } from '../utils';
+import { getSearchParamsFromRequestConfigs, isSearchUrl } from '../utils';
 import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
@@ -86,9 +86,10 @@ export default function useSearchResults(
   const { cioClient } = contextValue;
   const { requestConfigs } = useRequestConfigs();
   const { query, searchParams } = getSearchParamsFromRequestConfigs(requestConfigs);
+  const isSearchPage = isSearchUrl(requestConfigs) || initialSearchResponse;
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
-  if (!cioClient && typeof window !== 'undefined') {
+  if (isSearchPage && !cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
@@ -100,7 +101,7 @@ export default function useSearchResults(
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (query && cioClient && (!initialSearchResponse || !isFirstRender)) {
+    if (isSearchPage && query && cioClient && (!initialSearchResponse || !isFirstRender)) {
       fetchSearchResults(cioClient, query, searchParams, dispatch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

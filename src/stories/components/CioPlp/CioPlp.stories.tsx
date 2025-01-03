@@ -67,8 +67,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function PrimaryStory({ args }: any) {
-  const [currentUrl, setCurrentUrl] = useState(`${window.location.href}&q=shirt`);
+function PrimaryStory({ args, defaultUrl }: any) {
+  const [currentUrl, setCurrentUrl] = useState(defaultUrl);
   // This is used for reactivity, updating this key will force CioPlpGrid to re-render
   const [gridKey, setGridKey] = useState(1);
 
@@ -91,8 +91,20 @@ function PrimaryStory({ args }: any) {
   );
 }
 
-export const Primary: Story = {
-  render: (args) => <PrimaryStory args={args} />,
+export const SearchPlp: Story = {
+  render: (args) => <PrimaryStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
+  args: {
+    apiKey: DEMO_API_KEY,
+  },
+};
+
+export const BrowsePlp: Story = {
+  render: (args) => (
+    <PrimaryStory
+      args={args}
+      defaultUrl={`${window.location.href.replace('/iframe.html', '/group_id/1035')}`}
+    />
+  ),
   args: {
     apiKey: DEMO_API_KEY,
   },
