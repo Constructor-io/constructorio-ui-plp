@@ -14,6 +14,7 @@ import {
   PlpSearchData,
   PlpSingleFacet,
   PlpHierarchicalFacet,
+  PlpBrowseData,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -100,15 +101,21 @@ export function getPreferredColorScheme() {
 }
 
 export function isPlpSearchDataResults(
-  response: Nullable<PlpSearchData>,
+  response: Nullable<PlpSearchData | PlpBrowseData>,
 ): response is PlpSearchDataResults {
   return 'response' in (response || {});
 }
 
 export function isPlpSearchDataRedirect(
-  response: Nullable<PlpSearchData>,
+  response: Nullable<PlpSearchData | PlpBrowseData>,
 ): response is PlpSearchDataRedirect {
   return 'redirect' in (response || {});
+}
+
+export function isPlpBrowseDataResults(
+  response: Nullable<PlpSearchData | PlpBrowseData>,
+): response is PlpBrowseData {
+  return 'response' in (response || {});
 }
 
 export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
@@ -151,4 +158,16 @@ export function isOptionFacet(
   facet: PlpFacet,
 ): facet is PlpMultipleFacet | PlpSingleFacet | PlpHierarchicalFacet {
   return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
+}
+
+export function isSearchUrl(requestConfigs: RequestConfigs) {
+  const { query } = getSearchParamsFromRequestConfigs(requestConfigs);
+
+  return !!query;
+}
+
+export function isBrowseUrl(requestConfigs: RequestConfigs) {
+  const { filterName, filterValue } = getBrowseParamsFromRequestConfigs(requestConfigs);
+
+  return !!filterName && !!filterValue;
 }

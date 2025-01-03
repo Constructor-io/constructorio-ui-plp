@@ -221,7 +221,8 @@ export interface CioPlpProviderProps {
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
   urlHelpers?: Partial<UrlHelpers>;
-  initialResponse?: SearchResponse;
+  initialSearchResponse?: SearchResponse;
+  initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
 }
 
