@@ -169,4 +169,69 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(getByText(mockSearchData.response.results[0].itemName)).toBeInTheDocument(),
     );
   });
+
+  it('Should include cnstrc beacon data attributes when data is fetched with results returned', async () => {
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
+    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      data: {
+        response: mockSearchData.response,
+        rawApiResponse: {
+          response: {
+            total_num_results: 200,
+          },
+        },
+      },
+      query: 'red',
+    });
+
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
+      expect(
+        container
+          .querySelector('[data-cnstrc-num-results]')
+          .getAttribute('data-cnstrc-num-results'),
+      ).toEqual('200');
+    });
+  });
+
+  it('Should include cnstrc beacon data attributes when data is fetched with zero results returned', async () => {
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
+    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      data: {
+        response: { ...mockSearchData.response, results: [] },
+        rawApiResponse: {
+          response: {
+            total_num_results: 0,
+          },
+        },
+      },
+      query: 'red',
+    });
+
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('.cio-zero-results-header')).toBeInTheDocument();
+      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
+      expect(
+        container
+          .querySelector('[data-cnstrc-num-results]')
+          .getAttribute('data-cnstrc-num-results'),
+      ).toEqual('0');
+    });
+  });
 });
