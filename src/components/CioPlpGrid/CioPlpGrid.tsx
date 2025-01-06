@@ -102,7 +102,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
       )}
     </span>
   ) : (
-    <Breadcrumbs groups={data?.response.groups || []} filterValue={browseFilterValue} />
+    <Breadcrumbs groups={data?.response.groups || []} filterValue={browseFilterValue || ''} />
   );
 
   return (

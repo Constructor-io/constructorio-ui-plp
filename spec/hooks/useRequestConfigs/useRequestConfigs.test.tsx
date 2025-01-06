@@ -32,7 +32,8 @@ describe('Testing Hook: useRequestConfigs', () => {
 
   it('Should return an object with page only if no defaults have been specified', () => {
     function TestReactComponent() {
-      const { requestConfigs, setRequestConfigs } = useRequestConfigs();
+      const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+      const requestConfigs = getRequestConfigs();
       expect(requestConfigs).toEqual({ page: 1 });
       expect(typeof setRequestConfigs).toEqual('function');
       return <div>test</div>;
@@ -48,7 +49,8 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return configurations set as defaults at Plp Context', () => {
     window.location.href = 'https://example.com/group_id/Styles';
     function TestReactComponent() {
-      const { requestConfigs } = useRequestConfigs();
+      const { getRequestConfigs } = useRequestConfigs();
+      const requestConfigs = getRequestConfigs();
       expect(requestConfigs).toEqual(testRequestState);
       return <div>test</div>;
     }
@@ -65,7 +67,8 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return configurations set in the URL path/query parameters', () => {
     function TestReactComponent() {
       window.location.href = testUrl;
-      const { requestConfigs } = useRequestConfigs();
+      const { getRequestConfigs } = useRequestConfigs();
+      const requestConfigs = getRequestConfigs();
       const { fmtOptions, qsParam, preFilterExpression, variationsMap, ...sampleRequestState } =
         testRequestState;
 
@@ -87,7 +90,8 @@ describe('Testing Hook: useRequestConfigs', () => {
   it('Should return merged configurations with the URL query parameters taking priority', () => {
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
-      const { requestConfigs } = useRequestConfigs();
+      const { getRequestConfigs } = useRequestConfigs();
+      const requestConfigs = getRequestConfigs();
       const decodedRequestState = testRequestState;
       decodedRequestState.page = 2;
       decodedRequestState.query = 'fire';
@@ -120,7 +124,8 @@ describe('Testing Hook: useRequestConfigs', () => {
 
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/water/fall?q=fire&page=2';
-      const { requestConfigs: decodedRequestState } = useRequestConfigs();
+      const { getRequestConfigs } = useRequestConfigs();
+      const decodedRequestState = getRequestConfigs();
 
       expect(typeof decodedRequestState).toBe('object');
       expect(decodedRequestState.page).toBe(7);

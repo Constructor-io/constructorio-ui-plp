@@ -5,7 +5,13 @@ import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
 import usePagination, { UsePaginationProps } from './usePagination';
-import { isBrowseUrl, isPlpBrowseDataResults, isPlpSearchDataResults, isSearchUrl } from '../utils';
+import {
+  getPageType,
+  checkIsBrowsePage,
+  isPlpBrowseDataResults,
+  isPlpSearchDataResults,
+  checkIsSearchPage,
+} from '../utils';
 import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useRequestConfigs from './useRequestConfigs';
 
@@ -46,12 +52,28 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     );
   }
 
-  const { requestConfigs } = useRequestConfigs();
-  const isSearchPage = isSearchUrl(requestConfigs) || initialSearchResponse;
-  const isBrowsePage = isBrowseUrl(requestConfigs) || initialBrowseResponse;
+  const { getRequestConfigs } = useRequestConfigs();
+  const requestConfigs = getRequestConfigs();
+  const isSearchPage = checkIsSearchPage(requestConfigs) || initialSearchResponse;
+  const isBrowsePage = checkIsBrowsePage(requestConfigs) || initialBrowseResponse;
 
   const search = useSearchResults({ initialSearchResponse });
   const browse = useBrowseResults({ initialBrowseResponse });
+
+  const refetch = () => {
+    const currentRequestConfigs = getRequestConfigs();
+    const pageType = getPageType(currentRequestConfigs);
+
+    switch (pageType) {
+      case 'search':
+        search.refetch();
+        break;
+      case 'browse':
+        browse.refetch();
+        break;
+      default:
+    }
+  };
 
   useEffect(() => {
     if (isSearchPage && isPlpSearchDataResults(search.data)) {
@@ -76,8 +98,8 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     browseFilterName: browse.filterName,
     browseFilterValue: browse.filterValue,
     status: isSearchPage ? search.status : browse.status,
-    refetch: isSearchPage ? search.refetch : browse.refetch,
     data: isSearchPage ? search.data : browse.data,
+    refetch,
     filters,
     sort,
     pagination,

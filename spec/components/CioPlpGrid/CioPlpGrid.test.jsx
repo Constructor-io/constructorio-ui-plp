@@ -12,7 +12,12 @@ jest.mock('../../../src/styles.css', () => ({}));
 jest.mock('../../../src/hooks/useSearchResults');
 jest.mock('../../../src/hooks/useRequestConfigs', () => ({
   __esModule: true,
-  default: jest.fn(() => ({ requestConfigs: { query: 'red' }, setRequestConfigs: jest.fn() })),
+  default: jest.fn(() => ({
+    getRequestConfigs: () => ({
+      query: 'red',
+    }),
+    setRequestConfigs: jest.fn(),
+  })),
 }));
 
 const originalWindowLocation = window.location;
@@ -72,9 +77,7 @@ describe('Testing Component: CioPlpGrid', () => {
     const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.ERROR,
-      data: {
-        response: null,
-      },
+      data: null,
     });
 
     const { queryByTestId } = render(
@@ -90,9 +93,7 @@ describe('Testing Component: CioPlpGrid', () => {
     const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.ERROR,
-      data: {
-        response: null,
-      },
+      data: null,
     });
 
     const { queryByText } = render(

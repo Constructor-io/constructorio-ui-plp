@@ -23,11 +23,12 @@ describe('Testing Hook on the server: useRequestConfigs', () => {
 
   it('Should return an object with page only and a setter', async () => {
     const {
-      result: { requestConfigs, setRequestConfigs },
+      result: { getRequestConfigs, setRequestConfigs },
     } = renderHookServerSideWithCioPlp(() => useRequestConfigs(), {
       apiKey: DEMO_API_KEY,
     });
 
+    const requestConfigs = getRequestConfigs();
     expect(requestConfigs).toEqual({ page: 1 });
     expect(typeof setRequestConfigs).toBe('function');
   });
