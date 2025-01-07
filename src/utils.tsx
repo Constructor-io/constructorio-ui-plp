@@ -159,7 +159,7 @@ export function getSearchCnstrcDataAttributes(
   initialResponse: SearchResponse | undefined,
 ) {
   let totalNumResults: number | undefined;
-  let dataCnstrc: any = { 'data-cnstrc-search': true };
+  let dataCnstrc: Record<`data-cnstrc-${string}`, any> = { 'data-cnstrc-search': true };
 
   if (data) {
     totalNumResults = data?.rawApiResponse?.response?.total_num_results;
