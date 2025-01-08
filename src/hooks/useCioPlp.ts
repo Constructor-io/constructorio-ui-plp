@@ -42,9 +42,6 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     filterConfigs = {},
   } = props;
   const contextValue = useCioPlpContext();
-  const [facets, setFacets] = useState<Array<PlpFacet>>([]);
-  const [sortOptions, setSortOptions] = useState<Array<PlpSortOption>>([]);
-  const [totalNumResults, setTotalNumResults] = useState(0);
 
   if (!contextValue) {
     throw new Error(
@@ -54,11 +51,29 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
 
   const { getRequestConfigs } = useRequestConfigs();
   const requestConfigs = getRequestConfigs();
-  const isSearchPage = checkIsSearchPage(requestConfigs) || initialSearchResponse;
-  const isBrowsePage = checkIsBrowsePage(requestConfigs) || initialBrowseResponse;
+  const isSearchPage = checkIsSearchPage(requestConfigs) || !!initialSearchResponse;
+  const isBrowsePage = checkIsBrowsePage(requestConfigs) || !!initialBrowseResponse;
 
   const search = useSearchResults({ initialSearchResponse });
   const browse = useBrowseResults({ initialBrowseResponse });
+
+  function coalesceResponse() {
+    if (isSearchPage && isPlpSearchDataResults(search?.data)) {
+      return search.data.response;
+    }
+    if (isBrowsePage && isPlpBrowseDataResults(browse?.data)) {
+      return browse.data.response;
+    }
+    return null;
+  }
+
+  const [facets, setFacets] = useState<Array<PlpFacet>>(() => coalesceResponse()?.facets || []);
+  const [sortOptions, setSortOptions] = useState<Array<PlpSortOption>>(
+    () => coalesceResponse()?.sortOptions || [],
+  );
+  const [totalNumResults, setTotalNumResults] = useState(
+    () => coalesceResponse()?.totalNumResults || 0,
+  );
 
   const refetch = () => {
     const currentRequestConfigs = getRequestConfigs();
