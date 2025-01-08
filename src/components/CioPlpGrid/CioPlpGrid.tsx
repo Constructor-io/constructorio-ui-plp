@@ -92,18 +92,24 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     return <ZeroResults />;
   }
 
-  const renderTitle = isSearchPage ? (
-    <span className='cio-products-header-title'>
-      <b>{data?.response?.totalNumResults}</b> results
-      {searchQuery && (
-        <>
-          &nbsp;for <b>&quot;{searchQuery}&quot;</b>
-        </>
-      )}
-    </span>
-  ) : (
-    <Breadcrumbs groups={data?.response.groups || []} filterValue={browseFilterValue || ''} />
-  );
+  let renderHeader;
+
+  if (isSearchPage) {
+    renderHeader = (
+      <span className='cio-products-header-title'>
+        <b>{data?.response?.totalNumResults}</b> results
+        {searchQuery && (
+          <>
+            &nbsp;for <b>&quot;{searchQuery}&quot;</b>
+          </>
+        )}
+      </span>
+    );
+  } else if (isBrowsePage && data?.request.browse_filter_name === 'group_id') {
+    renderHeader = (
+      <Breadcrumbs groups={data?.response.groups || []} filterValue={browseFilterValue || ''} />
+    );
+  }
 
   return (
     <>
@@ -122,7 +128,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                   <div className='cio-products-container'>
                     <div className='cio-products-header-container'>
                       <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
-                        {renderTitle}
+                        {renderHeader}
                       </div>
                       <div className='cio-products-header-wrapper'>
                         <button
@@ -132,7 +138,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                           {FiltersIcon}
                           Filters
                         </button>
-                        <span className='cio-large-screen-only'>{renderTitle}</span>
+                        <span className='cio-large-screen-only'>{renderHeader}</span>
                         <Sort sortOptions={sort.sortOptions} isOpen={false} {...sortConfigs} />
                       </div>
                     </div>
