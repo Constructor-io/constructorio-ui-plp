@@ -1,24 +1,43 @@
+/* eslint-disable max-classes-per-file */
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import CioPlpGrid from '../../../src/components/CioPlpGrid';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
-import '@testing-library/jest-dom';
-import { transformSearchResponse } from '../../../src/utils/transformers';
-import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
+import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
+import mockApiBrowseResponse from '../../local_examples/apiBrowseResponse.json';
+import { transformBrowseResponse, transformSearchResponse } from '../../../src/utils/transformers';
 import { RequestStatus } from '../../../src/components/CioPlpGrid/reducer';
+import useCioPlp from '../../../src/hooks/useCioPlp';
+import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 
-jest.mock('../../../src/styles.css', () => ({}));
-jest.mock('../../../src/hooks/useSearchResults');
-jest.mock('../../../src/hooks/useRequestConfigs', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    getRequestConfigs: () => ({
-      query: 'red',
-    }),
-    setRequestConfigs: jest.fn(),
-  })),
-}));
+const actualUseCioPlp = jest.requireActual('../../../src/hooks/useCioPlp').default;
+const actualUseRequestConfigs = jest.requireActual('../../../src/hooks/useRequestConfigs').default;
+
+jest.mock('../../../src/hooks/useCioPlp');
+jest.mock('../../../src/hooks/useRequestConfigs');
+jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
+  const Search = class {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
+    constructor() {}
+
+    getSearchResults = jest.fn().mockResolvedValue(mockApiSearchResponse);
+  };
+
+  return Search;
+});
+
+jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/browse.js', () => {
+  const Browse = class {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
+    constructor() {}
+
+    getBrowseResults = jest.fn().mockResolvedValue(mockApiBrowseResponse);
+  };
+
+  return Browse;
+});
 
 const originalWindowLocation = window.location;
 
@@ -30,13 +49,16 @@ describe('Testing Component: CioPlpGrid', () => {
     Object.defineProperty(window, 'location', {
       value: new URL('https://example.com'),
     });
+
+    useCioPlp.mockImplementation(actualUseCioPlp);
+    useRequestConfigs.mockImplementation(actualUseRequestConfigs);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     Object.defineProperty(window, 'location', {
       value: originalWindowLocation,
     });
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('Should throw error if used outside the CioPlp', () => {
@@ -44,8 +66,7 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should render spinner while fetching data', async () => {
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({ status: RequestStatus.FETCHING });
+    useCioPlp.mockReturnValue({ status: RequestStatus.FETCHING, isSearchPage: true });
 
     const { getByTestId } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -57,12 +78,7 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render spinner if data has been fetched', async () => {
-    const mockSearchData = transformSearchResponse(mockSearchResponse);
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({
-      status: RequestStatus.SUCCESS,
-      data: { response: mockSearchData.response },
-    });
+    useCioPlp.mockReturnValue({ status: RequestStatus.SUCCESS, isSearchPage: true });
 
     const { queryByTestId } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -74,8 +90,7 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render spinner if there has been an error while fetching data', async () => {
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({
+    useCioPlp.mockReturnValue({
       status: RequestStatus.ERROR,
       data: null,
     });
@@ -90,8 +105,7 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render custom spinner if there has been an error while fetching data', async () => {
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({
+    useCioPlp.mockReturnValue({
       status: RequestStatus.ERROR,
       data: null,
     });
@@ -106,11 +120,9 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should not render custom spinner if data has been fetched', async () => {
-    const mockSearchData = transformSearchResponse(mockSearchResponse);
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({
+    useCioPlp.mockReturnValue({
       status: RequestStatus.SUCCESS,
-      data: { response: mockSearchData.response },
+      data: { response: {} },
     });
 
     const { queryByText } = render(
@@ -123,8 +135,7 @@ describe('Testing Component: CioPlpGrid', () => {
   });
 
   it('Should render custom spinner while fetching data if provided', async () => {
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({ status: RequestStatus.FETCHING });
+    useCioPlp.mockReturnValue({ status: RequestStatus.FETCHING, isSearchPage: true });
 
     const { getByText, queryByTestId } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -138,13 +149,13 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
-  it('Should render results when data is fetched', async () => {
-    const mockSearchData = transformSearchResponse(mockSearchResponse);
-    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
-    mockUseSearchResults.mockReturnValue({
-      status: RequestStatus.SUCCESS,
-      data: { response: mockSearchData.response },
-    });
+  it('Should render results when data is fetched for Search', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ query: 'shoes' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const mockSearchData = transformSearchResponse(mockApiSearchResponse);
 
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -157,17 +168,50 @@ describe('Testing Component: CioPlpGrid', () => {
     );
   });
 
-  it('Should render results when provided with initialSearchResponse', async () => {
-    const mockSearchData = transformSearchResponse(mockSearchResponse);
+  it('Should render results when data is fetched for Browse', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ filterName: 'group_id', filterValue: '1030' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const mockBrowseData = transformBrowseResponse(mockApiBrowseResponse);
 
     const { getByText } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <CioPlpGrid initialSearchResponse={mockSearchResponse} />
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() =>
+      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument(),
+    );
+  });
+
+  it('Should render results when provided with initialSearchResponse', async () => {
+    const mockSearchData = transformSearchResponse(mockApiSearchResponse);
+
+    const { getByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid initialSearchResponse={mockApiSearchResponse} />
       </CioPlp>,
     );
 
     await waitFor(() =>
       expect(getByText(mockSearchData.response.results[0].itemName)).toBeInTheDocument(),
+    );
+  });
+
+  it('Should render results when provided with initialBrowseResponse', async () => {
+    const mockBrowseData = transformBrowseResponse(mockApiBrowseResponse);
+
+    const { getByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid initialBrowseResponse={mockApiBrowseResponse} />
+      </CioPlp>,
+    );
+
+    await waitFor(() =>
+      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument(),
     );
   });
 });

@@ -118,7 +118,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
       ) : (
         <>
           {status === RequestStatus.FETCHING && (spinner || <Spinner />)}
-          {status !== RequestStatus.FETCHING && status !== RequestStatus.STALE && data && (
+          {status !== RequestStatus.FETCHING && data && (
             <>
               {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
