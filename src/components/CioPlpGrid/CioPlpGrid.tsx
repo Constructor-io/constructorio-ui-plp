@@ -98,9 +98,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                   <div className='cio-filters-container cio-large-screen-only'>
                     <Filters facets={response.facets} {...filterConfigs} />
                   </div>
-                  <div
-                    className='cio-products-container'
-                    {...getSearchCnstrcDataAttributes(data, initialResponse)}>
+                  <div className='cio-products-container' {...getSearchCnstrcDataAttributes(data)}>
                     <div className='cio-products-header-container'>
                       <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
                         {renderTitle}
@@ -137,7 +135,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                   </div>
                 </div>
               ) : (
-                <div {...getSearchCnstrcDataAttributes(data, initialResponse)}>
+                <div {...getSearchCnstrcDataAttributes(data)}>
                   <ZeroResults />
                 </div>
               )}

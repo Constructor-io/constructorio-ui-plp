@@ -71,8 +71,11 @@ describe('Testing Component on the server: CioPlpGrid', () => {
   });
 
   it('Should include cnstrc beacon data attributes when when provided initialSearchResponse', async () => {
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
     const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
     mockUseSearchResults.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      data: mockSearchData,
       query: 'red',
     });
 

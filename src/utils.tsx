@@ -154,27 +154,15 @@ export function isOptionFacet(
   return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
 }
 
-export function getSearchCnstrcDataAttributes(
-  data: Nullable<PlpSearchData>,
-  initialResponse: SearchResponse | undefined,
-) {
-  let totalNumResults: number | undefined;
-  let dataCnstrc: Record<`data-cnstrc-${string}`, any> = { 'data-cnstrc-search': true };
+export function getSearchCnstrcDataAttributes(data: Nullable<PlpSearchDataResults>) {
+  if (!data) return {};
 
-  if (data) {
-    totalNumResults = data?.rawApiResponse?.response?.total_num_results;
-  }
+  let dataCnstrc: Record<`data-cnstrc-${string}`, string | number | boolean> = {};
 
-  if (initialResponse) {
-    totalNumResults = initialResponse.response.total_num_results;
-  }
-
-  if (totalNumResults !== undefined) {
-    dataCnstrc = {
-      ...dataCnstrc,
-      'data-cnstrc-num-results': totalNumResults,
-    };
-  }
+  dataCnstrc = {
+    'data-cnstrc-search': true,
+    'data-cnstrc-num-results': data.response.totalNumResults,
+  };
 
   return dataCnstrc;
 }

@@ -177,11 +177,6 @@ describe('Testing Component: CioPlpGrid', () => {
       status: RequestStatus.SUCCESS,
       data: {
         response: mockSearchData.response,
-        rawApiResponse: {
-          response: {
-            total_num_results: 200,
-          },
-        },
       },
       query: 'red',
     });
@@ -198,7 +193,7 @@ describe('Testing Component: CioPlpGrid', () => {
         container
           .querySelector('[data-cnstrc-num-results]')
           .getAttribute('data-cnstrc-num-results'),
-      ).toEqual('200');
+      ).toEqual(String(mockSearchData.response.totalNumResults));
     });
   });
 
@@ -208,12 +203,7 @@ describe('Testing Component: CioPlpGrid', () => {
     mockUseSearchResults.mockReturnValue({
       status: RequestStatus.SUCCESS,
       data: {
-        response: { ...mockSearchData.response, results: [] },
-        rawApiResponse: {
-          response: {
-            total_num_results: 0,
-          },
-        },
+        response: { ...mockSearchData.response, results: [], totalNumResults: 0 },
       },
       query: 'red',
     });
