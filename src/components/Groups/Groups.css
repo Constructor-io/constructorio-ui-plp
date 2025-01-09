@@ -1,0 +1,29 @@
+.cio-filter-groups-options-list ul {
+  padding-left: 0;
+  margin-top: 0;
+}
+
+.cio-groups-breadcrumbs {
+  margin-bottom: 8px;
+}
+
+.cio-filter-groups-options-list .cio-groups-crumb {
+  font-size: 14px;
+  background: none;
+  color: inherit;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  outline: inherit;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: 500;
+
+  &:hover:not(span) {
+    background-color: #f2f2f2;
+  }
+}
+
+.cio-filter-groups-options-list span.cio-groups-crumb {
+  cursor: auto;
+}

@@ -29,6 +29,7 @@ export {
   Redirect,
   ApiFacet,
   ApiFacetOption,
+  ApiGroup,
 };
 
 export interface ApiHierarchicalFacetOption extends ApiFacetOption {
@@ -80,7 +81,7 @@ export interface PlpSearchResponse {
   numResultsPerPage: number;
   results: Array<Item>;
   facets: Array<PlpFacet>;
-  groups: Array<ApiGroup>;
+  groups: Array<PlpItemGroup>;
   sortOptions: Array<PlpSortOption>;
   refinedContent: Record<string, any>[];
 }
@@ -287,7 +288,7 @@ export interface PlpHierarchicalFacet extends PlpFacet {
   options: Array<PlpHierarchicalFacetOption>;
 }
 
-export type PlpFilterValue = string | number | boolean | Array<string | boolean | number>;
+export type PlpFilterValue = string | number | boolean | Array<string | boolean | number> | null;
 export interface PlpFacetOption {
   status: string;
   count: number;
@@ -301,6 +302,15 @@ export interface PlpFacetOption {
 export interface PlpHierarchicalFacetOption extends PlpFacetOption {
   options: Array<PlpHierarchicalFacetOption>;
   data: object & { parentValue: string | null };
+}
+
+export interface PlpItemGroup {
+  groupId: string;
+  displayName: string;
+  count: number;
+  data: object | null;
+  children: Array<PlpItemGroup>;
+  parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 
 // Type Extenders

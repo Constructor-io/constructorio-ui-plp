@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { PlpContextValue, PlpFacet, PlpSortOption } from '../types';
+import { PlpContextValue, PlpFacet, PlpItemGroup, PlpSortOption } from '../types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
 import usePagination, { UsePaginationProps } from './usePagination';
 import { isPlpSearchDataResults } from '../utils';
+import useGroups, { UseGroupProps } from './useGroups';
 
 export interface UseCioPlpHook extends PlpContextValue {}
 
@@ -22,6 +23,10 @@ export interface UseCioPlpProps extends UseSearchResultsProps {
    * No configurations available yet.
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
+  /**
+   * Used to set the `initialNumOptions` to limit the number of options shown initially.
+   */
+  groupsConfigs?: Omit<UseGroupProps, 'groups'>;
 }
 
 export default function useCioPlp(props: UseCioPlpProps = {}) {
@@ -30,10 +35,12 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     paginationConfigs = {},
     sortConfigs = {},
     filterConfigs = {},
+    groupsConfigs = {},
   } = props;
   const contextValue = useCioPlpContext();
   const [facets, setFacets] = useState<Array<PlpFacet>>([]);
   const [sortOptions, setSortOptions] = useState<Array<PlpSortOption>>([]);
+  const [rawGroups, setGroups] = useState<Array<PlpItemGroup>>([]);
   const [totalNumResults, setTotalNumResults] = useState(0);
 
   if (!contextValue) {
@@ -50,12 +57,14 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
       setFacets(searchData.response.facets);
       setSortOptions(searchData.response.sortOptions);
       setTotalNumResults(searchData.response.totalNumResults);
+      setGroups(searchData.response.groups);
     }
   }, [searchData]);
 
   const filters = useFilter({ facets, ...filterConfigs });
   const sort = useSort({ sortOptions, ...sortConfigs });
   const pagination = usePagination({ totalNumResults, ...paginationConfigs });
+  const groups = useGroups({ groups: rawGroups, ...groupsConfigs });
 
   return {
     searchData,
@@ -63,5 +72,6 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     filters,
     sort,
     pagination,
+    groups,
   };
 }

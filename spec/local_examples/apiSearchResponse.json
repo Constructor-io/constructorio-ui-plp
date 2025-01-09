@@ -5991,7 +5991,16 @@
             "display_name": "Clearance",
             "count": 85,
             "data": null,
-            "children": [],
+            "children": [
+              {
+                "group_id": "FSG123",
+                "display_name": "Clearance - New",
+                "count": 23,
+                "data": null,
+                "children": [],
+                "parents": [{ "display_name": "All Products", "group_id": "AP01" }, { "display_name": "Clearance", "group_id": "W676714" }]
+              }
+            ],
             "parents": [
               {
                 "display_name": "All Products",
