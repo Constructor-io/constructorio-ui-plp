@@ -69,4 +69,23 @@ describe('Testing Component on the server: CioPlpGrid', () => {
 
     expect(html).toContain(mockSearchData.response.results[0].itemName);
   });
+
+  it('Should include cnstrc beacon data attributes when when provided initialSearchResponse', async () => {
+    const mockSearchData = transformSearchResponse(mockSearchResponse);
+    const mockUseSearchResults = require('../../../src/hooks/useSearchResults').default;
+    mockUseSearchResults.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      data: mockSearchData,
+      query: 'red',
+    });
+
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid initialResponse={mockSearchResponse} />
+      </CioPlp>,
+    );
+
+    expect(html).toContain('data-cnstrc-search');
+    expect(html).toContain('data-cnstrc-num-results="357"');
+  });
 });

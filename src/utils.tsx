@@ -1,6 +1,7 @@
 import {
   Nullable,
   SearchParameters,
+  SearchResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PrimaryColorStyles,
@@ -151,4 +152,17 @@ export function isOptionFacet(
   facet: PlpFacet,
 ): facet is PlpMultipleFacet | PlpSingleFacet | PlpHierarchicalFacet {
   return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
+}
+
+export function getSearchCnstrcDataAttributes(data: Nullable<PlpSearchDataResults>) {
+  if (!data) return {};
+
+  let dataCnstrc: Record<`data-cnstrc-${string}`, string | number | boolean> = {};
+
+  dataCnstrc = {
+    'data-cnstrc-search': true,
+    'data-cnstrc-num-results': data.response.totalNumResults,
+  };
+
+  return dataCnstrc;
 }
