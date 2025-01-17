@@ -183,3 +183,15 @@ export function getPageType(requestConfigs: RequestConfigs): PageType {
   }
   return 'unknown';
 }
+export function getSearchCnstrcDataAttributes(data: Nullable<PlpSearchDataResults>) {
+  if (!data) return {};
+
+  let dataCnstrc: Record<`data-cnstrc-${string}`, string | number | boolean> = {};
+
+  dataCnstrc = {
+    'data-cnstrc-search': true,
+    'data-cnstrc-num-results': data.response.totalNumResults,
+  };
+
+  return dataCnstrc;
+}

@@ -22,7 +22,17 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor() {}
 
-    getSearchResults = jest.fn().mockResolvedValue(mockApiSearchResponse);
+    getSearchResults = jest.fn().mockImplementation((searchQuery) => {
+      if (searchQuery === 'test zero results') {
+        return {
+          response: { results: [], total_num_results: 0, groups: [], facets: [], sort_options: [] },
+          result_id: 'test-zero-results',
+          request: {},
+        };
+      }
+
+      return mockApiSearchResponse;
+    });
   };
 
   return Search;
@@ -213,5 +223,52 @@ describe('Testing Component: CioPlpGrid', () => {
     await waitFor(() =>
       expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument(),
     );
+  });
+
+  it('Should include cnstrc beacon data attributes when data is fetched with results returned', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ query: 'shoes' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const mockSearchData = transformSearchResponse(mockApiSearchResponse);
+
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
+      expect(
+        container
+          .querySelector('[data-cnstrc-num-results]')
+          .getAttribute('data-cnstrc-num-results'),
+      ).toEqual(String(mockSearchData.response.totalNumResults));
+    });
+  });
+
+  it('Should include cnstrc beacon data attributes when data is fetched with zero results returned', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ query: 'test zero results' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('.cio-zero-results-header')).toBeInTheDocument();
+      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
+      expect(
+        container
+          .querySelector('[data-cnstrc-num-results]')
+          .getAttribute('data-cnstrc-num-results'),
+      ).toEqual('0');
+    });
   });
 });

@@ -7,27 +7,27 @@ import Breadcrumbs from '../../../src/components/Breadcrumbs';
 
 const groups = [
   {
-    group_id: 'men-shoes-boots',
-    display_name: 'Boots',
+    groupId: 'men-shoes-boots',
+    displayName: 'Boots',
     count: 2,
     data: {},
     children: [],
     parents: [
       {
-        display_name: 'All',
-        group_id: 'all',
+        displayName: 'All',
+        groupId: 'all',
       },
       {
-        display_name: 'Men',
-        group_id: 'men',
+        displayName: 'Men',
+        groupId: 'men',
       },
       {
-        display_name: 'Accessories',
-        group_id: 'men-accessories',
+        displayName: 'Accessories',
+        groupId: 'men-accessories',
       },
       {
-        display_name: 'Shoes',
-        group_id: 'men-shoes',
+        displayName: 'Shoes',
+        groupId: 'men-shoes',
       },
     ],
   },

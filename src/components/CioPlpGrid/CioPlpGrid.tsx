@@ -5,6 +5,7 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
+import Groups, { GroupsProps } from '../Groups';
 import FiltersIcon from '../Filters/FiltersIcon';
 import MobileModal from '../MobileModal';
 import Sort from '../Sort';
@@ -13,7 +14,11 @@ import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
-import { isPlpSearchDataRedirect } from '../../utils';
+import {
+  getSearchCnstrcDataAttributes,
+  isPlpSearchDataRedirect,
+  isPlpSearchDataResults,
+} from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
@@ -37,6 +42,10 @@ export type CioPlpGridProps = {
    * No configurations available yet.
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
+  /**
+   * Used to set the `initialNumOptions` to limit the number of options shown initially.
+   */
+  groupsConfigs?: Omit<GroupsProps, 'groups'>;
 };
 
 export type CioPlpGridWithRenderProps = IncludeRenderProps<
@@ -52,6 +61,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     filterConfigs,
     sortConfigs,
     paginationConfigs,
+    groupsConfigs,
     children,
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -123,9 +133,12 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
+                    <Groups groups={data.response.groups} {...groupsConfigs} />
                     <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
-                  <div className='cio-products-container'>
+                  <div
+                    className='cio-products-container'
+                    {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
                     <div className='cio-products-header-container'>
                       <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
                         {renderHeader}
@@ -165,7 +178,9 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                   </div>
                 </div>
               ) : (
-                <ZeroResults />
+                <div {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
+                  <ZeroResults />
+                </div>
               )}
             </>
           )}
