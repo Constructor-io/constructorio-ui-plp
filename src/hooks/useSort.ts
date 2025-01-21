@@ -19,10 +19,8 @@ const useSort = ({ sortOptions }: UseSortProps): UseSortReturn => {
 
   const [selectedSort, setSelectedSort] = useState<PlpSortOption | null>(null);
 
-  const {
-    requestConfigs: { sortBy, sortOrder },
-    setRequestConfigs,
-  } = useRequestConfigs();
+  const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+  const { sortBy, sortOrder } = getRequestConfigs();
 
   // Read sort configs from url and set state
   useEffect(() => {

@@ -4,7 +4,7 @@ import {
   SearchParameters,
   SearchResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { transformSearchResponse } from '../utils/transformers';
 import { PlpSearchData } from '../types';
 import {
@@ -17,7 +17,7 @@ import {
 } from '../components/CioPlpGrid/reducer';
 import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
-import { getSearchParamsFromRequestConfigs } from '../utils';
+import { getSearchParamsFromRequestConfigs, checkIsSearchPage } from '../utils';
 import useFirstRender from './useFirstRender';
 
 export interface UseSearchResultsProps {
@@ -25,7 +25,7 @@ export interface UseSearchResultsProps {
 }
 
 export interface UseSearchResultsReturn {
-  query?: string | null;
+  query?: string;
   status: RequestStatus | null;
   message?: string;
   data: Nullable<PlpSearchData>;
@@ -84,33 +84,46 @@ export default function useSearchResults(
   }
 
   const { cioClient } = contextValue;
-  const { requestConfigs } = useRequestConfigs();
-  const { query, searchParams } = getSearchParamsFromRequestConfigs(requestConfigs);
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
   if (!cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
+  const [query, setQuery] = useState<string>();
+  const { getRequestConfigs } = useRequestConfigs();
   const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
     initFunction(defaultState, initialSearchResponse),
   );
-
   const { search: data, status, message } = state;
+
+  const refetch = () => {
+    const requestConfigs = getRequestConfigs();
+    const { query: currentQuery, searchParams } = getSearchParamsFromRequestConfigs(requestConfigs);
+
+    const isSearchPage = checkIsSearchPage(requestConfigs) || !!initialSearchResponse;
+
+    if (isSearchPage) {
+      setQuery(currentQuery);
+      if (cioClient && currentQuery) {
+        fetchSearchResults(cioClient, currentQuery, searchParams, dispatch);
+      }
+    }
+  };
 
   // Get search results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (query && cioClient && (!initialSearchResponse || !isFirstRender)) {
-      fetchSearchResults(cioClient, query, searchParams, dispatch);
+    if (!initialSearchResponse || !isFirstRender) {
+      refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestConfigs?.page]);
+  }, []);
 
   return {
     query,
     status,
     message,
     data,
-    refetch: () => cioClient && fetchSearchResults(cioClient, query, searchParams || {}, dispatch),
+    refetch,
   };
 }

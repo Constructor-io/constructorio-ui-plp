@@ -3,6 +3,7 @@ import { transformSearchResponse } from '../../../src/utils/transformers';
 import { renderHookServerSideWithCioPlp } from '../../test-utils.server';
 import { DEMO_API_KEY } from '../../../src/constants';
 import apiSearchResponse from '../../local_examples/apiSearchResponse.json';
+import apiBrowseResponse from '../../local_examples/apiBrowseResponse.json';
 
 describe('Testing Hook on the server: useCioPlp with initial search results', () => {
   beforeEach(() => {
@@ -38,51 +39,81 @@ describe('Testing Hook on the server: useCioPlp with initial search results', ()
       apiKey: DEMO_API_KEY,
     });
 
-    expect(() => {
-      const { searchData, filters, pagination, sort, refetch } = result.current;
+    const { data, filters, pagination, sort, refetch } = result;
 
-      expect(searchData?.rawApiResponse).toBeUndefined();
-      expect(searchData?.request).toBeUndefined();
-      expect(searchData?.resultId).toBeUndefined();
-      expect(filters.facets).toEqual([]);
-      expect(pagination.currentPage).toEqual(1);
-      expect(pagination.totalPages).toEqual(0);
-      expect(sort.selectedSort).toEqual(null);
+    expect(data?.rawApiResponse).toBeUndefined();
+    expect(data?.request).toBeUndefined();
+    expect(data?.resultId).toBeUndefined();
+    expect(filters.facets).toEqual([]);
+    expect(pagination.currentPage).toEqual(1);
+    expect(pagination.totalPages).toEqual(0);
+    expect(sort.selectedSort).toEqual(null);
 
-      expect(typeof filters.setFilter).toEqual('function');
-      expect(typeof pagination.goToPage).toEqual('function');
-      expect(typeof pagination.nextPage).toEqual('function');
-      expect(typeof pagination.prevPage).toEqual('function');
-      expect(typeof filters.setFilter).toEqual('function');
-      expect(typeof refetch).toEqual('function');
-    });
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof pagination.goToPage).toEqual('function');
+    expect(typeof pagination.nextPage).toEqual('function');
+    expect(typeof pagination.prevPage).toEqual('function');
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof refetch).toEqual('function');
   });
 
   it('Should return the expected values/methods if an initialSearchResponse is passed', () => {
-    const initialSearchResponse = transformSearchResponse(apiSearchResponse);
-    const { result } = renderHookServerSideWithCioPlp(() => useCioPlp({ initialSearchResponse }), {
-      apiKey: DEMO_API_KEY,
-    });
+    const { result } = renderHookServerSideWithCioPlp(
+      () => useCioPlp({ initialSearchResponse: apiSearchResponse }),
+      {
+        apiKey: DEMO_API_KEY,
+      },
+    );
 
-    expect(() => {
-      const { searchData, filters, pagination, sort, refetch } = result.current;
+    const { data, filters, pagination, sort, refetch } = result;
 
-      expect(searchData?.rawApiResponse.request.term).toEqual('shoes');
-      expect(searchData?.rawApiResponse).not.toBeUndefined();
-      expect(searchData?.request).not.toBeUndefined();
-      expect(searchData?.response.results.length).toBeGreaterThan(0);
-      expect(searchData?.resultId).not.toBeUndefined();
-      expect(filters.facets.length).not.toEqual(0);
-      expect(pagination.currentPage).toEqual(1);
-      expect(pagination.totalPages).toEqual(18);
-      expect(sort.selectedSort).toEqual(null);
+    expect(data?.rawApiResponse.request.term).toEqual('shoes');
+    expect(data?.rawApiResponse).not.toBeUndefined();
+    expect(data?.request).not.toBeUndefined();
+    expect(data?.response.results.length).toBeGreaterThan(0);
+    expect(data?.resultId).not.toBeUndefined();
+    expect(filters.facets.length).not.toEqual(0);
+    expect(sort.selectedSort).toEqual(null);
 
-      expect(typeof filters.setFilter).toEqual('function');
-      expect(typeof pagination.goToPage).toEqual('function');
-      expect(typeof pagination.nextPage).toEqual('function');
-      expect(typeof pagination.prevPage).toEqual('function');
-      expect(typeof filters.setFilter).toEqual('function');
-      expect(typeof refetch).toEqual('function');
-    });
+    expect(pagination.currentPage).toEqual(1);
+    expect(pagination.totalPages).toEqual(0);
+
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof pagination.goToPage).toEqual('function');
+    expect(typeof pagination.nextPage).toEqual('function');
+    expect(typeof pagination.prevPage).toEqual('function');
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof refetch).toEqual('function');
+  });
+
+  it('Should return the expected values/methods if an initialBrowseResponse is passed', () => {
+    const { result } = renderHookServerSideWithCioPlp(
+      () => useCioPlp({ initialBrowseResponse: apiBrowseResponse }),
+      {
+        apiKey: DEMO_API_KEY,
+      },
+    );
+
+    const { data, filters, pagination, sort, refetch } = result;
+
+    expect(data?.rawApiResponse.request.term).toEqual('');
+    expect(data?.rawApiResponse.request.browse_filter_name).toEqual('group_id');
+    expect(data?.rawApiResponse.request.browse_filter_value).toEqual('1030');
+    expect(data?.rawApiResponse).not.toBeUndefined();
+    expect(data?.request).not.toBeUndefined();
+    expect(data?.response.results.length).toBeGreaterThan(0);
+    expect(data?.resultId).not.toBeUndefined();
+    expect(filters.facets.length).not.toEqual(0);
+    expect(sort.selectedSort).toEqual(null);
+
+    expect(pagination.currentPage).toEqual(1);
+    expect(pagination.totalPages).toEqual(0);
+
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof pagination.goToPage).toEqual('function');
+    expect(typeof pagination.nextPage).toEqual('function');
+    expect(typeof pagination.prevPage).toEqual('function');
+    expect(typeof filters.setFilter).toEqual('function');
+    expect(typeof refetch).toEqual('function');
   });
 });

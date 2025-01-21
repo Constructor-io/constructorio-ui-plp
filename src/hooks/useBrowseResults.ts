@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import {
   Nullable,
   IBrowseParameters as BrowseParameters,
@@ -8,7 +8,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import useRequestConfigs from './useRequestConfigs';
 import { transformBrowseResponse } from '../utils/transformers';
 import { ConstructorIOClient, PlpBrowseData } from '../types';
-import { getBrowseParamsFromRequestConfigs } from '../utils';
+import { getBrowseParamsFromRequestConfigs, checkIsBrowsePage } from '../utils';
 import useFirstRender from './useFirstRender';
 import {
   RequestStatus,
@@ -28,6 +28,8 @@ export type UseBrowseResultsReturn = {
   message?: string;
   data: Nullable<PlpBrowseData>;
   refetch: () => void;
+  filterName?: string;
+  filterValue?: string;
 };
 
 const fetchBrowseResults = async (
@@ -80,42 +82,58 @@ export default function useBrowseResults(
   }
 
   const { cioClient } = contextValue;
-  const { requestConfigs } = useRequestConfigs();
-  const {
-    filterName,
-    filterValue,
-    queryParams: browseParams,
-  } = getBrowseParamsFromRequestConfigs(requestConfigs);
-
-  if ((!filterName || !filterValue) && typeof window !== 'undefined') {
-    throw new Error('Unable to retrieve filterName and filterValue from the url.');
-  }
 
   // Throw error if client is not provided and window is defined (i.e. not SSR)
   if (!cioClient && typeof window !== 'undefined') {
     throw new Error('CioClient required');
   }
 
+  const [filterName, setFilterName] = useState<string>();
+  const [filterValue, setFilterValue] = useState<string>();
+  const { getRequestConfigs } = useRequestConfigs();
   const [state, dispatch] = useReducer(requestReducer, initialState, (defaultState) =>
     initFunction(defaultState, undefined, initialBrowseResponse),
   );
-
   const { browse: data, status, message } = state;
+
+  const refetch = () => {
+    const requestConfigs = getRequestConfigs();
+    const isBrowsePage = checkIsBrowsePage(requestConfigs) || !!initialBrowseResponse;
+    const {
+      filterName: currentFilterName,
+      filterValue: currentFilterValue,
+      queryParams: browseParams,
+    } = getBrowseParamsFromRequestConfigs(requestConfigs);
+
+    if (isBrowsePage) {
+      setFilterName(currentFilterName);
+      setFilterValue(currentFilterValue);
+      if (cioClient) {
+        fetchBrowseResults(
+          cioClient,
+          currentFilterName,
+          currentFilterValue,
+          browseParams,
+          dispatch,
+        );
+      }
+    }
+  };
 
   // Get browse results for initial query if there is one if not don't ever run this effect again
   useEffect(() => {
-    if (cioClient && filterName && filterValue && (!initialBrowseResponse || !isFirstRender)) {
-      fetchBrowseResults(cioClient, filterName, filterValue, browseParams, dispatch);
+    if (!initialBrowseResponse || !isFirstRender) {
+      refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestConfigs?.page]);
+  }, []);
 
   return {
     status,
+    filterName,
+    filterValue,
     message,
     data,
-    refetch: () =>
-      cioClient &&
-      fetchBrowseResults(cioClient, filterName, filterValue, browseParams || {}, dispatch),
+    refetch,
   };
 }

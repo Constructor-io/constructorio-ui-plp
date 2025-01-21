@@ -2,7 +2,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import { RequestConfigs } from '../types';
 
 interface UseRequestConfigsReturn {
-  requestConfigs: RequestConfigs;
+  getRequestConfigs: () => RequestConfigs;
   setRequestConfigs: (configsToUpdate: Partial<RequestConfigs>) => void;
 }
 
@@ -15,16 +15,20 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
   const { urlHelpers, staticRequestConfigs } = context;
   const { getUrl, setUrl, getStateFromUrl, getUrlFromState } = urlHelpers;
 
-  const url = getUrl();
-  const urlRequestConfigs = url ? getStateFromUrl(url) : {};
-  const page = urlRequestConfigs?.page || staticRequestConfigs?.page || 1;
+  const getRequestConfigs = () => {
+    const url = getUrl();
+    const urlRequestConfigs = url ? getStateFromUrl(url) : {};
+    const page = urlRequestConfigs?.page || staticRequestConfigs?.page || 1;
 
-  const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs, page };
+    const requestConfigs: RequestConfigs = { ...staticRequestConfigs, ...urlRequestConfigs, page };
 
-  if (!requestConfigs.filterValue || requestConfigs.filterValue === '') {
-    delete requestConfigs.filterName;
-    delete requestConfigs.filterValue;
-  }
+    if (!requestConfigs.filterValue || requestConfigs.filterValue === '') {
+      delete requestConfigs.filterName;
+      delete requestConfigs.filterValue;
+    }
+
+    return requestConfigs;
+  };
 
   const setRequestConfigs = (configsToUpdate: Partial<RequestConfigs>) => {
     const oldUrl = getUrl();
@@ -40,5 +44,5 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     setUrl(newUrl);
   };
 
-  return { requestConfigs, setRequestConfigs };
+  return { getRequestConfigs, setRequestConfigs };
 }

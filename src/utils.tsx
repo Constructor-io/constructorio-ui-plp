@@ -1,7 +1,6 @@
 import {
   Nullable,
   SearchParameters,
-  SearchResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   PrimaryColorStyles,
@@ -15,6 +14,7 @@ import {
   PlpSearchData,
   PlpSingleFacet,
   PlpHierarchicalFacet,
+  PlpBrowseData,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -101,15 +101,21 @@ export function getPreferredColorScheme() {
 }
 
 export function isPlpSearchDataResults(
-  response: Nullable<PlpSearchData>,
+  response: Nullable<PlpSearchData | PlpBrowseData>,
 ): response is PlpSearchDataResults {
   return 'response' in (response || {});
 }
 
 export function isPlpSearchDataRedirect(
-  response: Nullable<PlpSearchData>,
+  response: Nullable<PlpSearchData | PlpBrowseData>,
 ): response is PlpSearchDataRedirect {
   return 'redirect' in (response || {});
+}
+
+export function isPlpBrowseDataResults(
+  response: Nullable<PlpSearchData | PlpBrowseData>,
+): response is PlpBrowseData {
+  return 'response' in (response || {});
 }
 
 export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
@@ -154,6 +160,29 @@ export function isOptionFacet(
   return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
 }
 
+export function checkIsSearchPage(requestConfigs: RequestConfigs) {
+  const { query } = getSearchParamsFromRequestConfigs(requestConfigs);
+
+  return !!query;
+}
+
+export function checkIsBrowsePage(requestConfigs: RequestConfigs) {
+  const { filterName, filterValue } = getBrowseParamsFromRequestConfigs(requestConfigs);
+
+  return !!filterName && !!filterValue;
+}
+
+export type PageType = 'search' | 'browse' | 'unknown';
+
+export function getPageType(requestConfigs: RequestConfigs): PageType {
+  if (checkIsSearchPage(requestConfigs)) {
+    return 'search';
+  }
+  if (checkIsBrowsePage(requestConfigs)) {
+    return 'browse';
+  }
+  return 'unknown';
+}
 export function getSearchCnstrcDataAttributes(data: Nullable<PlpSearchDataResults>) {
   if (!data) return {};
 

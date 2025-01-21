@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { SearchResponse } from '@constructor-io/constructorio-client-javascript/lib/types';
-import useSearchResults, { UseSearchResultsReturn } from '../../hooks/useSearchResults';
+import {
+  GetBrowseResultsResponse,
+  SearchResponse,
+} from '@constructor-io/constructorio-client-javascript/lib/types';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import Groups, { GroupsProps } from '../Groups';
@@ -12,14 +14,21 @@ import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
-import { getSearchCnstrcDataAttributes, isPlpSearchDataRedirect } from '../../utils';
+import {
+  getSearchCnstrcDataAttributes,
+  isPlpSearchDataRedirect,
+  isPlpSearchDataResults,
+} from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
+import useCioPlp from '../../hooks/useCioPlp';
+import Breadcrumbs from '../Breadcrumbs';
 
 export type CioPlpGridProps = {
-  initialResponse?: SearchResponse;
+  initialSearchResponse?: SearchResponse;
+  initialBrowseResponse?: GetBrowseResultsResponse;
   spinner?: React.ReactNode;
   /**
    * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
@@ -38,12 +47,17 @@ export type CioPlpGridProps = {
    */
   groupsConfigs?: Omit<GroupsProps, 'groups'>;
 };
-export type CioPlpGridWithRenderProps = IncludeRenderProps<CioPlpGridProps, UseSearchResultsReturn>;
+
+export type CioPlpGridWithRenderProps = IncludeRenderProps<
+  CioPlpGridProps,
+  ReturnType<typeof useCioPlp>
+>;
 
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const {
     spinner,
-    initialResponse,
+    initialSearchResponse,
+    initialBrowseResponse,
     filterConfigs,
     sortConfigs,
     paginationConfigs,
@@ -52,12 +66,22 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  const plpData = useCioPlp({
+    initialSearchResponse,
+    initialBrowseResponse,
+  });
+
   const {
-    query: searchQuery,
+    isSearchPage,
+    isBrowsePage,
+    searchQuery,
+    browseFilterValue,
     data,
     status,
-    refetch,
-  } = useSearchResults({ initialSearchResponse: initialResponse });
+    filters,
+    sort,
+  } = plpData;
+
   const {
     callbacks: { onRedirect = (redirectUrl) => window.location.replace(redirectUrl) },
   } = useCioPlpContext();
@@ -72,49 +96,52 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     return null;
   }
 
-  const response = data?.response;
-  const searchTerm = data?.request?.term;
-
-  const renderTitle = (
-    <span className='cio-products-header-title'>
-      <b>{response?.totalNumResults}</b> results
-      {searchTerm && (
-        <>
-          &nbsp;for <b>&quot;{searchTerm}&quot;</b>
-        </>
-      )}
-    </span>
-  );
-
-  if (!searchQuery) {
+  if (!isSearchPage && !isBrowsePage) {
     // Render Zero results page in the case where no query is provided
     // TODO: Allow customers to override default page
     return <ZeroResults />;
   }
 
+  let renderHeader;
+
+  if (isSearchPage) {
+    renderHeader = (
+      <span className='cio-products-header-title'>
+        <b>{data?.response?.totalNumResults}</b> results
+        {searchQuery && (
+          <>
+            &nbsp;for <b>&quot;{searchQuery}&quot;</b>
+          </>
+        )}
+      </span>
+    );
+  } else if (isBrowsePage && data?.request.browse_filter_name === 'group_id') {
+    renderHeader = (
+      <Breadcrumbs groups={data?.response.groups || []} filterValue={browseFilterValue || ''} />
+    );
+  }
+
   return (
     <>
       {typeof children === 'function' ? (
-        children({
-          data,
-          status,
-          refetch,
-        })
+        children(plpData)
       ) : (
         <>
           {status === RequestStatus.FETCHING && (spinner || <Spinner />)}
-          {status !== RequestStatus.FETCHING && status !== RequestStatus.STALE && (
+          {status !== RequestStatus.FETCHING && data && (
             <>
-              {response?.results?.length ? (
+              {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
-                    <Groups groups={response.groups} {...groupsConfigs} />
-                    <Filters facets={response.facets} {...filterConfigs} />
+                    <Groups groups={data.response.groups} {...groupsConfigs} />
+                    <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
-                  <div className='cio-products-container' {...getSearchCnstrcDataAttributes(data)}>
+                  <div
+                    className='cio-products-container'
+                    {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
                     <div className='cio-products-header-container'>
                       <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
-                        {renderTitle}
+                        {renderHeader}
                       </div>
                       <div className='cio-products-header-wrapper'>
                         <button
@@ -124,31 +151,34 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                           {FiltersIcon}
                           Filters
                         </button>
-                        <span className='cio-large-screen-only'>{renderTitle}</span>
-                        <Sort sortOptions={response.sortOptions} isOpen={false} {...sortConfigs} />
+                        <span className='cio-large-screen-only'>{renderHeader}</span>
+                        <Sort sortOptions={sort.sortOptions} isOpen={false} {...sortConfigs} />
                       </div>
                     </div>
+
                     <div className='cio-product-tiles-container'>
                       <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
-                        <Filters facets={response.facets} />
+                        <Filters facets={filters.facets} />
                       </MobileModal>
-                      {response?.results?.map((item) => (
+
+                      {data.response?.results?.map((item) => (
                         <div className='cio-product-tile' key={item.itemId}>
                           <ProductCard key={item.itemId} item={item} />
                         </div>
                       ))}
                     </div>
+
                     <div className='cio-pagination-container'>
                       <Pagination
-                        totalNumResults={response.totalNumResults}
-                        resultsPerPage={response.numResultsPerPage}
+                        totalNumResults={data.response.totalNumResults}
+                        resultsPerPage={data.response.numResultsPerPage}
                         {...paginationConfigs}
                       />
                     </div>
                   </div>
                 </div>
               ) : (
-                <div {...getSearchCnstrcDataAttributes(data)}>
+                <div {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
                   <ZeroResults />
                 </div>
               )}

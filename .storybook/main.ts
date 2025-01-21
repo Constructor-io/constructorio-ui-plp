@@ -4,11 +4,8 @@ let storiesRegexPaths = [
   "../src/stories/**/components/**/*.mdx",
   "../src/stories/**/components/**/*.stories.@(js|jsx|ts|tsx)",
   "../src/stories/**/components/**/*.stories.@(js|jsx|ts|tsx)",
-  "../src/stories/**/hooks/*.mdx",
   "../src/stories/**/hooks/UseCioPlp/*.mdx",
   "../src/stories/**/hooks/UseCioPlp/*.stories.@(js|jsx|ts|tsx)",
-  "../src/stories/**/hooks/UseBrowseResults/*.mdx",
-  "../src/stories/**/hooks/UseBrowseResults/*.stories.@(js|jsx|ts|tsx)",
 ]
 
 if (process.env.NODE_ENV === 'dev') {

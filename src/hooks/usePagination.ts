@@ -50,10 +50,8 @@ const usePagination: UsePagination = ({
 }) => {
   const [totalPages, setTotalPages] = useState(0);
 
-  const {
-    requestConfigs: { page: currentPage, resultsPerPage: resultsPerPageFromConfigs },
-    setRequestConfigs,
-  } = useRequestConfigs();
+  const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+  const { page: currentPage, resultsPerPage: resultsPerPageFromConfigs } = getRequestConfigs();
 
   const resultsPerPage = resultsPerPageFromProps || resultsPerPageFromConfigs || 20;
 

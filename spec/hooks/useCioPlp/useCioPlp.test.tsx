@@ -30,17 +30,17 @@ describe('Testing Hook: useCioPlp', () => {
     spy.mockRestore();
   });
 
-  it('Should return the defaults if no search term is found', async () => {
+  it('Should return the defaults if no search term or browse filter is found', async () => {
     window.location.href = 'https://example.com';
 
     const { result } = renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
-      const { searchData, filters, pagination, sort, groups, refetch } = result.current;
+      const { data, filters, pagination, sort, groups, refetch } = result.current;
 
-      expect(searchData?.rawApiResponse).toBeUndefined();
-      expect(searchData?.request).toBeUndefined();
-      expect(searchData?.resultId).toBeUndefined();
+      expect(data?.rawApiResponse).toBeUndefined();
+      expect(data?.request).toBeUndefined();
+      expect(data?.resultId).toBeUndefined();
       expect(filters.facets).toEqual([]);
       expect(groups.groupOptions).toEqual([]);
       expect(groups.optionsToRender).toEqual([]);
@@ -63,6 +63,7 @@ describe('Testing Hook: useCioPlp', () => {
       expect(typeof refetch).toEqual('function');
 
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(0);
+      expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -71,13 +72,13 @@ describe('Testing Hook: useCioPlp', () => {
     const { result } = renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
-      const { searchData, filters, pagination, sort, groups, refetch } = result.current;
+      const { data, filters, pagination, sort, groups, refetch } = result.current;
 
-      expect(searchData?.rawApiResponse.request.term).toEqual('shoes');
-      expect(searchData?.rawApiResponse).not.toBeUndefined();
-      expect(searchData?.request).not.toBeUndefined();
-      expect((searchData as PlpSearchDataResults)?.response.results.length).toBeGreaterThan(0);
-      expect(searchData?.resultId).not.toBeUndefined();
+      expect(data?.rawApiResponse?.request?.term).toEqual('shoes');
+      expect(data?.rawApiResponse).not.toBeUndefined();
+      expect(data?.request).not.toBeUndefined();
+      expect((data as PlpSearchDataResults)?.response.results.length).toBeGreaterThan(0);
+      expect(data?.resultId).not.toBeUndefined();
       expect(filters.facets.length).not.toEqual(0);
       expect(groups.optionsToRender.length).not.toEqual(0);
       expect(pagination.currentPage).toEqual(1);
@@ -95,16 +96,69 @@ describe('Testing Hook: useCioPlp', () => {
     });
   });
 
-  it('Should call getSearchResults if refetch is used', async () => {
+  it('Should call getSearchResults if refetch is used and it is a search page', async () => {
     const { result } = renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
-      const { searchData, refetch } = result.current;
-      expect(searchData?.request.term).toEqual('shoes');
+      const { data, refetch } = result.current;
+      expect(data?.request.term).toEqual('shoes');
 
       refetch();
 
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(2);
+      expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  it('Should call getBrowseResults if refetch is used and it is a browse page', async () => {
+    window.location.href = 'https://example.com/group_id/1030';
+    const { result } = renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      const { data, refetch } = result.current;
+
+      expect(data?.request.term).toEqual('');
+      expect(data?.request.browse_filter_name).toEqual('group_id');
+      expect(data?.request.browse_filter_value).toEqual('1030');
+
+      refetch();
+
+      expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(2);
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  it('Should use the right refetch if the page has been reloaded', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      const { data } = result.current;
+
+      expect(data?.request.term).toEqual('shoes');
+      expect(data?.request.browse_filter_name).toEqual(undefined);
+      expect(data?.request.browse_filter_value).toEqual(undefined);
+
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+      expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(0);
+    });
+
+    let count = 0;
+    window.location.href = 'https://example.com/group_id/1030';
+
+    await waitFor(() => {
+      const { data, refetch } = result.current;
+
+      if (count === 0) {
+        refetch();
+        count += 1;
+      }
+
+      expect(data?.request.term).toEqual('');
+      expect(data?.request.browse_filter_name).toEqual('group_id');
+      expect(data?.request.browse_filter_value).toEqual('1030');
+
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+      expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -131,8 +185,8 @@ describe('Testing Hook: useCioPlp', () => {
     });
 
     await waitFor(() => {
-      const { searchData, sort, pagination, filters, groups } = result.current;
-      expect(searchData?.request.term).toEqual('shoes');
+      const { data, sort, pagination, groups, filters } = result.current;
+      expect(data?.request.term).toEqual('shoes');
 
       sort.changeSelectedSort({ sortBy: 'price', sortOrder: 'descending' } as PlpSortOption);
 

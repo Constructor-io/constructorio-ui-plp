@@ -22,7 +22,8 @@ export default function useGroups(props: UseGroupProps) {
   }
 
   const { setFilter } = useFilter({ facets: [] });
-  const { requestConfigs } = useRequestConfigs();
+  const { getRequestConfigs } = useRequestConfigs();
+  const requestConfigs = getRequestConfigs();
   let groupOptions = groups;
 
   let currentGroupId = requestConfigs.filters?.groupId?.toString() || null;

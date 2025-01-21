@@ -22,10 +22,8 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     throw new Error('useFilter must be used within a component that is a child of <CioPlp />');
   }
 
-  const {
-    requestConfigs: { filters: requestFilters },
-    setRequestConfigs,
-  } = useRequestConfigs();
+  const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+  const { filters: requestFilters } = getRequestConfigs();
 
   const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
     const newFilters = requestFilters || {};

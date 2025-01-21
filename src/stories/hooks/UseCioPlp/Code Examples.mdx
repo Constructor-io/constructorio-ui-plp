@@ -6,12 +6,12 @@ import * as UseCioPlpStories from './UseCioPlp.stories';
 # `UseCioPlp`
 
 The `UseCioPlp` hook is designed as a more flexible alternative to the [CioPlpGrid](./?path=/docs/components-cioplpgrid--code-examples) component.
-This hook takes in the the different configurations of the different components, and returns the relevant objects for rendering.
+It takes in the various component configurations, determines the type of page (search/browse/collections), and returns the relevant properties for rendering.
 
 > Note: This hook may only be called in a React component that is nested under the [CioPlp](./?path=/docs/components-cioplp--code-examples#render-props-pattern) component.
 
-
 ## Code Example
+
 ```jsx
 export default function UseCioPlpExample(props: UseCioPlpProps) {
   return (
@@ -25,7 +25,13 @@ export default function UseCioPlpExample(props: UseCioPlpProps) {
 }
 
 function MyCustomCioPlpComponent() {
-  const { filters, pagination, sort, searchData } = useCioPlp();
+  const { filters, pagination, sort, data, refetch } = useCioPlp();
+
+  useEffect(() => {
+    if (newPageId) {
+      refetch()
+    }
+  }, [newPageId])
 
   return (
     <>
@@ -56,8 +62,8 @@ function MyCustomCioPlpComponent() {
       <div>
         <h2>Results</h2>
         <ul>
-          {isPlpSearchDataResults(searchData) &&
-            searchData.response.results.map((item) => <li>{item.itemName}</li>)}
+          {isPlpSearchDataResults(data) &&
+            data.response.results.map((item) => <li>{item.itemName}</li>)}
         </ul>
       </div>
     </>

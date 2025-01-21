@@ -8,8 +8,8 @@ import useRequestConfigs from '../../../hooks/useRequestConfigs';
  * @returns {JSX.Element} The 'no results' component
  */
 export default function ZeroResults() {
-  const config = useRequestConfigs();
-  const { query } = config.requestConfigs;
+  const { getRequestConfigs } = useRequestConfigs();
+  const { query } = getRequestConfigs();
 
   if (query) {
     return (

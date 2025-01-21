@@ -52,7 +52,8 @@ function findGroup(groups: Array<PlpItemGroup>, groupId: string) {
 
 // Wrapper Group used to access request configs to emulate filtering down
 function GroupsWrapper(props: GroupsProps) {
-  const { requestConfigs } = useRequestConfigs();
+  const { getRequestConfigs } = useRequestConfigs();
+  const requestConfigs = getRequestConfigs();
   const currentGroupId = requestConfigs.filters?.group_id?.toString() || 'all';
 
   // Use mocks instead of relying on API requests for demo
