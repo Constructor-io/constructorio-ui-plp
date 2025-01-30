@@ -21,6 +21,9 @@ export { default as Groups } from './components/Groups';
 export { default as ProductSwatch } from './components/ProductSwatch';
 export { default as Spinner } from './components/Spinner';
 
+// Utils
+export * as utils from './utils';
+
 // Types
 export type { CioPlpProps } from './components/CioPlp';
 export type { CioPlpGridProps, CioPlpGridWithRenderProps } from './components/CioPlpGrid';
