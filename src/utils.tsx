@@ -183,15 +183,41 @@ export function getPageType(requestConfigs: RequestConfigs): PageType {
   }
   return 'unknown';
 }
-export function getSearchCnstrcDataAttributes(data: Nullable<PlpSearchDataResults>) {
-  if (!data) return {};
 
+export function getPLPContainerCnstrcDataAttributes(
+  data: PlpSearchDataResults | PlpSearchDataRedirect | PlpBrowseData | null,
+  requestConfigs: RequestConfigs,
+) {
+  if (!data || (!isPlpSearchDataResults(data) && !isPlpBrowseDataResults(data))) return {};
+
+  const { filterName, filterValue } = requestConfigs;
+  const pageType = getPageType(requestConfigs);
   let dataCnstrc: Record<`data-cnstrc-${string}`, string | number | boolean> = {};
 
-  dataCnstrc = {
-    'data-cnstrc-search': true,
-    'data-cnstrc-num-results': data.response.totalNumResults,
-  };
+  switch (pageType) {
+    case 'browse':
+      dataCnstrc = {
+        'data-cnstrc-browse': true,
+        'data-cnstrc-num-results': data.response.totalNumResults,
+        'data-cnstrc-filter-name': filterName!,
+        'data-cnstrc-filter-value': filterValue!,
+      };
+      break;
+
+    case 'search':
+      dataCnstrc = {
+        'data-cnstrc-search': true,
+        'data-cnstrc-num-results': data.response.totalNumResults,
+      };
+      break;
+
+    case 'unknown':
+      dataCnstrc = {};
+      break;
+
+    default:
+      break;
+  }
 
   return dataCnstrc;
 }

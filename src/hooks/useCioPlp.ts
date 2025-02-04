@@ -11,6 +11,7 @@ import {
   isPlpBrowseDataResults,
   isPlpSearchDataResults,
   checkIsSearchPage,
+  getPLPContainerCnstrcDataAttributes,
 } from '../utils';
 import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups, { UseGroupProps } from './useGroups';
@@ -116,6 +117,13 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
   const pagination = usePagination({ totalNumResults, ...paginationConfigs });
   const groups = useGroups({ groups: rawGroups, ...groupsConfigs });
 
+  const data = isSearchPage ? search.data : browse.data;
+
+  const plpContainerCnstrcDataAttributes = getPLPContainerCnstrcDataAttributes(
+    data,
+    requestConfigs,
+  );
+
   return {
     isSearchPage,
     isBrowsePage,
@@ -123,11 +131,12 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     browseFilterName: browse.filterName,
     browseFilterValue: browse.filterValue,
     status: isSearchPage ? search.status : browse.status,
-    data: isSearchPage ? search.data : browse.data,
+    data,
     refetch,
     filters,
     sort,
     pagination,
     groups,
+    plpContainerCnstrcDataAttributes,
   };
 }

@@ -14,11 +14,7 @@ import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
-import {
-  getSearchCnstrcDataAttributes,
-  isPlpSearchDataRedirect,
-  isPlpSearchDataResults,
-} from '../../utils';
+import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
@@ -80,6 +76,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     status,
     filters,
     sort,
+    plpContainerCnstrcDataAttributes,
   } = plpData;
 
   const {
@@ -136,9 +133,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                     <Groups groups={data.response.groups} {...groupsConfigs} />
                     <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
-                  <div
-                    className='cio-products-container'
-                    {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
+                  <div className='cio-products-container' {...plpContainerCnstrcDataAttributes}>
                     <div className='cio-products-header-container'>
                       <div className='cio-mobile-products-header-wrapper cio-mobile-only'>
                         {renderHeader}
@@ -178,7 +173,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                   </div>
                 </div>
               ) : (
-                <div {...(isPlpSearchDataResults(data) && getSearchCnstrcDataAttributes(data))}>
+                <div {...plpContainerCnstrcDataAttributes}>
                   <ZeroResults />
                 </div>
               )}

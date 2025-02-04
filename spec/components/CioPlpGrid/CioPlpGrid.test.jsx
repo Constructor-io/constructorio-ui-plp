@@ -11,6 +11,7 @@ import { transformBrowseResponse, transformSearchResponse } from '../../../src/u
 import { RequestStatus } from '../../../src/components/CioPlpGrid/reducer';
 import useCioPlp from '../../../src/hooks/useCioPlp';
 import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
+import { getAttribute } from '../../test-utils';
 
 const actualUseCioPlp = jest.requireActual('../../../src/hooks/useCioPlp').default;
 const actualUseRequestConfigs = jest.requireActual('../../../src/hooks/useRequestConfigs').default;
@@ -186,15 +187,24 @@ describe('Testing Component: CioPlpGrid', () => {
 
     const mockBrowseData = transformBrowseResponse(mockApiBrowseResponse);
 
-    const { getByText } = render(
+    const { getByText, container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <CioPlpGrid />
       </CioPlp>,
     );
 
-    await waitFor(() =>
-      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      const getAttributeFromContainer = getAttribute(container);
+      const totalNumResults = getAttributeFromContainer('data-cnstrc-num-results');
+      const filterName = getAttributeFromContainer('data-cnstrc-filter-name');
+      const filterValue = getAttributeFromContainer('data-cnstrc-filter-value');
+
+      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument();
+      expect(container.querySelector('[data-cnstrc-browse]')).toBeInTheDocument();
+      expect(totalNumResults).toEqual(String(mockBrowseData.response.totalNumResults));
+      expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
+      expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
+    });
   });
 
   it('Should render results when provided with initialSearchResponse', async () => {
@@ -225,7 +235,7 @@ describe('Testing Component: CioPlpGrid', () => {
     );
   });
 
-  it('Should include cnstrc beacon data attributes when data is fetched with results returned', async () => {
+  it('Should include Search cnstrc beacon data attributes when data is fetched with results returned', async () => {
     useRequestConfigs.mockImplementation(() => ({
       getRequestConfigs: () => ({ query: 'shoes' }),
       setRequestConfigs: jest.fn(),
@@ -249,7 +259,7 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
-  it('Should include cnstrc beacon data attributes when data is fetched with zero results returned', async () => {
+  it('Should include Search cnstrc beacon data attributes when data is fetched with zero results returned', async () => {
     useRequestConfigs.mockImplementation(() => ({
       getRequestConfigs: () => ({ query: 'test zero results' }),
       setRequestConfigs: jest.fn(),
