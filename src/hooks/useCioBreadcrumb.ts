@@ -47,7 +47,6 @@ export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
     (path: string) => {
       const ids = path.split('/');
       const lastId = ids[ids.length - 1];
-      const newFilter = { filterName: 'group_id', filterValue: lastId };
       setRequestConfigs({ filterName: 'group_id', filterValue: lastId });
     },
     [setRequestConfigs]

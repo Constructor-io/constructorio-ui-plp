@@ -9,6 +9,8 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
   sortBy: 'sortBy',
   sortOrder: 'sortOrder',
   section: 'section',
+  filterName: 'filterName', // for breadcrumb redirect
+  filterValue: 'filterValue',
 });
 
 export function getUrl(): string | undefined {
@@ -108,10 +110,22 @@ export function getUrlFromState(
   options: QueryParamEncodingOptions = {},
 ): string {
   const { baseUrl: url, origin, pathname } = options;
-  const baseUrl = url || `${origin}${pathname}`;
+  let baseUrl = url || `${origin}${pathname}`;
+  let updatedPathname = pathname;
+
+  // Update the pathname to initiate redirect
+  if (state.filterName && state.filterValue) {
+    updatedPathname = `/${state.filterName}/${state.filterValue}`;
+    baseUrl = `${origin}${updatedPathname}`;
+  }
 
   const params = new URLSearchParams();
   Object.entries(state).forEach(([key, val]) => {
+    // Not used in the params
+    if (key === 'filterName' || key === 'filterValue') {
+      return;
+    }
+
     if (defaultQueryStringMap[key] === undefined) {
       return;
     }
@@ -131,7 +145,5 @@ export function getUrlFromState(
     }
   });
 
-  console.log('pathname', pathname);
-  console.log('baseUrl', baseUrl);
   return `${baseUrl}?${params.toString()}`;
 }

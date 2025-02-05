@@ -39,13 +39,7 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     const urlObj = new URL(oldUrl);
     const oldRequestConfigs = oldUrl ? getStateFromUrl(oldUrl) : {};
     const newRequestConfigs = { ...oldRequestConfigs, ...configsToUpdate };
-
-    console.log('oldRequestConfigs', oldRequestConfigs);
-    console.log('configsToUpdate', configsToUpdate);  
-    console.log('newRequestConfigs', newRequestConfigs);
-    console.log('urlObj', urlObj);
     const newUrl = getUrlFromState(newRequestConfigs, urlObj);
-    console.log('newUrl', newUrl);
 
     setUrl(newUrl);
   };
