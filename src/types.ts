@@ -100,8 +100,8 @@ export type DefaultQueryStringMap = {
   sortBy: 'sortBy';
   sortOrder: 'sortOrder';
   section: 'section';
-  filterName: 'filterName', // for breadcrumb redirect
-  filterValue: 'filterValue',
+  filterName: 'filterName'; // for breadcrumb redirect
+  filterValue: 'filterValue';
 };
 
 export interface UrlHelpers {

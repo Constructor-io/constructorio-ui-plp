@@ -49,7 +49,7 @@ export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
       const lastId = ids[ids.length - 1];
       setRequestConfigs({ filterName: 'group_id', filterValue: lastId });
     },
-    [setRequestConfigs]
+    [setRequestConfigs],
   );
 
   return { breadcrumbs, currentPage: currentGroup?.displayName, onClickHandler };

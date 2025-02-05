@@ -19,7 +19,14 @@ export default function BreadcrumbElement({
     if (onClickHandler && path) {
       onClickHandler(path);
     }
-  }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleClick();
+    }
+  };
 
   return (
     <>
@@ -28,8 +35,13 @@ export default function BreadcrumbElement({
           'cio-plp-breadcrumb',
           !isCurrentPage && 'cio-plp-parent-breadcrumb',
         )}>
-        {/* {!isCurrentPage ? <a href={path}>{breadcrumb}</a> : <span>{breadcrumb}</span>} */}
-        {!isCurrentPage ? <span onClick={handleClick}>{breadcrumb}</span> : <span>{breadcrumb}</span>}
+        {!isCurrentPage ? (
+          <span role='button' tabIndex={0} onClick={handleClick} onKeyDown={handleKeyDown}>
+            {breadcrumb}
+          </span>
+        ) : (
+          <span>{breadcrumb}</span>
+        )}
       </li>
       {!isCurrentPage && <img src={ChevronRight} alt='chevron-right' />}
     </>
