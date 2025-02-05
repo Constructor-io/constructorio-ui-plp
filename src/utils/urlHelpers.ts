@@ -131,5 +131,7 @@ export function getUrlFromState(
     }
   });
 
+  console.log('pathname', pathname);
+  console.log('baseUrl', baseUrl);
   return `${baseUrl}?${params.toString()}`;
 }
