@@ -1,3 +1,5 @@
+import CioPlp from './components/CioPlp';
+
 // Hooks
 export { useCioPlpContext } from './hooks/useCioPlpContext';
 export { default as useCioPlp } from './hooks/useCioPlp';
@@ -35,3 +37,4 @@ export type { FiltersProps, FiltersWithRenderProps } from './components/Filters'
 export type { GroupsProps, GroupsWithRenderProps } from './components/Groups';
 export type { UseOptionsListProps } from './hooks/useOptionsList';
 export * from './types';
+export default CioPlp;
