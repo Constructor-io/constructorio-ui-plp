@@ -118,7 +118,7 @@ describe('Testing Component: Breadcrumbs', () => {
         <Breadcrumbs {...breadcrumbProps} />
       </CioPlp>,
     );
-    expect(queryAllByRole('link')).toHaveLength(bootsBreadcrumbs.length);
+    expect(queryAllByRole('button')).toHaveLength(bootsBreadcrumbs.length);
     bootsBreadcrumbs.forEach((breadcrumb) => {
       expect(getByText(breadcrumb.breadcrumb)).toBeInTheDocument();
     });

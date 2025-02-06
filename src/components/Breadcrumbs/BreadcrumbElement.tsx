@@ -21,13 +21,6 @@ export default function BreadcrumbElement({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleClick();
-    }
-  };
-
   return (
     <>
       <li
@@ -36,9 +29,9 @@ export default function BreadcrumbElement({
           !isCurrentPage && 'cio-plp-parent-breadcrumb',
         )}>
         {!isCurrentPage ? (
-          <span role='button' tabIndex={0} onClick={handleClick} onKeyDown={handleKeyDown}>
+          <button type='button' onClick={handleClick}>
             {breadcrumb}
-          </span>
+          </button>
         ) : (
           <span>{breadcrumb}</span>
         )}
