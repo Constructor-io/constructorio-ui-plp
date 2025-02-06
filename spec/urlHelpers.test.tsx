@@ -110,6 +110,27 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(params.has(testRequestState.filterName)).toBe(false);
     expect(params.has(testRequestState.filterValue)).toBe(false);
   });
+
+  test('Should update pathname when filterName and filterValue are provided', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, {
+        baseUrl: 'https://www.example.com/a/random/path',
+      }),
+    )
+
+    expect(url.pathname).toBe('/group_id/Styles');    
+  });
+
+  test('Should retain pathname when filterName and filterValue are not provided', () => {
+    const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
+    const url = new URL(
+      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, {
+        baseUrl: 'https://www.example.com/a/random/path',
+      }),
+    )
+
+    expect(url.pathname).toBe('/a/random/path');
+  });
 });
 
 describe('Testing Default UrlHelpers: getStateFromUrl', () => {
