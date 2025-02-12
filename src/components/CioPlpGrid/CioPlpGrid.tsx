@@ -5,7 +5,6 @@ import {
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
-import Groups, { GroupsProps } from '../Groups';
 import FiltersIcon from '../Filters/FiltersIcon';
 import MobileModal from '../MobileModal';
 import Sort from '../Sort';
@@ -42,10 +41,6 @@ export type CioPlpGridProps = {
    * No configurations available yet.
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
-  /**
-   * Used to set the `initialNumOptions` to limit the number of options shown initially.
-   */
-  groupsConfigs?: Omit<GroupsProps, 'groups'>;
 };
 
 export type CioPlpGridWithRenderProps = IncludeRenderProps<
@@ -61,7 +56,6 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     filterConfigs,
     sortConfigs,
     paginationConfigs,
-    groupsConfigs,
     children,
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -133,7 +127,6 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
-                    <Groups groups={data.response.groups} {...groupsConfigs} />
                     <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
                   <div
