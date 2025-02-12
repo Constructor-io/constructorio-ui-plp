@@ -48,10 +48,14 @@ const delay = (ms) =>
     setTimeout(r, ms);
   });
 
+const getAttribute = (container) => (attribute) =>
+  container.querySelector(`[${attribute}]`)?.getAttribute(attribute);
+
 export {
   customRender as renderWithCioPlp,
   customRenderHook as renderHookWithCioPlp,
   mockConstructorIOClient,
   CioPlpWrapper,
   delay,
+  getAttribute,
 };
