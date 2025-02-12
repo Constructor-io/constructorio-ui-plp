@@ -187,7 +187,26 @@ describe('Testing Component: CioPlpGrid', () => {
 
     const mockBrowseData = transformBrowseResponse(mockApiBrowseResponse);
 
-    const { getByText, container } = render(
+    const { getByText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument();
+    });
+  });
+
+  it('Should render results with data attributes when data is fetched for Browse', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ filterName: 'group_id', filterValue: '1030' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const mockBrowseData = transformBrowseResponse(mockApiBrowseResponse);
+
+    const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <CioPlpGrid />
       </CioPlp>,
@@ -199,7 +218,6 @@ describe('Testing Component: CioPlpGrid', () => {
       const filterName = getAttributeFromContainer('data-cnstrc-filter-name');
       const filterValue = getAttributeFromContainer('data-cnstrc-filter-value');
 
-      expect(getByText(mockBrowseData.response.results[0].itemName)).toBeInTheDocument();
       expect(container.querySelector('[data-cnstrc-browse]')).toBeInTheDocument();
       expect(totalNumResults).toEqual(String(mockBrowseData.response.totalNumResults));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));

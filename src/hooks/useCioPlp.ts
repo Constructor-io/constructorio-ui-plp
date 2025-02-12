@@ -11,7 +11,7 @@ import {
   isPlpBrowseDataResults,
   isPlpSearchDataResults,
   checkIsSearchPage,
-  getPLPContainerCnstrcDataAttributes,
+  getPlpContainerCnstrcDataAttributes,
 } from '../utils';
 import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups, { UseGroupProps } from './useGroups';
@@ -119,7 +119,7 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
 
   const data = isSearchPage ? search.data : browse.data;
 
-  const plpContainerCnstrcDataAttributes = getPLPContainerCnstrcDataAttributes(
+  const plpContainerCnstrcDataAttributes = getPlpContainerCnstrcDataAttributes(
     data,
     requestConfigs,
   );

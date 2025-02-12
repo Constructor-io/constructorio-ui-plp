@@ -184,7 +184,7 @@ export function getPageType(requestConfigs: RequestConfigs): PageType {
   return 'unknown';
 }
 
-export function getPLPContainerCnstrcDataAttributes(
+export function getPlpContainerCnstrcDataAttributes(
   data: PlpSearchDataResults | PlpSearchDataRedirect | PlpBrowseData | null,
   requestConfigs: RequestConfigs,
 ) {
