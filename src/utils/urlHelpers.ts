@@ -9,6 +9,8 @@ export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.fre
   sortBy: 'sortBy',
   sortOrder: 'sortOrder',
   section: 'section',
+  filterName: 'filterName', // for breadcrumb redirect
+  filterValue: 'filterValue',
 });
 
 export function getUrl(): string | undefined {
@@ -107,11 +109,35 @@ export function getUrlFromState(
   state: RequestConfigs,
   options: QueryParamEncodingOptions = {},
 ): string {
-  const { baseUrl: url, origin, pathname } = options;
-  const baseUrl = url || `${origin}${pathname}`;
+  const { baseUrl: url, origin: initialOrigin, pathname: initialPathname } = options;
+  let origin = initialOrigin;
+  let pathname = initialPathname;
 
+  // If none of the options are provided
+  if (!url && !origin && !pathname) {
+    throw new Error('Either baseUrl or both origin and pathname must be provided in options');
+  }
+
+  // Extract origin and pathname from url if they are not provided
+  if (url && (!origin || !pathname)) {
+    const parsedUrl = new URL(url);
+    origin = parsedUrl.origin || '';
+    pathname = parsedUrl.pathname || '';
+  }
+
+  // If filterName and filterValue are present, update the pathname for redirect
+  const updatedPathname =
+    state.filterName && state.filterValue ? `/${state.filterName}/${state.filterValue}` : pathname;
+
+  const baseUrl = `${origin}${updatedPathname}`;
   const params = new URLSearchParams();
+
   Object.entries(state).forEach(([key, val]) => {
+    // Not used in the params
+    if (key === 'filterName' || key === 'filterValue') {
+      return;
+    }
+
     if (defaultQueryStringMap[key] === undefined) {
       return;
     }

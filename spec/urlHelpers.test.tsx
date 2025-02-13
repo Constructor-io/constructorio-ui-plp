@@ -16,6 +16,44 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     const url = new URL(
       getUrlFromState(testRequestState as RequestConfigs, {
         baseUrl: 'https://www.example.com/a/random/path',
+        origin: 'https://www.example.com',
+        pathname: '/a/random/path',
+      }),
+    );
+    const params = url.searchParams;
+
+    const query = params.get(defaultQueryStringMap.query);
+    expect(query).toBe('item');
+
+    Object.entries(testRequestState.filters)?.forEach(([key, value]) => {
+      const filterValues = params.getAll(`${defaultQueryStringMap.filters}[${key}]`);
+
+      expect(new Set(filterValues)).toEqual(new Set(value));
+    });
+
+    const page = params.get(defaultQueryStringMap.page);
+    expect(page).toBe('3');
+
+    const offset = params.get(defaultQueryStringMap.offset);
+    expect(offset).toBe('24');
+
+    const resultsPerPage = params.get(defaultQueryStringMap.resultsPerPage);
+    expect(resultsPerPage).toBe('30');
+
+    const sortBy = params.get(defaultQueryStringMap.sortBy);
+    expect(sortBy).toBe('price');
+
+    const sortOrder = params.get(defaultQueryStringMap.sortOrder);
+    expect(sortOrder).toBe('descending');
+
+    const section = params.get(defaultQueryStringMap.section);
+    expect(section).toBe('Products');
+  });
+
+  test('Should encode all request parameters as defined in defaultQueryStringMap when only baseUrl is provided', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, {
+        baseUrl: 'https://www.example.com/a/random/path',
       }),
     );
     const params = url.searchParams;
@@ -71,6 +109,27 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     // Check that filterName and filterValue aren't encoded as query string parameters
     expect(params.has(testRequestState.filterName)).toBe(false);
     expect(params.has(testRequestState.filterValue)).toBe(false);
+  });
+
+  test('Should update pathname when filterName and filterValue are provided', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, {
+        baseUrl: 'https://www.example.com/a/random/path',
+      }),
+    )
+
+    expect(url.pathname).toBe('/group_id/Styles');    
+  });
+
+  test('Should retain pathname when filterName and filterValue are not provided', () => {
+    const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
+    const url = new URL(
+      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, {
+        baseUrl: 'https://www.example.com/a/random/path',
+      }),
+    )
+
+    expect(url.pathname).toBe('/a/random/path');
   });
 });
 
