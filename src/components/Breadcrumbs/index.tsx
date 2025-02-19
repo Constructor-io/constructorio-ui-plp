@@ -7,7 +7,7 @@ import BreadcrumbElement from './BreadcrumbElement';
 import MoreBreadcrumbsMenu from './MoreBreadcrumbsMenu';
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
-  const { breadcrumbs = [], currentPage, onClickBreadCrumbElement } = useCioBreadcrumb(props);
+  const { breadcrumbs = [], currentPage, onBreadcrumbClick } = useCioBreadcrumb(props);
   if (!currentPage && (!breadcrumbs || breadcrumbs.length === 0)) return null;
 
   const { firstItems, middle, lastItems } = splitBreadcrumbs(breadcrumbs);
@@ -18,7 +18,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
           <BreadcrumbElement
             key={breadcrumb.path}
             {...breadcrumb}
-            onClickHandler={onClickBreadCrumbElement}
+            onClick={onBreadcrumbClick}
           />
         ))}
         {middle.length > 0 && <MoreBreadcrumbsMenu breadcrumbs={middle} />}
@@ -26,7 +26,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
           <BreadcrumbElement
             key={breadcrumb.path}
             {...breadcrumb}
-            onClickHandler={onClickBreadCrumbElement}
+            onClick={onBreadcrumbClick}
           />
         ))}
         <BreadcrumbElement breadcrumb={currentPage} isCurrentPage />

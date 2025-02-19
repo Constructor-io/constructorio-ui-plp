@@ -100,8 +100,6 @@ export type DefaultQueryStringMap = {
   sortBy: 'sortBy';
   sortOrder: 'sortOrder';
   section: 'section';
-  filterName: 'filterName'; // for breadcrumb redirect
-  filterValue: 'filterValue';
 };
 
 export interface UrlHelpers {
@@ -136,9 +134,7 @@ export interface RequestConfigs {
 export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
 
 export interface QueryParamEncodingOptions {
-  baseUrl?: string;
-  origin?: string;
-  pathname?: string;
+  url?: URL;
 }
 
 export interface PlpContextValue {

@@ -5,9 +5,10 @@ import ChevronRight from '../../icons/chevron-right.svg';
 
 export default function BreadcrumbElement({
   path,
+  group_id,
   breadcrumb,
   isCurrentPage = false,
-  onClickHandler,
+  onClick,
 }: BreadcrumbProps) {
   // If it's a parent breadcrumb but doesn't have a path and label OR
   // It is a current page and it doesn't have a label, don't render.
@@ -16,8 +17,8 @@ export default function BreadcrumbElement({
   }
 
   const handleClick = () => {
-    if (onClickHandler && path) {
-      onClickHandler(path);
+    if (onClick && group_id) {
+      onClick(group_id);
     }
   };
 
