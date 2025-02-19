@@ -15,19 +15,11 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     <nav aria-label='plp-breadcrumbs'>
       <ul className='cio-breadcrumbs-container'>
         {firstItems.map((breadcrumb) => (
-          <BreadcrumbElement
-            key={breadcrumb.path}
-            {...breadcrumb}
-            onClick={onBreadcrumbClick}
-          />
+          <BreadcrumbElement key={breadcrumb.path} {...breadcrumb} onClick={onBreadcrumbClick} />
         ))}
         {middle.length > 0 && <MoreBreadcrumbsMenu breadcrumbs={middle} />}
         {lastItems.map((breadcrumb) => (
-          <BreadcrumbElement
-            key={breadcrumb.path}
-            {...breadcrumb}
-            onClick={onBreadcrumbClick}
-          />
+          <BreadcrumbElement key={breadcrumb.path} {...breadcrumb} onClick={onBreadcrumbClick} />
         ))}
         <BreadcrumbElement breadcrumb={currentPage} isCurrentPage />
       </ul>

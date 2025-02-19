@@ -113,11 +113,12 @@ export function getUrlFromState(
   if (!url) {
     throw new Error('URL is required to generate state');
   }
-  
-  // If filterName and filterValue are present, update the pathname for redirect
-  const pathname = state.filterName && state.filterValue
-    ? `/${state.filterName}/${state.filterValue}`
-    : url.pathname;
+
+  // If filterName and filterValue is provided, use value for redirect
+  const pathname =
+    state.filterName && state.filterValue
+      ? `/${state.filterName}/${state.filterValue}`
+      : url.pathname;
 
   const params = new URLSearchParams();
 
