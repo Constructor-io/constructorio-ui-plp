@@ -34,7 +34,8 @@
   },
   "files": [
     "lib/**/*",
-    "dist/constructorio-ui-plp-bundled.js"
+    "dist/constructorio-ui-plp-bundled.js",
+    "dist/assets/*"
   ],
   "engines": {
     "node": ">=14"
