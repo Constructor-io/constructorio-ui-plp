@@ -1,7 +1,7 @@
 import React from 'react';
 import { MoreBreadcrumbsMenuProps } from './types';
-import Ellipsis from '../../icons/ellipsis.svg';
-import ChevronRight from '../../icons/chevron-right.svg';
+import ChevronRightIcon from './ChevronRightIcon';
+import EllipsisIcon from './EllipsisIcon';
 
 export default function MoreBreadcrumbsMenu({ breadcrumbs }: MoreBreadcrumbsMenuProps) {
   const [expanded, setExpanded] = React.useState(false);
@@ -39,7 +39,7 @@ export default function MoreBreadcrumbsMenu({ breadcrumbs }: MoreBreadcrumbsMenu
           onClick={() => {
             setExpanded(!expanded);
           }}>
-          <img src={Ellipsis} alt='more menu icon' />
+          <EllipsisIcon />
         </button>
         <nav
           id='cio-more-menu'
@@ -59,7 +59,7 @@ export default function MoreBreadcrumbsMenu({ breadcrumbs }: MoreBreadcrumbsMenu
           )}
         </nav>
       </li>
-      <img src={ChevronRight} alt='chevron-right' />
+      <ChevronRightIcon />
     </>
   );
 }
