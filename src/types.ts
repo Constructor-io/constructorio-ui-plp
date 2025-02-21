@@ -41,6 +41,9 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface ItemFieldGetters {
   getPrice: (item: Item | Variation) => number;
+  getUrl: (item: Item | Variation) => string;
+  getImageUrl: (item: Item | Variation) => string;
+  getName: (item: Item | Variation) => string;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
@@ -204,6 +207,7 @@ export interface SwatchItem {
   price?: number;
   swatchPreview: string;
   variationId?: string;
+  variation?: Variation;
 }
 
 export interface PlpBrowseData {
