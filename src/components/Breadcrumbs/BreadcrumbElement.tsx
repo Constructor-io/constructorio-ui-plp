@@ -1,7 +1,7 @@
 import React from 'react';
 import { concatStyles } from '../../utils/styleHelpers';
 import { BreadcrumbProps } from './types';
-import ChevronRight from '../../icons/chevron-right.svg';
+import ChevronRightIcon from './ChevronRightIcon';
 
 export default function BreadcrumbElement({
   path,
@@ -22,7 +22,7 @@ export default function BreadcrumbElement({
         )}>
         {!isCurrentPage ? <a href={path}>{breadcrumb}</a> : <span>{breadcrumb}</span>}
       </li>
-      {!isCurrentPage && <img src={ChevronRight} alt='chevron-right' />}
+      {!isCurrentPage && <ChevronRightIcon />}
     </>
   );
 }
