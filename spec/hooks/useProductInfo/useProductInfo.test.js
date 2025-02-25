@@ -45,6 +45,9 @@ describe('Testing Hook: useProductInfo', () => {
           getPrice: () => {},
           getSwatches: () => {},
           getSwatchPreview: () => {},
+          getName: () => {},
+          getUrl: () => {},
+          getImageUrl: () => {},
         },
       },
     });
@@ -55,10 +58,37 @@ describe('Testing Hook: useProductInfo', () => {
       } = result;
 
       expect(productSwatch).not.toBeNull();
-      expect(itemName).toEqual(transformedItem.itemName);
-      expect(itemImageUrl).toEqual(transformedItem.imageUrl);
-      expect(itemUrl).toEqual(transformedItem.url);
+      expect(itemName).toBeUndefined();
+      expect(itemImageUrl).toBeUndefined();
+      expect(itemUrl).toBeUndefined();
       expect(itemPrice).toBeUndefined();
+    });
+  });
+
+  it('Should return properly with getters that override defaults', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
+      initialProps: {
+        itemFieldGetters: {
+          getPrice: () => 'override',
+          getSwatches: () => [],
+          getSwatchPreview: () => 'override',
+          getName: () => 'override',
+          getUrl: () => 'override',
+          getImageUrl: () => 'override',
+        },
+      },
+    });
+
+    await waitFor(() => {
+      const {
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+      } = result;
+
+      expect(itemName).toEqual('override');
+      expect(itemUrl).toEqual('override');
+      expect(itemImageUrl).toEqual('override');
+      expect(itemPrice).toEqual('override');
+      expect(productSwatch).not.toBeNull();
     });
   });
 
