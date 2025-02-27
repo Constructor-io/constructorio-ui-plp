@@ -1,8 +1,10 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { PlpItemGroup } from '../types';
+import useRequestConfigs from './useRequestConfigs';
 
 export interface Breadcrumb {
   path: string;
+  groupId: string;
   breadcrumb: string;
 }
 
@@ -14,6 +16,7 @@ const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {
 
     return {
       path: pathAccumulator,
+      groupId: parent.groupId,
       breadcrumb: parent.displayName,
     };
   });
@@ -37,9 +40,17 @@ export interface UseCioBreadcrumbProps {
 
 export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
   const { groups, filterValue } = props;
+  const { setRequestConfigs } = useRequestConfigs();
 
   const currentGroup = useMemo(() => getCurrentGroup(groups, filterValue), [groups, filterValue]);
   const breadcrumbs = generateBreadcrumbs(currentGroup);
 
-  return { breadcrumbs, currentPage: currentGroup?.displayName };
+  const onBreadcrumbClick = useCallback(
+    (groupId: string) => {
+      setRequestConfigs({ filterName: 'groupId', filterValue: groupId });
+    },
+    [setRequestConfigs],
+  );
+
+  return { breadcrumbs, currentPage: currentGroup?.displayName, onBreadcrumbClick };
 }

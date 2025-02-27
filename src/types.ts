@@ -106,7 +106,7 @@ export interface UrlHelpers {
   getUrl: () => string | undefined;
   setUrl: (newUrlWithEncodedState: string) => void;
   getStateFromUrl: (urlString: string) => RequestConfigs;
-  getUrlFromState: (state: RequestConfigs, options: QueryParamEncodingOptions) => string;
+  getUrlFromState: (state: RequestConfigs, urlString: string) => string;
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
@@ -132,12 +132,6 @@ export interface RequestConfigs {
 }
 
 export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
-
-export interface QueryParamEncodingOptions {
-  baseUrl?: string;
-  origin?: string;
-  pathname?: string;
-}
 
 export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;

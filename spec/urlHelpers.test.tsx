@@ -14,9 +14,7 @@ import { RequestConfigs } from '../src/types';
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
-      getUrlFromState(testRequestState as RequestConfigs, {
-        baseUrl: 'https://www.example.com/a/random/path',
-      }),
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path'),
     );
     const params = url.searchParams;
 
@@ -49,9 +47,7 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   });
 
   test('Should not encode parameters not defined in defaultQueryStringMap', () => {
-    const urlString = getUrlFromState(testRequestState as RequestConfigs, {
-      baseUrl: 'https://www.example.com/a/random/path',
-    });
+    const urlString = getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path');
     const url = new URL(urlString);
     const params = url.searchParams;
 
@@ -71,6 +67,50 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     // Check that filterName and filterValue aren't encoded as query string parameters
     expect(params.has(testRequestState.filterName)).toBe(false);
     expect(params.has(testRequestState.filterValue)).toBe(false);
+  });
+
+  test('Should update pathname when filterName and filterValue are provided', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path'),
+    )
+
+    expect(url.pathname).toBe('/group_id/Styles');    
+  });
+
+  test('Should handle empty pathname correctly', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com'),
+    );
+    expect(url.pathname).toBe('/group_id/Styles');
+  });
+
+  test('Should replace existing group_id in pathname', () => {
+    const url = new URL(
+      getUrlFromState(
+        testRequestState as RequestConfigs, 
+        'https://www.example.com/path/group_id/old-value'
+      ),
+    );
+    expect(url.pathname).toBe('/path/group_id/Styles');
+  });
+
+  test('Should replace existing collection_id in pathname', () => {
+    const url = new URL(
+      getUrlFromState(
+        { ...testRequestState, filterName: 'collection_id' } as RequestConfigs,
+        'https://www.example.com/path/collection_id/old-value'
+      ),
+    );
+    expect(url.pathname).toBe('/path/collection_id/Styles');
+  });
+
+  test('Should retain pathname when filterName and filterValue are not provided', () => {
+    const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
+    const url = new URL(
+      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, 'https://www.example.com/a/random/path'),
+    )
+
+    expect(url.pathname).toBe('/a/random/path');
   });
 });
 
