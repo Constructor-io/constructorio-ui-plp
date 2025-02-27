@@ -5,7 +5,7 @@ import ChevronRight from '../../icons/chevron-right.svg';
 
 export default function BreadcrumbElement({
   path,
-  group_id,
+  groupId,
   breadcrumb,
   isCurrentPage = false,
   onClick,
@@ -17,8 +17,8 @@ export default function BreadcrumbElement({
   }
 
   const handleClick = () => {
-    if (onClick && group_id) {
-      onClick(group_id);
+    if (onClick && groupId) {
+      onClick(groupId);
     }
   };
 

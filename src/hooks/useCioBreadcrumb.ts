@@ -4,7 +4,7 @@ import useRequestConfigs from './useRequestConfigs';
 
 export interface Breadcrumb {
   path: string;
-  group_id: string;
+  groupId: string;
   breadcrumb: string;
 }
 
@@ -16,7 +16,7 @@ const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {
 
     return {
       path: pathAccumulator,
-      group_id: parent.groupId,
+      groupId: parent.groupId,
       breadcrumb: parent.displayName,
     };
   });
@@ -46,8 +46,8 @@ export default function useCioBreadcrumb(props: UseCioBreadcrumbProps) {
   const breadcrumbs = generateBreadcrumbs(currentGroup);
 
   const onBreadcrumbClick = useCallback(
-    (group_id: string) => {
-      setRequestConfigs({ filterName: 'group_id', filterValue: group_id });
+    (groupId: string) => {
+      setRequestConfigs({ filterName: 'groupId', filterValue: groupId });
     },
     [setRequestConfigs],
   );

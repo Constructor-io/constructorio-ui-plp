@@ -1,4 +1,4 @@
-import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
+import type { RequestConfigs, DefaultQueryStringMap } from '../types';
 
 export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
@@ -103,22 +103,20 @@ export function getStateFromUrl(url: string): RequestConfigs {
   return state;
 }
 
-export function getUrlFromState(
-  state: RequestConfigs,
-  options: QueryParamEncodingOptions = {},
-): string {
-  const { url } = options;
+export function getUrlFromState(state: RequestConfigs, url: string): string {
+  const urlObject = new URL(url);
+  let { pathname } = urlObject;
 
-  // If none of the options are provided
-  if (!url) {
-    throw new Error('URL is required to generate state');
+  if (state.filterName && state.filterValue) {
+    if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
+      pathname = pathname.replace(
+        /\/(group_id|collection_id)\/[^/]+$/,
+        `/${state.filterName}/${state.filterValue}`,
+      );
+    } else {
+      pathname = `/${state.filterName}/${state.filterValue}`;
+    }
   }
-
-  // If filterName and filterValue is provided, use value for redirect
-  const pathname =
-    state.filterName && state.filterValue
-      ? `/${state.filterName}/${state.filterValue}`
-      : url.pathname;
 
   const params = new URLSearchParams();
 
@@ -142,5 +140,5 @@ export function getUrlFromState(
     }
   });
 
-  return `${url.origin}${pathname}?${params.toString()}`;
+  return `${urlObject.origin}${pathname}?${params.toString()}`;
 }

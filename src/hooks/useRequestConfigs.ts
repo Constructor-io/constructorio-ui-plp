@@ -36,10 +36,9 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
       throw new Error('getUrl returns undefined when attempting to call setRequestConfigs');
     }
 
-    const urlObj = new URL(oldUrl);
     const oldRequestConfigs = oldUrl ? getStateFromUrl(oldUrl) : {};
     const newRequestConfigs = { ...oldRequestConfigs, ...configsToUpdate };
-    const newUrl = getUrlFromState(newRequestConfigs, { url: urlObj });
+    const newUrl = getUrlFromState(newRequestConfigs, oldUrl);
 
     setUrl(newUrl);
   };

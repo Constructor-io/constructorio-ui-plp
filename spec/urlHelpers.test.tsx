@@ -14,47 +14,7 @@ import { RequestConfigs } from '../src/types';
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
     const url = new URL(
-      getUrlFromState(testRequestState as RequestConfigs, {
-        baseUrl: 'https://www.example.com/a/random/path',
-        origin: 'https://www.example.com',
-        pathname: '/a/random/path',
-      }),
-    );
-    const params = url.searchParams;
-
-    const query = params.get(defaultQueryStringMap.query);
-    expect(query).toBe('item');
-
-    Object.entries(testRequestState.filters)?.forEach(([key, value]) => {
-      const filterValues = params.getAll(`${defaultQueryStringMap.filters}[${key}]`);
-
-      expect(new Set(filterValues)).toEqual(new Set(value));
-    });
-
-    const page = params.get(defaultQueryStringMap.page);
-    expect(page).toBe('3');
-
-    const offset = params.get(defaultQueryStringMap.offset);
-    expect(offset).toBe('24');
-
-    const resultsPerPage = params.get(defaultQueryStringMap.resultsPerPage);
-    expect(resultsPerPage).toBe('30');
-
-    const sortBy = params.get(defaultQueryStringMap.sortBy);
-    expect(sortBy).toBe('price');
-
-    const sortOrder = params.get(defaultQueryStringMap.sortOrder);
-    expect(sortOrder).toBe('descending');
-
-    const section = params.get(defaultQueryStringMap.section);
-    expect(section).toBe('Products');
-  });
-
-  test('Should encode all request parameters as defined in defaultQueryStringMap when only baseUrl is provided', () => {
-    const url = new URL(
-      getUrlFromState(testRequestState as RequestConfigs, {
-        baseUrl: 'https://www.example.com/a/random/path',
-      }),
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path'),
     );
     const params = url.searchParams;
 
@@ -87,9 +47,7 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   });
 
   test('Should not encode parameters not defined in defaultQueryStringMap', () => {
-    const urlString = getUrlFromState(testRequestState as RequestConfigs, {
-      baseUrl: 'https://www.example.com/a/random/path',
-    });
+    const urlString = getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path');
     const url = new URL(urlString);
     const params = url.searchParams;
 
@@ -113,20 +71,43 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
 
   test('Should update pathname when filterName and filterValue are provided', () => {
     const url = new URL(
-      getUrlFromState(testRequestState as RequestConfigs, {
-        baseUrl: 'https://www.example.com/a/random/path',
-      }),
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path'),
     )
 
     expect(url.pathname).toBe('/group_id/Styles');    
   });
 
+  test('Should handle empty pathname correctly', () => {
+    const url = new URL(
+      getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com'),
+    );
+    expect(url.pathname).toBe('/group_id/Styles');
+  });
+
+  test('Should replace existing group_id in pathname', () => {
+    const url = new URL(
+      getUrlFromState(
+        testRequestState as RequestConfigs, 
+        'https://www.example.com/path/group_id/old-value'
+      ),
+    );
+    expect(url.pathname).toBe('/path/group_id/Styles');
+  });
+
+  test('Should replace existing collection_id in pathname', () => {
+    const url = new URL(
+      getUrlFromState(
+        { ...testRequestState, filterName: 'collection_id' } as RequestConfigs,
+        'https://www.example.com/path/collection_id/old-value'
+      ),
+    );
+    expect(url.pathname).toBe('/path/collection_id/Styles');
+  });
+
   test('Should retain pathname when filterName and filterValue are not provided', () => {
     const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
     const url = new URL(
-      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, {
-        baseUrl: 'https://www.example.com/a/random/path',
-      }),
+      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, 'https://www.example.com/a/random/path'),
     )
 
     expect(url.pathname).toBe('/a/random/path');
