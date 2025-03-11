@@ -69,7 +69,7 @@ describe('Testing Hook: useBrowseResults', () => {
 
     const url = getUrlFromState(
       { filterValue: '123', filters, resultsPerPage, page },
-      { baseUrl: 'https://example.com/browse/123' },
+      'https://example.com/browse/123',
     );
 
     window.location.href = url;

@@ -74,7 +74,7 @@ describe('Testing Hook: useSearchResults', () => {
     const page = 1;
     const url = getUrlFromState(
       { query, filters, resultsPerPage, page },
-      { baseUrl: 'https://example.com/search' },
+      'https://example.com/search',
     );
 
     window.location.href = url;
