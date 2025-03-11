@@ -90,7 +90,7 @@ export default meta;
 
 export function Primary() {
   const [currentUrl, setCurrentUrl] = useState(window.location.href);
-  
+
   return (
     <CioPlp
       apiKey={DEMO_API_KEY}
