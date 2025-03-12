@@ -1,4 +1,4 @@
-import type { RequestConfigs, QueryParamEncodingOptions, DefaultQueryStringMap } from '../types';
+import type { RequestConfigs, DefaultQueryStringMap } from '../types';
 
 export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
@@ -103,14 +103,23 @@ export function getStateFromUrl(url: string): RequestConfigs {
   return state;
 }
 
-export function getUrlFromState(
-  state: RequestConfigs,
-  options: QueryParamEncodingOptions = {},
-): string {
-  const { baseUrl: url, origin, pathname } = options;
-  const baseUrl = url || `${origin}${pathname}`;
+export function getUrlFromState(state: RequestConfigs, url: string): string {
+  const urlObject = new URL(url);
+  let { pathname } = urlObject;
+
+  if (state.filterName && state.filterValue) {
+    if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
+      pathname = pathname.replace(
+        /\/(group_id|collection_id)\/[^/]+$/,
+        `/${state.filterName}/${state.filterValue}`,
+      );
+    } else {
+      pathname = `/${state.filterName}/${state.filterValue}`;
+    }
+  }
 
   const params = new URLSearchParams();
+
   Object.entries(state).forEach(([key, val]) => {
     if (defaultQueryStringMap[key] === undefined) {
       return;
@@ -131,5 +140,5 @@ export function getUrlFromState(
     }
   });
 
-  return `${baseUrl}?${params.toString()}`;
+  return `${urlObject.origin}${pathname}?${params.toString()}`;
 }

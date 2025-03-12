@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Meta } from '@storybook/react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import CioPlp from '../../../components/CioPlp';
@@ -89,24 +89,51 @@ const groups = [
 export default meta;
 
 export function Primary() {
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+
   return (
-    <CioPlp apiKey={DEMO_API_KEY}>
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
       <Breadcrumbs groups={groups} filterValue='coffee' />
     </CioPlp>
   );
 }
 
 export function FourOrLessParentBreadcrumbs() {
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+
   return (
-    <CioPlp apiKey={DEMO_API_KEY}>
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
       <Breadcrumbs groups={groups} filterValue='coffee-accessories' />
     </CioPlp>
   );
 }
 
 export function MoreThanFourParentBreadcrumbs() {
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+
   return (
-    <CioPlp apiKey={DEMO_API_KEY}>
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}>
       <Breadcrumbs groups={groups} filterValue='coffee-manual-grinders-espresso-ceramic' />
     </CioPlp>
   );
