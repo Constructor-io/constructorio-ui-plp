@@ -274,6 +274,11 @@ describe('Testing Component: CioPlpGrid', () => {
           .querySelector('[data-cnstrc-num-results]')
           .getAttribute('data-cnstrc-num-results'),
       ).toEqual(String(mockSearchData.response.totalNumResults));
+      expect(
+        container
+          .querySelector('[data-cnstrc-search-term]')
+          .getAttribute('data-cnstrc-search-term'),
+      ).toEqual(String(mockSearchData.request.term));
     });
   });
 

@@ -208,6 +208,7 @@ export function getPlpContainerCnstrcDataAttributes(
       dataCnstrc = {
         'data-cnstrc-search': true,
         'data-cnstrc-num-results': data.response.totalNumResults,
+        'data-cnstrc-search-term': requestConfigs.query || '',
       };
       break;
 
