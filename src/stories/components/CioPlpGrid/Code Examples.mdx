@@ -79,12 +79,17 @@ function myApp() {
   return (
     <CioPlp apiKey={MY_API_KEY}>
       <CioPlpGrid />
-        <MyCustomRender />
+        {(props) => {
+          return <MyCustomRender {...props} />;
+        }}
       </CioPlpGrid>
     </CioPlp>
   )
 }
 ```
+
+For more customization examples, visit our Code Sandbox:
+- <a href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-customization-example-sgdgkl?file=%2Fsrc%2Fcomponents%2FCioPlpComponent.js%3A26%2C35'>Sandbox Example - Custom Render</a>
 
 ### Arguments passed to children via Render Props
 >Accessible to children of the CioPlpGrid component via render props.
