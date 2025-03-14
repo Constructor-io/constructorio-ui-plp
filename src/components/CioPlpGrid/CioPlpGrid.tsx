@@ -130,7 +130,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
-                    <Groups groups={data.response.groups} {...groupsConfigs} />
+                    {isSearchPage && <Groups groups={data.response.groups} {...groupsConfigs} />}
                     <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
                   <div className='cio-products-container' {...plpContainerCnstrcDataAttributes}>
