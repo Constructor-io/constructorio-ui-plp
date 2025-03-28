@@ -2,7 +2,7 @@ import { Meta, Canvas, Story, Controls, Markdown } from '@storybook/blocks';
 import meta, {
   Primary,
   FourOrLessParentBreadcrumbs,
-  MoreThanFourParentBreadcrumbs
+  MoreThanFourParentBreadcrumbs,
 } from './Breadcrumbs.stories';
 
 <Meta of={meta} />
@@ -26,31 +26,32 @@ A navigation component to render a visual trail of the current user position in 
 ## Basic example
 
 ```jsx
-import { Breadcrumbs, CioPlp } from '@constructor-io/constructorio-ui-plp'
+import { Breadcrumbs, CioPlp } from '@constructor-io/constructorio-ui-plp';
 
-function myApp() {
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
   const groups = [
-    ...
     {
-      group_id: 'coffee',
-      display_name: 'Coffee',
+      groupId: 'coffee',
+      displayName: 'Coffee',
       count: 2,
       data: {},
       children: [],
       parents: [
         {
-          display_name: 'All',
-          group_id: 'all',
+          groupId: 'all',
+          displayName: 'All',
         },
       ],
-    }
+    },
   ];
 
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <Breadcrumbs groups={groups} filterValue="coffee" />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <Breadcrumbs groups={groups} filterValue='coffee' />
     </CioPlp>
-  )
+  );
 }
 ```
 
@@ -61,42 +62,57 @@ When there's four or less parent breadcrumbs relative to the current group, the 
 <Canvas sourceState='none'>
   <Story of={FourOrLessParentBreadcrumbs} />
 </Canvas>
-```jsx
-import { Breadcrumbs, CioPlp} from '@constructor-io/constructorio-ui-plp'
 
-function myApp() {
+```jsx
+import { Breadcrumbs, CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
   const groups = [
-    ...
     {
-      group_id: 'coffee-accessories',
-      display_name: 'Coffee Accessories',
+      groupId: 'coffee',
+      displayName: 'Coffee',
       count: 2,
       data: {},
       children: [],
       parents: [
         {
-          display_name: 'All',
-          group_id: 'all',
-        },
-        {
-          display_name: 'Coffee',
-          group_id: 'coffee',
-        },
-        {
-          display_name: 'Coffee Tools',
-          group_id: 'coffee-tools',
+          displayName: 'All',
+          groupId: 'all',
         },
       ],
     },
-  ]
+    {
+      groupId: 'coffee-accessories',
+      displayName: 'Coffee Accessories',
+      count: 2,
+      data: {},
+      children: [],
+      parents: [
+        {
+          displayName: 'All',
+          groupId: 'all',
+        },
+        {
+          displayName: 'Coffee',
+          groupId: 'coffee',
+        },
+        {
+          displayName: 'Coffee Tools',
+          groupId: 'coffee-tools',
+        },
+      ],
+    },
+  ];
 
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <Breadcrumbs groups={groups} filterValue="coffee-accessories" />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <Breadcrumbs groups={groups} filterValue='coffee-accessories' />
     </CioPlp>
-  )
+  );
 }
-
 ```
 
 ## More than four parent Breadcrumbs
@@ -108,56 +124,95 @@ When more than four parent breadcrumbs are present relative to the current group
     <Story of={MoreThanFourParentBreadcrumbs} />
   </div>
 </Canvas>
-```jsx
-import { Breadcrumbs, CioPlp} from '@constructor-io/constructorio-ui-plp'
 
-function myApp() {
+```jsx
+import { Breadcrumbs, CioPlp } from '@constructor-io/constructorio-ui-plp';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
   const groups = [
-    ...
     {
-      group_id: 'coffee-manual-grinders-espresso-ceramic',
-      display_name: 'Manual Coffee Grinders for Espresso with Ceramic Conical Burrs',
+      groupId: 'coffee',
+      displayName: 'Coffee',
       count: 2,
       data: {},
       children: [],
       parents: [
         {
-          display_name: 'All',
-          group_id: 'all',
-        },
-        {
-          display_name: 'Coffee',
-          group_id: 'coffee',
-        },
-        {
-          display_name: 'Coffee Tools',
-          group_id: 'coffee-tools',
-        },
-        {
-          display_name: 'Coffee Grinders',
-          group_id: 'coffee-grinders',
-        },
-        {
-          display_name: 'Manual Coffee Grinders',
-          group_id: 'manual-coffee-grinders',
-        },
-        {
-          display_name: 'Manual Espresso Grinders',
-          group_id: 'manual-espresso-grinders',
-        },
-        {
-          display_name: 'Manual Espresso Grinders with Conical Burrs',
-          group_id: 'manual-espresso-grinders-conical',
+          displayName: 'All',
+          groupId: 'all',
         },
       ],
     },
-  ]
+    {
+      groupId: 'coffee-accessories',
+      displayName: 'Coffee Accessories',
+      count: 2,
+      data: {},
+      children: [],
+      parents: [
+        {
+          displayName: 'All',
+          groupId: 'all',
+        },
+        {
+          displayName: 'Coffee',
+          groupId: 'coffee',
+        },
+        {
+          displayName: 'Coffee Tools',
+          groupId: 'coffee-tools',
+        },
+      ],
+    },
+    {
+      groupId: 'coffee-manual-grinders-espresso-ceramic',
+      displayName: 'Manual Ceramic Conical Grinders',
+      count: 2,
+      data: {},
+      children: [],
+      parents: [
+        {
+          displayName: 'All',
+          groupId: 'all',
+        },
+        {
+          displayName: 'Coffee',
+          groupId: 'coffee',
+        },
+        {
+          displayName: 'Coffee Tools',
+          groupId: 'coffee-tools',
+        },
+        {
+          displayName: 'Coffee Grinders',
+          groupId: 'coffee-grinders',
+        },
+        {
+          displayName: 'Manual Grinders',
+          groupId: 'manual-coffee-grinders',
+        },
+        {
+          displayName: 'Manual Espresso Grinders',
+          groupId: 'manual-espresso-grinders',
+        },
+        {
+          displayName: 'Manual Conical Grinders',
+          groupId: 'manual-espresso-grinders-conical',
+        },
+      ],
+    },
+  ];
 
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <Breadcrumbs groups={groups} filterValue="coffee-manual-grinders-espresso-ceramic" />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <Breadcrumbs groups={groups} filterValue='coffee-manual-grinders-espresso-ceramic' />
     </CioPlp>
-  )
+  );
 }
+```
+
+```
 
 ```
