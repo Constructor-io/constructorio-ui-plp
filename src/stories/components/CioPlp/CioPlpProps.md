@@ -1,20 +1,16 @@
 ### `Formatters`
 
+---
+
 Formatters will be used to modify how certain fields are rendered
 
 | property    | type                        | description           |
 | ----------- | --------------------------- | --------------------- |
 | formatPrice | `(price: number) => string` | Format price funciton |
 
-### `ItemFieldGetters`
-
-ItemFieldGetters maps the fields sent in the catalog feeds to the fields the libary expects for rendering
-
-| property | type                     | description        |
-| -------- | ------------------------ | ------------------ |
-| getPrice | `(item: Item) => number` | Get price funciton |
-
 ### `Callbacks`
+
+---
 
 Callbacks will be composed with the library's internal tracking calls for a given event
 
@@ -25,7 +21,19 @@ Callbacks will be composed with the library's internal tracking calls for a give
 | onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void` | Product swatch click callback function |
 | onRedirect         | `(url: string) => void`                                    | Redirect callback function             |
 
+### `ItemFieldGetters`
+
+---
+
+ItemFieldGetters maps the fields sent in the catalog feeds to the fields the libary expects for rendering
+
+| property | type                     | description        |
+| -------- | ------------------------ | ------------------ |
+| getPrice | `(item: Item) => number` | Get price funciton |
+
 ### `UrlHelpers`
+
+---
 
 Url Helpers are used for managing the url and request state
 
@@ -117,33 +125,44 @@ Url Helpers are used for managing the url and request state
 - Default Implementation
 
   ```javascript
-  function getUrlFromState(state: RequestConfigs, options: QueryParamEncodingOptions = {}): string {
-    const { baseUrl: url, origin, pathname } = options;
-    const baseUrl = url || `${origin}${pathname}`;
+  function getUrlFromState(state: RequestConfigs, url: string): string {
+  const urlObject = new URL(url);
+  let { pathname } = urlObject;
 
-    const params = new URLSearchParams();
-    Object.entries(state).forEach(([key, val]) => {
+  if (state.filterName && state.filterValue) {
+    if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
+      pathname = pathname.replace(
+        /\/(group_id|collection_id)\/[^/]+$/,
+        `/${state.filterName}/${state.filterValue}`,
+      );
+    } else {
+      pathname = `/${state.filterName}/${state.filterValue}`;
+    }
+  }
+
+  const params = new URLSearchParams();
+
+  Object.entries(state).forEach(([key, val]) => {
     if (defaultQueryStringMap[key] === undefined) {
-    return;
+      return;
     }
 
-      let encodedVal: string = '';
+    let encodedVal: string = '';
 
-      if (key === 'filters' && state.filters) {
-        getFilterParamsFromState(params, state.filters);
-      } else if (typeof val !== 'string') {
-        encodedVal = JSON.stringify(val);
-      } else {
-        encodedVal = val;
-      }
+    if (key === 'filters' && state.filters) {
+      getFilterParamsFromState(params, state.filters);
+    } else if (typeof val !== 'string') {
+      encodedVal = JSON.stringify(val);
+    } else {
+      encodedVal = val;
+    }
 
-      if (encodedVal) {
-        params.set(defaultQueryStringMap[key], encodedVal);
-      }
+    if (encodedVal) {
+      params.set(defaultQueryStringMap[key], encodedVal);
+    }
+  });
 
-    });
-
-    return `${baseUrl}?${params.toString()}`;
+  return `${urlObject.origin}${pathname}?${params.toString()}`;
   }
   ```
 
