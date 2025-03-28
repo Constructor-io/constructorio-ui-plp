@@ -5,6 +5,7 @@
 | refetch    | `() => void`                                                                                                                         | Function that refetches the search data |
 | sort       | [Sort Options](./?path=/docs/components-sort--code-examples#arguments-passed-to-children-via-render-props)                           | Sort object                             |
 | filters    | [Filter Options](./?path=/docs/components-filters--code-examples#arguments-passed-to-children-via-render-props)                      | Filter object                           |
+| groups     | [Group Options](./?path=/docs/components-groups--code-examples#arguments-passed-to-children-via-render-props)                        | Group object                            |
 | pagination | [Pagination Options](./?path=/docs/components-pagination--code-examples#arguments-passed-to-children-via-render-props)               | Pagination object                       |
 
 - `data`: response data including:
