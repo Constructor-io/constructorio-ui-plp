@@ -6,7 +6,7 @@ import useCioPlp, { UseCioPlpProps } from '../../../hooks/useCioPlp';
 
 // A simple React Component to showcase useCioPlp with PlpContext
 function MyCustomCioPlpComponent(props: UseCioPlpProps) {
-  const { filters, pagination, sort, searchData } = useCioPlp(props);
+  const { filters, pagination, sort, data } = useCioPlp(props);
 
   return (
     <>
@@ -37,8 +37,8 @@ function MyCustomCioPlpComponent(props: UseCioPlpProps) {
       <div>
         <h2>Results</h2>
         <ul>
-          {isPlpSearchDataResults(searchData) &&
-            searchData.response.results.map((item) => <li>{item.itemName}</li>)}
+          {isPlpSearchDataResults(data) &&
+            data.response.results.map((item) => <li>{item.itemName}</li>)}
         </ul>
       </div>
     </>

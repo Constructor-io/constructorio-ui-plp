@@ -37,13 +37,13 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 
 Url Helpers are used for managing the url and request state
 
-| property              | type                                                                    | description                                                                                                                               |
-| --------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| getUrl                | `() => string \| undefined`                                             | This function will be used to get the current url for a page instead of using the current href.                                           |
-| setUrl                | `(newEncodedUrlState: string) => void`                                  | This function will be called when any request state changes result in url changes. By default the window href will be set to the new url. |
-| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | This function will be called when parsing the current url string to a request state.                                                      |
-| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | This function will be called when converting the request state to a url string.                                                           |
-| defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Used to provide a mapping for what strings constructor api query parameters should use in url                                             |
+| property              | type                                                                    | description                                                     |
+| --------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
+| getUrl                | `() => string \| undefined`                                             | Get the current url for a page (Default: getting current href)  |
+| setUrl                | `(newEncodedUrlState: string) => void`                                  | Set the window href using the provided url                      |
+| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | Parses the given url string to a request configuration state.   |
+| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | Convert the request configuration state to a url string.        |
+| defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Provides a mapping for the query parameters that is used in URL |
 
 > #### `getUrl`
 
