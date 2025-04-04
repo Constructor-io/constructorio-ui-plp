@@ -29,14 +29,16 @@ export { default as Spinner } from './components/Spinner';
 export * as utils from './utils';
 
 // Types
+export type { BreadcrumbsProps } from './components/Breadcrumbs';
 export type { CioPlpProps } from './components/CioPlp';
 export type { CioPlpGridProps, CioPlpGridWithRenderProps } from './components/CioPlpGrid';
+export type { FiltersProps, FiltersWithRenderProps } from './components/Filters';
+export type { GroupsProps, GroupsWithRenderProps } from './components/Groups';
+export type { MobileModalProps } from './components/MobileModal';
+export type { PaginationProps, PaginationWithRenderProps } from './components/Pagination';
 export type { ProductCardProps } from './components/ProductCard';
 export type { ProductSwatchProps } from './components/ProductSwatch';
 export type { SortProps, SortWithRenderProps } from './components/Sort';
-export type { PaginationProps, PaginationWithRenderProps } from './components/Pagination';
-export type { FiltersProps, FiltersWithRenderProps } from './components/Filters';
-export type { GroupsProps, GroupsWithRenderProps } from './components/Groups';
 export type { UseOptionsListProps } from './hooks/useOptionsList';
 export * from './types';
 export default CioPlp;
