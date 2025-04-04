@@ -32,13 +32,9 @@ export default function useOnProductCardClick(
             section,
           });
         }
-        // TODO: Track browse result click
       }
 
       if (callback) callback(event, item);
-
-      event.preventDefault();
-      event.stopPropagation();
     },
     [callback, cioClient, requestConfigs],
   );
