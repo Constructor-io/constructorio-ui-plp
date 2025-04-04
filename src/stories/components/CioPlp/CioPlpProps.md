@@ -10,9 +10,12 @@ Formatters will be used to modify how certain fields are rendered
 
 ItemFieldGetters maps the fields sent in the catalog feeds to the fields the libary expects for rendering
 
-| property | type                     | description        |
-| -------- | ------------------------ | ------------------ |
-| getPrice | `(item: Item) => number` | Get price funciton |
+| property    | type                     | description            |
+| ----------- | ------------------------ | ---------------------- |
+| getPrice    | `(item: Item) => number` | Get price funciton     |
+| getImageUrl | `(item: Item) => string` | Get image url funciton |
+| getUrl      | `(item: Item) => stirng` | Get href url funciton  |
+| getName     | `(item: Item) => string` | Get item name funciton |
 
 ### `Callbacks`
 

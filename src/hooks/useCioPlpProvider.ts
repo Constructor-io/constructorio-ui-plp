@@ -15,6 +15,7 @@ export default function useCioPlpProvider(
     itemFieldGetters,
     urlHelpers,
     staticRequestConfigs = {},
+    customConfigs = {},
     cioClient: customCioClient,
   } = props;
 
@@ -27,6 +28,7 @@ export default function useCioPlpProvider(
       cioClientOptions,
       setCioClientOptions,
       staticRequestConfigs,
+      customConfigs,
       itemFieldGetters: { ...defaultGetters, ...itemFieldGetters },
       formatters: { ...defaultFormatters, ...formatters },
       callbacks: { ...callbacks },
@@ -40,6 +42,7 @@ export default function useCioPlpProvider(
       callbacks,
       urlHelpers,
       staticRequestConfigs,
+      customConfigs,
     ],
   );
 
