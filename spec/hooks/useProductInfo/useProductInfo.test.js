@@ -92,6 +92,26 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
+  it.only('Should return image properly with overridden baseUrl', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
+      initialProps: {
+        customConfigs: { imageBaseUrl: 'test.com ' },
+      },
+    });
+
+    await waitFor(() => {
+      const {
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+      } = result;
+
+      expect(productSwatch).not.toBeNull();
+      expect(itemName).toEqual(transformedItem.itemName);
+      expect(itemImageUrl).toEqual(`test.com${transformedItem.imageUrl}`);
+      expect(itemUrl).toEqual(transformedItem.url);
+      expect(itemPrice).toEqual(transformedItem.data.price);
+    });
+  });
+
   it('Should return correctly after different variation is selected', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 

@@ -9,7 +9,14 @@ export function getPrice(item: Item | Variation, selectedSwatch?: SwatchItem | u
 export function getImageUrl(
   item: Item | Variation,
   selectedSwatch?: SwatchItem | undefined,
+  options?: any,
 ): string | undefined {
+  const { imageBaseUrl } = options;
+
+  console.log(options);
+  if (imageBaseUrl) {
+    return `${imageBaseUrl}${selectedSwatch?.imageUrl || selectedSwatch?.variation?.imageUrl || item?.imageUrl}`;
+  }
   return selectedSwatch?.imageUrl || selectedSwatch?.variation?.imageUrl || item?.imageUrl;
 }
 

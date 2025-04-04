@@ -113,6 +113,10 @@ export interface UrlHelpers {
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
+export interface CustomConfigs {
+  imageBaseUrl?: string;
+}
+
 export interface RequestConfigs {
   // Search
   query?: string;
@@ -147,6 +151,7 @@ export interface PlpContextValue {
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   staticRequestConfigs: RequestConfigs;
+  customConfigs: CustomConfigs;
   itemFieldGetters: ItemFieldGetters;
   formatters: Formatters;
   callbacks: Callbacks;
@@ -229,6 +234,7 @@ export interface CioPlpProviderProps {
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
+  customConfigs?: Partial<CustomConfigs>;
 }
 
 export type UseSortReturn = {
