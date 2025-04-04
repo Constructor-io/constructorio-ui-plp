@@ -1,69 +1,182 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as FiltersStories from './Filters.stories';
-import UseFilterReturn from '../../hooks/UseFilter/UseFilterReturn.md?raw'
+import UseFilterReturn from '../../hooks/UseFilter/UseFilterReturn.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={FiltersStories} />
 
 # `Filters`
-The Filters component is a dynamic component that 
+
+The Filters component is a dynamic component that
 is responsible for displaying the filters available to the users.
 
 **Dynamic Options Rendering:**
+
 - Automatically updates and displays selected filters based on user requests
 
 <Canvas of={FiltersStories.Primary} />
 
 ## Basic example
+
 ```jsx
-import React from 'react';
 import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-function MyComponent() {
+const DEMO_FACETS = [
+  {
+    displayName: 'Color',
+    name: 'color',
+    type: 'multiple',
+    data: {},
+    hidden: false,
+    options: [
+      {
+        status: '',
+        count: 155,
+        displayName: 'Black',
+        value: 'Black',
+        data: {},
+      },
+      {
+        status: 'selected',
+        count: 45,
+        displayName: 'Blue',
+        value: 'Blue',
+        data: {},
+      },
+      {
+        status: '',
+        count: 54,
+        displayName: 'Brown',
+        value: 'Brown',
+        data: {},
+      },
+    ],
+  },
+  {
+    displayName: 'Price',
+    name: 'price',
+    type: 'range',
+    data: {},
+    hidden: false,
+    min: 1,
+    max: 100,
+    status: {},
+  },
+];
 
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Filters />
-    </CioPlp>
+    <>
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters facets={DEMO_FACETS} />
+      </CioPlp>
+    </>
   );
 }
 ```
 
 ## Render Props pattern
+
 To override the default rendering of the Filters component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+const DEMO_FACETS = [
+  {
+    displayName: 'Color',
+    name: 'color',
+    type: 'multiple',
+    data: {},
+    hidden: false,
+    options: [
+      {
+        status: '',
+        count: 155,
+        displayName: 'Black',
+        value: 'Black',
+        data: {},
+      },
+      {
+        status: 'selected',
+        count: 45,
+        displayName: 'Blue',
+        value: 'Blue',
+        data: {},
+      },
+      {
+        status: '',
+        count: 54,
+        displayName: 'Brown',
+        value: 'Brown',
+        data: {},
+      },
+    ],
+  },
+  {
+    displayName: 'Price',
+    name: 'price',
+    type: 'range',
+    data: {},
+    hidden: false,
+    min: 1,
+    max: 100,
+    status: {},
+  },
+];
 
 function MyCustomFilters(props) {
-  const {facets, setFilter} = props
+  const { facets, setFilter } = props;
+  console.log(props);
 
   return (
-    <>
-      {/* CUSTOM_MARKUP_HERE */}
-    </>
+    <div>
+      {facets.map((facet, index) => (
+        <div key={index}>
+          <div>{facet.displayName}</div>
+          {facet.options ? (
+            <ul>
+              {facet.options.map((option, optionIndex) => (
+                <li key={optionIndex}>{option.displayName}</li>
+              ))}
+            </ul>
+          ) : (
+            <ul>
+              <li>Min: {facet.min} </li>
+              <li>Max: {facet.max} </li>
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Filters />
-        <MyCustomFilters />
-      </Filters>
-    </CioPlp>
-  )
+    <>
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters facets={DEMO_FACETS}>
+          {(props) => {
+            return <MyCustomFilters {...props} />;
+          }}
+        </Filters>
+      </CioPlp>
+    </>
+  );
 }
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the Filters component via render props.
+
+> Accessible to children of the Filters component via render props.
 
 `UseFilterReturn`
+
 <Markdown>{UseFilterReturn}</Markdown>
