@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
+import { useState } from 'react';
 import useSort from '../../../src/hooks/useSort';
 import { transformSearchResponse } from '../../../src/utils/transformers';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
@@ -96,6 +97,34 @@ describe('Testing Hook: useSort', () => {
       expect(selectedSort.sortBy).toEqual('item_name');
       expect(selectedSort.sortOrder).toEqual('descending');
       expect(selectedSort.displayName).toEqual('Name Z-A');
+    });
+  });
+
+  it.only('Should reflect the selected sort_option on page reload/component rerender', async () => {
+    function TestUseSort() {
+      // sortOptions will be an empty array when the page is first loading
+      const [sortOptions, setSortOptions] = useState([]);
+      const { selectedSort } = useSort({ sortOptions });
+
+      return { selectedSort, setSortOptions };
+    }
+
+    let firstRun = true;
+    const { result } = renderHookWithCioPlp(() => TestUseSort());
+
+    await waitFor(() => {
+      const {
+        current: { selectedSort, setSortOptions },
+      } = result;
+
+      if (firstRun) {
+        // When the page finishes loading, the sortOptions object will be updated
+        setSortOptions(useSortOptionsProps.sortOptions);
+        firstRun = false;
+      }
+
+      expect(selectedSort.sortBy).toEqual('relevance');
+      expect(selectedSort.sortOrder).toEqual('descending');
     });
   });
 });
