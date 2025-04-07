@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import useSort, { UseSortProps } from '../../hooks/useSort';
-import { IncludeRenderProps, UseSortReturn } from '../../types';
+import { IncludeRenderProps, PlpSortOption, UseSortReturn } from '../../types';
 import MobileModal from '../MobileModal';
 
 export type SortProps = UseSortProps & {
@@ -29,18 +29,24 @@ export default function Sort({
     changeSelectedSort(JSON.parse(event.target.value));
   };
 
+  const isChecked = useCallback(
+    (option: PlpSortOption) =>
+      selectedSort?.sortBy === option.sortBy && selectedSort?.sortOrder === option.sortOrder,
+    [selectedSort],
+  );
+
+  const getOptionId = (option: PlpSortOption) => `${option.sortBy}-${option.sortOrder}`;
+
   const defaultMarkup = sortOptions.map((option) => (
     <label
-      htmlFor={`${option.sortBy}-${option.sortOrder}`}
-      key={`${option.sortBy}-${option.sortOrder}`}>
+      htmlFor={getOptionId(option)}
+      key={`${getOptionId(option)}${isChecked(option) ? '-checked' : ''}`}>
       <input
-        id={`${option.sortBy}-${option.sortOrder}`}
+        id={getOptionId(option)}
         type='radio'
-        name={`${option.sortBy}-${option.sortOrder}`}
+        name={getOptionId(option)}
         value={JSON.stringify(option)}
-        checked={
-          selectedSort?.sortBy === option.sortBy && selectedSort.sortOrder === option.sortOrder
-        }
+        checked={isChecked(option)}
         onChange={handleOptionChange}
       />
       <span>{option.displayName}</span>
