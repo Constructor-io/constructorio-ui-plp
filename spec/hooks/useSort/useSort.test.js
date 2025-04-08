@@ -23,6 +23,7 @@ describe('Testing Hook: useSort', () => {
     Object.defineProperty(window, 'location', {
       value: originalWindowLocation,
     });
+    window.location.href = `https://example.com`;
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
@@ -100,7 +101,7 @@ describe('Testing Hook: useSort', () => {
     });
   });
 
-  it.only('Should reflect the selected sort_option on page reload/component rerender', async () => {
+  it('Should reflect the selected sort_option on page reload/component rerender', async () => {
     function TestUseSort() {
       // sortOptions will be an empty array when the page is first loading
       const [sortOptions, setSortOptions] = useState([]);
