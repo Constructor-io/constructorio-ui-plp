@@ -101,4 +101,23 @@ describe('Testing Component: Sort', () => {
     expect(mockChildren).toHaveBeenCalled();
     expect(getByText('Custom Sort')).toBeInTheDocument();
   });
+
+  it('Should render sort options with unique ids for both desktop and mobile', async () => {
+    const { getAllByLabelText } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Sort sortOptions={searchData.response.sortOptions} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      responseSortOptions.forEach((option) => {
+        const spanEls = getAllByLabelText(option.displayName);
+        expect(spanEls.length).toBe(2);
+
+        const inputEls = spanEls.map((el) => el.closest('label').querySelector('input'));
+        const uniqueInputIds = new Set(inputEls.map((el) => el.id));
+        expect(uniqueInputIds.size).toBe(2);
+      });
+    });
+  });
 });
