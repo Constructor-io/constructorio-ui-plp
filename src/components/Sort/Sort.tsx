@@ -25,33 +25,39 @@ export default function Sort({
     setIsOpen(!isOpen);
   };
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeSelectedSort(JSON.parse(event.target.value));
-  };
-
   const isChecked = useCallback(
     (option: PlpSortOption) =>
       selectedSort?.sortBy === option.sortBy && selectedSort?.sortOrder === option.sortOrder,
     [selectedSort],
   );
 
-  const getOptionId = (option: PlpSortOption) => `${option.sortBy}-${option.sortOrder}`;
+  const getOptionId = (option: PlpSortOption, idSuffix: string = '') =>
+    `${option.sortBy}-${option.sortOrder}${idSuffix}`;
 
-  const defaultMarkup = sortOptions.map((option) => (
-    <label
-      htmlFor={getOptionId(option)}
-      key={`${getOptionId(option)}${isChecked(option) ? '-checked' : ''}`}>
-      <input
-        id={getOptionId(option)}
-        type='radio'
-        name={getOptionId(option)}
-        value={JSON.stringify(option)}
-        checked={isChecked(option)}
-        onChange={handleOptionChange}
-      />
-      <span>{option.displayName}</span>
-    </label>
-  ));
+  const genDefaultMarkup = useCallback(
+    (idSuffix: string = '') => {
+      const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        changeSelectedSort(JSON.parse(event.target.value));
+      };
+
+      return sortOptions.map((option) => (
+        <label
+          htmlFor={getOptionId(option, idSuffix)}
+          key={`${getOptionId(option, idSuffix)}${isChecked(option) ? '-checked' : ''}`}>
+          <input
+            id={getOptionId(option, idSuffix)}
+            type='radio'
+            name={getOptionId(option, idSuffix)}
+            value={JSON.stringify(option)}
+            checked={isChecked(option)}
+            onChange={handleOptionChange}
+          />
+          <span>{option.displayName}</span>
+        </label>
+      ));
+    },
+    [changeSelectedSort, isChecked, sortOptions],
+  );
 
   return (
     <>
@@ -75,10 +81,10 @@ export default function Sort({
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
           <MobileModal side='right' isOpen={isOpen} setIsOpen={setIsOpen}>
-            {defaultMarkup}
+            {genDefaultMarkup('-mobile')}
           </MobileModal>
           {isOpen && (
-            <div className='collapsible-content cio-large-screen-only'>{defaultMarkup}</div>
+            <div className='collapsible-content cio-large-screen-only'>{genDefaultMarkup()}</div>
           )}
         </div>
       )}
