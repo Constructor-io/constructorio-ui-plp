@@ -1,39 +1,13 @@
-import {
-  Nullable,
-  SearchParameters,
-} from '@constructor-io/constructorio-client-javascript/lib/types';
+import { SearchParameters } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   RequestConfigs,
   RequestQueryParams,
-  PlpFacet,
-  PlpRangeFacet,
-  PlpMultipleFacet,
   PlpSearchDataResults,
   PlpSearchDataRedirect,
-  PlpSearchData,
-  PlpSingleFacet,
-  PlpHierarchicalFacet,
   PlpBrowseData,
 } from '../types';
-import { removeNullValuesFromObject } from './utilFunctions';
-
-export function isPlpSearchDataResults(
-  response: Nullable<PlpSearchData | PlpBrowseData>,
-): response is PlpSearchDataResults {
-  return 'response' in (response || {});
-}
-
-export function isPlpSearchDataRedirect(
-  response: Nullable<PlpSearchData | PlpBrowseData>,
-): response is PlpSearchDataRedirect {
-  return 'redirect' in (response || {});
-}
-
-export function isPlpBrowseDataResults(
-  response: Nullable<PlpSearchData | PlpBrowseData>,
-): response is PlpBrowseData {
-  return 'response' in (response || {});
-}
+import { removeNullValuesFromObject } from './common';
+import { isPlpBrowseDataResults, isPlpSearchDataResults } from './typeHelpers';
 
 export function getSearchParamsFromRequestConfigs(requestConfigs: RequestConfigs): {
   query: string;
@@ -53,28 +27,6 @@ export function getBrowseParamsFromRequestConfigs(requestConfigs: RequestConfigs
   const { query, filterValue = '', filterName = '', ...queryParams } = requestConfigs;
 
   return { filterName, filterValue, queryParams: removeNullValuesFromObject(queryParams) };
-}
-
-export function isRangeFacet(facet: PlpFacet): facet is PlpRangeFacet {
-  return facet.type === 'range';
-}
-
-export function isMultipleOrBucketedFacet(facet: PlpFacet): facet is PlpMultipleFacet {
-  return facet.type === 'multiple';
-}
-
-export function isSingleFacet(facet: PlpFacet): facet is PlpSingleFacet {
-  return facet.type === 'single';
-}
-
-export function isHierarchicalFacet(facet: PlpFacet): facet is PlpHierarchicalFacet {
-  return facet.type === 'hierarchical';
-}
-
-export function isOptionFacet(
-  facet: PlpFacet,
-): facet is PlpMultipleFacet | PlpSingleFacet | PlpHierarchicalFacet {
-  return isMultipleOrBucketedFacet(facet) || isSingleFacet(facet) || isHierarchicalFacet(facet);
 }
 
 export function checkIsSearchPage(requestConfigs: RequestConfigs) {
