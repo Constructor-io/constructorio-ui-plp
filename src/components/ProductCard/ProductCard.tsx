@@ -82,7 +82,7 @@ export default function ProductCard(props: ProductCardProps) {
           formatPrice,
           onAddToCart,
           onClick,
-          productContainerCnstrcDataAttributes: cnstrcData,
+          productCardCnstrcDataAttributes: cnstrcData,
         })
       ) : (
         <a
