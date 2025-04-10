@@ -15,6 +15,9 @@ import {
   PlpSingleFacet,
   PlpHierarchicalFacet,
   PlpBrowseData,
+  ProductInfoObject,
+  Item,
+  CnstrcData,
 } from './types';
 
 // Function to emulate pausing between interactions
@@ -184,6 +187,22 @@ export function getPageType(requestConfigs: RequestConfigs): PageType {
   return 'unknown';
 }
 
+export function getProductCardCnstrcDataAttributes(item: Item, productInfo: ProductInfoObject) {
+  let dataCnstrc: CnstrcData = {};
+
+  const { itemId } = item;
+  const { itemPrice, itemName, variationId } = productInfo;
+
+  dataCnstrc = {
+    'data-cnstrc-item-id': itemId,
+    'data-cnstrc-item-name': itemName,
+    'data-cnstrc-item-price': itemPrice!,
+    'data-cnstrc-item-variation-id': variationId!,
+  };
+
+  return dataCnstrc;
+}
+
 export function getPlpContainerCnstrcDataAttributes(
   data: PlpSearchDataResults | PlpSearchDataRedirect | PlpBrowseData | null,
   requestConfigs: RequestConfigs,
@@ -192,7 +211,7 @@ export function getPlpContainerCnstrcDataAttributes(
 
   const { filterName, filterValue } = requestConfigs;
   const pageType = getPageType(requestConfigs);
-  let dataCnstrc: Record<`data-cnstrc-${string}`, string | number | boolean> = {};
+  let dataCnstrc: CnstrcData = {};
 
   switch (pageType) {
     case 'browse':
