@@ -5,6 +5,8 @@
   display: flex;
   flex-direction: column;
   row-gap: 24px;
+  list-style-type: none;
+  padding: 0;
 }
 
 .cio-filter-group {
