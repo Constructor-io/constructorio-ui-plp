@@ -83,7 +83,12 @@ describe('Testing Hook: useCioPlp', () => {
       expect(groups.optionsToRender.length).not.toEqual(0);
       expect(pagination.currentPage).toEqual(1);
       expect(pagination.totalPages).toEqual(18);
-      expect(sort.selectedSort).toEqual(null);
+      expect(sort.selectedSort).toEqual({
+        displayName: 'Relevance',
+        sortBy: 'relevance',
+        sortOrder: 'descending',
+        status: 'selected',
+      });
 
       expect(typeof filters.setFilter).toEqual('function');
       expect(typeof pagination.goToPage).toEqual('function');

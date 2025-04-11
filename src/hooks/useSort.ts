@@ -33,9 +33,7 @@ const useSort = ({ sortOptions }: UseSortProps): UseSortReturn => {
       const defaultSort = sortOptions.find((option) => option.status === 'selected');
       if (defaultSort) setSelectedSort(defaultSort);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy, sortOrder]);
+  }, [sortBy, sortOrder, sortOptions]);
 
   const changeSelectedSort = (sortOption: PlpSortOption) => {
     setSelectedSort(sortOption);

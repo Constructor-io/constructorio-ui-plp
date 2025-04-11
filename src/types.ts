@@ -19,7 +19,6 @@ import {
   BrowseRequestType,
   FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { MakeOptional } from './utils/typeHelpers';
 
 export {
   Nullable,
@@ -109,7 +108,7 @@ export interface UrlHelpers {
   getUrl: () => string | undefined;
   setUrl: (newUrlWithEncodedState: string) => void;
   getStateFromUrl: (urlString: string) => RequestConfigs;
-  getUrlFromState: (state: RequestConfigs, options: QueryParamEncodingOptions) => string;
+  getUrlFromState: (state: RequestConfigs, urlString: string) => string;
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
@@ -139,12 +138,6 @@ export interface RequestConfigs {
 }
 
 export type RequestQueryParams = Omit<RequestConfigs, 'query' | 'filterName' | 'filterValue'>;
-
-export interface QueryParamEncodingOptions {
-  baseUrl?: string;
-  origin?: string;
-  pathname?: string;
-}
 
 export interface PlpContextValue {
   cioClient: Nullable<ConstructorIOClient>;
@@ -344,3 +337,9 @@ export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = Componen
 export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType & {
   rawResponse?: OriginalType;
 };
+
+/**
+ * Given a Type T and a set of keys K (pipe-delimited string), make those keys optional.
+ */
+export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
+  Partial<Pick<Type, Keys>>;
