@@ -40,6 +40,9 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface ItemFieldGetters {
   getPrice: (item: Item | Variation) => number;
+  getUrl: (item: Item | Variation) => string;
+  getImageUrl: (item: Item | Variation) => string;
+  getName: (item: Item | Variation) => string;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
@@ -109,6 +112,10 @@ export interface UrlHelpers {
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
+export interface CustomConfigs {
+  imageBaseUrl?: string;
+}
+
 export interface RequestConfigs {
   // Search
   query?: string;
@@ -137,6 +144,7 @@ export interface PlpContextValue {
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   staticRequestConfigs: RequestConfigs;
+  customConfigs: CustomConfigs;
   itemFieldGetters: ItemFieldGetters;
   formatters: Formatters;
   callbacks: Callbacks;
@@ -197,6 +205,7 @@ export interface SwatchItem {
   price?: number;
   swatchPreview: string;
   variationId?: string;
+  variation?: Variation;
 }
 
 export interface PlpBrowseData {
@@ -218,6 +227,7 @@ export interface CioPlpProviderProps {
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
+  customConfigs?: Partial<CustomConfigs>;
 }
 
 export type UseSortReturn = {
