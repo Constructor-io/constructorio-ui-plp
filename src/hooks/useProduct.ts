@@ -18,7 +18,9 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const itemName = getName(item, productSwatch?.selectedVariation);
   const itemPrice = getPrice(item, productSwatch?.selectedVariation);
-  const itemImageUrl = getImageUrl(item, productSwatch?.selectedVariation);
+  const itemImageUrl = getImageUrl(item, productSwatch?.selectedVariation, {
+    imageBaseUrl: state.customConfigs.imageBaseUrl,
+  });
   const itemUrl = getUrl(item, productSwatch?.selectedVariation);
 
   return {

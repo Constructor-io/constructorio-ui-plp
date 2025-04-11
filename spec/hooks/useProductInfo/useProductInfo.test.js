@@ -92,10 +92,10 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
-  it.only('Should return image properly with overridden baseUrl', async () => {
+  it('Should return image properly with overridden baseUrl', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
       initialProps: {
-        customConfigs: { imageBaseUrl: 'test.com ' },
+        customConfigs: { imageBaseUrl: 'test.com' },
       },
     });
 

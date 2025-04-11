@@ -13,7 +13,6 @@ export function getImageUrl(
 ): string | undefined {
   const { imageBaseUrl } = options;
 
-  console.log(options);
   if (imageBaseUrl) {
     return `${imageBaseUrl}${selectedSwatch?.imageUrl || selectedSwatch?.variation?.imageUrl || item?.imageUrl}`;
   }
