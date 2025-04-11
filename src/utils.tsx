@@ -187,11 +187,10 @@ export function getPageType(requestConfigs: RequestConfigs): PageType {
   return 'unknown';
 }
 
-export function getProductCardCnstrcDataAttributes(item: Item, productInfo: ProductInfoObject) {
+export function getProductCardCnstrcDataAttributes(productInfo: ProductInfoObject) {
   let dataCnstrc: CnstrcData = {};
 
-  const { itemId } = item;
-  const { itemPrice, itemName, variationId } = productInfo;
+  const { itemId, itemPrice, itemName, variationId } = productInfo;
 
   dataCnstrc = {
     'data-cnstrc-item-id': itemId,

@@ -18,6 +18,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
+  const { itemId } = item;
 
   return {
     productSwatch,
@@ -26,6 +27,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     itemImageUrl,
     itemUrl,
     variationId,
+    itemId,
   };
 };
 
