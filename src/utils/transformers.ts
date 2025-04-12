@@ -26,7 +26,7 @@ import {
   ApiHierarchicalFacetOption,
   ApiFacetOption,
 } from '../types';
-import { isOptionFacet, isRangeFacet } from '../utils';
+import { isOptionFacet, isRangeFacet } from './typeHelpers';
 
 function isAPIRedirectSearchResponse(
   response: SearchResponseType | Redirect,

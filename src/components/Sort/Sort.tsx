@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import useSort, { UseSortProps } from '../../hooks/useSort';
-import { IncludeRenderProps, UseSortReturn } from '../../types';
+import { IncludeRenderProps, PlpSortOption, UseSortReturn } from '../../types';
 import MobileModal from '../MobileModal';
 
 export type SortProps = UseSortProps & {
@@ -25,27 +25,39 @@ export default function Sort({
     setIsOpen(!isOpen);
   };
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeSelectedSort(JSON.parse(event.target.value));
-  };
+  const isChecked = useCallback(
+    (option: PlpSortOption) =>
+      selectedSort?.sortBy === option.sortBy && selectedSort?.sortOrder === option.sortOrder,
+    [selectedSort],
+  );
 
-  const defaultMarkup = sortOptions.map((option) => (
-    <label
-      htmlFor={`${option.sortBy}-${option.sortOrder}`}
-      key={`${option.sortBy}-${option.sortOrder}`}>
-      <input
-        id={`${option.sortBy}-${option.sortOrder}`}
-        type='radio'
-        name={`${option.sortBy}-${option.sortOrder}`}
-        value={JSON.stringify(option)}
-        checked={
-          selectedSort?.sortBy === option.sortBy && selectedSort.sortOrder === option.sortOrder
-        }
-        onChange={handleOptionChange}
-      />
-      <span>{option.displayName}</span>
-    </label>
-  ));
+  const getOptionId = (option: PlpSortOption, idSuffix: string = '') =>
+    `${option.sortBy}-${option.sortOrder}${idSuffix}`;
+
+  const genDefaultMarkup = useCallback(
+    (idSuffix: string = '') => {
+      const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        changeSelectedSort(JSON.parse(event.target.value));
+      };
+
+      return sortOptions.map((option) => (
+        <label
+          htmlFor={getOptionId(option, idSuffix)}
+          key={`${getOptionId(option, idSuffix)}${isChecked(option) ? '-checked' : ''}`}>
+          <input
+            id={getOptionId(option, idSuffix)}
+            type='radio'
+            name={getOptionId(option, idSuffix)}
+            value={JSON.stringify(option)}
+            checked={isChecked(option)}
+            onChange={handleOptionChange}
+          />
+          <span>{option.displayName}</span>
+        </label>
+      ));
+    },
+    [changeSelectedSort, isChecked, sortOptions],
+  );
 
   return (
     <>
@@ -69,10 +81,10 @@ export default function Sort({
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
           <MobileModal side='right' isOpen={isOpen} setIsOpen={setIsOpen}>
-            {defaultMarkup}
+            {genDefaultMarkup('-mobile')}
           </MobileModal>
           {isOpen && (
-            <div className='collapsible-content cio-large-screen-only'>{defaultMarkup}</div>
+            <div className='collapsible-content cio-large-screen-only'>{genDefaultMarkup()}</div>
           )}
         </div>
       )}

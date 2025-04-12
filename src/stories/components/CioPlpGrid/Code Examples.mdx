@@ -1,7 +1,7 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as CioPlpGridStories from './CioPlpGrid.stories';
 import RenderProps from './RenderProps.md?raw';
-/* This "?raw" import raw text form the md file */
+/* This "?raw" import raw text from the md file */
 
 <Meta of={CioPlpGridStories} name='Code Examples' />
 
@@ -93,6 +93,30 @@ export default function MyComponent() {
   );
 }
 ```
+
+For a working example, visit our Code Sandbox:
+
+- <a
+    href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-customization-example-sgdgkl?file=%2Fsrc%2Fcomponents%2FCustomCioPlp.js'
+    target='_blank'
+    rel='noopener noreferrer'>
+    {' '}
+    Code Sandbox Example - Custom Render{' '}
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='12'
+      height='12'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      stroke-width='2'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+      class='lucide lucide-arrow-up-right-icon lucide-arrow-up-right'>
+      <path d='M7 7h10v10' />
+      <path d='M7 17 17 7' />
+    </svg>
+  </a>
 
 ### Arguments passed to children via Render Props
 

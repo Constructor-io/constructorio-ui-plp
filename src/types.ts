@@ -19,7 +19,6 @@ import {
   BrowseRequestType,
   FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import { MakeOptional } from './utils/typeHelpers';
 
 export {
   Nullable,
@@ -328,3 +327,9 @@ export type IncludeRenderProps<ComponentProps, ChildrenFunctionProps> = Componen
 export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType & {
   rawResponse?: OriginalType;
 };
+
+/**
+ * Given a Type T and a set of keys K (pipe-delimited string), make those keys optional.
+ */
+export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
+  Partial<Pick<Type, Keys>>;
