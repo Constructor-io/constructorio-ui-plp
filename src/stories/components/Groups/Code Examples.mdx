@@ -21,15 +21,74 @@ A separate filter component that allows you to filter down by groups.
 ## Basic example
 
 ```jsx
-import React from 'react';
 import { CioPlp, Groups } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-function MyComponent() {
+const DEMO_GROUPS = [
+  {
+    groupId: '1',
+    displayName: 'All',
+    count: 250,
+    data: null,
+    children: [
+      {
+        groupId: '11',
+        displayName: 'Greeting Cards',
+        count: 250,
+        data: null,
+        children: [
+          {
+            groupId: '111',
+            displayName: 'Halloween Greeting Cards',
+            count: 100,
+            data: null,
+            children: [],
+            parents: [
+              {
+                displayName: 'All',
+                groupId: '1',
+              },
+              {
+                displayName: 'Greeting Cards',
+                groupId: '11',
+              },
+            ],
+          },
+          {
+            groupId: '112',
+            displayName: 'Christmas Greeting Cards',
+            count: 150,
+            data: null,
+            children: [],
+            parents: [
+              {
+                displayName: 'All',
+                groupId: '1',
+              },
+              {
+                displayName: 'Greeting Cards',
+                groupId: '11',
+              },
+            ],
+          },
+        ],
+        parents: [
+          {
+            displayName: 'All',
+            groupId: '1',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Groups />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <Groups groups={DEMO_GROUPS} />
     </CioPlp>
   );
 }
@@ -40,30 +99,113 @@ function MyComponent() {
 To override the default rendering of the Groups component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, Groups } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-function MyCustomGroupFilter(props) {
-  const {groups, initialNumOptions} = props
+const DEMO_GROUPS = [
+  {
+    groupId: '1',
+    displayName: 'All',
+    count: 250,
+    data: null,
+    children: [
+      {
+        groupId: '11',
+        displayName: 'Greeting Cards',
+        count: 250,
+        data: null,
+        children: [
+          {
+            groupId: '111',
+            displayName: 'Halloween Greeting Cards',
+            count: 100,
+            data: null,
+            children: [],
+            parents: [
+              {
+                displayName: 'All',
+                groupId: '1',
+              },
+              {
+                displayName: 'Greeting Cards',
+                groupId: '11',
+              },
+            ],
+          },
+          {
+            groupId: '112',
+            displayName: 'Christmas Greeting Cards',
+            count: 150,
+            data: null,
+            children: [],
+            parents: [
+              {
+                displayName: 'All',
+                groupId: '1',
+              },
+              {
+                displayName: 'Greeting Cards',
+                groupId: '11',
+              },
+            ],
+          },
+        ],
+        parents: [
+          {
+            displayName: 'All',
+            groupId: '1',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+function MyCustomGroups(props) {
+  const {
+    groupOptions,
+    currentGroupId,
+    currentPage,
+    initialNumOptions,
+    isShowAll,
+    optionsToRender,
+  } = props;
+
+  const renderGroup = (group, depth = 0) => {
+    const hasChildren = group.children && group.children.length > 0;
+
+    return (
+      <div key={group.groupId}>
+        <div>
+          Depth: {depth}: {group.displayName} <span>({group.count})</span>
+        </div>
+
+        {hasChildren && <div>{group.children.map((child) => renderGroup(child, depth + 1))}</div>}
+      </div>
+    );
+  };
 
   return (
     <>
-      {/* CUSTOM_MARKUP_HERE */}
+      <h2>Custom Group Filters</h2>
+      <p>Current Page: {currentPage}</p>
+      <div>{groupOptions.map((group) => renderGroup(group))}</div>
     </>
   );
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Groups>
-        <MyCustomGroupFilter />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <Groups groups={DEMO_GROUPS}>
+        {(props) => {
+          return <MyCustomGroups {...props} />;
+        }}
       </Groups>
     </CioPlp>
-  )
+  );
 }
 ```
 
