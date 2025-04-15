@@ -22,7 +22,7 @@ describe('Testing Hook on the server: useCioPlpProvider', () => {
   });
 
   it('Should return when clientOptions are provided', () => {
-    const key = 'xx';
+    const key = 'test-key';
     const clientOptions = {
       serviceUrl: 'https://special.cnstrc.com',
       quizzesServiceUrl: 'https://quizzes.cnstrc.com',

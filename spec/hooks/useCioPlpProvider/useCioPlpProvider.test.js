@@ -43,7 +43,7 @@ describe('Testing Hook: useCioPlpProvider', () => {
   });
 
   test('Should update client if setCioClientOptions is called', async () => {
-    const key = 'xx';
+    const key = 'test-key';
 
     const { result } = renderHook(({ apiKey }) => useCioPlpProvider({ apiKey }), {
       initialProps: { apiKey: key },
