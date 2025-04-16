@@ -211,6 +211,7 @@ export interface PlpBrowseResponse extends PlpSearchResponse {}
 export interface CioPlpProviderProps {
   apiKey: string;
   cioClient?: Nullable<ConstructorIOClient>;
+  cioClientOptions?: Omit<ConstructorClientOptions, 'apiKey' | 'version'>;
   formatters?: Partial<Formatters>;
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
