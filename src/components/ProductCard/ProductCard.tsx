@@ -71,7 +71,7 @@ export default function ProductCard(props: ProductCardProps) {
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
-  const cnstrcData = getProductCardCnstrcDataAttributes(item, productInfo);
+  const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
   return (
     <>
