@@ -240,13 +240,13 @@ export type UseProductSwatchProps = {
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
 
 export interface ProductInfoObject {
-  productSwatch: ProductSwatchObject | undefined;
+  productSwatch?: ProductSwatchObject;
   itemName: string;
   itemId: string;
-  itemPrice: number | undefined;
-  itemUrl: string | undefined;
-  itemImageUrl: string | undefined;
-  variationId: string | undefined;
+  itemPrice?: number;
+  itemUrl?: string;
+  itemImageUrl?: string;
+  variationId?: string;
 }
 
 export type UseProductInfoProps = {
