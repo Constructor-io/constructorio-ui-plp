@@ -28,10 +28,7 @@ export function getItemUrl(
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export function getName(
-  item: Item | Variation,
-  selectedSwatch?: SwatchItem | undefined,
-): string {
+export function getName(item: Item | Variation, selectedSwatch?: SwatchItem | undefined): string {
   return selectedSwatch?.itemName || selectedSwatch?.variation?.itemName || item.itemName;
 }
 
