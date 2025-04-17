@@ -8,7 +8,7 @@ import { renderHookWithCioPlp } from './test-utils';
 const transformedItem = transformResultItem(mockItem);
 
 describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
-  test('Should return productSwatch, itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
+  test('Should return relevant data attributes for Product Card', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
