@@ -43,7 +43,7 @@ export interface ItemFieldGetters {
   getItemUrl: (item: Item | Variation) => string | undefined;
   getImageUrl: (item: Item | Variation) => string | undefined;
   getName: (item: Item | Variation) => string;
-  getSwatchPreview: (variation: Variation) => string | undefined;
+  getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
     retrievePrice: ItemFieldGetters['getPrice'],
