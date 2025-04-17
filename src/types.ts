@@ -240,11 +240,13 @@ export type UseProductSwatchProps = {
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
 
 export interface ProductInfoObject {
-  productSwatch: ProductSwatchObject | undefined;
+  productSwatch?: ProductSwatchObject;
   itemName: string;
-  itemPrice: number | undefined;
-  itemUrl: string | undefined;
-  itemImageUrl: string | undefined;
+  itemId: string;
+  itemPrice?: number;
+  itemUrl?: string;
+  itemImageUrl?: string;
+  variationId?: string;
 }
 
 export type UseProductInfoProps = {
@@ -307,6 +309,8 @@ export interface PlpItemGroup {
   children: Array<PlpItemGroup>;
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
+
+export type CnstrcData = Record<`data-cnstrc-${string}`, string | number | boolean>;
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
-import { IncludeRenderProps, Item, ProductInfoObject } from '../../types';
+import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
+import { getProductCardCnstrcDataAttributes } from '../../utils';
 
 interface Props {
   /**
@@ -40,6 +41,10 @@ export interface ProductCardRenderProps extends ProductCardProps {
    * Set globally at the CioPlp provider level.
    */
   onClick: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Data Attributes to surface on parent div of product card.
+   */
+  productCardCnstrcDataAttributes: CnstrcData;
 }
 
 export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>;
@@ -66,6 +71,8 @@ export default function ProductCard(props: ProductCardProps) {
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
+  const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -75,9 +82,11 @@ export default function ProductCard(props: ProductCardProps) {
           formatPrice,
           onAddToCart,
           onClick,
+          productCardCnstrcDataAttributes: cnstrcData,
         })
       ) : (
         <a
+          {...cnstrcData}
           className='cio-product-card'
           href={itemUrl}
           onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
