@@ -12,11 +12,16 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   }
 
   const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice);
+  const getImageUrl = tryCatchify(state?.itemFieldGetters?.getImageUrl);
+  const getItemUrl = tryCatchify(state?.itemFieldGetters?.getItemUrl);
+  const getName = tryCatchify(state?.itemFieldGetters?.getName);
 
-  const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
-  const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
-  const itemUrl = productSwatch?.selectedVariation?.url || item.url;
+  const itemName = getName(item, productSwatch?.selectedVariation);
+  const itemPrice = getPrice(item, productSwatch?.selectedVariation);
+  const itemImageUrl = getImageUrl(item, productSwatch?.selectedVariation, {
+    imageBaseUrl: state.customConfigs.imageBaseUrl,
+  });
+  const itemUrl = getItemUrl(item, productSwatch?.selectedVariation);
 
   return {
     productSwatch,
