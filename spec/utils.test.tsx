@@ -1,8 +1,6 @@
 import { waitFor } from '@testing-library/react';
 import { transformResultItem } from '../src/utils/transformers';
-import {
-  getProductCardCnstrcDataAttributes,
-} from '../src/utils';
+import { getProductCardCnstrcDataAttributes } from '../src/utils';
 import useProductInfo from '../src/hooks/useProduct';
 import mockItem from './local_examples/item.json';
 import { renderHookWithCioPlp } from './test-utils';
