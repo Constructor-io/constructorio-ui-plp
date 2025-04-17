@@ -14,7 +14,7 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 | ----------- | ------------------------ | ---------------------- |
 | getPrice    | `(item: Item) => number` | Get price funciton     |
 | getImageUrl | `(item: Item) => string` | Get image url funciton |
-| getUrl      | `(item: Item) => stirng` | Get href url funciton  |
+| getItemUrl  | `(item: Item) => stirng` | Get href url funciton  |
 | getName     | `(item: Item) => string` | Get item name funciton |
 
 ### `Callbacks`

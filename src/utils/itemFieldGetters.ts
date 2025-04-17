@@ -20,7 +20,7 @@ export function getImageUrl(
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export function getUrl(
+export function getItemUrl(
   item: Item | Variation,
   selectedSwatch?: SwatchItem | undefined,
 ): string | undefined {
@@ -31,7 +31,7 @@ export function getUrl(
 export function getName(
   item: Item | Variation,
   selectedSwatch?: SwatchItem | undefined,
-): string | undefined {
+): string {
   return selectedSwatch?.itemName || selectedSwatch?.variation?.itemName || item.itemName;
 }
 

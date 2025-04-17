@@ -13,7 +13,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice);
   const getImageUrl = tryCatchify(state?.itemFieldGetters?.getImageUrl);
-  const getUrl = tryCatchify(state?.itemFieldGetters?.getUrl);
+  const getItemUrl = tryCatchify(state?.itemFieldGetters?.getItemUrl);
   const getName = tryCatchify(state?.itemFieldGetters?.getName);
 
   const itemName = getName(item, productSwatch?.selectedVariation);
@@ -21,7 +21,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const itemImageUrl = getImageUrl(item, productSwatch?.selectedVariation, {
     imageBaseUrl: state.customConfigs.imageBaseUrl,
   });
-  const itemUrl = getUrl(item, productSwatch?.selectedVariation);
+  const itemUrl = getItemUrl(item, productSwatch?.selectedVariation);
 
   return {
     productSwatch,

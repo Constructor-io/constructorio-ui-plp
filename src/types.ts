@@ -39,11 +39,11 @@ export interface ApiHierarchicalFacetOption extends ApiFacetOption {
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface ItemFieldGetters {
-  getPrice: (item: Item | Variation) => number;
-  getUrl: (item: Item | Variation) => string;
-  getImageUrl: (item: Item | Variation) => string;
+  getPrice: (item: Item | Variation) => number | undefined;
+  getItemUrl: (item: Item | Variation) => string | undefined;
+  getImageUrl: (item: Item | Variation) => string | undefined;
   getName: (item: Item | Variation) => string;
-  getSwatchPreview: (variation: Variation) => string;
+  getSwatchPreview: (variation: Variation) => string | undefined;
   getSwatches: (
     item: Item,
     retrievePrice: ItemFieldGetters['getPrice'],
