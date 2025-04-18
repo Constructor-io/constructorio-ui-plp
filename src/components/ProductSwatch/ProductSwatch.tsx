@@ -24,6 +24,9 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   } = context;
 
   const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
+    e.preventDefault(); // Prevents link navigation
+    e.stopPropagation(); // Prevents the event from bubbling up to parent elements
+
     selectVariation(clickedSwatch);
 
     if (onSwatchClick) {
