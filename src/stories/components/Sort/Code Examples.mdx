@@ -51,30 +51,56 @@ export default function MyComponent() {
 If you prefer to handle the rendering of the Sort component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid, Sort, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+import { useCallback } from 'react';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomSort(props) {
-  const {sortOptions, selectedSort, changeSelectedSort} = props
+  const { sortOptions, selectedSort, changeSelectedSort } = props;
 
   return (
     <>
-      {/* CUSTOM_MARKUP_HERE */}
+      <h3>Sort by: {selectedSort?.sortBy}</h3>
+      {sortOptions.map((option) => (
+        <label>
+          <input
+            type='radio'
+            checked={
+              selectedSort?.sortBy === option.sortBy && selectedSort?.sortOrder === option.sortOrder
+            }
+            onChange={(event) => changeSelectedSort(JSON.parse(event.target.value))}
+            value={JSON.stringify(option)}
+          />
+          <span>{option.displayName}</span>
+        </label>
+      ))}
     </>
   );
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Sort />
-        <MyCustomSort />
-      </Sort>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            return (
+              <Sort sortOptions={props.data.response.sortOptions}>
+                {(sortProps) => {
+                  return <MyCustomSort {...sortProps} />;
+                }}
+              </Sort>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
