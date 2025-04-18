@@ -68,8 +68,8 @@ export default function MyComponent() {
           if (utils.isPlpBrowseDataResults(props.data) || utils.isPlpSearchDataResults(props.data))
             return (
               <Pagination totalNumResults={props.data.response.totalNumResults}>
-                {(props) => {
-                  return <MyCustomPagination {...props} />;
+                {(paginationProps) => {
+                  return <MyCustomPagination {...paginationProps} />;
                 }}
               </Pagination>
             );
