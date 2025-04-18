@@ -24,11 +24,17 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   } = context;
 
   const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
+    // Stop the event from bubbling up to the parent element
+    e.stopPropagation();
+
     selectVariation(clickedSwatch);
 
     if (onSwatchClick) {
       onSwatchClick(e, clickedSwatch);
     }
+
+    // Prevent link navigation
+    e.preventDefault();
   };
 
   return (
