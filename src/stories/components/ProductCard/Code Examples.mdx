@@ -1,77 +1,144 @@
 import { Meta, Canvas, Story, Controls, Markdown } from '@storybook/blocks';
 import meta, { Primary } from './ProductCard.stories';
-import RenderProps from './RenderProps.md?raw'
+import RenderProps from './RenderProps.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={meta} />
 
 # `ProductCard`
-A Component to manage Product Card Interactions. 
+
+A Component to manage Product Card Interactions.
 
 The Product Card component comes bundled with Constructor tracking and default rendering built-in.
 
 <style>
-{`
+  {`
   .docs-story div.innerZoomElementWrapper {
     max-height: 100vh;
   }
 `}
 </style>
-<Canvas sourceState="none">
+
+<Canvas sourceState='none'>
   <Story of={Primary} />
 </Canvas>
 
-
 ## Basic example
-```jsx
-import { useCioClient, ProductCard, CioPlp } from '@constructor-io/constructorio-ui-plp'
 
-function myApp() {
-  ...
-  
+```jsx
+import { CioPlp, CioPlpGrid, ProductCard, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <ProductCard item={item} />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            return (
+              <div className='cio-product-tiles-container'>
+                {props.data.response.results.map((item) => {
+                  return (
+                    <div key={item.itemId}>
+                      <ProductCard item={item} />
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
 ## Render Props pattern
+
 If you prefer handle the rendering of the ProductCard component, you may pass a Render Props function to the component.
+
 ```jsx
-import { ProductCardComponent, useOnAddToCart, useOnProductCardClick } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid, ProductCard, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomProductCard(props) {
-  const { onClick, formatPrice, productInfo, onAddToCart, item } = props
-  const price = productInfo.itemPrice
+  const {
+    item,
+    productInfo,
+    formatPrice,
+    onAddToCart,
+    onClick,
+    productCardCnstrcDataAttributes: cnstrcData,
+  } = props;
+
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
 
   return (
-    <div class="cio-product-card" onClick={(e) => onClick(e, item)}>
-      <div class="title">{item.itemName}</div>
-      <div class="price">{formatPrice(price)}</div>
-      <button type="button" onClick={(e) => onAddToCart(e, item)}>Add To Cart</button>
-    </div>
-  )
+    <a
+      {...cnstrcData}
+      href={itemUrl}
+      onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
+      <div>
+        <img alt={itemName} src={itemImageUrl} />
+      </div>
+
+      <div>
+        {Number(itemPrice) >= 0 && <div>{formatPrice(itemPrice)}</div>}
+        <div>{itemName}</div>
+      </div>
+      <button
+        type='button'
+        onClick={(e) =>
+          onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
+        }>
+        Add to Cart
+      </button>
+    </a>
+  );
 }
 
-function myApp() {
-  const myCustomAddToCart = () => console.log('Added to cart')
-  const myCustomProductCardClick = () => console.log('Product Card Clicked')
-  const myCustomCallbacks = { myCustomAddToCart, myCustomProductCardClick }
-  ...
-  
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={YOUR_API_KEY} callbacks={myCustomCallbacks}>
-      <ProductCard>
-        <MyCustomProductCard />
-      </ProductCard>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            return (
+              <div className='cio-product-tiles-container'>
+                {props.data.response.results.map((item) => {
+                  return (
+                    <div key={item.itemId}>
+                      <ProductCard item={item}>
+                        {(productCardProps) => {
+                          return <MyCustomProductCard {...productCardProps} />;
+                        }}
+                      </ProductCard>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the ProductCard component via render props.
+
+> Accessible to children of the ProductCard component via render props.
 
 <Markdown>{RenderProps}</Markdown>
