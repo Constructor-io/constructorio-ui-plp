@@ -46,17 +46,10 @@ const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 function MyCustomPagination(props) {
   const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = props;
   return (
-    <div>
-      <button onClick={() => prevPage()}>&lt;</button>
-      {pages.map((page) => (
-        <button onClick={() => goToPage(page)} type='button'>
-          {page === -1 ? <span>...</span> : page}
-        </button>
-      ))}
-      <button onClick={() => nextPage()} type='button'>
-        &gt;
-      </button>
-    </div>
+    <>
+      <div>Total Page: {totalPages}</div>
+      <div>Page Number: {JSON.stringify(pages)}</div>
+    </>
   );
 }
 
