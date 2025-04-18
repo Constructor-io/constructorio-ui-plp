@@ -33,7 +33,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
       onSwatchClick(e, clickedSwatch);
     }
 
-    // Prevent link navigation
+    // Prevents link navigation
     e.preventDefault();
   };
 
