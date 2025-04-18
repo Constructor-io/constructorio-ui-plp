@@ -40,15 +40,10 @@ export default function MyComponent() {
             utils.isPlpBrowseDataResults(props.data) ||
             utils.isPlpSearchDataResults(props.data)
           ) {
+            const firstItem = props.data.response.results[0];
             return (
               <div className='cio-product-tiles-container'>
-                {props.data.response.results.map((item) => {
-                  return (
-                    <div key={item.itemId}>
-                      <ProductCard item={item} />
-                    </div>
-                  );
-                })}
+                <ProductCard item={firstItem} />
               </div>
             );
           }
@@ -81,28 +76,7 @@ function MyCustomProductCard(props) {
 
   const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
 
-  return (
-    <a
-      {...cnstrcData}
-      href={itemUrl}
-      onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
-      <div>
-        <img alt={itemName} src={itemImageUrl} />
-      </div>
-
-      <div>
-        {Number(itemPrice) >= 0 && <div>{formatPrice(itemPrice)}</div>}
-        <div>{itemName}</div>
-      </div>
-      <button
-        type='button'
-        onClick={(e) =>
-          onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
-        }>
-        Add to Cart
-      </button>
-    </a>
-  );
+  return <>{/* CUSTOM_MARKUP_HERE */}</>;
 }
 
 export default function MyComponent() {
@@ -114,19 +88,14 @@ export default function MyComponent() {
             utils.isPlpBrowseDataResults(props.data) ||
             utils.isPlpSearchDataResults(props.data)
           ) {
+            const firstItem = props.data.response.results[0];
             return (
               <div className='cio-product-tiles-container'>
-                {props.data.response.results.map((item) => {
-                  return (
-                    <div key={item.itemId}>
-                      <ProductCard item={item}>
-                        {(productCardProps) => {
-                          return <MyCustomProductCard {...productCardProps} />;
-                        }}
-                      </ProductCard>
-                    </div>
-                  );
-                })}
+                <ProductCard item={firstItem}>
+                  {(productCardProps) => {
+                    return <MyCustomProductCard {...productCardProps} />;
+                  }}
+                </ProductCard>
               </div>
             );
           }
