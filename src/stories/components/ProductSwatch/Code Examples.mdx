@@ -1,45 +1,64 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as ProductSwatchStories from './ProductSwatch.stories';
-import RenderProps from './RenderProps.md?raw'
+import RenderProps from './RenderProps.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={ProductSwatchStories} />
 
 # `ProductSwatch`
+
 A Component to manage Product Swatch interactions and UI.
 
 <Canvas of={ProductSwatchStories.Primary} />
 
 {/* Todo: Update examples */}
+
 ## Basic Example
-  ```jsx
-  import React from 'react';
-  import { CioPlp, ProductSwatch, useProductSwatch } from '@constructor-io/constructorio-ui-plp';
 
-  const apiKey = 'MY_API_KEY'
+```jsx
+import React from 'react';
+import { CioPlp, ProductSwatch, useProductSwatch } from '@constructor-io/constructorio-ui-plp';
 
-  function MyComponent() {
-  const {swatchList, selectedVariation, selectVariation} = useProductSwatch({ item });
+const apiKey = 'MY_API_KEY';
 
-    return (
-      <>
-        <CioPlp apiKey={MY_API_KEY}>
-          <ProductSwatch swatchObject={{ swatchList, selectedVariation, selectVariation }} />
-        </CioPlp>
-      </>
-    );
-  }
-  ```
+function MyComponent() {
+  const { swatchList, selectedVariation, selectVariation } = useProductSwatch({ item });
 
+  return (
+    <>
+      <CioPlp apiKey={MY_API_KEY}>
+        <ProductSwatch swatchObject={{ swatchList, selectedVariation, selectVariation }} />
+      </CioPlp>
+    </>
+  );
+}
+```
 
 ## Render Props pattern
+
 If you prefer handle the rendering of the ProductSwatch component, you may pass a Render Props function to the component.
+
+> If your `ProductSwatch` is nested within a clickable parent component (eg. `ProductCard`), we recommend adding the following event modifiers to your `onClick` handler:
+
+- `event.stopPropagation()` - Prevents the event from bubbling up to parent elements
+- `event.preventDefault()` - Prevents default browser behaviors like link navigation
+
+Example handler:
+
+```
+onClick={(event) => {
+  event.stopPropagation();
+  /** On Click Logic */
+  event.preventDefault();
+}}
+```
+
 ```jsx
 import { CioPlp, ProductSwatch } from '@constructor-io/constructorio-ui-plp'
 
 function myApp() {
   ...
-  
+
   return (
     <CioPlp apiKey={YOUR_API_KEY}>
       <ProductSwatch>
@@ -72,7 +91,9 @@ function myApp() {
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the ProductSwatch component via render props.
+
+> Accessible to children of the ProductSwatch component via render props.
 
 `ProductSwatch`
+
 <Markdown>{RenderProps}</Markdown>

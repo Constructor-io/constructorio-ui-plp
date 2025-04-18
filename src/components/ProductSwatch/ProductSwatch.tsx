@@ -24,7 +24,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   } = context;
 
   const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
-    // Stop the event from bubbling up to the parent element
+    // Prevents the event from bubbling up to parent elements
     e.stopPropagation();
 
     selectVariation(clickedSwatch);
