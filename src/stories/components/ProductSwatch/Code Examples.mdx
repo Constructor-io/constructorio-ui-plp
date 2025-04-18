@@ -39,19 +39,19 @@ function MyComponent() {
 If you prefer handle the rendering of the ProductSwatch component, you may pass a Render Props function to the component.
 
 > If your `ProductSwatch` is nested within a clickable parent component (eg. `ProductCard`), we recommend adding the following event modifiers to your `onClick` handler:
-
-- `event.stopPropagation()` - Prevents the event from bubbling up to parent elements
-- `event.preventDefault()` - Prevents default browser behaviors like link navigation
-
-Example handler:
-
-```
-onClick={(event) => {
-  event.stopPropagation();
-  /** On Click Logic */
-  event.preventDefault();
-}}
-```
+>
+> - `event.preventDefault()` - Prevents default browser behaviors like link navigation
+> - `event.stopPropagation()` - Prevents the event from bubbling up to parent elements
+>
+> Example handler:
+>
+> ```js
+> onClick={(event) => {
+>   event.preventDefault();
+>   event.stopPropagation();
+>   /** On Click Logic */
+> }}
+> ```
 
 ```jsx
 import { CioPlp, ProductSwatch } from '@constructor-io/constructorio-ui-plp'
