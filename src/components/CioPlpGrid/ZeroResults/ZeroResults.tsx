@@ -34,6 +34,15 @@ export default function ZeroResults() {
         <li>Use fewer keywords</li>
         <li>Broaden your search terms</li>
       </ul>
+      <ul className='cio-zero-results-option-list'>
+        <li>
+          To visit <strong>Search Page</strong> example, append current URL with <i>?q=shirt</i>
+        </li>
+        <li>
+          To visit <strong>Browse Page</strong> example, append current URL with{' '}
+          <i>/group_id/1035</i>
+        </li>
+      </ul>
     </>
   );
 }
