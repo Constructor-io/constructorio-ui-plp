@@ -24,14 +24,16 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   } = context;
 
   const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
-    e.preventDefault(); // Prevents link navigation
-    e.stopPropagation(); // Prevents the event from bubbling up to parent elements
-
     selectVariation(clickedSwatch);
 
     if (onSwatchClick) {
       onSwatchClick(e, clickedSwatch);
     }
+  };
+
+  const swatchContainerClickHandler = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   return (
@@ -44,7 +46,8 @@ export default function ProductSwatch(props: ProductSwatchProps) {
         })
       ) : (
         <div>
-          <ul className='cio-swatch-container'>
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+          <ul className='cio-swatch-container' onClick={swatchContainerClickHandler}>
             {swatchList?.map((swatch) => {
               const isSelected = selectedVariation?.variationId === swatch.variationId;
               const color = isHexColor(swatch?.swatchPreview)
