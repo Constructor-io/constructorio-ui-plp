@@ -1,78 +1,177 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as ProductSwatchStories from './ProductSwatch.stories';
-import RenderProps from './RenderProps.md?raw'
+import RenderProps from './RenderProps.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={ProductSwatchStories} />
 
 # `ProductSwatch`
+
 A Component to manage Product Swatch interactions and UI.
 
 <Canvas of={ProductSwatchStories.Primary} />
 
 {/* Todo: Update examples */}
+
 ## Basic Example
-  ```jsx
-  import React from 'react';
-  import { CioPlp, ProductSwatch, useProductSwatch } from '@constructor-io/constructorio-ui-plp';
 
-  const apiKey = 'MY_API_KEY'
+This component must be used within a **ProductCard** as it relies on the ProductCard's context to access product data.
 
-  function MyComponent() {
-  const {swatchList, selectedVariation, selectVariation} = useProductSwatch({ item });
+- You will also need to pass the **itemFieldGetter** prop to CioPlp since the ProductSwatch component depends on these getters to extract the correct data from ProductCard.
 
-    return (
-      <>
-        <CioPlp apiKey={MY_API_KEY}>
-          <ProductSwatch swatchObject={{ swatchList, selectedVariation, selectVariation }} />
-        </CioPlp>
-      </>
-    );
-  }
-  ```
+```jsx
+import {
+CioPlp,
+CioPlpGrid,
+ProductCard,
+ProductSwatch,
+SwatchItem,
+utils,
+} from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
 
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+export default function MyComponent() {
+return (
+  <CioPlp
+    apiKey={DEMO_API_KEY}
+    itemFieldGetters={{
+      getPrice: (item) => item.data.price,
+      getSwatches: (item) => {
+        const swatchList: SwatchItem[] = [];
+
+        item?.variations?.forEach((variation) => {
+          console.log(variation);
+          swatchList.push({
+            itemName: item?.itemName,
+            url: item?.data.url,
+            imageUrl: variation?.imageUrl,
+            variationId: variation?.data.variationId,
+            swatchPreview: variation?.imageUrl || "",
+          });
+        });
+
+        return swatchList;
+      },
+      getSwatchPreview: (item) => item.imageUrl || "",
+    }}
+  >
+    <CioPlpGrid>
+      {(props) => {
+        if (
+          utils.isPlpBrowseDataResults(props.data) ||
+          utils.isPlpSearchDataResults(props.data)
+        ) {
+          const firstItem = props.data.response.results.find(
+            (item) => item.variations && item.variations?.length > 1
+          );
+          return (
+            <ProductCard item={firstItem}>
+              {(productProps) => {
+                if (productProps.productInfo.productSwatch) {
+                  return (
+                    <ProductSwatch
+                      swatchObject={productProps.productInfo.productSwatch}
+                    />
+                  );
+                }
+              }}
+            </ProductCard>
+          );
+        }
+      }}
+    </CioPlpGrid>
+  </CioPlp>
+);
+}
+```
 
 ## Render Props pattern
-If you prefer handle the rendering of the ProductSwatch component, you may pass a Render Props function to the component.
-```jsx
-import { CioPlp, ProductSwatch } from '@constructor-io/constructorio-ui-plp'
 
-function myApp() {
-  ...
-  
+If you prefer handle the rendering of the ProductSwatch component, you may pass a Render Props function to the component.
+
+```jsx
+import {
+  CioPlp,
+  CioPlpGrid,
+  ProductCard,
+  ProductSwatch,
+  SwatchItem,
+  utils,
+} from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
+
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+function MyCustomSwatch(props) {
+  const { swatchList, selectedVariation, selectVariation } = props;
+  return <pre>{JSON.stringify(swatchList, null, 2)}</pre>;
+}
+
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <ProductSwatch>
-        {
-          ({
-            swatchList,
-            selectedVariation,
-            selectVariation,
-          }) => (
-            <ul>
-            {swatchList?.map((swatch) => (
-              <li
-                key={swatch.variationId}
-                className={`cio-swatch-item ${
-                  selectedVariation?.variationId === swatch.variationId ? 'cio-swatch-selected' : ''
-                }`}
-                onClick={() => selectVariation(swatch)}
-                style={{
-                  background: swatch?.swatchPreview
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      itemFieldGetters={{
+        getPrice: (item) => item.data.price,
+        getSwatches: (item) => {
+          const swatchList: SwatchItem[] = [];
+
+          item?.variations?.forEach((variation) => {
+            console.log(variation);
+            swatchList.push({
+              itemName: item?.itemName,
+              url: item?.data.url,
+              imageUrl: variation?.imageUrl,
+              variationId: variation?.data.variationId,
+              swatchPreview: variation?.imageUrl || "",
+            });
+          });
+
+          return swatchList;
+        },
+        getSwatchPreview: (item) => item.imageUrl || "",
+      }}
+    >
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            const firstItem = props.data.response.results.find(
+              (item) => item.variations && item.variations?.length > 1
+            );
+            return (
+              <ProductCard item={firstItem}>
+                {(productProps) => {
+                  if (productProps.productInfo.productSwatch) {
+                    return (
+                      <ProductSwatch
+                        swatchObject={productProps.productInfo.productSwatch}
+                      >
+                        {(swatchProps) => {
+                          return <MyCustomSwatch {...swatchProps} />;
+                        }}
+                      </ProductSwatch>
+                    );
+                  }
                 }}
-              />
-            ))}
-            </ul>
-           )
-        }
-      </ProductSwatch>
+              </ProductCard>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the ProductSwatch component via render props.
+
+> Accessible to children of the ProductSwatch component via render props.
 
 `ProductSwatch`
+
 <Markdown>{RenderProps}</Markdown>
