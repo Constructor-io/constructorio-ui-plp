@@ -116,6 +116,101 @@ describe('Testing Component: Filters', () => {
       expect(mockChildren).toHaveBeenCalled();
       expect(getByText('Custom Filters')).toBeInTheDocument();
     });
+
+    it('Should render ranged filters correctly', async () => {
+      const mockPriceFacet = {
+        displayName: 'Price',
+        name: 'price',
+        type: 'range',
+        data: {},
+        hidden: false,
+        min: 1,
+        max: 100,
+        status: {},
+      };
+
+      const { getByText, container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockPriceFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+
+        const minInputValue = container.querySelector('.cio-slider-input-min input');
+        const maxInputValue = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputValue.value).toBe(mockPriceFacet.min.toString());
+        expect(maxInputValue.value).toBe(mockPriceFacet.max.toString());
+
+        const selectableTrack = container.querySelector(
+          '.cio-doubly-ended-slider .cio-slider-track-selected',
+        );
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+
+        expect(selectableTrack.style.width).toBe('100.00%');
+        expect(selectableTrack.style.left).toBe('0.00%');
+
+        expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(minInputSlider.value).toBe(mockPriceFacet.min.toString());
+
+        expect(maxInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(maxInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(maxInputSlider.value).toBe(mockPriceFacet.max.toString());
+      });
+    });
+
+    it('Should render ranged filters that have already been applied correctly', async () => {
+      const mockPriceFacet = {
+        displayName: 'Price',
+        name: 'price',
+        type: 'range',
+        data: {},
+        hidden: false,
+        min: 1,
+        max: 100,
+        status: {
+          min: 30,
+          max: 75,
+        },
+      };
+
+      const { getByText, container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockPriceFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+
+        const minInputValue = container.querySelector('.cio-slider-input-min input');
+        const maxInputValue = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputValue.value).toBe(mockPriceFacet.status.min.toString());
+        expect(maxInputValue.value).toBe(mockPriceFacet.status.max.toString());
+
+        const selectableTrack = container.querySelector(
+          '.cio-doubly-ended-slider .cio-slider-track-selected',
+        );
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+
+        expect(selectableTrack.style.width).toBe('45.45%');
+        expect(selectableTrack.style.left).toBe('29.29%');
+
+        expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(minInputSlider.value).toBe(mockPriceFacet.status.min.toString());
+
+        expect(maxInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(maxInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(maxInputSlider.value).toBe(mockPriceFacet.status.max.toString());
+      });
+    });
   });
 
   describe(' - Behavior Tests', () => {
