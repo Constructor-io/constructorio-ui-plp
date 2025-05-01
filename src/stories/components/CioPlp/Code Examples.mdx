@@ -29,19 +29,18 @@ Open in full screen here:
 
 This renders the PLP displayed above.
 
+To view the examples and see this component in action
+  - **Search** - append your URL with `?q=shirt`
+  - **Browse** - append your URL with `/group_id/1035`
+
 ```jsx
-import React from 'react';
-import { CioPlp } from '@constructor-io/constructorio-ui-plp';
-import '@constructor-io/constructorio-ui-plp/styles.css';
+import { CioPlp } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
 
-function MyComponent() {
-  return (
-    <>
-      <CioPlp apiKey={apiKey} />
-    </>
-  );
+export default function MyComponent() {
+  return <CioPlp apiKey={DEMO_API_KEY} />;
 }
 ```
 
@@ -55,9 +54,12 @@ Take control of the rendering logic by using Render Props through `children`.
 The [context](..?path=/docs/components-cioplp--code-examples#cioplp-context-value) will be passed along as props to your render function.
 
 ```jsx
-import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import { CioPlp } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
 
-function MyGrid(props) {
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+function MyCustomPlp(props) {
   const {
     cioClient,
     cioClientOptions,
@@ -65,15 +67,18 @@ function MyGrid(props) {
     formatters,
     itemFieldGetters,
     urlHelpers,
+    callbacks,
   } = props;
 
   return <>{/* CUSTOM_MARKUP_HERE */}</>;
 }
 
-function MyComponent() {
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={apiKey}>
-      <MyGrid />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      {(props) => {
+        return <MyCustomPlp {...props} />;
+      }}
     </CioPlp>
   );
 }

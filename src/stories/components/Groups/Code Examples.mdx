@@ -26,15 +26,21 @@ To view the examples and see this component in action
 - **Browse** - append your URL with `/group_id/1035`
 
 ```jsx
-import React from 'react';
-import { CioPlp, Groups } from '@constructor-io/constructorio-ui-plp';
+import { CioPlp, CioPlpGrid, Groups, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-function MyComponent() {
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Groups />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (utils.isPlpSearchDataResults(props.data)) {
+            return <Groups groups={props.data.response.groups} />;
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
   );
 }
@@ -45,30 +51,42 @@ function MyComponent() {
 To override the default rendering of the Groups component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, Filters } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid, Groups, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-function MyCustomGroupFilter(props) {
-  const {groups, initialNumOptions} = props
-
-  return (
-    <>
-      {/* CUSTOM_MARKUP_HERE */}
-    </>
-  );
+function MyCustomGroups(props) {
+  const {
+    groupOptions,
+    currentGroupId,
+    breadcrumbs,
+    currentPage,
+    initialNumOptions,
+    isShowAll,
+    optionsToRender,
+  } = props;
+  return <pre>{JSON.stringify(groupOptions, null, 2)}</pre>;
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Groups>
-        <MyCustomGroupFilter />
-      </Groups>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (utils.isPlpSearchDataResults(props.data)) {
+            return (
+              <Groups groups={props.data.response.groups}>
+                {(groupProps) => {
+                  return <MyCustomGroups {...groupProps} />;
+                }}
+              </Groups>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
