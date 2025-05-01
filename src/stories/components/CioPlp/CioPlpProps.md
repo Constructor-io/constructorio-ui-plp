@@ -8,6 +8,8 @@ Formatters will be used to modify how certain fields are rendered
 | ----------- | --------------------------- | --------------------- |
 | formatPrice | `(price: number) => string` | Format price funciton |
 
+<br>
+
 ### `Callbacks`
 
 ---
@@ -21,6 +23,8 @@ Callbacks will be composed with the library's internal tracking calls for a give
 | onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void` | Product swatch click callback function |
 | onRedirect         | `(url: string) => void`                                    | Redirect callback function             |
 
+<br>
+
 ### `ItemFieldGetters`
 
 ---
@@ -31,11 +35,13 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 | -------- | ------------------------ | ------------------ |
 | getPrice | `(item: Item) => number` | Get price funciton |
 
+<br>
+
 ### `UrlHelpers`
 
 ---
 
-Url Helpers are used for managing the url and request state
+Url Helpers are used for managing the url and request state. These functions define how this Library modifies and parses the URL.
 
 | property              | type                                                                    | description                                                     |
 | --------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
@@ -48,9 +54,10 @@ Url Helpers are used for managing the url and request state
 > #### `getUrl`
 
 - Default Implementation
+- type: () => string \| undefined
 
   ```javascript
-  function getUrl(): string | undefined {
+  function getUrl() {
     if (typeof window === 'undefined') return undefined;
     return window.location.href;
   }
@@ -59,9 +66,10 @@ Url Helpers are used for managing the url and request state
 > #### `setUrl`
 
 - Default Implementation
+- type: (newEncodedUrlState: string) => void
 
   ```javascript
-  function setUrl(newUrlWithEncodedState: string) {
+  function setUrl(newUrlWithEncodedState) {
     if (typeof window === 'undefined') return;
     window.location.href = newUrlWithEncodedState;
   }
@@ -70,21 +78,22 @@ Url Helpers are used for managing the url and request state
 > #### `getStateFromUrl`
 
 - Default Implementation
+- type: (urlString: string) => RequestConfig
 
   ```javascript
-  function getStateFromUrl(url: string): RequestConfigs {
+  function getStateFromUrl(url) {
     const urlObject = new URL(url);
     const urlParams = urlObject.searchParams;
     const paths = decodeURI(urlObject?.pathname)?.split('/');
-    let filterName: string | undefined;
-    let filterValue: string | undefined;
+    let filterName;
+    let filterValue;
 
     if (paths.length > 0) {
       filterName = 'group_id';
       filterValue = paths[paths.length - 1];
     }
 
-    const rawState = {} as Record<string, string>;
+    const rawState = {};
     Object.entries(defaultQueryStringMap).forEach(([key, val]) => {
       const storedVal = urlParams.get(val);
       if (storedVal != null) {
@@ -106,7 +115,7 @@ Url Helpers are used for managing the url and request state
       ...rest
     } = rawState;
 
-    const state = { ...rest } as RequestConfigs;
+    const state = { ...rest };
     if (page) state.page = Number(page);
     if (offset) state.offset = Number(offset);
     if (resultsPerPage) state.resultsPerPage = Number(resultsPerPage);
@@ -123,55 +132,57 @@ Url Helpers are used for managing the url and request state
 > #### `getUrlFromState`
 
 - Default Implementation
+- type: (state: RequestConfigs, options: QueryParamEncodingOptions) => string
 
   ```javascript
-  function getUrlFromState(state: RequestConfigs, url: string): string {
-  const urlObject = new URL(url);
-  let { pathname } = urlObject;
+  function getUrlFromState(state, url) {
+    const urlObject = new URL(url);
+    let { pathname } = urlObject;
 
-  if (state.filterName && state.filterValue) {
-    if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
-      pathname = pathname.replace(
-        /\/(group_id|collection_id)\/[^/]+$/,
-        `/${state.filterName}/${state.filterValue}`,
-      );
-    } else {
-      pathname = `/${state.filterName}/${state.filterValue}`;
-    }
-  }
-
-  const params = new URLSearchParams();
-
-  Object.entries(state).forEach(([key, val]) => {
-    if (defaultQueryStringMap[key] === undefined) {
-      return;
+    if (state.filterName && state.filterValue) {
+      if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
+        pathname = pathname.replace(
+          /\/(group_id|collection_id)\/[^/]+$/,
+          `/${state.filterName}/${state.filterValue}`,
+        );
+      } else {
+        pathname = `/${state.filterName}/${state.filterValue}`;
+      }
     }
 
-    let encodedVal: string = '';
+    const params = new URLSearchParams();
 
-    if (key === 'filters' && state.filters) {
-      getFilterParamsFromState(params, state.filters);
-    } else if (typeof val !== 'string') {
-      encodedVal = JSON.stringify(val);
-    } else {
-      encodedVal = val;
-    }
+    Object.entries(state).forEach(([key, val]) => {
+      if (defaultQueryStringMap[key] === undefined) {
+        return;
+      }
 
-    if (encodedVal) {
-      params.set(defaultQueryStringMap[key], encodedVal);
-    }
-  });
+      let encodedVal = '';
 
-  return `${urlObject.origin}${pathname}?${params.toString()}`;
+      if (key === 'filters' && state.filters) {
+        getFilterParamsFromState(params, state.filters);
+      } else if (typeof val !== 'string') {
+        encodedVal = JSON.stringify(val);
+      } else {
+        encodedVal = val;
+      }
+
+      if (encodedVal) {
+        params.set(defaultQueryStringMap[key], encodedVal);
+      }
+    });
+
+    return `${urlObject.origin}${pathname}?${params.toString()}`;
   }
   ```
 
 > #### `defaultQueryStringMap`
 
 - Default Implementation
+- type: DefaultQueryStringMap
 
   ```javascript
-  const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
+  const defaultQueryStringMap = Object.freeze({
     query: 'q',
     page: 'page',
     offset: 'offset',
