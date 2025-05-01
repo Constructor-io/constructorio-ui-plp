@@ -1,34 +1,18 @@
 import { Meta, Story, Canvas, Markdown } from '@storybook/blocks';
 import * as SortStories from './Sort.stories';
-import UseSortReturn from '../../hooks/UseSort/UseSortReturn.md?raw'
+import UseSortReturn from '../../hooks/UseSort/UseSortReturn.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={SortStories} />
 
 # `Sort`
+
 The Sort component is a dynamic component.
-It is responsible for displaying the sort options based on user's search or browse response. 
+It is responsible for displaying the sort options based on user's search or browse response.
 
 **Dynamic Options Rendering:**
+
 - Automatically updates and displays sort options based on user requests
-
-## Basic Example
-```jsx
-  import React from 'react';
-  import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp';
-
-  const apiKey = 'MY_API_KEY';
-
-  function MyComponent() {
-
-    return (
-      <CioPlp apiKey={MY_API_KEY}>
-        <Sort />
-      </CioPlp>
-    );
-  }
-```
-
 
 <Canvas>
   <div style={{ height: '180px', width: 'fit-content', margin: 'auto' }}>
@@ -36,39 +20,81 @@ It is responsible for displaying the sort options based on user's search or brow
   </div>
 </Canvas>
 
+## Basic Example
+
+To view the examples and see this component in action
+
+- **Search** - append your URL with `?q=shirt`
+- **Browse** - append your URL with `/group_id/1035`
+
+```jsx
+import { CioPlp, CioPlpGrid, Sort, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            return <Sort sortOptions={props.data.response.sortOptions} />;
+          }
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
+
 If you prefer to handle the rendering of the Sort component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, Sort } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid, Sort, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomSort(props) {
-  const {sortOptions, selectedSort, changeSelectedSort} = props
+  const { sortOptions, selectedSort, changeSelectedSort } = props;
 
-  return (
-    <>
-      {/* CUSTOM_MARKUP_HERE */}
-    </>
-  );
+  return <pre>{JSON.stringify(sortOptions, null, 2)}</pre>;
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <Sort />
-        <MyCustomSort />
-      </Sort>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (
+            utils.isPlpBrowseDataResults(props.data) ||
+            utils.isPlpSearchDataResults(props.data)
+          ) {
+            return (
+              <Sort sortOptions={props.data.response.sortOptions}>
+                {(sortProps) => {
+                  return <MyCustomSort {...sortProps} />;
+                }}
+              </Sort>
+            );
+          }
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the Sort component via render props.
+
+> Accessible to children of the Sort component via render props.
 
 `UseSortReturn`
+
 <Markdown>{UseSortReturn}</Markdown>
