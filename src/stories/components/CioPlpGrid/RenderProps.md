@@ -15,9 +15,10 @@
 
 - `data`: API response data includes:
 
-  | property       | type                           | description                                  |
-  | -------------- | ------------------------------ | -------------------------------------------- | --------------- | ------------------------------- |
-  | resultId       | `string`                       | Result ID of the response                    |
-  | request        | `SearchRequestType`            | API returned request object                  |
-  | response       | `Nullable<PlpSearchDataResults | PlpSearchDataRedirect                        | PlpBrowseData>` | API transformed response object |
-  | rawApiResponse | `Nullable<SearchResponse>`     | API raw response without any transformations |
+  | property       | type                        | description                                  |
+  | -------------- | --------------------------- | -------------------------------------------- | ------------------------------- |
+  | resultId       | `string`                    | Result ID of the response                    |
+  | request        | `SearchRequestType`         | API returned request object                  |
+  | response       | `Nullable<PlpSearchResponse | PlpBrowseResponse>`                          | API transformed response object |
+  | redirect       | `Nullable<Redirect>`        | API transformed redirect object              |
+  | rawApiResponse | `Nullable<SearchResponse>`  | API raw response without any transformations |
