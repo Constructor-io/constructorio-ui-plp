@@ -53,7 +53,7 @@ import '@constructor-io/constructorio-ui-plp/styles.css';
 const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomFilters(props) {
-  const { facets } = props;
+  const { facets, setFilter } = props;
   return <pre>{JSON.stringify(facets, null, 2)}</pre>;
 }
 
