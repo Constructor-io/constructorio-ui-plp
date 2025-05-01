@@ -27,6 +27,8 @@
 .cio-swatch-container {
   display: flex;
   flex-wrap: wrap;
-  padding: 0;
+  padding: 16px;
   gap: 10px;
+  margin: auto;
+  cursor: default;
 }
