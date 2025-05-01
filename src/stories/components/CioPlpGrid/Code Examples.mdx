@@ -1,6 +1,6 @@
 import { Meta, Canvas, Markdown } from '@storybook/blocks';
 import * as CioPlpGridStories from './CioPlpGrid.stories';
-import SearchResultsReturn from '../../hooks/UseSearchResults/SearchResultsReturn.md?raw';
+import RenderProps from './RenderProps.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={CioPlpGridStories} name='Code Examples' />
@@ -46,19 +46,21 @@ It is responsible for displaying the results based on user's actions
 
 ## Basic example
 
+To view the examples and see this component in action
+  - **Search** - append your URL with `?q=shirt`
+  - **Browse** - append your URL with `/group_id/1035`
+
 ```jsx
-import React from 'react';
-import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp';
+import { CioPlp, CioPlpGrid } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
 
-function MyComponent() {
+export default function MyComponent() {
   return (
-    <>
-      <CioPlp apiKey={MY_API_KEY}>
-        <CioPlpGrid />
-      </CioPlp>
-    </>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid />
+    </CioPlp>
   );
 }
 ```
@@ -68,32 +70,27 @@ function MyComponent() {
 If you prefer to handle the rendering of the CioPlpGrid component, you may pass a Render Props function to the component.
 
 ```jsx
-import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
 
-const apiKey = 'MY_API_KEY';
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
 
-function MyCustomRender(props) {
-  const {data, status, refetch} = props
+function MyCustomPlpGrid(props) {
+  const { status, data, refetch, sort, filters, groups, pagination } = props;
 
-  return (
-    <>
-      {/* CUSTOM_MARKUP_HERE */}
-    </>
-  );
+  return <>{/* CUSTOM_MARKUP_HERE */}</>;
 }
 
-function myApp() {
-  ...
-
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={MY_API_KEY}>
-      <CioPlpGrid />
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
         {(props) => {
-          return <MyCustomRender {...props} />;
+          return <MyCustomPlpGrid {...props} />;
         }}
       </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
@@ -105,4 +102,4 @@ For a working example, visit our Code Sandbox:
 
 > Accessible to children of the CioPlpGrid component via render props.
 
-<Markdown>{SearchResultsReturn}</Markdown>
+<Markdown>{RenderProps}</Markdown>
