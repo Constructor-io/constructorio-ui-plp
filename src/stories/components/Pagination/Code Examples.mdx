@@ -1,85 +1,87 @@
 import { Meta, Canvas, Controls, Markdown } from '@storybook/blocks';
 import * as PaginationStories from './Pagination.stories';
-import UsePaginationReturn from '../../hooks/UsePagination/UsePaginationReturn.md?raw'
+import UsePaginationReturn from '../../hooks/UsePagination/UsePaginationReturn.md?raw';
 /* This "?raw" import raw text form the md file */
 
 <Meta of={PaginationStories} />
 
 # `Pagination`
+
 The Pagination component is a dynamic component that manages pagination interactions.
 
 <Canvas of={PaginationStories.Primary} />
 
 ## Basic example
-  ```jsx
-  import React from 'react';
-  import { CioPlp, Pagination, usePagination } from '@constructor-io/constructorio-ui-plp';
 
-  const apiKey = 'MY_API_KEY'
+To view the examples and see this component in action
 
-  function MyComponent() {
-    const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = usePagination(props);
+- **Search** - append your URL with `?q=shirt`
+- **Browse** - append your URL with `/group_id/1035`
 
-    return (
-      <>
-        <CioPlp apiKey={MY_API_KEY}>
-          <Pagination pagination={{ currentPage, goToPage, nextPage, pages, prevPage, totalPages }} />
-        </CioPlp>
-      </>
-    );
-  }
-  ```
+```jsx
+import { CioPlp, CioPlpGrid, Pagination, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (utils.isPlpBrowseDataResults(props.data) || utils.isPlpSearchDataResults(props.data))
+            return <Pagination totalNumResults={props.data.response.totalNumResults} />;
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
 
 ## Render Props pattern
+
 If you prefer handle the rendering of the Pagination component, you may pass a Render Props function to the component.
+
 ```jsx
-import { CioPlp, Pagination } from '@constructor-io/constructorio-ui-plp'
+import { CioPlp, CioPlpGrid, Pagination, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomPagination(props) {
-  const {
-    currentPage,
-    goToPage,
-    nextPage,
-    pages,
-    prevPage,
-    totalPages,
-  } = props
-  
+  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = props;
   return (
-    <div>
-      <div>Current Page: {currentPage}</div>
-      <div>Total: {totalPages}</div>
-      <button onClick={() => prevPage()} type='button'>
-        Previous
-      </button>
-
-      {pages.map((page) => (
-        <button onClick={() => goToPage(page)} type='button'>
-          {page}
-        </button>
-      ))}
-      <button onClick={() => nextPage()} type='button'>
-        Next
-      </button>
-    </div>
-  )
+    <>
+      <div>Total Pages: {totalPages}</div>
+      <div>Page Numbers: {JSON.stringify(pages)}</div>
+    </>
+  );
 }
 
-function myApp() {
-  ...
-  
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={YOUR_API_KEY}>
-      <Pagination>
-        <MyCustomPagination />
-      </Pagination>
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (utils.isPlpBrowseDataResults(props.data) || utils.isPlpSearchDataResults(props.data))
+            return (
+              <Pagination totalNumResults={props.data.response.totalNumResults}>
+                {(paginationProps) => {
+                  return <MyCustomPagination {...paginationProps} />;
+                }}
+              </Pagination>
+            );
+        }}
+      </CioPlpGrid>
     </CioPlp>
-  )
+  );
 }
 ```
 
 ### Arguments passed to children via Render Props
->Accessible to children of the Pagination component via render props.
+
+> Accessible to children of the Pagination component via render props.
 
 `UsePaginationReturn`
+
 <Markdown>{UsePaginationReturn}</Markdown>
