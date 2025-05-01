@@ -30,8 +30,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   const [minValue, setMinValue] = useState(facet.min);
   const [maxValue, setMaxValue] = useState(facet.max);
-  const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.min);
-  const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.max);
+  const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.status?.min || facet.min);
+  const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.status?.max || facet.max);
   const [filterRange, setFilterRange] = useState('');
 
   const [isModified, setIsModified] = useState(false);
@@ -101,7 +101,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     const totalWidth = visibleTrack.current!.offsetWidth;
     const clickedX = event.nativeEvent.offsetX;
 
-    const selectedValue = Math.round((clickedX / totalWidth) * facet.max);
+    const selectedValue = Math.round((clickedX / totalWidth) * (facet.max - facet.min)) + facet.min;
     const distMinToClicked = Math.abs(selectedValue - minValue);
     const distMaxToClicked = Math.abs(selectedValue - maxValue);
 
@@ -118,6 +118,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       setInputMaxValue(selectedValue);
       modifyRequestRangeFilter(newRange);
     }
+
+    setIsModified(true);
   };
 
   // Update internal state
@@ -136,8 +138,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   // Update selected track styles
   useEffect(() => {
-    const startPercentage = ((100 * minValue) / facet.max).toFixed(2);
-    const widthPercentage = ((100 * (maxValue - minValue)) / facet.max).toFixed(2);
+    const trackLen = facet.max - facet.min;
+    const rebasedStartValue = minValue - facet.min;
+    const startPercentage = ((100 * rebasedStartValue) / trackLen).toFixed(2);
+    const widthPercentage = ((100 * (maxValue - minValue)) / trackLen).toFixed(2);
 
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
   }, [minValue, maxValue, facet]);
