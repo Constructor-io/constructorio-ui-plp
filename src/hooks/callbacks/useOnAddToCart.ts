@@ -32,7 +32,7 @@ export default function useOnAddToCart(
         });
       }
 
-      if (callback) callback(event, item);
+      if (callback) callback(event, { ...item, variationId: selectedVariationId || variationId });
 
       event.preventDefault();
       event.stopPropagation();

@@ -93,6 +93,25 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
   });
 
+  test('Should run custom onAddToCart handler if overridden at the CioPlp provider level', () => {
+    const contextOnAddToCart = jest.fn();
+    const item = transformResultItem(testItem);
+    const testVariationId = item.variations[1].variationId;
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${testVariationId}`));
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.objectContaining({ variationId: testVariationId }),
+    );
+  });
+
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>

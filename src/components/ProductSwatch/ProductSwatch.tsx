@@ -58,6 +58,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
                   type='button'
                   key={swatch.variationId}
                   data-cnstrc-variation-id={swatch.variationId}
+                  data-testid={`cio-swatch-${swatch.variationId}`}
                   className='cio-swatch-button cio-swatch-item'
                   onClick={(e) => swatchClickHandler(e, swatch)}
                   style={{
