@@ -134,6 +134,25 @@ describe('Testing Component: ProductCard', () => {
     );
   });
 
+  test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {
+    const contextOnAddToCart = jest.fn();
+    const { variations, variationId, ...item } = transformResultItem(testItem);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      undefined,
+    );
+  });
+
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
