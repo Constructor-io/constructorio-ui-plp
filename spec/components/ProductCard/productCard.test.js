@@ -93,22 +93,44 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
   });
 
-  test('Should run custom onAddToCart handler if overridden at the CioPlp provider level', () => {
+  test('Should pass the expected props to the custom onAddToCart handler if defined', () => {
     const contextOnAddToCart = jest.fn();
     const item = transformResultItem(testItem);
-    const testVariationId = item.variations[1].variationId;
+    const testSelectedVariation = item.variations[0];
+
     render(
       <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
         <ProductCard item={item} />
       </CioPlp>,
     );
 
-    fireEvent.click(screen.getByTestId(`cio-swatch-${testVariationId}`));
     fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
     expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
     expect(contextOnAddToCart).toHaveBeenCalledWith(
-      expect.any(Object),
-      expect.objectContaining({ variationId: testVariationId }),
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(testSelectedVariation),
+    );
+  });
+
+  test('Should pass expected props, including the updated selectedVariation when a swatch has been selected, to the custom onAddToCart handler if defined', () => {
+    const contextOnAddToCart = jest.fn();
+    const item = transformResultItem(testItem);
+    const testSelectedVariation = item.variations[1];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${testSelectedVariation.variationId}`));
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(testSelectedVariation),
     );
   });
 
