@@ -3,12 +3,12 @@ import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { Nullable } from '@constructor-io/constructorio-client-javascript/lib/types';
 
-import { Item } from '../../types';
+import { Callbacks, Item, Variation } from '../../types';
 import useRequestConfigs from '../useRequestConfigs';
 
 export default function useOnAddToCart(
   cioClient: Nullable<ConstructorIO>,
-  callback?: (event: React.MouseEvent, item: Item) => void,
+  callback?: Callbacks['onAddToCart'],
 ) {
   const { getRequestConfigs } = useRequestConfigs();
   const requestConfigs = getRequestConfigs();
@@ -21,6 +21,7 @@ export default function useOnAddToCart(
     (event: React.MouseEvent, item: Item, revenue?: number, selectedVariationId?: string) => {
       const { itemId, itemName, variationId } = item;
       const { query, section } = requestConfigs;
+      let selectedVariation: Variation | undefined;
 
       if (cioClient) {
         cioClient.tracker.trackConversion(query, {
@@ -32,7 +33,13 @@ export default function useOnAddToCart(
         });
       }
 
-      if (callback) callback(event, item);
+      if (selectedVariationId) {
+        selectedVariation = item.variations?.filter(
+          (variation) => variation.variationId === selectedVariationId,
+        )?.[0];
+      }
+
+      if (callback) callback(event, item, selectedVariation);
 
       event.preventDefault();
       event.stopPropagation();
