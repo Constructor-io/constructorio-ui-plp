@@ -54,7 +54,7 @@ export interface Formatters {
 
 export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void;
-  onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
+  onProductCardClick?: (event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
   onRedirect?: (url: string) => void;
 }

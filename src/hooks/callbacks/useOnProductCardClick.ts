@@ -3,12 +3,12 @@ import React, { useCallback } from 'react';
 import ConstructorIO from '@constructor-io/constructorio-client-javascript';
 import { Nullable } from '@constructor-io/constructorio-client-javascript/lib/types';
 
-import { Item } from '../../types';
+import { Callbacks, Item, Variation } from '../../types';
 import useRequestConfigs from '../useRequestConfigs';
 
 export default function useOnProductCardClick(
   cioClient: Nullable<ConstructorIO>,
-  callback?: (event: React.MouseEvent, item: Item) => void,
+  callback?: Callbacks['onProductCardClick'],
 ) {
   const { getRequestConfigs } = useRequestConfigs();
   const requestConfigs = getRequestConfigs();
@@ -21,6 +21,7 @@ export default function useOnProductCardClick(
     (event: React.MouseEvent, item: Item, selectedVariationId?: string) => {
       const { itemName, itemId, variationId } = item;
       const { query, section } = requestConfigs;
+      let selectedVariation: Variation | undefined;
 
       if (cioClient) {
         // Track search result click
@@ -34,7 +35,13 @@ export default function useOnProductCardClick(
         }
       }
 
-      if (callback) callback(event, item);
+      if (selectedVariationId) {
+        selectedVariation = item.variations?.find(variation => 
+          variation.variationId === selectedVariationId
+        )
+      }
+
+      if (callback) callback(event, item, selectedVariation);
     },
     [callback, cioClient, requestConfigs],
   );

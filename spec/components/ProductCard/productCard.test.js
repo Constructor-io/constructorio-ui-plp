@@ -153,6 +153,61 @@ describe('Testing Component: ProductCard', () => {
     );
   });
 
+  test('Should pass the selected variation to the onProductCardClick if defined', () => {
+    const contextOnProductCardClick = jest.fn();
+    const item = transformResultItem(testItem);
+    const firstVariation = item.variations[0];
+    const thirdVariation = item.variations[2];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onProductCardClick: contextOnProductCardClick }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'))
+    fireEvent.click(productCard);
+    expect(contextOnProductCardClick).toHaveBeenCalledTimes(1);
+    expect(contextOnProductCardClick).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(firstVariation),
+    );
+    contextOnProductCardClick.mockClear();
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${thirdVariation.variationId}`));
+    fireEvent.click(productCard);
+    expect(contextOnProductCardClick).toHaveBeenCalledTimes(1);
+    expect(contextOnProductCardClick).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(thirdVariation),
+    );
+  });
+
+  test('Should pass the updated selectedVariation when a swatch has been selected, to the onProductCardClick if defined', () => {
+    const contextOnProductCardClick = jest.fn();
+    const item = transformResultItem(testItem);
+    const testSelectedVariation = item.variations[2];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onProductCardClick: contextOnProductCardClick }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'))
+    fireEvent.click(screen.getByTestId(`cio-swatch-${testSelectedVariation.variationId}`));
+    expect(contextOnProductCardClick).not.toHaveBeenCalled();
+    fireEvent.click(productCard);
+    expect(contextOnProductCardClick).toHaveBeenCalledTimes(1);
+    expect(contextOnProductCardClick).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(testSelectedVariation),
+    );
+  });
+
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
