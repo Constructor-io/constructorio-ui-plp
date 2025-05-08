@@ -36,9 +36,9 @@ export default function useOnProductCardClick(
       }
 
       if (selectedVariationId) {
-        selectedVariation = item.variations?.find(variation => 
-          variation.variationId === selectedVariationId
-        )
+        selectedVariation = item.variations?.find(
+          (variation) => variation.variationId === selectedVariationId,
+        );
       }
 
       if (callback) callback(event, item, selectedVariation);
