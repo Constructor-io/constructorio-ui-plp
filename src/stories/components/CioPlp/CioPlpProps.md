@@ -19,7 +19,7 @@ Callbacks will be composed with the library's internal tracking calls for a give
 | property           | type                                                                           | description                            |
 | ------------------ | ------------------------------------------------------------------------------ | -------------------------------------- |
 | onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void` | Product add to cart callback function  |
-| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                | Product click callback function        |
+| onProductCardClick | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void` | Product click callback function        |
 | onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                     | Product swatch click callback function |
 | onRedirect         | `(url: string) => void`                                                        | Redirect callback function             |
 

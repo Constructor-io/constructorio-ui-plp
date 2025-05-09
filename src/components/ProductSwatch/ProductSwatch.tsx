@@ -33,6 +33,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
 
   const swatchContainerClickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
   };
 
   return (
