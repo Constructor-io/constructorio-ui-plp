@@ -19,4 +19,4 @@ jobs:
         with:
           node-version: '18.13.0'
       - name: Spell check
-        run: npx cspellv8.19.4 "**/*.{ts,tsx}"
+        run: npx cspell@v8.19.4 "**/*.{ts,tsx}"
