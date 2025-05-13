@@ -72,7 +72,7 @@ export interface PlpSearchDataRedirect {
   resultId: string;
   request: SearchRequestType;
   rawApiResponse: SearchResponse;
-  redirect: Redirect;
+  redirect: Redirect['redirect'];
 }
 
 export interface PlpSearchResponse {
