@@ -208,10 +208,11 @@ describe('Testing Component: CioPlpGrid', () => {
       },
     };
 
-    const mockReplace = jest.fn();
-    Object.defineProperty(window, 'location', {
-      value: { replace: mockReplace },
-      writable: true,
+    const mockOnRedirect = jest.fn();
+    jest.spyOn(require('../../../src/hooks/useCioPlpContext'), 'useCioPlpContext').mockReturnValue({
+      callbacks: {
+        onRedirect: mockOnRedirect,
+      },
     });
 
     useCioPlp.mockReturnValue({
@@ -227,7 +228,7 @@ describe('Testing Component: CioPlpGrid', () => {
     );
 
     await waitFor(() => {
-      expect(mockReplace).toHaveBeenCalledWith('https://example.com/redirect-url');
+      expect(mockOnRedirect).toHaveBeenCalledWith('https://example.com/redirect-url');
     });
   });
 
