@@ -198,7 +198,7 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
-  it('Should render redirect data when a search direct is received', async () => {
+  it('Should render redirect data when a search redirect response is received', async () => {
     // Mock redirect data
     const mockRedirectData = {
       redirect: {
