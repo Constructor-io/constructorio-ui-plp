@@ -198,6 +198,39 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
+  it('Should render redirect data when a search direct is received', async () => {
+    // Mock redirect data
+    const mockRedirectData = {
+      redirect: {
+        data: {
+          url: 'https://example.com/redirect-url',
+        },
+      },
+    };
+
+    const mockReplace = jest.fn();
+    Object.defineProperty(window, 'location', {
+      value: { replace: mockReplace },
+      writable: true,
+    });
+
+    useCioPlp.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      isSearchPage: true,
+      data: mockRedirectData,
+    });
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('https://example.com/redirect-url');
+    });
+  });
+
   it('Should render results with data attributes when data is fetched for Browse', async () => {
     useRequestConfigs.mockImplementation(() => ({
       getRequestConfigs: () => ({ filterName: 'group_id', filterValue: '1030' }),
