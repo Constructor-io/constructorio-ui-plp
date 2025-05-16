@@ -249,7 +249,6 @@ export type UseProductSwatchProps = {
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
 
 export interface ProductInfoObject {
-  productSwatch: ProductSwatchObject | undefined;
   itemName: string;
   itemPrice: number | undefined;
   itemUrl: string | undefined;
