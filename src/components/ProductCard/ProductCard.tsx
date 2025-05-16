@@ -4,6 +4,7 @@ import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
+import useProductSwatch from '../../hooks/useProductSwatch';
 import { getProductCardCnstrcDataAttributes } from '../../utils';
 
 interface Props {
@@ -55,8 +56,10 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
 export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
-  const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
+  const productSwatch = useProductSwatch({ item });
+  const { selectedVariation } = productSwatch;
+  const productInfo = useProductInfo({ item, selectedVariation });
+  const { itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');

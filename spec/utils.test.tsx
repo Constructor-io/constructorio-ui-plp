@@ -9,7 +9,7 @@ const transformedItem = transformResultItem(mockItem);
 
 describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
   test('Should return relevant data attributes for Product Card', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem, selectedVariation: { variationId: 'BKT00110DG1733LR', swatchPreview: '#FFFFFF' }}));
 
     await waitFor(() => {
       const dataAttributes = getProductCardCnstrcDataAttributes(result.current);

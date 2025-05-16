@@ -1,43 +1,42 @@
 import { useEffect, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
-import { SwatchItem, UseProductSwatch } from '../types';
+import { SwatchItem, UseProductSwatch, Variation } from '../types';
 import {
   getSwatches as defaultGetSwatches,
-  getPrice as defaultGetPrice,
   getSwatchPreview as defaultGetSwatchPreview,
 } from '../utils/itemFieldGetters';
 
 const useProductSwatch: UseProductSwatch = ({ item }) => {
-  const [selectedVariation, setSelectedVariation] = useState<SwatchItem>();
+  const [selectedVariation, setSelectedVariation] = useState<Variation>();
   const [swatchList, setSwatchList] = useState<SwatchItem[]>([]);
 
   const state = useCioPlpContext();
 
   const getSwatches = state?.itemFieldGetters?.getSwatches || defaultGetSwatches;
-  const getPrice = state?.itemFieldGetters?.getPrice || defaultGetPrice;
   const getSwatchPreview = state?.itemFieldGetters?.getSwatchPreview || defaultGetSwatchPreview;
 
   useEffect(() => {
     if (item?.variations) {
       try {
-        setSwatchList(getSwatches(item, getPrice, getSwatchPreview) || []);
+        const swatches = getSwatches(item, getSwatchPreview);
+        setSwatchList(swatches || []);
       } catch (e) {
         // do nothing
       }
     }
-  }, [item, getSwatches, getPrice, getSwatchPreview]);
+  }, [item, getSwatches, getSwatchPreview]);
 
   useEffect(() => {
     if (item?.variations) {
-      const initialSwatch = swatchList?.find((swatch) => swatch?.variationId === item?.variationId);
-      if (initialSwatch) {
-        setSelectedVariation(initialSwatch);
+      const initialVariation = item?.variations?.[0];
+      if (initialVariation) {
+        setSelectedVariation(initialVariation);
       }
     }
   }, [swatchList, item]);
 
-  const selectVariation = (swatch: SwatchItem) => {
-    setSelectedVariation(swatch);
+  const selectVariation = (variation: Variation) => {
+    setSelectedVariation(variation);
   };
 
   return {

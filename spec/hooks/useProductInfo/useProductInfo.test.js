@@ -22,15 +22,14 @@ describe('Testing Hook: useProductInfo', () => {
 
   const transformedItem = transformResultItem(mockItem);
 
-  it('Should return productSwatch, itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
+  it('Should return itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemId },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice, itemId },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemId).toEqual(transformedItem.itemId);
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
@@ -46,37 +45,67 @@ describe('Testing Hook: useProductInfo', () => {
           getPrice: () => {},
           getSwatches: () => {},
           getSwatchPreview: () => {},
+          getName: () => {},
+          getItemUrl: () => {},
+          getImageUrl: () => {},
         },
       },
     });
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
-      expect(itemName).toEqual(transformedItem.itemName);
-      expect(itemImageUrl).toEqual(transformedItem.imageUrl);
-      expect(itemUrl).toEqual(transformedItem.url);
+      expect(itemName).toBeUndefined();
+      expect(itemImageUrl).toBeUndefined();
+      expect(itemUrl).toBeUndefined();
       expect(itemPrice).toBeUndefined();
     });
   });
 
-  it('Should return correctly after different variation is selected', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
+  it('Should return properly with getters that override defaults', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
+      initialProps: {
+        itemFieldGetters: {
+          getPrice: () => 'override',
+          getSwatches: () => [],
+          getSwatchPreview: () => 'override',
+          getName: () => 'override',
+          getItemUrl: () => 'override',
+          getImageUrl: () => 'override',
+        },
+      },
+    });
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
-      const { selectVariation, swatchList } = productSwatch;
-      selectVariation(swatchList[1]);
 
-      expect(itemName).toEqual(swatchList[1].itemName);
-      expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItem.imageUrl);
-      expect(itemUrl).toEqual(swatchList[1].url || transformedItem.url);
-      expect(itemPrice).toEqual(swatchList[1].price || transformedItem.data.price);
+      expect(itemName).toEqual('override');
+      expect(itemUrl).toEqual('override');
+      expect(itemImageUrl).toEqual('override');
+      expect(itemPrice).toEqual('override');
+    });
+  });
+
+  it('Should return image properly with overridden baseUrl', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
+      initialProps: {
+        customConfigs: { imageBaseUrl: 'test.com' },
+      },
+    });
+
+    await waitFor(() => {
+      const {
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
+      } = result;
+
+      expect(itemName).toEqual(transformedItem.itemName);
+      expect(itemImageUrl).toEqual(`test.com${transformedItem.imageUrl}`);
+      expect(itemUrl).toEqual(transformedItem.url);
+      expect(itemPrice).toEqual(transformedItem.data.price);
     });
   });
 
@@ -99,14 +128,27 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toBeUndefined();
+    });
+  });
+
+  it('should merge product info fields with selectedVariation when provided', async () => {
+    const transformedItem = transformResultItem(mockItem);
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem, selectedVariation: transformedItem.variations[0] }));
+
+    console.log(transformedItem.variations[0])
+    await waitFor(() => {
+      const { current: { itemName, itemPrice, itemImageUrl, itemUrl } } = result;
+      expect(itemName).toEqual(transformedItem.variations[0].itemName);
+      expect(itemPrice).toEqual(transformedItem.variations[0].data.price);
+      expect(itemImageUrl).toEqual(transformedItem.variations[0].imageUrl);
+      expect(itemUrl).toEqual(transformedItem.variations[0].url);
     });
   });
 });

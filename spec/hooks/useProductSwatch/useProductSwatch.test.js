@@ -18,7 +18,7 @@ describe('Testing Hook: useProductSwatch', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
-  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview);
+  const expectedSwatch = getSwatches(transformedItem, getSwatchPreview);
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useProductSwatch())).toThrow();
@@ -73,7 +73,7 @@ describe('Testing Hook: useProductSwatch', () => {
       } = result;
 
       expect(typeof selectVariation).toBe('function');
-      expect(selectedVariation).toBeUndefined();
+      expect(selectedVariation).toBe(transformedItem.variations[0]);
       expect(swatchList.length).toBe(0);
     });
   });
@@ -101,7 +101,7 @@ describe('Testing Hook: useProductSwatch', () => {
       } = result;
 
       expect(typeof selectVariation).toBe('function');
-      expect(selectedVariation).toBeUndefined();
+      expect(selectedVariation).toBe(transformedItem.variations[0]);
       expect(swatchList.length).toBe(0);
     });
   });

@@ -1,32 +1,38 @@
-import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
-import { UseProductInfo } from '../types';
 import { tryCatchify } from '../utils';
+import { Item, SwatchItem } from '../types';
 
-const useProductInfo: UseProductInfo = ({ item }) => {
+interface UseProductInfoArgs {
+  item: Item;
+  selectedVariation?: SwatchItem;
+}
+
+const useProductInfo = ({ item, selectedVariation }: UseProductInfoArgs) => {
   const state = useCioPlpContext();
-  const productSwatch = useProductSwatch({ item });
 
   if (!item.data || !item.itemId || !item.itemName) {
     throw new Error('data, itemId, or itemName are required.');
   }
 
   const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice);
+  const getImageUrl = tryCatchify(state?.itemFieldGetters?.getImageUrl);
+  const getItemUrl = tryCatchify(state?.itemFieldGetters?.getItemUrl);
+  const getName = tryCatchify(state?.itemFieldGetters?.getName);
 
-  const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
-  const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
-  const itemUrl = productSwatch?.selectedVariation?.url || item.url;
-  const variationId = productSwatch?.selectedVariation?.variationId;
+  const itemName = getName(item, selectedVariation);
+  const itemPrice = getPrice(item, selectedVariation);
+  const itemImageUrl = getImageUrl(item, selectedVariation, {
+    imageBaseUrl: state.customConfigs.imageBaseUrl,
+  });
+  const itemUrl = getItemUrl(item, selectedVariation);
   const { itemId } = item;
 
   return {
-    productSwatch,
     itemName,
     itemPrice,
     itemImageUrl,
     itemUrl,
-    variationId,
+    variationId: selectedVariation?.variationId,
     itemId,
   };
 };
