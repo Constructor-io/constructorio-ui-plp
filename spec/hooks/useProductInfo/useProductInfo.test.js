@@ -140,21 +140,15 @@ describe('Testing Hook: useProductInfo', () => {
 
   it('should merge product info fields with selectedVariation when provided', async () => {
     const transformedItem = transformResultItem(mockItem);
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem, selectedVariation: transformedItem.variations[0] }));
 
-    const selectedVariation = {
-      itemName: 'Variation Name',
-      price: 123.45,
-      imageUrl: 'variation-image.jpg',
-      url: 'variation-url',
-    };
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem, selectedVariation }));
-
+    console.log(transformedItem.variations[0])
     await waitFor(() => {
       const { current: { itemName, itemPrice, itemImageUrl, itemUrl } } = result;
-      expect(itemName).toEqual('Variation Name');
-      expect(itemPrice).toEqual(123.45);
-      expect(itemImageUrl).toEqual('variation-image.jpg');
-      expect(itemUrl).toEqual('variation-url');
+      expect(itemName).toEqual(transformedItem.variations[0].itemName);
+      expect(itemPrice).toEqual(transformedItem.variations[0].data.price);
+      expect(itemImageUrl).toEqual(transformedItem.variations[0].imageUrl);
+      expect(itemUrl).toEqual(transformedItem.variations[0].url);
     });
   });
 });

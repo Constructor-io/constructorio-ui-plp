@@ -39,14 +39,13 @@ export interface ApiHierarchicalFacetOption extends ApiFacetOption {
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface ItemFieldGetters {
-  getPrice: (item: Item | Variation) => number | undefined;
-  getItemUrl: (item: Item | Variation) => string | undefined;
-  getImageUrl: (item: Item | Variation) => string | undefined;
-  getName: (item: Item | Variation) => string;
+  getPrice: (item: Item, variation?: Variation) => number | undefined;
+  getItemUrl: (item: Item, variation?: Variation) => string | undefined;
+  getImageUrl: (item: Item, variation?: Variation) => string | undefined;
+  getName: (item: Item, variation?: Variation) => string;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
-    retrievePrice: ItemFieldGetters['getPrice'],
     retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
   ) => SwatchItem[] | undefined;
 }
@@ -239,8 +238,8 @@ export type UseSortReturn = {
 
 export interface ProductSwatchObject {
   swatchList: SwatchItem[] | undefined;
-  selectedVariation: SwatchItem | undefined;
-  selectVariation: (swatch: SwatchItem) => void;
+  selectedVariation: Variation | undefined;
+  selectVariation: (variation: Variation) => void;
 }
 
 export type UseProductSwatchProps = {

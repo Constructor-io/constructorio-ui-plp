@@ -1,36 +1,28 @@
 import { ItemFieldGetters, Item, SwatchItem, Variation } from '../types';
 
-export function getPrice(item: Item | Variation, selectedSwatch?: SwatchItem | undefined): number {
-  return selectedSwatch?.price || selectedSwatch?.variation?.data?.price || item?.data?.price;
+export function getPrice(item: Item, variation?: Variation): number {
+  return variation?.data?.price || item?.data?.price;
 }
 
-export function getImageUrl(
-  item: Item | Variation,
-  selectedSwatch?: SwatchItem | undefined,
-  options?: any,
-): string | undefined {
+export function getImageUrl(item: Item, variation?: Variation, options?: any): string | undefined {
   const { imageBaseUrl } = options;
 
   if (imageBaseUrl) {
-    return `${imageBaseUrl}${selectedSwatch?.imageUrl || selectedSwatch?.variation?.imageUrl || item?.imageUrl}`;
+    return `${imageBaseUrl}${variation?.imageUrl || item?.imageUrl}`;
   }
-  return selectedSwatch?.imageUrl || selectedSwatch?.variation?.imageUrl || item?.imageUrl;
+  return variation?.imageUrl || item?.imageUrl;
 }
 
-export function getItemUrl(
-  item: Item | Variation,
-  selectedSwatch?: SwatchItem | undefined,
-): string | undefined {
-  return selectedSwatch?.url || selectedSwatch?.variation?.url || item.url;
+export function getItemUrl(item: Item, variation?: Variation): string | undefined {
+  return variation?.url || item.url;
 }
 
-export function getName(item: Item | Variation, selectedSwatch?: SwatchItem | undefined): string {
-  return selectedSwatch?.itemName || selectedSwatch?.variation?.itemName || item.itemName;
+export function getName(item: Item, variation?: Variation): string {
+  return variation?.itemName || item.itemName;
 }
 
 export function getSwatches(
   item: Item,
-  retrievePrice: ItemFieldGetters['getPrice'],
   retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
@@ -42,7 +34,6 @@ export function getSwatches(
         url: variation?.url || item?.url,
         imageUrl: variation?.url,
         variationId: variation?.variationId,
-        price: retrievePrice(variation),
         swatchPreview: retrieveSwatchPreview(variation),
         variation,
       });

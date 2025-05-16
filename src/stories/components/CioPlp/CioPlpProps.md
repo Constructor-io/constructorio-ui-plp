@@ -31,12 +31,12 @@ Callbacks will be composed with the library's internal tracking calls for a give
 
 ItemFieldGetters maps the fields sent in the catalog feeds to the fields the libary expects for rendering
 
-| property    | type                     | description            |
-| ----------- | ------------------------ | ---------------------- |
-| getPrice    | `(item: Item) => number` | Get price funciton     |
-| getImageUrl | `(item: Item) => string` | Get image url funciton |
-| getItemUrl  | `(item: Item) => stirng` | Get href url funciton  |
-| getName     | `(item: Item) => string` | Get item name funciton |
+| property    | type                                           | description            |
+| ----------- | -----------------------------------------------| ---------------------- |
+| getPrice    | `(item: Item, variation: Variation) => number` | Get price funciton     |
+| getImageUrl | `(item: Item, variation: Variation) => string` | Get image url funciton |
+| getItemUrl  | `(item: Item, variation: Variation) => stirng` | Get href url funciton  |
+| getName     | `(item: Item, variation: Variation) => string` | Get item name funciton |
 
 <br>
 
