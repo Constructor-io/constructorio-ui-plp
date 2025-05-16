@@ -32,7 +32,7 @@ const useProductInfo = ({ item, selectedVariation }: UseProductInfoArgs) => {
     itemPrice,
     itemImageUrl,
     itemUrl,
-    variationId,
+    variationId: selectedVariation?.variationId,
     itemId,
   };
 };
