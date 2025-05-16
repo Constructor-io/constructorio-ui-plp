@@ -30,7 +30,6 @@ describe('Testing Hook: useProductInfo', () => {
         current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
       expect(itemUrl).toEqual(transformedItem.url);
@@ -54,10 +53,9 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemName).toBeUndefined();
       expect(itemImageUrl).toBeUndefined();
       expect(itemUrl).toBeUndefined();
@@ -81,14 +79,13 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
       expect(itemName).toEqual('override');
       expect(itemUrl).toEqual('override');
       expect(itemImageUrl).toEqual('override');
       expect(itemPrice).toEqual('override');
-      expect(productSwatch).not.toBeNull();
     });
   });
 
@@ -101,31 +98,13 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(`test.com${transformedItem.imageUrl}`);
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toEqual(transformedItem.data.price);
-    });
-  });
-
-  it('Should return correctly after different variation is selected', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
-
-    await waitFor(() => {
-      const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
-      } = result;
-      const { selectVariation, swatchList } = productSwatch;
-      selectVariation(swatchList[1]);
-
-      expect(itemName).toEqual(swatchList[1].itemName);
-      expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItem.imageUrl);
-      expect(itemUrl).toEqual(swatchList[1].url || transformedItem.url);
-      expect(itemPrice).toEqual(swatchList[1].price || transformedItem.data.price);
     });
   });
 
@@ -148,14 +127,33 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice },
       } = result;
 
-      expect(productSwatch).not.toBeNull();
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toBeUndefined();
+    });
+  });
+
+  it('should merge product info fields with selectedVariation when provided', async () => {
+    const transformedItem = transformResultItem(mockItem);
+
+    const selectedVariation = {
+      itemName: 'Variation Name',
+      price: 123.45,
+      imageUrl: 'variation-image.jpg',
+      url: 'variation-url',
+    };
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem, selectedVariation }));
+
+    await waitFor(() => {
+      const { current: { itemName, itemPrice, itemImageUrl, itemUrl } } = result;
+      expect(itemName).toEqual('Variation Name');
+      expect(itemPrice).toEqual(123.45);
+      expect(itemImageUrl).toEqual('variation-image.jpg');
+      expect(itemUrl).toEqual('variation-url');
     });
   });
 });
