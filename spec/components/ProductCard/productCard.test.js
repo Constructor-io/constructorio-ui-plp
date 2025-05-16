@@ -93,6 +93,66 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
   });
 
+  test('Should pass the expected props to the custom onAddToCart handler if defined', () => {
+    const contextOnAddToCart = jest.fn();
+    const item = transformResultItem(testItem);
+    const testSelectedVariation = item.variations[0];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(testSelectedVariation),
+    );
+  });
+
+  test('Should pass expected props, including the updated selectedVariation when a swatch has been selected, to the custom onAddToCart handler if defined', () => {
+    const contextOnAddToCart = jest.fn();
+    const item = transformResultItem(testItem);
+    const testSelectedVariation = item.variations[1];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${testSelectedVariation.variationId}`));
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      expect.objectContaining(testSelectedVariation),
+    );
+  });
+
+  test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {
+    const contextOnAddToCart = jest.fn();
+    const { variations, variationId, ...item } = transformResultItem(testItem);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onAddToCart: contextOnAddToCart }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }));
+    expect(contextOnAddToCart).toHaveBeenCalledTimes(1);
+    expect(contextOnAddToCart).toHaveBeenCalledWith(
+      expect.any(Object), // Event
+      expect.objectContaining(item),
+      undefined,
+    );
+  });
+
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>

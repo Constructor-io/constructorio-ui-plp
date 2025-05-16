@@ -3,6 +3,7 @@ import { Meta } from '@storybook/react';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
+import '../../../styles.css';
 
 const meta = {
   title: 'Components/Breadcrumbs',

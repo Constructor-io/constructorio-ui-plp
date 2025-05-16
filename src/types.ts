@@ -56,7 +56,7 @@ export interface Formatters {
 }
 
 export interface Callbacks {
-  onAddToCart?: (event: React.MouseEvent, item: Item) => void;
+  onAddToCart?: (event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
   onRedirect?: (url: string) => void;
@@ -75,7 +75,7 @@ export interface PlpSearchDataRedirect {
   resultId: string;
   request: SearchRequestType;
   rawApiResponse: SearchResponse;
-  redirect: Redirect;
+  redirect: Redirect['redirect'];
 }
 
 export interface PlpSearchResponse {
@@ -220,6 +220,7 @@ export interface PlpBrowseResponse extends PlpSearchResponse {}
 export interface CioPlpProviderProps {
   apiKey: string;
   cioClient?: Nullable<ConstructorIOClient>;
+  cioClientOptions?: Omit<ConstructorClientOptions, 'apiKey' | 'version'>;
   formatters?: Partial<Formatters>;
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
@@ -250,9 +251,11 @@ export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchOb
 
 export interface ProductInfoObject {
   itemName: string;
-  itemPrice: number | undefined;
-  itemUrl: string | undefined;
-  itemImageUrl: string | undefined;
+  itemId: string;
+  itemPrice?: number;
+  itemUrl?: string;
+  itemImageUrl?: string;
+  variationId?: string;
 }
 
 export type UseProductInfoProps = {
@@ -315,6 +318,8 @@ export interface PlpItemGroup {
   children: Array<PlpItemGroup>;
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
+
+export type CnstrcData = Record<`data-cnstrc-${string}`, string | number | boolean>;
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };

@@ -1,12 +1,33 @@
 ### `Formatters`
 
+---
+
 Formatters will be used to modify how certain fields are rendered
 
 | property    | type                        | description           |
 | ----------- | --------------------------- | --------------------- |
 | formatPrice | `(price: number) => string` | Format price funciton |
 
+<br>
+
+### `Callbacks`
+
+---
+
+Callbacks will be composed with the library's internal tracking calls for a given event
+
+| property           | type                                                                           | description                            |
+| ------------------ | ------------------------------------------------------------------------------ | -------------------------------------- |
+| onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void` | Product add to cart callback function  |
+| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                | Product click callback function        |
+| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                     | Product swatch click callback function |
+| onRedirect         | `(url: string) => void`                                                        | Redirect callback function             |
+
+<br>
+
 ### `ItemFieldGetters`
+
+---
 
 ItemFieldGetters maps the fields sent in the catalog feeds to the fields the libary expects for rendering
 
@@ -17,35 +38,29 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 | getItemUrl  | `(item: Item) => stirng` | Get href url funciton  |
 | getName     | `(item: Item) => string` | Get item name funciton |
 
-### `Callbacks`
-
-Callbacks will be composed with the library's internal tracking calls for a given event
-
-| property           | type                                                       | description                            |
-| ------------------ | ---------------------------------------------------------- | -------------------------------------- |
-| onAddToCart        | `(event: React.MouseEvent, item: Item) => void`            | Product add to cart callback function  |
-| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`            | Product click callback function        |
-| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void` | Product swatch click callback function |
-| onRedirect         | `(url: string) => void`                                    | Redirect callback function             |
+<br>
 
 ### `UrlHelpers`
 
-Url Helpers are used for managing the url and request state
+---
 
-| property              | type                                                                    | description                                                                                                                               |
-| --------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| getUrl                | `() => string \| undefined`                                             | This function will be used to get the current url for a page instead of using the current href.                                           |
-| setUrl                | `(newEncodedUrlState: string) => void`                                  | This function will be called when any request state changes result in url changes. By default the window href will be set to the new url. |
-| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | This function will be called when parsing the current url string to a request state.                                                      |
-| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | This function will be called when converting the request state to a url string.                                                           |
-| defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Used to provide a mapping for what strings constructor api query parameters should use in url                                             |
+Url Helpers are used for managing the url and request state. These functions define how this Library modifies and parses the URL.
+
+| property              | type                                                                    | description                                                     |
+| --------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
+| getUrl                | `() => string \| undefined`                                             | Get the current url for a page (Default: getting current href)  |
+| setUrl                | `(newEncodedUrlState: string) => void`                                  | Set the window href using the provided url                      |
+| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | Parses the given url string to a request configuration state.   |
+| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | Convert the request configuration state to a url string.        |
+| defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Provides a mapping for the query parameters that is used in URL |
 
 > #### `getUrl`
 
 - Default Implementation
+- type: () => string \| undefined
 
   ```javascript
-  function getUrl(): string | undefined {
+  function getUrl() {
     if (typeof window === 'undefined') return undefined;
     return window.location.href;
   }
@@ -54,9 +69,10 @@ Url Helpers are used for managing the url and request state
 > #### `setUrl`
 
 - Default Implementation
+- type: (newEncodedUrlState: string) => void
 
   ```javascript
-  function setUrl(newUrlWithEncodedState: string) {
+  function setUrl(newUrlWithEncodedState) {
     if (typeof window === 'undefined') return;
     window.location.href = newUrlWithEncodedState;
   }
@@ -65,21 +81,22 @@ Url Helpers are used for managing the url and request state
 > #### `getStateFromUrl`
 
 - Default Implementation
+- type: (urlString: string) => RequestConfig
 
   ```javascript
-  function getStateFromUrl(url: string): RequestConfigs {
+  function getStateFromUrl(url) {
     const urlObject = new URL(url);
     const urlParams = urlObject.searchParams;
     const paths = decodeURI(urlObject?.pathname)?.split('/');
-    let filterName: string | undefined;
-    let filterValue: string | undefined;
+    let filterName;
+    let filterValue;
 
     if (paths.length > 0) {
       filterName = 'group_id';
       filterValue = paths[paths.length - 1];
     }
 
-    const rawState = {} as Record<string, string>;
+    const rawState = {};
     Object.entries(defaultQueryStringMap).forEach(([key, val]) => {
       const storedVal = urlParams.get(val);
       if (storedVal != null) {
@@ -101,7 +118,7 @@ Url Helpers are used for managing the url and request state
       ...rest
     } = rawState;
 
-    const state = { ...rest } as RequestConfigs;
+    const state = { ...rest };
     if (page) state.page = Number(page);
     if (offset) state.offset = Number(offset);
     if (resultsPerPage) state.resultsPerPage = Number(resultsPerPage);
@@ -118,19 +135,32 @@ Url Helpers are used for managing the url and request state
 > #### `getUrlFromState`
 
 - Default Implementation
+- type: (state: RequestConfigs, options: QueryParamEncodingOptions) => string
 
   ```javascript
-  function getUrlFromState(state: RequestConfigs, options: QueryParamEncodingOptions = {}): string {
-    const { baseUrl: url, origin, pathname } = options;
-    const baseUrl = url || `${origin}${pathname}`;
+  function getUrlFromState(state, url) {
+    const urlObject = new URL(url);
+    let { pathname } = urlObject;
 
-    const params = new URLSearchParams();
-    Object.entries(state).forEach(([key, val]) => {
-    if (defaultQueryStringMap[key] === undefined) {
-    return;
+    if (state.filterName && state.filterValue) {
+      if (pathname.match(/(group_id|collection_id)\/[^/]+$/)) {
+        pathname = pathname.replace(
+          /\/(group_id|collection_id)\/[^/]+$/,
+          `/${state.filterName}/${state.filterValue}`,
+        );
+      } else {
+        pathname = `/${state.filterName}/${state.filterValue}`;
+      }
     }
 
-      let encodedVal: string = '';
+    const params = new URLSearchParams();
+
+    Object.entries(state).forEach(([key, val]) => {
+      if (defaultQueryStringMap[key] === undefined) {
+        return;
+      }
+
+      let encodedVal = '';
 
       if (key === 'filters' && state.filters) {
         getFilterParamsFromState(params, state.filters);
@@ -143,19 +173,19 @@ Url Helpers are used for managing the url and request state
       if (encodedVal) {
         params.set(defaultQueryStringMap[key], encodedVal);
       }
-
     });
 
-    return `${baseUrl}?${params.toString()}`;
+    return `${urlObject.origin}${pathname}?${params.toString()}`;
   }
   ```
 
 > #### `defaultQueryStringMap`
 
 - Default Implementation
+- type: DefaultQueryStringMap
 
   ```javascript
-  const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
+  const defaultQueryStringMap = Object.freeze({
     query: 'q',
     page: 'page',
     offset: 'offset',

@@ -31,6 +31,10 @@ export default function ProductSwatch(props: ProductSwatchProps) {
     }
   };
 
+  const swatchContainerClickHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -40,7 +44,8 @@ export default function ProductSwatch(props: ProductSwatchProps) {
           selectedVariation,
         })
       ) : (
-        <div>
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        <div onClick={swatchContainerClickHandler}>
           <ul className='cio-swatch-container'>
             {swatchList?.map((swatch) => {
               const isSelected = selectedVariation?.variationId === swatch.variationId;
@@ -53,6 +58,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
                   type='button'
                   key={swatch.variationId}
                   data-cnstrc-variation-id={swatch.variationId}
+                  data-testid={`cio-swatch-${swatch.variationId}`}
                   className='cio-swatch-button cio-swatch-item'
                   onClick={(e) => swatchClickHandler(e, swatch)}
                   style={{

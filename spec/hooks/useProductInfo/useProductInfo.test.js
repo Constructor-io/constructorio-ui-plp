@@ -22,14 +22,15 @@ describe('Testing Hook: useProductInfo', () => {
 
   const transformedItem = transformResultItem(mockItem);
 
-  it('Should return productSwatch, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
+  it('Should return itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { itemName, itemImageUrl, itemUrl, itemPrice, itemId },
       } = result;
 
+      expect(itemId).toEqual(transformedItem.itemId);
       expect(itemName).toEqual(transformedItem.itemName);
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
       expect(itemUrl).toEqual(transformedItem.url);

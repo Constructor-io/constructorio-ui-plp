@@ -17,9 +17,10 @@ export default function useCioPlpProvider(
     staticRequestConfigs = {},
     customConfigs = {},
     cioClient: customCioClient,
+    cioClientOptions: customCioClientOptions = {},
   } = props;
 
-  const [cioClientOptions, setCioClientOptions] = useState({});
+  const [cioClientOptions, setCioClientOptions] = useState(customCioClientOptions);
   const cioClient = useCioClient({ apiKey, cioClient: customCioClient, options: cioClientOptions });
 
   const contextValue = useMemo(

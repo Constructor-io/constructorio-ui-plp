@@ -84,7 +84,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   } = useCioPlpContext();
 
   if (isPlpSearchDataRedirect(data)) {
-    const redirectUrl = data.redirect.redirect.data.url;
+    const redirectUrl = data.redirect.data.url;
 
     if (onRedirect) {
       onRedirect(redirectUrl);

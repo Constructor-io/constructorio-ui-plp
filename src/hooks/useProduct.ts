@@ -25,12 +25,15 @@ const useProductInfo = ({ item, selectedVariation }: UseProductInfoArgs) => {
     imageBaseUrl: state.customConfigs.imageBaseUrl,
   });
   const itemUrl = getItemUrl(item, selectedVariation);
+  const { itemId } = item;
 
   return {
     itemName,
     itemPrice,
     itemImageUrl,
     itemUrl,
+    variationId,
+    itemId,
   };
 };
 
