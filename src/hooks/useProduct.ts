@@ -1,11 +1,10 @@
-import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
-import { UseProductInfo } from '../types';
 import { tryCatchify } from '../utils';
+import { Item, SwatchItem } from '../types';
 
 interface UseProductInfoArgs {
-  item: any;
-  selectedVariation?: any;
+  item: Item;
+  selectedVariation?: SwatchItem;
 }
 
 const useProductInfo = ({ item, selectedVariation }: UseProductInfoArgs) => {

@@ -52,7 +52,7 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productSwatch = useProductSwatch({ item });
-  const { selectedVariation} = productSwatch;
+  const { selectedVariation } = productSwatch;
   const productInfo = useProductInfo({ item, selectedVariation });
   const { itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
 
