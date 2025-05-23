@@ -144,11 +144,18 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
     expect(typeof (state as any).qsParam).toBe('undefined');
   });
 
-  test('getBrowseGroup should get the last path name as the group_id', () => {
-    const mockUrl = 'https://example.com/a/random/lastPathName?q=3&randomQuery=[true,%20false]';
+  test('getBrowseGroup should get the last path name as the group_id when no query parameter exists', () => {
+    const mockUrl = 'https://example.com/a/random/lastPathName';
     const { filterName, filterValue } = getStateFromUrl(mockUrl);
     expect(filterName).toBe('group_id');
     expect(filterValue).toBe('lastPathName');
+  });
+
+  test('getBrowseGroup should not set group_id when query parameter exists', () => {
+    const mockUrl = 'https://example.com/a/random/lastPathName?q=searchterm';
+    const { filterName, filterValue } = getStateFromUrl(mockUrl);
+    expect(filterName).toBeUndefined();
+    expect(filterValue).toBeUndefined();
   });
 });
 
