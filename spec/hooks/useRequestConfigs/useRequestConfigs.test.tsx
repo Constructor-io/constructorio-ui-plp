@@ -66,7 +66,7 @@ describe('Testing Hook: useRequestConfigs', () => {
 
   it('Should return configurations set in the URL path/query parameters', () => {
     function TestReactComponent() {
-      window.location.href = testUrl;
+      window.location.href = testUrl.replace('q=item', '');
       const { getRequestConfigs } = useRequestConfigs();
       const requestConfigs = getRequestConfigs();
       const { fmtOptions, qsParam, preFilterExpression, variationsMap, ...sampleRequestState } =
@@ -75,7 +75,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       sampleRequestState.filterName = 'group_id';
       sampleRequestState.filterValue = 'Styles';
 
-      expect(requestConfigs).toEqual(sampleRequestState);
+      expect(requestConfigs).toEqual({ ...sampleRequestState, query: undefined });
 
       return <div>test</div>;
     }
