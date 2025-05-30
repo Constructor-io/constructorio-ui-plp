@@ -39,11 +39,13 @@ export interface ApiHierarchicalFacetOption extends ApiFacetOption {
 export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTrackingEvents'>;
 
 export interface ItemFieldGetters {
-  getPrice: (item: Item | Variation) => number;
+  getPrice: (item: Item, variation?: Variation) => number | undefined;
+  getItemUrl: (item: Item, variation?: Variation) => string | undefined;
+  getImageUrl: (item: Item, variation?: Variation) => string | undefined;
+  getName: (item: Item, variation?: Variation) => string;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
-    retrievePrice: ItemFieldGetters['getPrice'],
     retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
   ) => SwatchItem[] | undefined;
 }
@@ -109,6 +111,10 @@ export interface UrlHelpers {
   defaultQueryStringMap: Readonly<DefaultQueryStringMap>;
 }
 
+export interface CustomConfigs {
+  imageBaseUrl?: string;
+}
+
 export interface RequestConfigs {
   // Search
   query?: string;
@@ -137,6 +143,7 @@ export interface PlpContextValue {
   cioClientOptions: CioClientOptions;
   setCioClientOptions: React.Dispatch<CioClientOptions>;
   staticRequestConfigs: RequestConfigs;
+  customConfigs: CustomConfigs;
   itemFieldGetters: ItemFieldGetters;
   formatters: Formatters;
   callbacks: Callbacks;
@@ -197,6 +204,7 @@ export interface SwatchItem {
   price?: number;
   swatchPreview: string;
   variationId?: string;
+  variation?: Variation;
 }
 
 export interface PlpBrowseData {
@@ -219,6 +227,7 @@ export interface CioPlpProviderProps {
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
+  customConfigs?: Partial<CustomConfigs>;
 }
 
 export type UseSortReturn = {
@@ -229,8 +238,8 @@ export type UseSortReturn = {
 
 export interface ProductSwatchObject {
   swatchList: SwatchItem[] | undefined;
-  selectedVariation: SwatchItem | undefined;
-  selectVariation: (swatch: SwatchItem) => void;
+  selectedVariation: Variation | undefined;
+  selectVariation: (variation: Variation) => void;
 }
 
 export type UseProductSwatchProps = {
@@ -240,7 +249,6 @@ export type UseProductSwatchProps = {
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
 
 export interface ProductInfoObject {
-  productSwatch?: ProductSwatchObject;
   itemName: string;
   itemId: string;
   itemPrice?: number;
