@@ -40,7 +40,7 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface ItemFieldGetters {
   getPrice: (item: Item | Variation) => number;
-  getSalePrice: (item: Item | Variation) => number;
+  getSalePrice: (item: Item | Variation) => number | undefined;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
