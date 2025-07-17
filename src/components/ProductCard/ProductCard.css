@@ -20,6 +20,19 @@
   width: 100%;
 }
 
+.cio-item-price.cio-item-price-sale {
+  text-decoration: line-through;
+  opacity: 0.7;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.cio-item-price-sale-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .cio-item-price {
   margin-top: 16px;
   font-weight: 700;

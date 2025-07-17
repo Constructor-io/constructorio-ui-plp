@@ -1,7 +1,7 @@
 import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
-import { tryCatchify } from '../utils';
+import { getSalePrice, tryCatchify } from '../utils';
 
 const useProductInfo: UseProductInfo = ({ item }) => {
   const state = useCioPlpContext();
@@ -15,6 +15,9 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
+  const salePrice = productSwatch?.selectedVariation
+    ? productSwatch?.selectedVariation?.salePrice
+    : getSalePrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
@@ -28,6 +31,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     itemUrl,
     variationId,
     itemId,
+    salePrice,
   };
 };
 

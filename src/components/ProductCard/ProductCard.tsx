@@ -4,7 +4,7 @@ import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
-import { getProductCardCnstrcDataAttributes } from '../../utils';
+import { concatStyles, getProductCardCnstrcDataAttributes } from '../../utils';
 
 interface Props {
   /**
@@ -56,7 +56,7 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -95,9 +95,20 @@ export default function ProductCard(props: ProductCardProps) {
           </div>
 
           <div className='cio-content'>
-            {Number(itemPrice) >= 0 && (
-              <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
-            )}
+            <div className='cio-item-price-sale-container'>
+              {salePrice && Number(salePrice) >= 0 && (
+                <div className='cio-item-price'>{formatPrice(salePrice)}</div>
+              )}
+              {Number(itemPrice) >= 0 && (
+                <div
+                  className={concatStyles(
+                    'cio-item-price',
+                    Number(salePrice) >= 0 && 'cio-item-price-sale',
+                  )}>
+                  {formatPrice(itemPrice)}
+                </div>
+              )}
+            </div>
             <div className='cio-item-name'>{itemName}</div>
             {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
           </div>

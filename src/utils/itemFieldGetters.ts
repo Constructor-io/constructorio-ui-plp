@@ -5,10 +5,15 @@ export function getPrice(item: Item | Variation): number {
   return item.data.price;
 }
 
+export function getSalePrice(item: Item | Variation): number | undefined {
+  return item.data.sale_price;
+}
+
 export function getSwatches(
   item: Item,
   retrievePrice: ItemFieldGetters['getPrice'],
   retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
+  retrieveSalePrice: ItemFieldGetters['getSalePrice'],
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
 
@@ -20,6 +25,7 @@ export function getSwatches(
         imageUrl: variation?.url,
         variationId: variation?.variationId,
         price: retrievePrice(variation),
+        salePrice: retrieveSalePrice(variation),
         swatchPreview: retrieveSwatchPreview(variation),
       });
     }

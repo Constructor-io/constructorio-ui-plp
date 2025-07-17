@@ -4,7 +4,12 @@ import useProductSwatch from '../../../src/hooks/useProductSwatch';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import { renderHookWithCioPlp } from '../../test-utils';
-import { getSwatchPreview, getPrice, getSwatches } from '../../../src/utils/itemFieldGetters';
+import {
+  getSwatchPreview,
+  getPrice,
+  getSwatches,
+  getSalePrice,
+} from '../../../src/utils/itemFieldGetters';
 
 describe('Testing Hook: useProductSwatch', () => {
   beforeEach(() => {
@@ -18,7 +23,7 @@ describe('Testing Hook: useProductSwatch', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
-  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview);
+  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview, getSalePrice);
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useProductSwatch())).toThrow();
@@ -63,6 +68,7 @@ describe('Testing Hook: useProductSwatch', () => {
           getPrice: () => {},
           getSwatches: () => {},
           getSwatchPreview: () => {},
+          getSalePrice: () => {},
         },
       },
     });
@@ -89,6 +95,9 @@ describe('Testing Hook: useProductSwatch', () => {
             throw new Error();
           },
           getSwatchPreview: () => {
+            throw new Error();
+          },
+          getSalePrice: () => {
             throw new Error();
           },
         },

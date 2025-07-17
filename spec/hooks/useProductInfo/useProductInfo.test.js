@@ -3,6 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import useProductInfo from '../../../src/hooks/useProduct';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
+import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
@@ -21,9 +22,29 @@ describe('Testing Hook: useProductInfo', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
+  const transformedItemWithSalePrice = transformResultItem(mockItemWithSalePrice);
 
   it('Should return productSwatch, itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
+
+    await waitFor(() => {
+      const {
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemId },
+      } = result;
+
+      expect(productSwatch).not.toBeNull();
+      expect(itemId).toEqual(transformedItem.itemId);
+      expect(itemName).toEqual(transformedItem.itemName);
+      expect(itemImageUrl).toEqual(transformedItem.imageUrl);
+      expect(itemUrl).toEqual(transformedItem.url);
+      expect(itemPrice).toEqual(transformedItem.data.price);
+    });
+  });
+
+  it('Should return include a sales_price if it exists in the item', async () => {
+    const { result } = renderHookWithCioPlp(() =>
+      useProductInfo({ item: transformedItemWithSalePrice }),
+    );
 
     await waitFor(() => {
       const {
