@@ -86,7 +86,7 @@ describe('Testing Component on the server: CioPlpGrid', () => {
     );
 
     expect(html).toContain('data-cnstrc-search');
-    expect(html).toContain('data-cnstrc-num-results="357"');
-    expect(html).toContain('data-cnstrc-result-id="c7000c32-0399-4bae-8e23-fb67bd0ecb62"');
+    expect(html).toContain(`data-cnstrc-num-results="${mockSearchData.response.totalNumResults}"`);
+    expect(html).toContain(`data-cnstrc-result-id="${mockSearchData.resultId}"`);
   });
 });
