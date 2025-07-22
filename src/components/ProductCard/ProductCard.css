@@ -27,7 +27,7 @@
   font-size: 24px;
 }
 
-.cio-item-price-sale-container {
+.cio-item-prices-container {
   display: flex;
   gap: 8px;
   align-items: center;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
@@ -70,6 +70,7 @@ export default function ProductCard(props: ProductCardProps) {
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
+  const hasSalesPrice = useMemo(() => !!(salePrice && Number(salePrice) >= 0), [salePrice]);
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
@@ -95,15 +96,13 @@ export default function ProductCard(props: ProductCardProps) {
           </div>
 
           <div className='cio-content'>
-            <div className='cio-item-price-sale-container'>
-              {salePrice && Number(salePrice) >= 0 && (
-                <div className='cio-item-price'>{formatPrice(salePrice)}</div>
-              )}
+            <div className='cio-item-prices-container'>
+              {hasSalesPrice && <div className='cio-item-price'>{formatPrice(salePrice)}</div>}
               {Number(itemPrice) >= 0 && (
                 <div
                   className={concatStyles(
                     'cio-item-price',
-                    Number(salePrice) >= 0 && 'cio-item-price-sale',
+                    hasSalesPrice && 'cio-item-price-sale',
                   )}>
                   {formatPrice(itemPrice)}
                 </div>

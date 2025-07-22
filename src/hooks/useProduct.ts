@@ -1,7 +1,11 @@
 import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
-import { getSalePrice, tryCatchify } from '../utils';
+import { tryCatchify } from '../utils';
+import {
+  getPrice as defaultGetPrice,
+  getSalePrice as defaultGetSalePrice,
+} from '../utils/itemFieldGetters';
 
 const useProductInfo: UseProductInfo = ({ item }) => {
   const state = useCioPlpContext();
@@ -11,11 +15,12 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     throw new Error('data, itemId, or itemName are required.');
   }
 
-  const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice);
+  const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice || defaultGetPrice);
+  const getSalePrice = tryCatchify(state?.itemFieldGetters?.getSalePrice || defaultGetSalePrice);
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const salePrice = productSwatch?.selectedVariation
+  const salePrice = productSwatch?.selectedVariation?.salePrice
     ? productSwatch?.selectedVariation?.salePrice
     : getSalePrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
