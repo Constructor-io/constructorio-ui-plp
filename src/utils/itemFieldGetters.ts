@@ -1,13 +1,28 @@
 import { ItemFieldGetters, Item, SwatchItem, Variation } from '../types';
 
-// eslint-disable-next-line import/prefer-default-export
-export function getPrice(item: Item | Variation): number {
-  return item.data.price;
+export function getPrice(item: Item, variation?: Variation): number {
+  return variation?.data?.price || item?.data?.price;
+}
+
+export function getImageUrl(item: Item, variation?: Variation, options?: any): string | undefined {
+  const { imageBaseUrl } = options;
+
+  if (imageBaseUrl) {
+    return `${imageBaseUrl}${variation?.imageUrl || item?.imageUrl}`;
+  }
+  return variation?.imageUrl || item?.imageUrl;
+}
+
+export function getItemUrl(item: Item, variation?: Variation): string | undefined {
+  return variation?.url || item.url;
+}
+
+export function getName(item: Item, variation?: Variation): string {
+  return variation?.itemName || item.itemName;
 }
 
 export function getSwatches(
   item: Item,
-  retrievePrice: ItemFieldGetters['getPrice'],
   retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
@@ -19,8 +34,8 @@ export function getSwatches(
         url: variation?.url || item?.url,
         imageUrl: variation?.url,
         variationId: variation?.variationId,
-        price: retrievePrice(variation),
         swatchPreview: retrieveSwatchPreview(variation),
+        variation,
       });
     }
   });
