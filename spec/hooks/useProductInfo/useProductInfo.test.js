@@ -41,56 +41,28 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
-  it('Should return include a sales_price if it exists in the item', async () => {
-    const { result } = renderHookWithCioPlp(() =>
-      useProductInfo({ item: transformedItemWithSalePrice }),
-    );
-
-    await waitFor(() => {
-      const {
-        current: {
-          productSwatch,
-          itemName,
-          itemImageUrl,
-          itemUrl,
-          itemPrice,
-          itemId,
-          itemSalePrice,
-        },
-      } = result;
-
-      expect(productSwatch).not.toBeNull();
-      expect(itemId).toEqual(transformedItemWithSalePrice.itemId);
-      expect(itemName).toEqual(transformedItemWithSalePrice.itemName);
-      expect(itemImageUrl).toEqual(transformedItemWithSalePrice.imageUrl);
-      expect(itemUrl).toEqual(transformedItemWithSalePrice.url);
-      expect(itemPrice).toEqual(transformedItemWithSalePrice.data.price);
-      expect(itemSalePrice).toEqual(transformedItemWithSalePrice.data.salePrice);
-    });
-  });
-
-  it('Should return nothing properly with getters that return nothing', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
-      initialProps: {
-        itemFieldGetters: {
-          getPrice: () => {},
-          getSwatches: () => {},
-          getSwatchPreview: () => {},
-          getSalePrice: () => {},
-        },
-      },
-    });
-
-    await waitFor(() => {
-      const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
-      } = result;
-
-      expect(productSwatch).not.toBeNull();
-      expect(itemName).toEqual(transformedItem.itemName);
-      expect(itemImageUrl).toEqual(transformedItem.imageUrl);
-      expect(itemUrl).toEqual(transformedItem.url);
-      expect(itemPrice).toBeUndefined();
+  describe.each([
+    {
+      item: transformedItem,
+      itemDescription: 'a standard item',
+    },
+    {
+      item: transformedItemWithSalePrice,
+      itemDescription: 'an item on sale',
+    },
+  ])('With $itemDescription', ({ item }) => {
+    it.each([
+      ['itemId', item.itemId],
+      ['itemName', item.itemName],
+      ['itemImageUrl', item.imageUrl],
+      ['itemUrl', item.url],
+      ['itemPrice', item.data.price],
+      ['salePrice', item.data.sale_price],
+    ])('Should return the correct value for "%s"', async (property, expectedValue) => {
+      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+      await waitFor(() => {
+        expect(result.current[property]).toEqual(expectedValue);
+      });
     });
   });
 

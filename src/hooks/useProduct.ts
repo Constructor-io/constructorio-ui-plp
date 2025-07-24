@@ -20,9 +20,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const salePrice = productSwatch?.selectedVariation?.salePrice
-    ? productSwatch?.selectedVariation?.salePrice
-    : getSalePrice(item);
+  const salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;

@@ -102,7 +102,7 @@ export default function ProductCard(props: ProductCardProps) {
                 <div
                   className={concatStyles(
                     'cio-item-price',
-                    hasSalesPrice && 'cio-item-price-sale',
+                    hasSalesPrice && 'cio-item-price-strikethrough',
                   )}>
                   {formatPrice(itemPrice)}
                 </div>
