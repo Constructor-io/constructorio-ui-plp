@@ -8,10 +8,11 @@
 
 - `ProductInfo`:
 
-  | property      | type                                                                                                                  | description               |
-  | ------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-  | productSwatch | [ProductSwatch](../?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props) | Result ID of the response |
-  | itemName      | `string`                                                                                                              | Name of item              |
-  | itemPrice     | `number`                                                                                                              | Price of item             |
-  | itemImageUrl  | `string`                                                                                                              | URL of item image         |
-  | itemUrl       | `string`                                                                                                              | URL to item PDP           |
+  | property      | type                                                                                                                  | description                 |
+  | ------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+  | productSwatch | [ProductSwatch](../?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props) | Result ID of the response   |
+  | itemName      | `string`                                                                                                              | Name of item                |
+  | itemPrice     | `number`                                                                                                              | Price of item               |
+  | salePrice     | `number`                                                                                                              | Price of item with discount |
+  | itemImageUrl  | `string`                                                                                                              | URL of item image           |
+  | itemUrl       | `string`                                                                                                              | URL to item PDP             |

@@ -40,11 +40,13 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 
 export interface ItemFieldGetters {
   getPrice: (item: Item | Variation) => number;
+  getSalePrice: (item: Item | Variation) => number | undefined;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
     retrievePrice: ItemFieldGetters['getPrice'],
     retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
+    retrieveSalePrice: ItemFieldGetters['getSalePrice'],
   ) => SwatchItem[] | undefined;
 }
 
@@ -195,6 +197,7 @@ export interface SwatchItem {
   itemName?: string;
   imageUrl?: string;
   price?: number;
+  salePrice?: number;
   swatchPreview: string;
   variationId?: string;
 }
@@ -244,6 +247,7 @@ export interface ProductInfoObject {
   itemName: string;
   itemId: string;
   itemPrice?: number;
+  salePrice?: number;
   itemUrl?: string;
   itemImageUrl?: string;
   variationId?: string;

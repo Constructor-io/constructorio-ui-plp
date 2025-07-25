@@ -3,6 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import useProductInfo from '../../../src/hooks/useProduct';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
+import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
@@ -21,6 +22,7 @@ describe('Testing Hook: useProductInfo', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
+  const transformedItemWithSalePrice = transformResultItem(mockItemWithSalePrice);
 
   it('Should return productSwatch, itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
@@ -39,27 +41,28 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
-  it('Should return nothing properly with getters that return nothing', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
-      initialProps: {
-        itemFieldGetters: {
-          getPrice: () => {},
-          getSwatches: () => {},
-          getSwatchPreview: () => {},
-        },
-      },
-    });
-
-    await waitFor(() => {
-      const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
-      } = result;
-
-      expect(productSwatch).not.toBeNull();
-      expect(itemName).toEqual(transformedItem.itemName);
-      expect(itemImageUrl).toEqual(transformedItem.imageUrl);
-      expect(itemUrl).toEqual(transformedItem.url);
-      expect(itemPrice).toBeUndefined();
+  describe.each([
+    {
+      item: transformedItem,
+      itemDescription: 'a standard item',
+    },
+    {
+      item: transformedItemWithSalePrice,
+      itemDescription: 'an item on sale',
+    },
+  ])('With $itemDescription', ({ item }) => {
+    it.each([
+      ['itemId', item.itemId],
+      ['itemName', item.itemName],
+      ['itemImageUrl', item.imageUrl],
+      ['itemUrl', item.url],
+      ['itemPrice', item.data.price],
+      ['salePrice', item.data.sale_price],
+    ])('Should return the correct value for "%s"', async (property, expectedValue) => {
+      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+      await waitFor(() => {
+        expect(result.current[property]).toEqual(expectedValue);
+      });
     });
   });
 
@@ -68,7 +71,7 @@ describe('Testing Hook: useProductInfo', () => {
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemSalePrice },
       } = result;
       const { selectVariation, swatchList } = productSwatch;
       selectVariation(swatchList[1]);
@@ -77,29 +80,36 @@ describe('Testing Hook: useProductInfo', () => {
       expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItem.imageUrl);
       expect(itemUrl).toEqual(swatchList[1].url || transformedItem.url);
       expect(itemPrice).toEqual(swatchList[1].price || transformedItem.data.price);
+      expect(itemSalePrice).toEqual(swatchList[1].salePrice || transformedItem.data.salePrice);
     });
   });
 
   it('Should return nothing properly with getters that throw errors', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }), {
-      initialProps: {
-        itemFieldGetters: {
-          getPrice: () => {
-            throw new Error();
-          },
-          getSwatches: () => {
-            throw new Error();
-          },
-          getSwatchPreview: () => {
-            throw new Error();
+    const { result } = renderHookWithCioPlp(
+      () => useProductInfo({ item: transformedItemWithSalePrice }),
+      {
+        initialProps: {
+          itemFieldGetters: {
+            getPrice: () => {
+              throw new Error();
+            },
+            getSwatches: () => {
+              throw new Error();
+            },
+            getSwatchPreview: () => {
+              throw new Error();
+            },
+            getSalePrice: () => {
+              throw new Error();
+            },
           },
         },
       },
-    });
+    );
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice },
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemSalePrice },
       } = result;
 
       expect(productSwatch).not.toBeNull();
@@ -107,6 +117,7 @@ describe('Testing Hook: useProductInfo', () => {
       expect(itemImageUrl).toEqual(transformedItem.imageUrl);
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toBeUndefined();
+      expect(itemSalePrice).toBeUndefined();
     });
   });
 });

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
-import { getProductCardCnstrcDataAttributes } from '../../utils';
+import { concatStyles, getProductCardCnstrcDataAttributes } from '../../utils';
 
 interface Props {
   /**
@@ -56,7 +56,7 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl } = productInfo;
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -70,6 +70,7 @@ export default function ProductCard(props: ProductCardProps) {
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
+  const hasSalesPrice = useMemo(() => !!(salePrice && Number(salePrice) >= 0), [salePrice]);
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
@@ -95,9 +96,18 @@ export default function ProductCard(props: ProductCardProps) {
           </div>
 
           <div className='cio-content'>
-            {Number(itemPrice) >= 0 && (
-              <div className='cio-item-price'>{formatPrice(itemPrice)}</div>
-            )}
+            <div className='cio-item-prices-container'>
+              {hasSalesPrice && <div className='cio-item-price'>{formatPrice(salePrice)}</div>}
+              {Number(itemPrice) >= 0 && (
+                <div
+                  className={concatStyles(
+                    'cio-item-price',
+                    hasSalesPrice && 'cio-item-price-strikethrough',
+                  )}>
+                  {formatPrice(itemPrice)}
+                </div>
+              )}
+            </div>
             <div className='cio-item-name'>{itemName}</div>
             {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
           </div>
