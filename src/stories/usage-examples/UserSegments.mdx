@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title='Usage Examples/User Segments' />
+
+# Utilizing User Segments
+
+Constructor allows you to pass your own custom user segments with every request.
+These user segments can then be used to create searchandizing rules via
+the [Dashboard](https://docs.constructor.com/docs/using-the-constructor-dashboard-searchandising-configure-rules-create-boost-and-bury-rules#set-user-segment) or via
+the [Refined Rules API](https://docs.constructor.com/reference/searchandising-searchandising-by-user-request-data)
+
+## Usage Example
+
+Upon initializing the library, simply pass the user segments as a prop via `cioClientOptions`.
+Once passed, they will automatically be passed to every request made to Constructor.
+
+```tsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+const segments = ['mobile', 'ios'];
+
+export default function MyComponent() {
+  return <CioPlp apiKey={DEMO_API_KEY} cioClientOptions={{ segments }} />;
+}
+```
