@@ -18,7 +18,9 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice || defaultGetPrice);
   const getSalePrice = tryCatchify(state?.itemFieldGetters?.getSalePrice || defaultGetSalePrice);
-  const getRolloverImage = tryCatchify(state?.itemFieldGetters?.getRolloverImage || defaultGetRolloverImage);
+  const getRolloverImage = tryCatchify(
+    state?.itemFieldGetters?.getRolloverImage || defaultGetRolloverImage,
+  );
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);

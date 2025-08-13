@@ -72,7 +72,8 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, rolloverImage } = productInfo;
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, rolloverImage } =
+    productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -95,8 +96,7 @@ export default function ProductCard(props: ProductCardProps) {
     if (state.callbacks.onProductCardImageRollover && rolloverImage) {
       state.callbacks.onProductCardImageRollover(isShown, item);
     }
-  }
-
+  };
 
   const onMouseEnter = (event: React.MouseEvent) => {
     if (state.callbacks.onProductCardMouseEnter) {
@@ -139,15 +139,14 @@ export default function ProductCard(props: ProductCardProps) {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}>
             <img alt={itemName} src={itemImageUrl} className='cio-image' />
-            {
-              rolloverImage &&
+            {rolloverImage && (
               <img
-                alt={`${itemName} rollover image`}
+                alt={`${itemName} rollover`}
                 src={rolloverImage}
                 loading='lazy'
                 className={concatStyles('cio-rollover-image', rolloverImageIsShown && 'is-active')}
               />
-            }
+            )}
           </div>
 
           <div className='cio-content'>

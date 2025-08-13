@@ -48,7 +48,7 @@ export interface ItemFieldGetters {
     retrievePrice: ItemFieldGetters['getPrice'],
     retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
     retrieveSalePrice: ItemFieldGetters['getSalePrice'],
-    retrieveRolloverImage: ItemFieldGetters['getRolloverImage']
+    retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
 }
 
@@ -215,7 +215,7 @@ export interface PlpBrowseData {
   response: PlpBrowseResponse;
 }
 
-export interface PlpBrowseResponse extends PlpSearchResponse { }
+export interface PlpBrowseResponse extends PlpSearchResponse {}
 
 export interface CioPlpProviderProps {
   apiKey: string;

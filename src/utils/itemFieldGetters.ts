@@ -13,12 +13,13 @@ export function getRolloverImage(item: Item | Variation): string | undefined {
   return item.data.rolloverImage;
 }
 
+/* eslint-disable-next-line max-params */
 export function getSwatches(
   item: Item,
   retrievePrice: ItemFieldGetters['getPrice'],
   retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
   retrieveSalePrice: ItemFieldGetters['getSalePrice'],
-  retrieveRolloverImage: ItemFieldGetters['getRolloverImage']
+  retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
 

@@ -17,7 +17,7 @@ import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups, { UseGroupProps } from './useGroups';
 import useRequestConfigs from './useRequestConfigs';
 
-export interface UseCioPlpHook extends PlpContextValue { }
+export interface UseCioPlpHook extends PlpContextValue {}
 
 export type UseCioPlpProps = UseSearchResultsProps &
   UseBrowseResultsProps & {
