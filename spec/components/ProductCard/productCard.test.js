@@ -70,7 +70,7 @@ describe('Testing Component: ProductCard', () => {
     expect(contextOnClickHandler).toHaveBeenCalledTimes(1);
 
     // Click the image
-    fireEvent.click(screen.getByRole('img'));
+    fireEvent.click(screen.getByAltText('Jersey Riviera Shirt (Red Park Bench Dot)'));
     expect(contextOnClickHandler).toHaveBeenCalledTimes(2);
 
     // Click the price
@@ -146,7 +146,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(rolloverImageEl.src).toEqual(selectedVariation.data.rolloverImage);
     expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
@@ -166,7 +166,7 @@ describe('Testing Component: ProductCard', () => {
 
     fireEvent.click(screen.getByTestId(`cio-swatch-${secondVariation.variationId}`));
     const itemName = secondVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(rolloverImageEl.src).toEqual(secondVariation.data.rolloverImage);
     expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
@@ -186,7 +186,7 @@ describe('Testing Component: ProductCard', () => {
 
     fireEvent.click(screen.getByTestId(`cio-swatch-${thirdVariation.variationId}`));
     const itemName = thirdVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(rolloverImageEl.src).toEqual(item.data.rolloverImage);
     expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
@@ -209,7 +209,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(onProductCardImageRolloverFn).toHaveBeenCalledWith(true, item);
     fireEvent.mouseLeave(rolloverImageEl);
@@ -233,7 +233,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(mouseEnterFn).toHaveBeenCalledWith(expect.any(Object), item);
     fireEvent.mouseLeave(rolloverImageEl);
@@ -253,7 +253,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     fireEvent.mouseEnter(rolloverImageEl);
     expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
   });

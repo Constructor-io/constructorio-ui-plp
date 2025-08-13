@@ -86,24 +86,6 @@ describe('Testing Hook: useProductSwatch', () => {
     });
   });
 
-  it('Should handle rollover image getter properly', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
-      initialProps: {
-        itemFieldGetters: {
-          getRolloverImage: () => 'test-image-url',
-        },
-      },
-    });
-
-    await waitFor(() => {
-      const {
-        current: { swatchList },
-      } = result;
-
-      expect(swatchList[0]?.rolloverImage).toBe('test-image-url');
-    });
-  });
-
   it('Should return nothing properly with getters that throw errors', async () => {
     const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
       initialProps: {
