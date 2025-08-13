@@ -9,11 +9,16 @@ export function getSalePrice(item: Item | Variation): number | undefined {
   return item.data.sale_price;
 }
 
+export function getRolloverImage(item: Item | Variation): string | undefined {
+  return item.data.rolloverImage;
+}
+
 export function getSwatches(
   item: Item,
   retrievePrice: ItemFieldGetters['getPrice'],
   retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
   retrieveSalePrice: ItemFieldGetters['getSalePrice'],
+  retrieveRolloverImage: ItemFieldGetters['getRolloverImage']
 ): SwatchItem[] | undefined {
   const swatchList: SwatchItem[] = [];
 
@@ -27,6 +32,7 @@ export function getSwatches(
         price: retrievePrice(variation),
         salePrice: retrieveSalePrice(variation),
         swatchPreview: retrieveSwatchPreview(variation),
+        rolloverImage: retrieveRolloverImage(variation),
       });
     }
   });

@@ -4,13 +4,14 @@ import useProductInfo from '../../../src/hooks/useProduct';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
+import mockItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(() => { });
   });
 
   afterEach(() => {
@@ -23,6 +24,7 @@ describe('Testing Hook: useProductInfo', () => {
 
   const transformedItem = transformResultItem(mockItem);
   const transformedItemWithSalePrice = transformResultItem(mockItemWithSalePrice);
+  const transformedItemWithRolloverImages = transformResultItem(mockItemWithRolloverImages);
 
   it('Should return productSwatch, itemId, itemName, itemImageUrl, itemUrl, itemPrice', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
@@ -67,20 +69,35 @@ describe('Testing Hook: useProductInfo', () => {
   });
 
   it('Should return correctly after different variation is selected', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItemWithRolloverImages }));
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemSalePrice },
+        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemSalePrice, rolloverImage },
       } = result;
       const { selectVariation, swatchList } = productSwatch;
       selectVariation(swatchList[1]);
 
       expect(itemName).toEqual(swatchList[1].itemName);
-      expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItem.imageUrl);
-      expect(itemUrl).toEqual(swatchList[1].url || transformedItem.url);
-      expect(itemPrice).toEqual(swatchList[1].price || transformedItem.data.price);
-      expect(itemSalePrice).toEqual(swatchList[1].salePrice || transformedItem.data.salePrice);
+      expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItemWithRolloverImages.imageUrl);
+      expect(itemUrl).toEqual(swatchList[1].url || transformedItemWithRolloverImages.url);
+      expect(itemPrice).toEqual(swatchList[1].price || transformedItemWithRolloverImages.data.price);
+      expect(itemSalePrice).toEqual(swatchList[1].salePrice || transformedItemWithRolloverImages.data.salePrice);
+      expect(rolloverImage).toEqual(swatchList[1].rolloverImage);
+    });
+  });
+
+  it('Should fallback to the item rolloverImage if it is not available in the variation', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItemWithRolloverImages }));
+
+    await waitFor(() => {
+      const {
+        current: { productSwatch, rolloverImage },
+      } = result;
+      const { selectVariation, swatchList } = productSwatch;
+      selectVariation(swatchList[2]);
+
+      expect(rolloverImage).toEqual(transformedItemWithRolloverImages.data.rolloverImage);
     });
   });
 

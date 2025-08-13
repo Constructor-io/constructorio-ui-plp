@@ -5,19 +5,20 @@ import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
+import testItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import { transformResultItem } from '../../../src/utils/transformers';
 
 describe('Testing Component: ProductCard', () => {
   test('Should throw error if used outside the CioPlp', () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(() => { });
     expect(() => render(<ProductCard />)).toThrow();
     spy.mockRestore();
   });
 
   test("Should throw error if item isn't provided", () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(() => { });
     expect(() =>
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
@@ -132,6 +133,129 @@ describe('Testing Component: ProductCard', () => {
       expect.objectContaining(item),
       expect.objectContaining(testSelectedVariation),
     );
+  });
+
+  test('it should show the rollover image when the mouse hovers over the image', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const selectedVariation = item.variations[0];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const itemName = selectedVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(rolloverImageEl.src).toEqual(selectedVariation.data.rolloverImage);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
+    fireEvent.mouseLeave(rolloverImageEl);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
+  });
+
+  test('it should change the rollover image if the selected variation changes', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const secondVariation = item.variations[1];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${secondVariation.variationId}`));
+    const itemName = secondVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(rolloverImageEl.src).toEqual(secondVariation.data.rolloverImage);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
+    fireEvent.mouseLeave(rolloverImageEl);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
+  });
+
+  test('it should fallback to the item rollover image if the selected variation does not have a rollover image', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const thirdVariation = item.variations[3];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${thirdVariation.variationId}`));
+    const itemName = thirdVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(rolloverImageEl.src).toEqual(item.data.rolloverImage);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
+    fireEvent.mouseLeave(rolloverImageEl);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
+  });
+
+  test('it should emit onProductCardImageRollover event if the callback is defined', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const selectedVariation = item.variations[0];
+    const onProductCardImageRolloverFn = jest.fn();
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}
+        callbacks={{
+          onProductCardImageRollover: onProductCardImageRolloverFn
+        }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const itemName = selectedVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(onProductCardImageRolloverFn).toHaveBeenCalledWith(true, item);
+    fireEvent.mouseLeave(rolloverImageEl);
+    expect(onProductCardImageRolloverFn).toHaveBeenCalledWith(false, item);
+  });
+
+  test('it should pass the correct props to the mouse events callbacks if they are defined', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const selectedVariation = item.variations[0];
+    const mouseEnterFn = jest.fn();
+    const mouseLeaveFn = jest.fn();
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}
+        callbacks={{
+          onProductCardMouseEnter: mouseEnterFn,
+          onProductCardMouseLeave: mouseLeaveFn
+        }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const itemName = selectedVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(mouseEnterFn).toHaveBeenCalledWith(expect.any(Object), item);
+    fireEvent.mouseLeave(rolloverImageEl);
+    expect(mouseLeaveFn).toHaveBeenCalledWith(expect.any(Object), item);
+  });
+
+  test('it should override the rollover image behavior if at least the mouse enter callback is defined', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const selectedVariation = item.variations[0];
+    const mouseEnterFn = jest.fn();
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}
+        callbacks={{ onProductCardMouseEnter: mouseEnterFn }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const itemName = selectedVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover image`);
+    fireEvent.mouseEnter(rolloverImageEl);
+    expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
   });
 
   test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {

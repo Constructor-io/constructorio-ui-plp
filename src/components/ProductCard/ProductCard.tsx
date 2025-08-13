@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
@@ -42,6 +42,21 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   onClick: (event: React.MouseEvent, item: Item) => void;
   /**
+   * Callback to run on Product Card Mouse Enter.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseEnter: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Mouse Leave.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseLeave: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Image Rollover.
+   * Set globally at the CioPlp provider level.
+   */
+  onProductCardImageRollover?: (isShown: boolean, item: Item) => void;
+  /**
    * Data Attributes to surface on parent div of product card.
    */
   productCardCnstrcDataAttributes: CnstrcData;
@@ -53,10 +68,11 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
  * ProductCard component that has Constructor tracking built-in.
  */
 export default function ProductCard(props: ProductCardProps) {
+  const [rolloverImageIsShown, setRolloverImageIsShown] = useState(false);
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice } = productInfo;
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, rolloverImage } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -74,6 +90,31 @@ export default function ProductCard(props: ProductCardProps) {
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
+  const handleRolloverImageState = (isShown: boolean) => {
+    setRolloverImageIsShown(isShown);
+    if (state.callbacks.onProductCardImageRollover && rolloverImage) {
+      state.callbacks.onProductCardImageRollover(isShown, item);
+    }
+  }
+
+
+  const onMouseEnter = (event: React.MouseEvent) => {
+    if (state.callbacks.onProductCardMouseEnter) {
+      state.callbacks.onProductCardMouseEnter(event, item);
+    } else {
+      handleRolloverImageState(true);
+    }
+  };
+
+  const onMouseLeave = (event: React.MouseEvent) => {
+    if (state.callbacks.onProductCardMouseLeave) {
+      state.callbacks.onProductCardMouseLeave(event, item);
+    }
+    if (rolloverImageIsShown) {
+      handleRolloverImageState(false);
+    }
+  };
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -83,6 +124,8 @@ export default function ProductCard(props: ProductCardProps) {
           formatPrice,
           onAddToCart,
           onClick,
+          onMouseEnter,
+          onMouseLeave,
           productCardCnstrcDataAttributes: cnstrcData,
         })
       ) : (
@@ -91,8 +134,20 @@ export default function ProductCard(props: ProductCardProps) {
           className='cio-product-card'
           href={itemUrl}
           onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
-          <div className='cio-image-container'>
+          <div
+            className='cio-image-container'
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}>
             <img alt={itemName} src={itemImageUrl} className='cio-image' />
+            {
+              rolloverImage &&
+              <img
+                alt={`${itemName} rollover image`}
+                src={rolloverImage}
+                loading='lazy'
+                className={concatStyles('cio-rollover-image', rolloverImageIsShown && 'is-active')}
+              />
+            }
           </div>
 
           <div className='cio-content'>
