@@ -419,5 +419,23 @@ describe('Testing Component: Filters', () => {
       const updatedFiltersWithMaxSliderMove = getRequestFilters(container);
       expect(updatedFiltersWithMaxSliderMove.price[0].indexOf('70')).not.toBe(-1);
     });
+
+    it('SliderRange: Using Touch Events - Upon moving the slider buttons, requestFilters should be updated', async () => {
+      const { container } = render(<TestFiltersApplied />);
+      const cioMinSlider = container.querySelector('.cio-min-slider');
+      const cioMaxSlider = container.querySelector('.cio-max-slider');
+
+      fireEvent.change(cioMinSlider, { target: { value: 20 } });
+      fireEvent.touchEnd(cioMinSlider);
+
+      const updatedFiltersWithMinSliderMove = getRequestFilters(container);
+      expect(updatedFiltersWithMinSliderMove.price[0].indexOf('20')).not.toBe(-1);
+
+      fireEvent.change(cioMaxSlider, { target: { value: 70 } });
+      fireEvent.touchEnd(cioMaxSlider);
+
+      const updatedFiltersWithMaxSliderMove = getRequestFilters(container);
+      expect(updatedFiltersWithMaxSliderMove.price[0].indexOf('70')).not.toBe(-1);
+    });
   });
 });
