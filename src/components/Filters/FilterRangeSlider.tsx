@@ -200,6 +200,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               value={minValue}
               onChange={onMinSliderMove}
               onMouseUp={onSliderMoveEnd}
+              onTouchEnd={onSliderMoveEnd}
             />
             <input
               className='cio-max-slider'
@@ -210,6 +211,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               value={maxValue}
               onChange={onMaxSliderMove}
               onMouseUp={onSliderMoveEnd}
+              onTouchEnd={onSliderMoveEnd}
             />
           </div>
         </div>
