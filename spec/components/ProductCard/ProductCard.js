@@ -196,7 +196,7 @@ describe('Testing Component: ProductCard', () => {
       </CioPlp>,
     );
 
-    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'))
+    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'));
     fireEvent.click(screen.getByTestId(`cio-swatch-${testSelectedVariation.variationId}`));
     expect(contextOnProductCardClick).not.toHaveBeenCalled();
     fireEvent.click(productCard);
