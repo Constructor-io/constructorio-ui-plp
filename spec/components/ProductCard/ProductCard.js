@@ -165,7 +165,7 @@ describe('Testing Component: ProductCard', () => {
       </CioPlp>,
     );
 
-    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'))
+    const productCard = screen.getAllByRole('link').find(el => el.classList.contains('cio-product-card'));
     fireEvent.click(productCard);
     expect(contextOnProductCardClick).toHaveBeenCalledTimes(1);
     expect(contextOnProductCardClick).toHaveBeenCalledWith(
