@@ -7,6 +7,7 @@
     "url": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/KNIT-CASUAL-SHIRT_BUTTON-DOWN-KNIT-SHIRT_BKT00110SG1733_3_category.jpg",
     "price": 90,
     "altPrice": 69,
+    "sale_price": 21,
     "image_url": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/KNIT-CASUAL-SHIRT_BUTTON-DOWN-KNIT-SHIRT_BKT00110SG1733_3_category.jpg",
     "group_ids": [
       "1111"
@@ -31,6 +32,7 @@
         "variation_id": "BKT00110DG1733LR",
         "swatchPreview": "#e04062",
         "price": 90,
+        "sale_price": 21,
         "facets": [
           {
             "name": "Color",
@@ -47,6 +49,7 @@
         "variation_id": "BKT00110DG1733MR",
         "swatchPreview": "#a3c43b",
         "price": 99,
+        "sale_price": 22,
         "facets": [
           {
             "name": "Color",
@@ -63,6 +66,7 @@
         "variation_id": "BKT00110DG1733SR",
         "swatchPreview": "#253d37",
         "price": 100,
+        "sale_price": 23,
         "facets": [
           {
             "name": "Color",

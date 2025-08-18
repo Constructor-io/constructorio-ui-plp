@@ -60,10 +60,11 @@ export function getStateFromUrl(url: string): RequestConfigs {
   const urlObject = new URL(url);
   const urlParams = urlObject.searchParams;
   const paths = decodeURI(urlObject?.pathname)?.split('/');
+  const query = urlParams.get(defaultQueryStringMap.query);
   let filterName: string | undefined;
   let filterValue: string | undefined;
 
-  if (paths.length > 0) {
+  if (!query && paths.length > 0) {
     filterName = 'group_id';
     filterValue = paths[paths.length - 1];
   }

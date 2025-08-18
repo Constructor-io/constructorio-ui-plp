@@ -47,7 +47,10 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   });
 
   test('Should not encode parameters not defined in defaultQueryStringMap', () => {
-    const urlString = getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path');
+    const urlString = getUrlFromState(
+      testRequestState as RequestConfigs,
+      'https://www.example.com/a/random/path',
+    );
     const url = new URL(urlString);
     const params = url.searchParams;
 
@@ -72,9 +75,9 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should update pathname when filterName and filterValue are provided', () => {
     const url = new URL(
       getUrlFromState(testRequestState as RequestConfigs, 'https://www.example.com/a/random/path'),
-    )
+    );
 
-    expect(url.pathname).toBe('/group_id/Styles');    
+    expect(url.pathname).toBe('/group_id/Styles');
   });
 
   test('Should handle empty pathname correctly', () => {
@@ -87,8 +90,8 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should replace existing group_id in pathname', () => {
     const url = new URL(
       getUrlFromState(
-        testRequestState as RequestConfigs, 
-        'https://www.example.com/path/group_id/old-value'
+        testRequestState as RequestConfigs,
+        'https://www.example.com/path/group_id/old-value',
       ),
     );
     expect(url.pathname).toBe('/path/group_id/Styles');
@@ -98,7 +101,7 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     const url = new URL(
       getUrlFromState(
         { ...testRequestState, filterName: 'collection_id' } as RequestConfigs,
-        'https://www.example.com/path/collection_id/old-value'
+        'https://www.example.com/path/collection_id/old-value',
       ),
     );
     expect(url.pathname).toBe('/path/collection_id/Styles');
@@ -107,8 +110,11 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should retain pathname when filterName and filterValue are not provided', () => {
     const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
     const url = new URL(
-      getUrlFromState(testRequestStateWithoutFilters as RequestConfigs, 'https://www.example.com/a/random/path'),
-    )
+      getUrlFromState(
+        testRequestStateWithoutFilters as RequestConfigs,
+        'https://www.example.com/a/random/path',
+      ),
+    );
 
     expect(url.pathname).toBe('/a/random/path');
   });
@@ -144,11 +150,18 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
     expect(typeof (state as any).qsParam).toBe('undefined');
   });
 
-  test('getBrowseGroup should get the last path name as the group_id', () => {
-    const mockUrl = 'https://example.com/a/random/lastPathName?q=3&randomQuery=[true,%20false]';
+  test('getStateFromUrl should get the last path name as the group_id when no query parameter exists', () => {
+    const mockUrl = 'https://example.com/a/random/lastPathName';
     const { filterName, filterValue } = getStateFromUrl(mockUrl);
     expect(filterName).toBe('group_id');
     expect(filterValue).toBe('lastPathName');
+  });
+
+  test('getStateFromUrl should not set group_id when query parameter exists', () => {
+    const mockUrl = 'https://example.com/a/random/lastPathName?q=searchterm';
+    const { filterName, filterValue } = getStateFromUrl(mockUrl);
+    expect(filterName).toBeUndefined();
+    expect(filterValue).toBeUndefined();
   });
 });
 

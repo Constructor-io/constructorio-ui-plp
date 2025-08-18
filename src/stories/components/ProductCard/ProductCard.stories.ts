@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { transformResultItem } from '../../../utils/transformers';
 import SampleItem from '../../../../spec/local_examples/item.json';
+import SampleItemWithSalePrice from '../../../../spec/local_examples/itemWithSalePrice.json';
 import ProductCardExample from './ProductCardExample';
 import '../../../styles.css';
 
@@ -25,5 +26,11 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     item: transformResultItem(SampleItem, false),
+  },
+};
+
+export const WithSalePrice: Story = {
+  args: {
+    item: transformResultItem(SampleItemWithSalePrice, false),
   },
 };

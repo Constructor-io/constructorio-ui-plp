@@ -198,6 +198,40 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
+  it('Should render redirect data when a search redirect response is received', async () => {
+    // Mock redirect data
+    const mockRedirectData = {
+      redirect: {
+        data: {
+          url: 'https://example.com/redirect-url',
+        },
+      },
+    };
+
+    const mockOnRedirect = jest.fn();
+    jest.spyOn(require('../../../src/hooks/useCioPlpContext'), 'useCioPlpContext').mockReturnValue({
+      callbacks: {
+        onRedirect: mockOnRedirect,
+      },
+    });
+
+    useCioPlp.mockReturnValue({
+      status: RequestStatus.SUCCESS,
+      isSearchPage: true,
+      data: mockRedirectData,
+    });
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(mockOnRedirect).toHaveBeenCalledWith('https://example.com/redirect-url');
+    });
+  });
+
   it('Should render results with data attributes when data is fetched for Browse', async () => {
     useRequestConfigs.mockImplementation(() => ({
       getRequestConfigs: () => ({ filterName: 'group_id', filterValue: '1030' }),
@@ -217,11 +251,13 @@ describe('Testing Component: CioPlpGrid', () => {
       const totalNumResults = getAttributeFromContainer('data-cnstrc-num-results');
       const filterName = getAttributeFromContainer('data-cnstrc-filter-name');
       const filterValue = getAttributeFromContainer('data-cnstrc-filter-value');
+      const resultId = getAttributeFromContainer('data-cnstrc-result-id');
 
       expect(container.querySelector('[data-cnstrc-browse]')).toBeInTheDocument();
       expect(totalNumResults).toEqual(String(mockBrowseData.response.totalNumResults));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
       expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
+      expect(resultId).toEqual(String(mockBrowseData.resultId));
     });
   });
 
@@ -274,6 +310,9 @@ describe('Testing Component: CioPlpGrid', () => {
           .querySelector('[data-cnstrc-num-results]')
           .getAttribute('data-cnstrc-num-results'),
       ).toEqual(String(mockSearchData.response.totalNumResults));
+      expect(
+        container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
+      ).toEqual(String(mockSearchData.resultId));
     });
   });
 
@@ -297,6 +336,9 @@ describe('Testing Component: CioPlpGrid', () => {
           .querySelector('[data-cnstrc-num-results]')
           .getAttribute('data-cnstrc-num-results'),
       ).toEqual('0');
+      expect(
+        container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
+      ).toEqual('test-zero-results');
     });
   });
 });

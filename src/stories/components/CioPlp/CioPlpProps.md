@@ -85,10 +85,11 @@ Url Helpers are used for managing the url and request state. These functions def
     const urlObject = new URL(url);
     const urlParams = urlObject.searchParams;
     const paths = decodeURI(urlObject?.pathname)?.split('/');
+    const query = urlParams.get(defaultQueryStringMap.query);
     let filterName;
     let filterValue;
 
-    if (paths.length > 0) {
+    if (!query && paths.length > 0) {
       filterName = 'group_id';
       filterValue = paths[paths.length - 1];
     }

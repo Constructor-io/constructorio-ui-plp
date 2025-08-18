@@ -39,6 +39,7 @@ export function getPlpContainerCnstrcDataAttributes(
       dataCnstrc = {
         'data-cnstrc-browse': true,
         'data-cnstrc-num-results': data.response.totalNumResults,
+        'data-cnstrc-result-id': data.resultId,
         'data-cnstrc-filter-name': filterName!,
         'data-cnstrc-filter-value': filterValue!,
       };
@@ -47,6 +48,7 @@ export function getPlpContainerCnstrcDataAttributes(
     case 'search':
       dataCnstrc = {
         'data-cnstrc-search': true,
+        'data-cnstrc-result-id': data.resultId,
         'data-cnstrc-num-results': data.response.totalNumResults,
       };
       break;

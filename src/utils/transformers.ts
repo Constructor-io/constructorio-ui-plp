@@ -229,7 +229,7 @@ export function transformSearchResponse(res: SearchResponse): Nullable<PlpSearch
     return {
       resultId,
       request,
-      redirect: response.redirect as Redirect,
+      redirect: response.redirect as Redirect['redirect'],
       rawApiResponse: res,
     } as PlpSearchDataRedirect; // Type override due to partials in client-js
   }
