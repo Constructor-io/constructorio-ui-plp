@@ -174,8 +174,13 @@ describe('Testing Component: ProductCard', () => {
     expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
   });
 
-  test('it should fallback to the item rollover image if the selected variation does not have a rollover image', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+  test('it should fallback to the item rollover image if all variations don\'t have a rollover image', () => {
+    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
+    clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
+    clonedItemWithRolloverImages.variations.forEach((variation) => {
+      variation.data.rolloverImage = null;
+    });
+    const item = transformResultItem(clonedItemWithRolloverImages);
     const thirdVariation = item.variations[3];
 
     render(
@@ -192,6 +197,24 @@ describe('Testing Component: ProductCard', () => {
     expect(rolloverImageEl.classList.contains('is-active')).toBe(true);
     fireEvent.mouseLeave(rolloverImageEl);
     expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
+  });
+
+  test('it should not fallback to the item rollover image if some variations have a rollover image', () => {
+    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
+    clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
+    const item = transformResultItem(clonedItemWithRolloverImages);
+    const thirdVariation = item.variations[3];
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.click(screen.getByTestId(`cio-swatch-${thirdVariation.variationId}`));
+    const itemName = thirdVariation.itemName || item.itemName;
+    const rolloverImageEl = screen.queryByAltText(`${itemName} rollover`);
+    expect(rolloverImageEl).toBeNull();
   });
 
   test('it should emit onProductCardImageRollover event if the callback is defined', () => {

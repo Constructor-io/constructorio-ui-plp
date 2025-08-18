@@ -28,7 +28,13 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
-  const rolloverImage = productSwatch?.selectedVariation?.rolloverImage || getRolloverImage(item);
+  let rolloverImage = productSwatch?.selectedVariation?.rolloverImage;
+
+  // Fallback to item's rollover image if all variations don't have a rollover image
+  if (!rolloverImage && productSwatch?.swatchList?.every((swatch) => !swatch.rolloverImage)) {
+    rolloverImage = getRolloverImage(item);
+  }
+
   const { itemId } = item;
 
   return {
