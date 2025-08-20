@@ -70,7 +70,7 @@ export default function ProductCard(props: ProductCardProps) {
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
-  const hasSalesPrice = useMemo(() => !!(salePrice && Number(salePrice) >= 0), [salePrice]);
+  const hasSalesPrice = useMemo(() => !!salePrice, [salePrice]);
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
@@ -97,7 +97,11 @@ export default function ProductCard(props: ProductCardProps) {
 
           <div className='cio-content'>
             <div className='cio-item-prices-container'>
-              {hasSalesPrice && <div className='cio-item-price'>{formatPrice(salePrice)}</div>}
+              {hasSalesPrice && (
+                <div className='cio-item-price' id='cio-sale-price'>
+                  {formatPrice(salePrice)}
+                </div>
+              )}
               {Number(itemPrice) >= 0 && (
                 <div
                   className={concatStyles(
