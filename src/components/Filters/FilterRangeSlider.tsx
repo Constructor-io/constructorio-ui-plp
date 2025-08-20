@@ -124,7 +124,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   // Update internal state
   useEffect(() => {
-    if (facet.status.min && !isModified) {
+    if (facet.status.min !== undefined && !isModified) {
       // Initial state
       setMinValue(facet.status.min);
       setMaxValue(facet.status.max);
