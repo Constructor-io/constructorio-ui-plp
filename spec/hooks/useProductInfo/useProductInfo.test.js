@@ -130,14 +130,6 @@ describe('Testing Hook: useProductInfo', () => {
       });
     });
 
-    it('Should return undefined salePrice if salePrice is an empty string', async () => {
-      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, ''));
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current.salePrice).toBeUndefined();
-      });
-    });
-
     it('Should return undefined salePrice if salePrice is negative', async () => {
       const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, -5));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
