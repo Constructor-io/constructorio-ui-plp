@@ -51,7 +51,7 @@ const delay = (ms) =>
 const getAttribute = (container) => (attribute) =>
   container.querySelector(`[${attribute}]`)?.getAttribute(attribute);
 
-function transformSalePrice(item, mockSalePrice) {
+function copyItemWithNewSalePrice(item, mockSalePrice) {
   const itemCopy = { ...item };
   if (itemCopy.variations && Array.isArray(itemCopy.variations)) {
     itemCopy.variations = itemCopy.variations.map((variation) => ({
@@ -78,5 +78,5 @@ export {
   CioPlpWrapper,
   delay,
   getAttribute,
-  transformSalePrice,
+  copyItemWithNewSalePrice,
 };

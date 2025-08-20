@@ -4,7 +4,7 @@ import useProductInfo from '../../../src/hooks/useProduct';
 import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
-import { renderHookWithCioPlp, transformSalePrice } from '../../test-utils';
+import { renderHookWithCioPlp, copyItemWithNewSalePrice } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
   beforeEach(() => {
@@ -123,7 +123,7 @@ describe('Testing Hook: useProductInfo', () => {
 
   describe('Testing sale price handling logic', () => {
     it('Should return undefined salePrice if salePrice is undefined', async () => {
-      const item = transformResultItem(transformSalePrice(mockItemWithSalePrice, undefined));
+      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, undefined));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
       await waitFor(() => {
         expect(result.current.salePrice).toBeUndefined();
@@ -131,7 +131,7 @@ describe('Testing Hook: useProductInfo', () => {
     });
 
     it('Should return undefined salePrice if salePrice is an empty string', async () => {
-      const item = transformResultItem(transformSalePrice(mockItemWithSalePrice, ''));
+      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, ''));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
       await waitFor(() => {
         expect(result.current.salePrice).toBeUndefined();
@@ -139,7 +139,7 @@ describe('Testing Hook: useProductInfo', () => {
     });
 
     it('Should return undefined salePrice if salePrice is negative', async () => {
-      const item = transformResultItem(transformSalePrice(mockItemWithSalePrice, -5));
+      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, -5));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
       await waitFor(() => {
         expect(result.current.salePrice).toBeUndefined();
@@ -147,7 +147,7 @@ describe('Testing Hook: useProductInfo', () => {
     });
 
     it('Should return undefined salePrice if salePrice is greater than or equal to price', async () => {
-      const item = transformResultItem(transformSalePrice(mockItemWithSalePrice, Infinity));
+      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, Infinity));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
       await waitFor(() => {
         expect(result.current.salePrice).toBeUndefined();
@@ -155,7 +155,7 @@ describe('Testing Hook: useProductInfo', () => {
     });
 
     it('Should return salePrice if salePrice is valid (positive and less than price)', async () => {
-      const item = transformResultItem(transformSalePrice(mockItemWithSalePrice, 1));
+      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, 1));
       const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
       await waitFor(() => {
         expect(result.current.salePrice).toEqual(1);

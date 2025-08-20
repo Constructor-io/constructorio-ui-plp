@@ -7,7 +7,7 @@ import { DEMO_API_KEY } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { transformResultItem } from '../../../src/utils/transformers';
-import { transformSalePrice } from '../../test-utils';
+import { copyItemWithNewSalePrice } from '../../test-utils';
 
 describe('Testing Component: ProductCard', () => {
   test('Should throw error if used outside the CioPlp', () => {
@@ -184,7 +184,7 @@ describe('Testing Component: ProductCard', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard
-          item={transformResultItem(transformSalePrice(testItemWithSalePrice, undefined))}
+          item={transformResultItem(copyItemWithNewSalePrice(testItemWithSalePrice, undefined))}
         />
       </CioPlp>,
     );
