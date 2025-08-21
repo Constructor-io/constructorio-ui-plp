@@ -26,13 +26,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const { itemId } = item;
 
   function isValidSalePrice(salePrice: number, usualPrice: number) {
-    return (
-      salePrice !== null &&
-      usualPrice !== null &&
-      salePrice >= 0 &&
-      usualPrice >= 0 &&
-      salePrice < usualPrice
-    );
+    return salePrice && usualPrice && salePrice > 0 && salePrice < usualPrice;
   }
   let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
   salePrice = isValidSalePrice(salePrice, itemPrice) ? salePrice : undefined;
