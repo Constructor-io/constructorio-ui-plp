@@ -5,6 +5,7 @@ import { tryCatchify } from '../utils';
 import {
   getPrice as defaultGetPrice,
   getSalePrice as defaultGetSalePrice,
+  getRolloverImage as defaultGetRolloverImage,
 } from '../utils/itemFieldGetters';
 
 const useProductInfo: UseProductInfo = ({ item }) => {
@@ -17,6 +18,9 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const getPrice = tryCatchify(state?.itemFieldGetters?.getPrice || defaultGetPrice);
   const getSalePrice = tryCatchify(state?.itemFieldGetters?.getSalePrice || defaultGetSalePrice);
+  const getRolloverImage = tryCatchify(
+    state?.itemFieldGetters?.getRolloverImage || defaultGetRolloverImage,
+  );
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
@@ -24,6 +28,13 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
+  let rolloverImage = productSwatch?.selectedVariation?.rolloverImage;
+
+  // Fallback to item's rollover image if all variations don't have a rollover image
+  if (!rolloverImage && productSwatch?.swatchList?.every((swatch) => !swatch.rolloverImage)) {
+    rolloverImage = getRolloverImage(item);
+  }
+
   const { itemId } = item;
 
   return {
@@ -35,6 +46,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     variationId,
     itemId,
     salePrice,
+    rolloverImage,
   };
 };
 

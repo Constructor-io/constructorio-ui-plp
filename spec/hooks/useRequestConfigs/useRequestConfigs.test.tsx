@@ -25,7 +25,7 @@ describe('Testing Hook: useRequestConfigs', () => {
 
   it('Should throw error if called outside of PlpContext', () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(() => { });
     expect(() => renderHook(() => useRequestConfigs())).toThrow();
     spy.mockRestore();
   });
@@ -96,7 +96,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       decodedRequestState.page = 2;
       decodedRequestState.query = 'fire';
       decodedRequestState.filterName = 'group_id';
-      decodedRequestState.filterValue = 'fall';
+      decodedRequestState.filterValue = 'Styles';
       expect(requestConfigs).toEqual(decodedRequestState);
       return <div>test</div>;
     }
