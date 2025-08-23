@@ -20,11 +20,22 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
   const { itemId } = item;
+
+  function isValidSalePrice(salePrice: number, usualPrice: number) {
+    return salePrice && usualPrice && salePrice > 0 && salePrice < usualPrice;
+  }
+
+  let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
+  let hasSalePrice = true;
+
+  if (!isValidSalePrice(salePrice, itemPrice)) {
+    salePrice = undefined;
+    hasSalePrice = false;
+  }
 
   return {
     productSwatch,
@@ -35,6 +46,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     variationId,
     itemId,
     salePrice,
+    hasSalePrice,
   };
 };
 

@@ -51,6 +51,26 @@ const delay = (ms) =>
 const getAttribute = (container) => (attribute) =>
   container.querySelector(`[${attribute}]`)?.getAttribute(attribute);
 
+function copyItemWithNewSalePrice(item, mockSalePrice) {
+  const itemCopy = { ...item };
+  if (itemCopy.variations && Array.isArray(itemCopy.variations)) {
+    itemCopy.variations = itemCopy.variations.map((variation) => ({
+      ...variation,
+      data: {
+        ...variation.data,
+        sale_price: mockSalePrice,
+      },
+    }));
+  }
+  return {
+    ...itemCopy,
+    data: {
+      ...itemCopy.data,
+      sale_price: mockSalePrice,
+    },
+  };
+}
+
 export {
   customRender as renderWithCioPlp,
   customRenderHook as renderHookWithCioPlp,
@@ -58,4 +78,5 @@ export {
   CioPlpWrapper,
   delay,
   getAttribute,
+  copyItemWithNewSalePrice,
 };

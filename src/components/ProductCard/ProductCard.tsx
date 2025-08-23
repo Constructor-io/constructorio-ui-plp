@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
@@ -56,7 +56,8 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice } = productInfo;
+  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, hasSalePrice } =
+    productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -70,7 +71,6 @@ export default function ProductCard(props: ProductCardProps) {
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
-  const hasSalesPrice = useMemo(() => !!(salePrice && Number(salePrice) >= 0), [salePrice]);
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
@@ -97,12 +97,16 @@ export default function ProductCard(props: ProductCardProps) {
 
           <div className='cio-content'>
             <div className='cio-item-prices-container'>
-              {hasSalesPrice && <div className='cio-item-price'>{formatPrice(salePrice)}</div>}
+              {hasSalePrice && (
+                <div className='cio-item-price' id='cio-sale-price'>
+                  {formatPrice(salePrice)}
+                </div>
+              )}
               {Number(itemPrice) >= 0 && (
                 <div
                   className={concatStyles(
                     'cio-item-price',
-                    hasSalesPrice && 'cio-item-price-strikethrough',
+                    hasSalePrice && 'cio-item-price-strikethrough',
                   )}>
                   {formatPrice(itemPrice)}
                 </div>
