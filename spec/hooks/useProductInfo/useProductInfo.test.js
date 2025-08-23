@@ -122,35 +122,36 @@ describe('Testing Hook: useProductInfo', () => {
   });
 
   describe('Testing sale price handling logic', () => {
-    it('Should return undefined salePrice if salePrice is undefined', async () => {
-      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, undefined));
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current.salePrice).toBeUndefined();
-      });
-    });
-
-    it('Should return undefined salePrice if salePrice is negative', async () => {
-      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, -5));
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current.salePrice).toBeUndefined();
-      });
-    });
-
-    it('Should return undefined salePrice if salePrice is greater than or equal to price', async () => {
-      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, Infinity));
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current.salePrice).toBeUndefined();
-      });
-    });
-
-    it('Should return salePrice if salePrice is valid (positive and less than price)', async () => {
-      const item = transformResultItem(copyItemWithNewSalePrice(mockItemWithSalePrice, 1));
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current.salePrice).toEqual(1);
+    describe.each([
+      {
+        desc: 'undefined salePrice',
+        salePrice: undefined,
+        expected: undefined,
+      },
+      {
+        desc: 'negative salePrice',
+        salePrice: -5,
+        expected: undefined,
+      },
+      {
+        desc: 'salePrice greater than or equal to price',
+        salePrice: Infinity,
+        expected: undefined,
+      },
+      {
+        desc: 'valid salePrice (positive and less than price)',
+        salePrice: 1,
+        expected: 1,
+      },
+    ])('When $desc', ({ salePrice, expected }) => {
+      it(`Should return ${expected === undefined ? 'undefined' : expected} for salePrice`, async () => {
+        const item = transformResultItem(
+          copyItemWithNewSalePrice(mockItemWithSalePrice, salePrice),
+        );
+        const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+        await waitFor(() => {
+          expect(result.current.salePrice).toEqual(expected);
+        });
       });
     });
   });

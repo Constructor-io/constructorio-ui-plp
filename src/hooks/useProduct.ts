@@ -28,8 +28,14 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   function isValidSalePrice(salePrice: number, usualPrice: number) {
     return salePrice && usualPrice && salePrice > 0 && salePrice < usualPrice;
   }
+
   let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
-  salePrice = isValidSalePrice(salePrice, itemPrice) ? salePrice : undefined;
+  let hasSalePrice = true;
+
+  if (!isValidSalePrice(salePrice, itemPrice)) {
+    salePrice = undefined;
+    hasSalePrice = false;
+  }
 
   return {
     productSwatch,
@@ -40,6 +46,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     variationId,
     itemId,
     salePrice,
+    hasSalePrice,
   };
 };
 
