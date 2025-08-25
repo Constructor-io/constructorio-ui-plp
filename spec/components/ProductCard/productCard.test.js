@@ -5,20 +5,19 @@ import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
-import testItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import { transformResultItem } from '../../../src/utils/transformers';
 
 describe('Testing Component: ProductCard', () => {
   test('Should throw error if used outside the CioPlp', () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => { });
+    spy.mockImplementation(() => {});
     expect(() => render(<ProductCard />)).toThrow();
     spy.mockRestore();
   });
 
   test("Should throw error if item isn't provided", () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => { });
+    spy.mockImplementation(() => {});
     expect(() =>
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
@@ -136,7 +135,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should show the rollover image when the mouse hovers over the image', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+    const item = transformResultItem(testItem);
     const selectedVariation = item.variations[0];
 
     render(
@@ -155,7 +154,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should change the rollover image if the selected variation changes', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+    const item = transformResultItem(testItem);
     const secondVariation = item.variations[1];
 
     render(
@@ -175,7 +174,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should fallback to the item rollover image if all variations don\'t have a rollover image', () => {
-    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
+    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItem));
     clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
     clonedItemWithRolloverImages.variations.forEach((variation) => {
       variation.data.rolloverImage = null;
@@ -200,7 +199,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should not fallback to the item rollover image if some variations have a rollover image', () => {
-    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
+    const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItem));
     clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
     const item = transformResultItem(clonedItemWithRolloverImages);
     const thirdVariation = item.variations[3];
@@ -218,7 +217,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should emit onProductCardImageRollover event if the callback is defined', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+    const item = transformResultItem(testItem);
     const selectedVariation = item.variations[0];
     const onProductCardImageRolloverFn = jest.fn();
 
@@ -240,7 +239,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should pass the correct props to the mouse events callbacks if they are defined', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+    const item = transformResultItem(testItem);
     const selectedVariation = item.variations[0];
     const mouseEnterFn = jest.fn();
     const mouseLeaveFn = jest.fn();
@@ -264,7 +263,7 @@ describe('Testing Component: ProductCard', () => {
   });
 
   test('it should override the rollover image behavior if at least the mouse enter callback is defined', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
+    const item = transformResultItem(testItem);
     const selectedVariation = item.variations[0];
     const mouseEnterFn = jest.fn();
 

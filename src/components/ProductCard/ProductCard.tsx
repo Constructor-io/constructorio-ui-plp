@@ -52,11 +52,6 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   onMouseLeave: (event: React.MouseEvent, item: Item) => void;
   /**
-   * Callback to run on Product Card Image Rollover.
-   * Set globally at the CioPlp provider level.
-   */
-  onProductCardImageRollover?: (isShown: boolean, item: Item) => void;
-  /**
    * Data Attributes to surface on parent div of product card.
    */
   productCardCnstrcDataAttributes: CnstrcData;
@@ -68,7 +63,7 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
  * ProductCard component that has Constructor tracking built-in.
  */
 export default function ProductCard(props: ProductCardProps) {
-  const [rolloverImageIsShown, setRolloverImageIsShown] = useState(false);
+  const [isRolloverImageShown, setIsRolloverImageShown] = useState(false);
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
@@ -92,7 +87,7 @@ export default function ProductCard(props: ProductCardProps) {
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
   const handleRolloverImageState = (isShown: boolean) => {
-    setRolloverImageIsShown(isShown);
+    setIsRolloverImageShown(isShown);
     if (state.callbacks.onProductCardImageRollover && rolloverImage) {
       state.callbacks.onProductCardImageRollover(isShown, item);
     }
@@ -110,7 +105,7 @@ export default function ProductCard(props: ProductCardProps) {
     if (state.callbacks.onProductCardMouseLeave) {
       state.callbacks.onProductCardMouseLeave(event, item);
     }
-    if (rolloverImageIsShown) {
+    if (isRolloverImageShown) {
       handleRolloverImageState(false);
     }
   };
@@ -144,7 +139,10 @@ export default function ProductCard(props: ProductCardProps) {
                 alt={`${itemName} rollover`}
                 src={rolloverImage}
                 loading='lazy'
-                className={concatStyles('cio-rollover-image', rolloverImageIsShown && 'is-active')}
+                className={concatStyles(
+                  'cio-image cio-rollover-image',
+                  isRolloverImageShown && 'is-active',
+                )}
               />
             )}
           </div>

@@ -16,7 +16,7 @@ describe('Testing Hook: useProductSwatch', () => {
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => { });
+    spy.mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -66,11 +66,11 @@ describe('Testing Hook: useProductSwatch', () => {
     const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
       initialProps: {
         itemFieldGetters: {
-          getPrice: () => { },
-          getSwatches: () => { },
-          getSwatchPreview: () => { },
-          getSalePrice: () => { },
-          getRolloverImage: () => { },
+          getPrice: () => {},
+          getSwatches: () => {},
+          getSwatchPreview: () => {},
+          getSalePrice: () => {},
+          getRolloverImage: () => {},
         },
       },
     });
@@ -117,6 +117,22 @@ describe('Testing Hook: useProductSwatch', () => {
       expect(typeof selectVariation).toBe('function');
       expect(selectedVariation).toBeUndefined();
       expect(swatchList.length).toBe(0);
+    });
+  });
+
+  it('Should override getRolloverImage and work as expected', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
+      initialProps: {
+        itemFieldGetters: {
+          getRolloverImage: (item) => item.data.swatchPreview,
+        },
+      },
+    });
+
+    await waitFor(() => {
+      const { current: { selectedVariation } } = result;
+
+      expect(selectedVariation.rolloverImage).toBe('#e04062');
     });
   });
 });

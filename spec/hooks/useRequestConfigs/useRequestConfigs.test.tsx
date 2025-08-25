@@ -25,7 +25,7 @@ describe('Testing Hook: useRequestConfigs', () => {
 
   it('Should throw error if called outside of PlpContext', () => {
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => { });
+    spy.mockImplementation(() => {});
     expect(() => renderHook(() => useRequestConfigs())).toThrow();
     spy.mockRestore();
   });

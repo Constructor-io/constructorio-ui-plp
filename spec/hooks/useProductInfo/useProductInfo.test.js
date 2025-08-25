@@ -11,7 +11,7 @@ describe('Testing Hook: useProductInfo', () => {
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => { });
+    spy.mockImplementation(() => {});
   });
 
   afterEach(() => {

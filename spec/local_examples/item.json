@@ -30,6 +30,7 @@
       "data": {
         "variation_id": "BKT00110DG1733LR",
         "swatchPreview": "#e04062",
+        "rolloverImage": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/WOVEN-CASUAL-SHIRT_BUTTON-DOWN-WOVEN-SHIRT_20084-BLW58_40_category-outfitter.jpg",
         "price": 90,
         "facets": [
           {
@@ -46,6 +47,7 @@
       "data": {
         "variation_id": "BKT00110DG1733MR",
         "swatchPreview": "#a3c43b",
+        "rolloverImage": "https://constructorio-integrations.s3.amazonaws.com/tikus-threads/2022-06-29/KNIT-CASUAL-SHIRT_BUTTON-DOWN-KNIT-SHIRT_BKT00110SG1759_3_category.jpg",
         "price": 99,
         "facets": [
           {
