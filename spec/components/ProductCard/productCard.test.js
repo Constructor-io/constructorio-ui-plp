@@ -217,28 +217,6 @@ describe('Testing Component: ProductCard', () => {
     expect(rolloverImageEl).toBeNull();
   });
 
-  test('it should emit onProductCardImageRollover event if the callback is defined', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
-    const selectedVariation = item.variations[0];
-    const onProductCardImageRolloverFn = jest.fn();
-
-    render(
-      <CioPlp apiKey={DEMO_API_KEY}
-        callbacks={{
-          onProductCardImageRollover: onProductCardImageRolloverFn
-        }}>
-        <ProductCard item={item} />
-      </CioPlp>,
-    );
-
-    const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
-    fireEvent.mouseEnter(rolloverImageEl);
-    expect(onProductCardImageRolloverFn).toHaveBeenCalledWith(true, item);
-    fireEvent.mouseLeave(rolloverImageEl);
-    expect(onProductCardImageRolloverFn).toHaveBeenCalledWith(false, item);
-  });
-
   test('it should pass the correct props to the mouse events callbacks if they are defined', () => {
     const item = transformResultItem(testItemWithRolloverImages);
     const selectedVariation = item.variations[0];
@@ -261,24 +239,6 @@ describe('Testing Component: ProductCard', () => {
     expect(mouseEnterFn).toHaveBeenCalledWith(expect.any(Object), item);
     fireEvent.mouseLeave(rolloverImageEl);
     expect(mouseLeaveFn).toHaveBeenCalledWith(expect.any(Object), item);
-  });
-
-  test('it should override the rollover image behavior if at least the mouse enter callback is defined', () => {
-    const item = transformResultItem(testItemWithRolloverImages);
-    const selectedVariation = item.variations[0];
-    const mouseEnterFn = jest.fn();
-
-    render(
-      <CioPlp apiKey={DEMO_API_KEY}
-        callbacks={{ onProductCardMouseEnter: mouseEnterFn }}>
-        <ProductCard item={item} />
-      </CioPlp>,
-    );
-
-    const itemName = selectedVariation.itemName || item.itemName;
-    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
-    fireEvent.mouseEnter(rolloverImageEl);
-    expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
   });
 
   test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {

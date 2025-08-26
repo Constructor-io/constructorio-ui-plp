@@ -52,6 +52,10 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   onMouseLeave: (event: React.MouseEvent, item: Item) => void;
   /**
+   * Boolean to show/hide the rollover image.
+   */
+  isRolloverImageShown: boolean;
+  /**
    * Data Attributes to surface on parent div of product card.
    */
   productCardCnstrcDataAttributes: CnstrcData;
@@ -86,28 +90,18 @@ export default function ProductCard(props: ProductCardProps) {
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
-  const handleRolloverImageState = (isShown: boolean) => {
-    setIsRolloverImageShown(isShown);
-    if (state.callbacks.onProductCardImageRollover && rolloverImage) {
-      state.callbacks.onProductCardImageRollover(isShown, item);
-    }
-  };
-
   const onMouseEnter = (event: React.MouseEvent) => {
     if (state.callbacks.onProductCardMouseEnter) {
       state.callbacks.onProductCardMouseEnter(event, item);
-    } else {
-      handleRolloverImageState(true);
     }
+    setIsRolloverImageShown(true);
   };
 
   const onMouseLeave = (event: React.MouseEvent) => {
     if (state.callbacks.onProductCardMouseLeave) {
       state.callbacks.onProductCardMouseLeave(event, item);
     }
-    if (isRolloverImageShown) {
-      handleRolloverImageState(false);
-    }
+    setIsRolloverImageShown(false);
   };
 
   return (
@@ -121,6 +115,7 @@ export default function ProductCard(props: ProductCardProps) {
           onClick,
           onMouseEnter,
           onMouseLeave,
+          isRolloverImageShown,
           productCardCnstrcDataAttributes: cnstrcData,
         })
       ) : (

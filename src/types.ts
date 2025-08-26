@@ -61,7 +61,6 @@ export interface Callbacks {
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
   onProductCardMouseEnter?: (event: React.MouseEvent, item: Item) => void;
   onProductCardMouseLeave?: (event: React.MouseEvent, item: Item) => void;
-  onProductCardImageRollover?: (isShown: boolean, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
   onRedirect?: (url: string) => void;
 }
