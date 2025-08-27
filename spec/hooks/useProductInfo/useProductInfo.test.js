@@ -143,6 +143,11 @@ describe('Testing Hook: useProductInfo', () => {
         salePrice: 1,
         expected: 1,
       },
+      {
+        desc: 'zero salePrice',
+        salePrice: 0,
+        expected: undefined,
+      },
     ])('When $desc', ({ salePrice, expected }) => {
       it(`Should return ${expected === undefined ? 'undefined' : expected} for salePrice`, async () => {
         const item = transformResultItem(
