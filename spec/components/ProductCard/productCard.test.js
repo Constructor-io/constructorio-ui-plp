@@ -241,6 +241,27 @@ describe('Testing Component: ProductCard', () => {
     expect(mouseLeaveFn).toHaveBeenCalledWith(expect.any(Object), item);
   });
 
+  test.only('should dispatch the "cio.ui-plp.productCardImageRollover" event when the rollover image is shown', () => {
+    const item = transformResultItem(testItemWithRolloverImages);
+    const selectedVariation = item.variations[0];
+    const dispatchEvent = jest.spyOn(document, 'dispatchEvent');
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    fireEvent.mouseEnter(screen.getByAltText(`${selectedVariation.itemName} rollover`));
+    expect(dispatchEvent).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'cio.ui-plp.productCardImageRollover',
+      detail: expect.objectContaining({
+        item,
+      }),
+    }));
+  });
+
+
   test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {
     const contextOnAddToCart = jest.fn();
     const { variations, variationId, ...item } = transformResultItem(testItem);
