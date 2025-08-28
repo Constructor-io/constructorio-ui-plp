@@ -33,3 +33,7 @@ export function removeNullValuesFromObject(obj: Object) {
 
   return Object.fromEntries(filteredListOfEntries);
 }
+
+export function isValidSalePrice(salePrice: number, usualPrice: number) {
+  return salePrice && usualPrice && salePrice > 0 && salePrice < usualPrice;
+}

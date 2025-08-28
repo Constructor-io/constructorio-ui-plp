@@ -5,7 +5,9 @@ import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
+import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { transformResultItem } from '../../../src/utils/transformers';
+import { copyItemWithNewSalePrice } from '../../test-utils';
 
 describe('Testing Component: ProductCard', () => {
   test('Should throw error if used outside the CioPlp', () => {
@@ -166,5 +168,27 @@ describe('Testing Component: ProductCard', () => {
     );
 
     screen.getByText('My Rendered Price: $90.00');
+  });
+
+  test('Should render sale price when salePrice is present and valid', () => {
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={transformResultItem(testItemWithSalePrice)} />
+      </CioPlp>,
+    );
+
+    screen.getByText('$21.00');
+  });
+
+  test('Should not render sale price when salePrice is undefined', () => {
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard
+          item={transformResultItem(copyItemWithNewSalePrice(testItemWithSalePrice, undefined))}
+        />
+      </CioPlp>,
+    );
+
+    expect(screen.queryByTestId('cio-sale-price')).toBeNull();
   });
 });
