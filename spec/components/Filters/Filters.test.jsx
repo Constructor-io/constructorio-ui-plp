@@ -6,7 +6,7 @@ import CioPlp from '../../../src/components/CioPlp';
 import Filters from '../../../src/components/Filters';
 import mockTransformedFacets from '../../local_examples/sampleFacets.json';
 import testJsonEncodedUrl from '../../local_examples/testJsonEncodedUrl.json';
-import { getStateFromUrl } from '../../../src/utils/urlHelpers';
+import { getStateFromUrl } from '../../../src/utils';
 
 const filterProps = { facets: mockTransformedFacets };
 
@@ -212,7 +212,7 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it.only('Edge Case: If facet.status.min = 0, should render ranged filters that have already been applied correctly', async () => {
+    it('Edge Case: If facet.status.min = 0, should render ranged filters that have already been applied correctly', async () => {
       const mockPriceFacet = {
         displayName: 'Price',
         name: 'price',
@@ -258,6 +258,78 @@ describe('Testing Component: Filters', () => {
         expect(maxInputSlider.min).toBe(mockPriceFacet.min.toString());
         expect(maxInputSlider.max).toBe(mockPriceFacet.max.toString());
         expect(maxInputSlider.value).toBe(mockPriceFacet.status.max.toString());
+      });
+    });
+
+    it('Should apply custom sliderStep to range sliders when provided globally', async () => {
+      const mockPriceFacet = {
+        displayName: 'Price',
+        name: 'price',
+        type: 'range',
+        data: {},
+        hidden: false,
+        min: 1,
+        max: 100,
+        status: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockPriceFacet]} sliderStep={0.5} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+        const minNumberInput = container.querySelector('.cio-slider-input-min input');
+        const maxNumberInput = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputSlider).toHaveAttribute('step', '0.5');
+        expect(maxInputSlider).toHaveAttribute('step', '0.5');
+        expect(minNumberInput).toHaveAttribute('step', '0.5');
+        expect(maxNumberInput).toHaveAttribute('step', '0.5');
+
+        expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(maxInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(maxInputSlider.max).toBe(mockPriceFacet.max.toString());
+      });
+    });
+
+    it('Should apply facet-specific sliderStep when provided', async () => {
+      const mockPriceFacet = {
+        displayName: 'Price',
+        name: 'price',
+        type: 'range',
+        data: {},
+        hidden: false,
+        min: 1,
+        max: 100,
+        status: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockPriceFacet]} sliderStep={0.1} facetSliderSteps={{ price: 1 }} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+        const minNumberInput = container.querySelector('.cio-slider-input-min input');
+        const maxNumberInput = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputSlider).toHaveAttribute('step', '1');
+        expect(maxInputSlider).toHaveAttribute('step', '1');
+        expect(minNumberInput).toHaveAttribute('step', '1');
+        expect(maxNumberInput).toHaveAttribute('step', '1');
+
+        expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
+        expect(maxInputSlider.min).toBe(mockPriceFacet.min.toString());
+        expect(maxInputSlider.max).toBe(mockPriceFacet.max.toString());
       });
     });
   });
@@ -485,6 +557,120 @@ describe('Testing Component: Filters', () => {
 
       const updatedFiltersWithMaxSliderMove = getRequestFilters(container);
       expect(updatedFiltersWithMaxSliderMove.price[0].indexOf('70')).not.toBe(-1);
+    });
+
+    it('SliderRange with custom sliderStep: Should have correct step attribute and behavior', async () => {
+      function TestFiltersWithCustomStep() {
+        const mockPriceFacet = {
+          displayName: 'Price',
+          name: 'price',
+          type: 'range',
+          data: {},
+          hidden: false,
+          min: 0,
+          max: 100,
+          status: {},
+        };
+
+        const [currentUrl, setCurrentUrl] = useState(testJsonEncodedUrl);
+        const [filters, setFilters] = useState('');
+
+        useEffect(() => {
+          if (currentUrl !== '') {
+            const { filters: requestFilters } = getStateFromUrl(currentUrl);
+            setFilters(JSON.stringify(requestFilters));
+          }
+        }, [currentUrl]);
+
+        return (
+          <CioPlp
+            apiKey={DEMO_API_KEY}
+            urlHelpers={{ setUrl: setCurrentUrl, getUrl: () => currentUrl }}>
+            <Filters facets={[mockPriceFacet]} sliderStep={0.5} />
+            <div id='request-filters'>{filters}</div>
+          </CioPlp>
+        );
+      }
+
+      const { container } = render(<TestFiltersWithCustomStep />);
+
+      await waitFor(() => {
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+        const minNumberInput = container.querySelector('.cio-slider-input-min input');
+        const maxNumberInput = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputSlider).toHaveAttribute('step', '0.5');
+        expect(maxInputSlider).toHaveAttribute('step', '0.5');
+        expect(minNumberInput).toHaveAttribute('step', '0.5');
+        expect(maxNumberInput).toHaveAttribute('step', '0.5');
+
+        fireEvent.change(minNumberInput, { target: { value: 25.5 } });
+        fireEvent.blur(minNumberInput);
+
+        const filters = getRequestFilters(container);
+        expect(filters.price[0].indexOf('25.5')).not.toBe(-1);
+      });
+    });
+
+    it('SliderRange with facet-specific sliderStep: Should prioritize facet-specific over global step and handle interactions', async () => {
+      function TestFiltersWithFacetSpecificStep() {
+        const mockPriceFacet = {
+          displayName: 'Price',
+          name: 'price',
+          type: 'range',
+          data: {},
+          hidden: false,
+          min: 0,
+          max: 100,
+          status: {},
+        };
+
+        const [currentUrl, setCurrentUrl] = useState(testJsonEncodedUrl);
+        const [filters, setFilters] = useState('');
+
+        useEffect(() => {
+          if (currentUrl !== '') {
+            const { filters: requestFilters } = getStateFromUrl(currentUrl);
+            setFilters(JSON.stringify(requestFilters));
+          }
+        }, [currentUrl]);
+
+        return (
+          <CioPlp
+            apiKey={DEMO_API_KEY}
+            urlHelpers={{ setUrl: setCurrentUrl, getUrl: () => currentUrl }}>
+            <Filters facets={[mockPriceFacet]} sliderStep={0.1} facetSliderSteps={{ price: 2 }} />
+            <div id='request-filters'>{filters}</div>
+          </CioPlp>
+        );
+      }
+
+      const { container } = render(<TestFiltersWithFacetSpecificStep />);
+
+      await waitFor(() => {
+        const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
+        const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
+        const minNumberInput = container.querySelector('.cio-slider-input-min input');
+        const maxNumberInput = container.querySelector('.cio-slider-input-max input');
+
+        expect(minInputSlider).toHaveAttribute('step', '2');
+        expect(maxInputSlider).toHaveAttribute('step', '2');
+        expect(minNumberInput).toHaveAttribute('step', '2');
+        expect(maxNumberInput).toHaveAttribute('step', '2');
+
+        fireEvent.change(minInputSlider, { target: { value: 24 } });
+        fireEvent.mouseUp(minInputSlider);
+
+        const filtersAfterSliderMove = getRequestFilters(container);
+        expect(filtersAfterSliderMove.price[0].indexOf('24')).not.toBe(-1);
+
+        fireEvent.change(maxNumberInput, { target: { value: 88 } });
+        fireEvent.blur(maxNumberInput);
+
+        const filtersAfterInputChange = getRequestFilters(container);
+        expect(filtersAfterInputChange.price[0].indexOf('88')).not.toBe(-1);
+      });
     });
   });
 });
