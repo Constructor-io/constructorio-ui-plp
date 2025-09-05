@@ -26,6 +26,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
         {optionsToRender.map((option) => (
           <FilterOptionListRow
             id={option.value}
+            key={option.value}
             displayValue={option.displayName}
             displayCountValue={option.count.toString()}
             isChecked={selectedOptionMap[option.value] || false}

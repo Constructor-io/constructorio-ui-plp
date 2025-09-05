@@ -161,7 +161,7 @@
   {
     "displayName": "Customer Rating",
     "name": "review_rating_rounded",
-    "type": "single",
+    "type": "multiple",
     "hidden": false,
     "data": {},
     "options": [
