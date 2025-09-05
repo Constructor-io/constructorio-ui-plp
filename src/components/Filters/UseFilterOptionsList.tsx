@@ -28,9 +28,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     const newMap = { ...selectedOptionMap };
     newMap[compositeId] = !newMap[compositeId];
 
-    const facetName = facet.name;
     const selectedOptions = Object.keys(newMap)
-      .filter((id) => id.startsWith(`${facetName}:`) && newMap[id])
+      .filter((id) => id.startsWith(`${facet.name}:`) && newMap[id])
       .map((id) => id.split(':')[1]);
 
     setSelectedOptionMap(newMap);
