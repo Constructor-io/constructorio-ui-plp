@@ -24,11 +24,15 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
 
   const [selectedOptionMap, setSelectedOptionMap] = useState({});
 
-  const onOptionSelect = (optionValue: string) => {
+  const onOptionSelect = (compositeId: string) => {
     const newMap = { ...selectedOptionMap };
-    newMap[optionValue] = !newMap[optionValue];
+    newMap[compositeId] = !newMap[compositeId];
 
-    const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
+    const facetName = facet.name;
+    const selectedOptions = Object.keys(newMap)
+      .filter((id) => id.startsWith(`${facetName}:`) && newMap[id])
+      .map((id) => id.split(':')[1]);
+
     setSelectedOptionMap(newMap);
     modifyRequestMultipleFilter(selectedOptions.length ? selectedOptions : null);
   };
@@ -36,7 +40,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   useEffect(() => {
     const newSelectedOptionsMap = {};
     facet.options.forEach((option) => {
-      newSelectedOptionsMap[option.value] = option.status === 'selected';
+      const compositeId = `${facet.name}:${option.value}`;
+      newSelectedOptionsMap[compositeId] = option.status === 'selected';
     });
 
     setSelectedOptionMap(newSelectedOptionsMap);
