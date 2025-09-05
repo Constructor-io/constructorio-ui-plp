@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
