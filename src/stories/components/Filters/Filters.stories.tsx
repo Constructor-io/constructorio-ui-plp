@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
@@ -16,7 +16,7 @@ const meta = {
   argTypes: {
     initialNumOptions: {
       table: {
-        defaultValue: { summary: 10 },
+        defaultValue: { summary: '10' },
       },
     },
   },

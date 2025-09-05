@@ -15,7 +15,7 @@ export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterR
 
 export default function Filters(props: FiltersWithRenderProps) {
   const { children, initialNumOptions, ...useFiltersProps } = props;
-  const { facets, setFilter, clearFilters } = useFilter(useFiltersProps);
+  const { facets, setFilter, clearFilters, filtersExist } = useFilter(useFiltersProps);
 
   return (
     <>
@@ -24,12 +24,15 @@ export default function Filters(props: FiltersWithRenderProps) {
           facets,
           setFilter,
           clearFilters,
+          filtersExist,
         })
       ) : (
         <div className='cio-filters'>
-          <button type='button' onClick={clearFilters}>
-            Clear Filters
-          </button>
+          {filtersExist && (
+            <button className='cio-clear-filters-button' type='button' onClick={clearFilters}>
+              Clear All Filters
+            </button>
+          )}
           {facets.map((facet) => (
             <FilterGroup
               facet={facet}

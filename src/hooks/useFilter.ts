@@ -6,6 +6,7 @@ export interface UseFilterReturn {
   facets: Array<PlpFacet>;
   setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
   clearFilters: () => void;
+  filtersExist: boolean;
 }
 
 export interface UseFilterProps {
@@ -25,6 +26,8 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
 
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
   const { filters: requestFilters } = getRequestConfigs();
+
+  const filtersExist = Object.keys(requestFilters || {}).length > 0;
 
   const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
     const newFilters = requestFilters || {};
@@ -46,5 +49,6 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     facets,
     setFilter,
     clearFilters,
+    filtersExist,
   };
 }
