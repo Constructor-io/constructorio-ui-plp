@@ -5,6 +5,7 @@ import useRequestConfigs from './useRequestConfigs';
 export interface UseFilterReturn {
   facets: Array<PlpFacet>;
   setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
+  clearFilters: () => void;
 }
 
 export interface UseFilterProps {
@@ -37,8 +38,13 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs({ filters: newFilters, page: 1 });
   };
 
+  const clearFilters = () => {
+    setRequestConfigs({ filters: {}, page: 1 });
+  };
+
   return {
     facets,
     setFilter,
+    clearFilters,
   };
 }

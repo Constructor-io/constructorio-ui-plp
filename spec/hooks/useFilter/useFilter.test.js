@@ -141,4 +141,20 @@ describe('Testing Hook: useFilter', () => {
       expect(window.location.href.indexOf('Brand')).toBe(-1);
     });
   });
+
+  it('Should remove all filters when clearFilters is called', async () => {
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
+
+    await waitFor(() => {
+      const {
+        current: { setFilter, clearFilters },
+      } = result;
+
+      setFilter('Brand', testBrandA);
+      expect(window.location.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
+
+      clearFilters();
+      expect(window.location.href.indexOf(testBrandA)).toBe(-1);
+    });
+  });
 });
