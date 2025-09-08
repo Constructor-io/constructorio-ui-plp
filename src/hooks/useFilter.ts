@@ -5,6 +5,8 @@ import useRequestConfigs from './useRequestConfigs';
 export interface UseFilterReturn {
   facets: Array<PlpFacet>;
   setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
+  sliderStep?: number;
+  facetSliderSteps?: Record<string, number>;
   clearFilters: () => void;
   filtersExist: boolean;
 }
@@ -14,10 +16,18 @@ export interface UseFilterProps {
    * Used to build and render filters dynamically
    */
   facets: Array<PlpFacet>;
+  /**
+   * Global slider step for all range facets
+   */
+  sliderStep?: number;
+  /**
+   * Per-facet slider step configuration
+   */
+  facetSliderSteps?: Record<string, number>;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
-  const { facets } = props;
+  const { facets, sliderStep, facetSliderSteps } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -50,5 +60,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setFilter,
     clearFilters,
     filtersExist,
+    sliderStep,
+    facetSliderSteps,
+    clearFilters,
+    filtersExist
   };
 }
