@@ -141,7 +141,7 @@ describe('Testing Hook: useFilter', () => {
       expect(window.location.href.indexOf('Brand')).toBe(-1);
     });
   });
-  
+
   it('Should return sliderStep when provided', async () => {
     const useFilterPropsWithSliderStep = {
       ...useFilterProps,
@@ -170,6 +170,7 @@ describe('Testing Hook: useFilter', () => {
         current: { facetSliderSteps: returnedFacetSliderSteps },
       } = result;
       expect(returnedFacetSliderSteps).toEqual(facetSliderSteps);
+    });
   });
 
   it('Should remove all filters when clearFilters is called', async () => {
@@ -185,5 +186,6 @@ describe('Testing Hook: useFilter', () => {
 
       clearFilters();
       expect(window.location.href.indexOf(testBrandA)).toBe(-1);
+    });
   });
 });

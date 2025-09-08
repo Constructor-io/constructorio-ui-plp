@@ -58,11 +58,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   return {
     facets,
     setFilter,
-    clearFilters,
-    filtersExist,
     sliderStep,
     facetSliderSteps,
     clearFilters,
-    filtersExist
+    filtersExist,
   };
 }

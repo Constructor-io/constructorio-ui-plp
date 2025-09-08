@@ -15,7 +15,8 @@ export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterR
 
 export default function Filters(props: FiltersWithRenderProps) {
   const { children, initialNumOptions, ...useFiltersProps } = props;
-  const { facets, setFilter, sliderStep, facetSliderSteps, clearFilters, filtersExist } = useFilter(useFiltersProps);
+  const { facets, setFilter, sliderStep, facetSliderSteps, clearFilters, filtersExist } =
+    useFilter(useFiltersProps);
 
   return (
     <>
@@ -26,7 +27,7 @@ export default function Filters(props: FiltersWithRenderProps) {
           sliderStep,
           facetSliderSteps,
           clearFilters,
-          filtersExist
+          filtersExist,
         })
       ) : (
         <div className='cio-filters'>
