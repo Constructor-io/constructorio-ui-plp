@@ -9,10 +9,12 @@ export interface FilterGroupProps {
   facet: PlpFacet;
   setFilter: UseFilterReturn['setFilter'];
   initialNumOptions?: number;
+  sliderStep?: number;
+  facetSliderSteps?: Record<string, number>;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
-  const { facet, setFilter, initialNumOptions = 10 } = props;
+  const { facet, setFilter, initialNumOptions = 10, sliderStep, facetSliderSteps } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
@@ -41,6 +43,7 @@ export default function FilterGroup(props: FilterGroupProps) {
           isCollapsed={isCollapsed}
           rangedFacet={facet}
           modifyRequestRangeFilter={onFilterSelect(facet.name)}
+          sliderStep={facetSliderSteps?.[facet.name] || sliderStep}
         />
       )}
     </li>

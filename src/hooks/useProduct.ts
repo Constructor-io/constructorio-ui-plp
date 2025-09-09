@@ -1,7 +1,7 @@
 import useProductSwatch from './useProductSwatch';
 import { useCioPlpContext } from './useCioPlpContext';
 import { UseProductInfo } from '../types';
-import { tryCatchify } from '../utils';
+import { tryCatchify, isValidSalePrice } from '../utils';
 import {
   getPrice as defaultGetPrice,
   getSalePrice as defaultGetSalePrice,
@@ -24,7 +24,6 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
-  const salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   const itemUrl = productSwatch?.selectedVariation?.url || item.url;
   const variationId = productSwatch?.selectedVariation?.variationId;
@@ -37,6 +36,14 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const { itemId } = item;
 
+  let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
+  let hasSalePrice = true;
+
+  if (!isValidSalePrice(salePrice, itemPrice)) {
+    salePrice = undefined;
+    hasSalePrice = false;
+  }
+
   return {
     productSwatch,
     itemName,
@@ -47,6 +54,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     itemId,
     salePrice,
     rolloverImage,
+    hasSalePrice,
   };
 };
 

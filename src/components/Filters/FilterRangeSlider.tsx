@@ -124,7 +124,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   // Update internal state
   useEffect(() => {
-    if (facet.status.min && !isModified) {
+    if (facet.status.min !== undefined && !isModified) {
       // Initial state
       setMinValue(facet.status.min);
       setMaxValue(facet.status.max);
@@ -200,6 +200,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               value={minValue}
               onChange={onMinSliderMove}
               onMouseUp={onSliderMoveEnd}
+              onTouchEnd={onSliderMoveEnd}
             />
             <input
               className='cio-max-slider'
@@ -210,6 +211,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               value={maxValue}
               onChange={onMaxSliderMove}
               onMouseUp={onSliderMoveEnd}
+              onTouchEnd={onSliderMoveEnd}
             />
           </div>
         </div>

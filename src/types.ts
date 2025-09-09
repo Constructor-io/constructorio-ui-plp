@@ -257,6 +257,7 @@ export interface ProductInfoObject {
   itemImageUrl?: string;
   variationId?: string;
   rolloverImage?: string;
+  hasSalePrice?: boolean;
 }
 
 export type UseProductInfoProps = {

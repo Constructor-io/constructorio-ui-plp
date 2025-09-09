@@ -5,7 +5,7 @@ import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import mockItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
-import { renderHookWithCioPlp } from '../../test-utils';
+import { renderHookWithCioPlp, copyItemWithNewSalePrice } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
   beforeEach(() => {
@@ -43,32 +43,7 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
-  describe.each([
-    {
-      item: transformedItem,
-      itemDescription: 'a standard item',
-    },
-    {
-      item: transformedItemWithSalePrice,
-      itemDescription: 'an item on sale',
-    },
-  ])('With $itemDescription', ({ item }) => {
-    it.each([
-      ['itemId', item.itemId],
-      ['itemName', item.itemName],
-      ['itemImageUrl', item.imageUrl],
-      ['itemUrl', item.url],
-      ['itemPrice', item.data.price],
-      ['salePrice', item.data.sale_price],
-    ])('Should return the correct value for "%s"', async (property, expectedValue) => {
-      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
-      await waitFor(() => {
-        expect(result.current[property]).toEqual(expectedValue);
-      });
-    });
-  });
-
-  it('Should return correctly after different variation is selected', async () => {
+  it('Should return correctly after a different variation is selected', async () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItemWithRolloverImages }));
 
     await waitFor(() => {
@@ -135,6 +110,71 @@ describe('Testing Hook: useProductInfo', () => {
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toBeUndefined();
       expect(itemSalePrice).toBeUndefined();
+    });
+  });
+
+  describe.each([
+    {
+      item: transformedItem,
+      itemDescription: 'a standard item',
+    },
+    {
+      item: transformedItemWithSalePrice,
+      itemDescription: 'an item on sale',
+    },
+  ])('With $itemDescription', ({ item }) => {
+    it.each([
+      ['itemId', item.itemId],
+      ['itemName', item.itemName],
+      ['itemImageUrl', item.imageUrl],
+      ['itemUrl', item.url],
+      ['itemPrice', item.data.price],
+      ['salePrice', item.data.sale_price],
+    ])('Should return the correct value for "%s"', async (property, expectedValue) => {
+      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+      await waitFor(() => {
+        expect(result.current[property]).toEqual(expectedValue);
+      });
+    });
+  });
+
+  describe('Testing sale price handling logic', () => {
+    describe.each([
+      {
+        desc: 'undefined salePrice',
+        salePrice: undefined,
+        expected: undefined,
+      },
+      {
+        desc: 'negative salePrice',
+        salePrice: -5,
+        expected: undefined,
+      },
+      {
+        desc: 'salePrice greater than or equal to price',
+        salePrice: Infinity,
+        expected: undefined,
+      },
+      {
+        desc: 'valid salePrice (positive and less than price)',
+        salePrice: 1,
+        expected: 1,
+      },
+      {
+        desc: 'zero salePrice',
+        salePrice: 0,
+        expected: undefined,
+      },
+    ])('When $desc', ({ salePrice, expected }) => {
+      it(`Should return ${expected === undefined ? 'undefined' : expected} for salePrice`, async () => {
+        const item = transformResultItem(
+          copyItemWithNewSalePrice(mockItemWithSalePrice, salePrice),
+        );
+        const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+        await waitFor(() => {
+          expect(result.current.salePrice).toEqual(expected);
+        });
+      });
     });
   });
 });
