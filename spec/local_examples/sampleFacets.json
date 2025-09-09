@@ -877,29 +877,15 @@
       {
         "status": "",
         "count": 28,
-        "displayName": "Size:0",
+        "displayName": "0",
         "value": "0",
         "data": {}
       },
       {
         "status": "",
         "count": 229,
-        "displayName": "Size:1",
+        "displayName": "1",
         "value": "1",
-        "data": {}
-      },
-      {
-        "status": "",
-        "count": 207,
-        "displayName": "Size:2",
-        "value": "2",
-        "data": {}
-      },
-      {
-        "status": "",
-        "count": 250,
-        "displayName": "Size:3",
-        "value": "3",
         "data": {}
       }
     ]
@@ -914,22 +900,15 @@
       {
         "status": "",
         "count": 7,
-        "displayName": "Rating:0",
+        "displayName": "0",
         "value": "0",
         "data": {}
       },
       {
         "status": "",
         "count": 29,
-        "displayName": "Rating:1",
+        "displayName": "1",
         "value": "1",
-        "data": {}
-      },
-      {
-        "status": "",
-        "count": 31,
-        "displayName": "Rating:2",
-        "value": "2",
         "data": {}
       }
     ]

@@ -23,18 +23,16 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
         'cio-collapsible-is-open': !isCollapsed,
       })}>
       <ul className='cio-filter-multiple-options-list cio-collapsible-inner'>
-        {optionsToRender.map((option) => {
-          const compositeId = `${facet.name}:${option.value}`;
-          return (
-            <FilterOptionListRow
-              id={compositeId}
-              displayValue={option.displayName}
-              displayCountValue={option.count.toString()}
-              isChecked={selectedOptionMap[compositeId] || false}
-              onChange={() => onOptionSelect(compositeId)}
-            />
-          );
-        })}
+        {optionsToRender.map((option) => (
+          <FilterOptionListRow
+            id={`${facet.name}-${option.value}`}
+            value={option.value}
+            displayValue={option.displayName}
+            displayCountValue={option.count.toString()}
+            isChecked={selectedOptionMap[option.value] || false}
+            onChange={onOptionSelect}
+          />
+        ))}
 
         {initialNumOptions < facet.options.length && (
           <button type='button' className='cio-see-all' onClick={() => setIsShowAll(!isShowAll)}>
