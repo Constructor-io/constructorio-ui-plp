@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
 import useFilter from '../../../src/hooks/useFilter';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
-import { transformSearchResponse } from '../../../src/utils/transformers';
+import { transformSearchResponse } from '../../../src/utils';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useFilter', () => {
@@ -139,6 +139,37 @@ describe('Testing Hook: useFilter', () => {
 
       expect(window.location.href.indexOf(testBrandA)).toBe(-1);
       expect(window.location.href.indexOf('Brand')).toBe(-1);
+    });
+  });
+
+  it('Should return sliderStep when provided', async () => {
+    const useFilterPropsWithSliderStep = {
+      ...useFilterProps,
+      sliderStep: 0.5,
+    };
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithSliderStep));
+
+    await waitFor(() => {
+      const {
+        current: { sliderStep },
+      } = result;
+      expect(sliderStep).toBe(0.5);
+    });
+  });
+
+  it('Should return facetSliderSteps when provided', async () => {
+    const facetSliderSteps = { price: 1, rating: 0.1 };
+    const useFilterPropsWithFacetSliderSteps = {
+      ...useFilterProps,
+      facetSliderSteps,
+    };
+    const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithFacetSliderSteps));
+
+    await waitFor(() => {
+      const {
+        current: { facetSliderSteps: returnedFacetSliderSteps },
+      } = result;
+      expect(returnedFacetSliderSteps).toEqual(facetSliderSteps);
     });
   });
 });
