@@ -73,8 +73,16 @@ export default function ProductCard(props: ProductCardProps) {
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, hasSalePrice, rolloverImage } =
-    productInfo;
+  const {
+    productSwatch,
+    itemName,
+    itemPrice,
+    itemImageUrl,
+    itemUrl,
+    salePrice,
+    hasSalePrice,
+    rolloverImage,
+  } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');

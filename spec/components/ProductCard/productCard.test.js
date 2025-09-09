@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
@@ -9,6 +9,7 @@ import testItemWithRolloverImages from '../../local_examples/itemWithRolloverIma
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { transformResultItem } from '../../../src/utils/transformers';
 import { copyItemWithNewSalePrice } from '../../test-utils';
+import { EMITTED_EVENTS } from '../../../src/constants';
 
 describe('Testing Component: ProductCard', () => {
   test('Should throw error if used outside the CioPlp', () => {
@@ -243,24 +244,29 @@ describe('Testing Component: ProductCard', () => {
     expect(mouseLeaveFn).toHaveBeenCalledWith(expect.any(Object), item);
   });
 
-  test.only('should dispatch the "cio.ui-plp.productCardImageRollover" event when the rollover image is shown', () => {
+  test.only('should dispatch the "cio.ui-plp.productCardImageRollover" event when the rollover image is shown', async () => {
     const item = transformResultItem(testItemWithRolloverImages);
-    const selectedVariation = item.variations[0];
-    const dispatchEvent = jest.spyOn(document, 'dispatchEvent');
+    const itemName = item.variations[0].itemName || item.itemName;
+    const callbackFn = jest.fn();
 
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <ProductCard item={item} />
       </CioPlp>,
     );
-
-    fireEvent.mouseEnter(screen.getByAltText(`${selectedVariation.itemName} rollover`));
-    expect(dispatchEvent).toHaveBeenCalledWith(expect.objectContaining({
-      type: 'cio.ui-plp.productCardImageRollover',
-      detail: expect.objectContaining({
-        item,
-      }),
-    }));
+    
+    const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
+    const productCard = rolloverImageEl.closest('.cio-product-card');
+    productCard.addEventListener(EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER, callbackFn);
+    fireEvent.mouseEnter(rolloverImageEl);
+    await waitFor(() =>
+      expect(callbackFn).toHaveBeenCalledWith(expect.objectContaining({
+        type: EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER,
+        detail: expect.objectContaining({
+          item,
+        }),
+      }))
+    );
   });
 
 
