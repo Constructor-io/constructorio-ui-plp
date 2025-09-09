@@ -6,7 +6,7 @@ export interface FilterOptionListRowProps {
   displayValue: string;
   displayCountValue: string;
   isChecked: boolean;
-  onChange: (id: string) => void;
+  onChange: (value: string) => void;
   showCheckbox?: boolean;
 }
 
@@ -27,7 +27,7 @@ export default function FilterOptionListRow(props: FilterOptionListRowProps) {
         <input
           type='checkbox'
           id={id}
-          value={displayValue}
+          value={optionValue}
           checked={isChecked}
           onChange={() => onChange(optionValue)}
         />
