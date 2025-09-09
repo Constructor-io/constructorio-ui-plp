@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface FilterOptionListRowProps {
   id: string;
+  optionValue: string;
   displayValue: string;
   displayCountValue: string;
   isChecked: boolean;
@@ -10,7 +11,15 @@ export interface FilterOptionListRowProps {
 }
 
 export default function FilterOptionListRow(props: FilterOptionListRowProps) {
-  const { id, displayValue, displayCountValue, isChecked, onChange, showCheckbox = true } = props;
+  const {
+    id,
+    optionValue,
+    displayValue,
+    displayCountValue,
+    isChecked,
+    onChange,
+    showCheckbox = true,
+  } = props;
 
   return (
     <li className='cio-filter-multiple-option' key={id}>
@@ -20,7 +29,7 @@ export default function FilterOptionListRow(props: FilterOptionListRowProps) {
           id={id}
           value={displayValue}
           checked={isChecked}
-          onChange={() => onChange(id)}
+          onChange={() => onChange(optionValue)}
         />
         {showCheckbox && (
           <div className='cio-checkbox'>

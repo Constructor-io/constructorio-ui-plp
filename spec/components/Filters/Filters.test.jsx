@@ -10,6 +10,55 @@ import { getStateFromUrl } from '../../../src/utils';
 
 const filterProps = { facets: mockTransformedFacets };
 
+const mockFacetsWithDuplicateValues = [
+  {
+    displayName: 'Size',
+    name: 'size',
+    type: 'multiple',
+    data: {},
+    hidden: false,
+    options: [
+      {
+        status: '',
+        count: 28,
+        displayName: '0',
+        value: '0',
+        data: {},
+      },
+      {
+        status: '',
+        count: 229,
+        displayName: '1',
+        value: '1',
+        data: {},
+      },
+    ],
+  },
+  {
+    displayName: 'Rating',
+    name: 'rating',
+    type: 'multiple',
+    data: {},
+    hidden: false,
+    options: [
+      {
+        status: '',
+        count: 7,
+        displayName: '0',
+        value: '0',
+        data: {},
+      },
+      {
+        status: '',
+        count: 29,
+        displayName: '1',
+        value: '1',
+        data: {},
+      },
+    ],
+  },
+];
+
 describe('Testing Component: Filters', () => {
   const originalWindowLocation = window.location;
 
@@ -91,13 +140,17 @@ describe('Testing Component: Filters', () => {
         (facetGroup) => facetGroup.displayName === 'Color',
       );
       const selectedOption = colorFacetData.options.find((option) => option.status === 'selected');
-      expect(container.querySelector(`#${selectedOption.value}:checked`)).not.toBeNull();
+      expect(
+        container.querySelector(`input[id=${colorFacetData.name}-${selectedOption.value}]`),
+      ).toBeChecked();
 
       const newSelectedOption = colorFacetData.options.find(
         (option) => option.status !== 'selected',
       );
       fireEvent.click(getByText(newSelectedOption.value));
-      expect(container.querySelector(`#${newSelectedOption.value}:checked`)).not.toBeNull();
+      expect(
+        container.querySelector(`input[id=${colorFacetData.name}-${newSelectedOption.value}]`),
+      ).toBeChecked();
     });
 
     it('Should render correctly with render props', () => {
@@ -414,6 +467,32 @@ describe('Testing Component: Filters', () => {
       const updatedFiltersWithTwoSelected = getRequestFilters(container);
       expect(updatedFiltersWithTwoSelected.color.includes(selectedOption.value)).toBe(true);
       expect(updatedFiltersWithTwoSelected.color.includes(newSelectedOption.value)).toBe(true);
+    });
+
+    it('OptionsList: Should handle duplicate option values between different facets correctly', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithDuplicateValues} />
+        </CioPlp>,
+      );
+
+      const sizeZeroCheckbox = container.querySelector('input[id="size-0"]');
+      const ratingZeroCheckbox = container.querySelector('input[id="rating-0"]');
+
+      // Select "0" option in Size facet
+      fireEvent.click(sizeZeroCheckbox);
+      expect(sizeZeroCheckbox).toBeChecked();
+      expect(ratingZeroCheckbox).not.toBeChecked();
+
+      // Select "0" option in Rating facet
+      fireEvent.click(ratingZeroCheckbox);
+      expect(sizeZeroCheckbox).toBeChecked();
+      expect(ratingZeroCheckbox).toBeChecked();
+
+      // Deselect "0" option in Size facet
+      fireEvent.click(sizeZeroCheckbox);
+      expect(sizeZeroCheckbox).not.toBeChecked();
+      expect(ratingZeroCheckbox).toBeChecked();
     });
 
     it('SliderRange: Upon updating the input, requestFilters should not be updated if not blurred', async () => {

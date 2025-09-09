@@ -67,6 +67,7 @@ export default function Groups(props: GroupsWithRenderProps) {
                     showCheckbox={false}
                     key={option.groupId}
                     id={option.groupId}
+                    optionValue={option.groupId}
                     displayValue={option.displayName}
                     displayCountValue={option.count.toString()}
                     isChecked={selectedGroupId === option.groupId}
