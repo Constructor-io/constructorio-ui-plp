@@ -145,7 +145,6 @@ describe('Testing Component: Filters', () => {
         container.querySelector(`input[id=${colorFacetData.name}-${selectedOption.value}]`),
       ).toBeChecked();
 
-      // Click a new option and check that it has been marked
       const newSelectedOption = colorFacetData.options.find(
         (option) => option.status !== 'selected',
       );
