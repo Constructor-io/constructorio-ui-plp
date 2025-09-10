@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
 import useFilter from '../../../src/hooks/useFilter';
+import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 import { transformSearchResponse } from '../../../src/utils';
 import { renderHookWithCioPlp } from '../../test-utils';
@@ -182,10 +183,57 @@ describe('Testing Hook: useFilter', () => {
       } = result;
 
       setFilter('Brand', testBrandA);
+      setFilter('Price', '2-150');
+
+      expect(window.location.href.indexOf('Brand')).toBeGreaterThanOrEqual(0);
       expect(window.location.href.indexOf(testBrandA)).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('Price')).toBeGreaterThanOrEqual(0);
+      expect(window.location.href.indexOf('2-150')).toBeGreaterThanOrEqual(0);
 
       clearFilters();
+      expect(window.location.href.indexOf('Brand')).toBe(-1);
       expect(window.location.href.indexOf(testBrandA)).toBe(-1);
+      expect(window.location.href.indexOf('Price')).toBe(-1);
+      expect(window.location.href.indexOf('2-150')).toBe(-1);
+    });
+  });
+
+  it('Should remove all filters but not other request params when clearFilters is called', async () => {
+    const initialProps = {
+      staticRequestConfigs: {
+        resultsPerPage: 12,
+        section: 'Search Suggestions',
+      },
+    };
+
+    const { result: filterResult } = renderHookWithCioPlp(() => useFilter(useFilterProps), {
+      initialProps,
+    });
+    // Use useRequestConfigs hook to access request configs
+    const { result: requestConfigsResult } = renderHookWithCioPlp(() => useRequestConfigs(), {
+      initialProps,
+    });
+
+    const {
+      current: { setFilter, clearFilters },
+    } = filterResult;
+
+    await waitFor(() => {
+      setFilter('Brand', testBrandA);
+      setFilter('Price', '2-150');
+
+      let requestConfig = requestConfigsResult.current.getRequestConfigs();
+      expect(requestConfig.filters.Brand.toString()).toBe(testBrandA);
+      expect(requestConfig.filters.Price.toString()).toBe('2-150');
+      expect(requestConfig.resultsPerPage).toBe(12);
+      expect(requestConfig.section.toString()).toBe('Search Suggestions');
+
+      clearFilters();
+
+      requestConfig = requestConfigsResult.current.getRequestConfigs();
+      expect(requestConfig.filters).toBeUndefined();
+      expect(requestConfig.resultsPerPage).toBe(12);
+      expect(requestConfig.section.toString()).toBe('Search Suggestions');
     });
   });
 });

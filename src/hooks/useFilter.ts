@@ -34,10 +34,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   }
 
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
-  const { filters: requestFilters } = getRequestConfigs();
 
   const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
-    const newFilters = requestFilters || {};
+    const newFilters = getRequestConfigs().filters || {};
 
     newFilters[filterName] = filterValue;
 
