@@ -5,4 +5,3 @@
 | sliderStep       | `number`                                                    | Global slider step for all range facets                                |
 | facetSliderSteps | `Record<string, number>`                                    | Per-facet slider step configuration                                    |
 | clearFilters     | `() => void`                                                | Function to clear all filters                                          |
-| filtersExist     | `boolean`                                                   | Indicates if any filters are currently applied                         |
