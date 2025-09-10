@@ -25,8 +25,9 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
       <ul className='cio-filter-multiple-options-list cio-collapsible-inner'>
         {optionsToRender.map((option) => (
           <FilterOptionListRow
-            id={option.value}
+            id={`${facet.name}-${option.value}`}
             key={option.value}
+            optionValue={option.value}
             displayValue={option.displayName}
             displayCountValue={option.count.toString()}
             isChecked={selectedOptionMap[option.value] || false}
