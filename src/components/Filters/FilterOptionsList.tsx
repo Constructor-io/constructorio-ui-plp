@@ -26,6 +26,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
         {optionsToRender.map((option) => (
           <FilterOptionListRow
             id={`${facet.name}-${option.value}`}
+            key={option.value}
             optionValue={option.value}
             displayValue={option.displayName}
             displayCountValue={option.count.toString()}

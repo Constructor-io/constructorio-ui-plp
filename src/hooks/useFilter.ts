@@ -7,6 +7,7 @@ export interface UseFilterReturn {
   setFilter: (filterName: string, filterValue: PlpFilterValue) => void;
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
+  clearFilters: () => void;
 }
 
 export interface UseFilterProps {
@@ -33,10 +34,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   }
 
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
-  const { filters: requestFilters } = getRequestConfigs();
 
   const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
-    const newFilters = requestFilters || {};
+    const newFilters = getRequestConfigs().filters || {};
 
     newFilters[filterName] = filterValue;
 
@@ -47,10 +47,15 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs({ filters: newFilters, page: 1 });
   };
 
+  const clearFilters = () => {
+    setRequestConfigs({ filters: {}, page: 1 });
+  };
+
   return {
     facets,
     setFilter,
     sliderStep,
     facetSliderSteps,
+    clearFilters,
   };
 }

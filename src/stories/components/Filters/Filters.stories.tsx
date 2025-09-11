@@ -16,7 +16,7 @@ const meta = {
   argTypes: {
     initialNumOptions: {
       table: {
-        defaultValue: { summary: 10 },
+        defaultValue: { summary: '10' },
       },
     },
   },
