@@ -41,12 +41,14 @@ export type CioClientOptions = Omit<ConstructorClientOptions, 'apiKey' | 'sendTr
 export interface ItemFieldGetters {
   getPrice: (item: Item | Variation) => number;
   getSalePrice: (item: Item | Variation) => number | undefined;
+  getRolloverImage: (item: Item | Variation) => string | undefined;
   getSwatchPreview: (variation: Variation) => string;
   getSwatches: (
     item: Item,
     retrievePrice: ItemFieldGetters['getPrice'],
     retrieveSwatchPreview: ItemFieldGetters['getSwatchPreview'],
     retrieveSalePrice: ItemFieldGetters['getSalePrice'],
+    retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
 }
 
@@ -57,6 +59,8 @@ export interface Formatters {
 export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
+  onProductCardMouseEnter?: (event: React.MouseEvent, item: Item) => void;
+  onProductCardMouseLeave?: (event: React.MouseEvent, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
   onRedirect?: (url: string) => void;
 }
@@ -200,6 +204,7 @@ export interface SwatchItem {
   salePrice?: number;
   swatchPreview: string;
   variationId?: string;
+  rolloverImage?: string;
 }
 
 export interface PlpBrowseData {
@@ -251,6 +256,7 @@ export interface ProductInfoObject {
   itemUrl?: string;
   itemImageUrl?: string;
   variationId?: string;
+  rolloverImage?: string;
   hasSalePrice?: boolean;
 }
 

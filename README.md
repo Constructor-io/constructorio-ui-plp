@@ -37,7 +37,7 @@ function YourComponent() {
 
 This is a framework agnostic method that can be used in any JavaScript project. The `CioPlp` function provides a simple interface to inject an entire PLP UI into the provided `selector`.
 
-In addition to [PLP component props](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/plp-component--docs), this function also accepts `selector` and `includeCSS`.
+In addition to [PLP component props](https://constructor-io.github.io/constructorio-ui-plp/?path=/docs/components-cioplp--props), this function also accepts `selector` and `includeCSS`.
 
 ```js
 import CioPlp from '@constructor-io/constructorio-ui-plp/constructorio-ui-plp-bundled';

@@ -96,7 +96,7 @@ describe('Testing Hook: useRequestConfigs', () => {
       decodedRequestState.page = 2;
       decodedRequestState.query = 'fire';
       decodedRequestState.filterName = 'group_id';
-      decodedRequestState.filterValue = 'fall';
+      decodedRequestState.filterValue = 'Styles';
       expect(requestConfigs).toEqual(decodedRequestState);
       return <div>test</div>;
     }
