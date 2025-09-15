@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
@@ -8,8 +8,39 @@ import testItem from '../../local_examples/item.json';
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { transformResultItem } from '../../../src/utils/transformers';
 import { copyItemWithNewSalePrice } from '../../test-utils';
+import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
+
+const originalWindowLocation = window.location;
+
+jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
+  const Search = class {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
+    constructor() {}
+
+    getSearchResults = jest.fn().mockImplementation(() => mockApiSearchResponse);
+  };
+
+  return Search;
+});
 
 describe('Testing Component: ProductCard', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com?q=red'),
+    });
+
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
+
+    jest.resetAllMocks();
+  });
+
   test('Should throw error if used outside the CioPlp', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
@@ -158,6 +189,61 @@ describe('Testing Component: ProductCard', () => {
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={transformResultItem(testItem)}>
+          {(props) => (
+            // Custom Rendered Price
+            <div>My Rendered Price: {props.formatPrice(props.productInfo.itemPrice)}</div>
+          )}
+        </ProductCard>
+      </CioPlp>,
+    );
+
+    screen.getByText('My Rendered Price: $90.00');
+  });
+
+  test('Should render the custom html render function if provided at the CioPlp level', async () => {
+    const renderOverrides = {
+      productCard: {
+        renderHtml: ({ productInfo, item }) => {
+          const itemId = document.createElement('div');
+          itemId.textContent = productInfo.itemId;
+          itemId.classList.add('cio-item-name');
+
+          const itemDescription = document.createElement('div');
+          itemDescription.textContent = item.description;
+
+          const itemContainer = document.createElement('div');
+          itemContainer.appendChild(itemId);
+          itemContainer.appendChild(itemDescription);
+
+          return itemContainer;
+        },
+      },
+    };
+
+    render(<CioPlp apiKey={DEMO_API_KEY} renderOverrides={renderOverrides} />);
+
+    await waitFor(() => {
+      expect(screen.getAllByText(mockApiSearchResponse.response.results[0].data.id));
+      expect(screen.getAllByText(mockApiSearchResponse.response.results[0].data.description));
+    });
+  });
+
+  test('Should prefer render props over top-level custom html render function', () => {
+    const renderOverrides = {
+      productCard: {
+        renderHtml: ({ productInfo }) => {
+          const itemName = document.createElement('div');
+          itemName.textContent = productInfo.itemName;
+          itemName.classList.add('cio-item-name');
+
+          return itemName;
+        },
+      },
+    };
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} renderOverrides={renderOverrides}>
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price
