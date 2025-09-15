@@ -6,6 +6,7 @@ import {
   getPrice as defaultGetPrice,
   getSwatchPreview as defaultGetSwatchPreview,
   getSalePrice as defaultGetSalePrice,
+  getRolloverImage as defaultGetRolloverImage,
 } from '../utils/itemFieldGetters';
 
 const useProductSwatch: UseProductSwatch = ({ item }) => {
@@ -18,16 +19,19 @@ const useProductSwatch: UseProductSwatch = ({ item }) => {
   const getPrice = state?.itemFieldGetters?.getPrice || defaultGetPrice;
   const getSalePrice = state?.itemFieldGetters?.getSalePrice || defaultGetSalePrice;
   const getSwatchPreview = state?.itemFieldGetters?.getSwatchPreview || defaultGetSwatchPreview;
+  const getRolloverImage = state?.itemFieldGetters?.getRolloverImage || defaultGetRolloverImage;
 
   useEffect(() => {
     if (item?.variations) {
       try {
-        setSwatchList(getSwatches(item, getPrice, getSwatchPreview, getSalePrice) || []);
+        setSwatchList(
+          getSwatches(item, getPrice, getSwatchPreview, getSalePrice, getRolloverImage) || [],
+        );
       } catch (e) {
         // do nothing
       }
     }
-  }, [item, getSwatches, getPrice, getSwatchPreview, getSalePrice]);
+  }, [item, getSwatches, getPrice, getSwatchPreview, getSalePrice, getRolloverImage]);
 
   useEffect(() => {
     if (item?.variations) {
