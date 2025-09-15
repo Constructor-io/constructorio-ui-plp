@@ -17,7 +17,7 @@ export interface ReactPropsWrapperProps<T> {
    */
   override?: RenderPropsChildren<T>;
   /**
-   * One of Function<T> | JSX. Overrides default implementation
+   * One of Function<T> -> HTMLElement. Overrides default implementation
    */
   htmlOverride?: (props: T) => HTMLElement | ReactNode;
   /**

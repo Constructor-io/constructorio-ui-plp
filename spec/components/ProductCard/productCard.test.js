@@ -224,8 +224,8 @@ describe('Testing Component: ProductCard', () => {
     render(<CioPlp apiKey={DEMO_API_KEY} renderOverrides={renderOverrides} />);
 
     await waitFor(() => {
-      expect(screen.getAllByText(mockApiSearchResponse.response.results[0].data.id));
-      expect(screen.getAllByText(mockApiSearchResponse.response.results[0].data.description));
+      expect(screen.getByText(mockApiSearchResponse.response.results[0].data.id));
+      expect(screen.getByText(mockApiSearchResponse.response.results[0].data.description));
     });
   });
 
