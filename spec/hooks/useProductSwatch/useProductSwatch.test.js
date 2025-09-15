@@ -9,6 +9,7 @@ import {
   getPrice,
   getSwatches,
   getSalePrice,
+  getRolloverImage,
 } from '../../../src/utils/itemFieldGetters';
 
 describe('Testing Hook: useProductSwatch', () => {
@@ -23,7 +24,7 @@ describe('Testing Hook: useProductSwatch', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
-  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview, getSalePrice);
+  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview, getSalePrice, getRolloverImage);
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useProductSwatch())).toThrow();
@@ -69,6 +70,7 @@ describe('Testing Hook: useProductSwatch', () => {
           getSwatches: () => {},
           getSwatchPreview: () => {},
           getSalePrice: () => {},
+          getRolloverImage: () => {},
         },
       },
     });
@@ -100,6 +102,9 @@ describe('Testing Hook: useProductSwatch', () => {
           getSalePrice: () => {
             throw new Error();
           },
+          getRolloverImage: () => {
+            throw new Error();
+          },
         },
       },
     });
@@ -112,6 +117,22 @@ describe('Testing Hook: useProductSwatch', () => {
       expect(typeof selectVariation).toBe('function');
       expect(selectedVariation).toBeUndefined();
       expect(swatchList.length).toBe(0);
+    });
+  });
+
+  it('Should override getRolloverImage and work as expected', async () => {
+    const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }), {
+      initialProps: {
+        itemFieldGetters: {
+          getRolloverImage: (item) => item.data.swatchPreview,
+        },
+      },
+    });
+
+    await waitFor(() => {
+      const { current: { selectedVariation } } = result;
+
+      expect(selectedVariation.rolloverImage).toBe('#e04062');
     });
   });
 });

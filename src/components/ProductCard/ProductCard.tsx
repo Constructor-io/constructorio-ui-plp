@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import { CnstrcData, IncludeRenderProps, Item, ProductInfoObject } from '../../types';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
 import { concatStyles, getProductCardCnstrcDataAttributes } from '../../utils';
+import { EMITTED_EVENTS } from '../../constants';
 
 interface Props {
   /**
@@ -42,6 +43,20 @@ export interface ProductCardRenderProps extends ProductCardProps {
    */
   onClick: (event: React.MouseEvent, item: Item) => void;
   /**
+   * Callback to run on Product Card Mouse Enter.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseEnter: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Mouse Leave.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseLeave: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Boolean to show/hide the rollover image.
+   */
+  isRolloverImageShown: boolean;
+  /**
    * Data Attributes to surface on parent div of product card.
    */
   productCardCnstrcDataAttributes: CnstrcData;
@@ -53,11 +68,21 @@ export type ProductCardProps = IncludeRenderProps<Props, ProductCardRenderProps>
  * ProductCard component that has Constructor tracking built-in.
  */
 export default function ProductCard(props: ProductCardProps) {
+  const [isRolloverImageShown, setIsRolloverImageShown] = useState(false);
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const { item, children } = props;
   const state = useCioPlpContext();
   const productInfo = useProductInfo({ item });
-  const { productSwatch, itemName, itemPrice, itemImageUrl, itemUrl, salePrice, hasSalePrice } =
-    productInfo;
+  const {
+    productSwatch,
+    itemName,
+    itemPrice,
+    itemImageUrl,
+    itemUrl,
+    salePrice,
+    hasSalePrice,
+    rolloverImage,
+  } = productInfo;
 
   if (!state) {
     throw new Error('This component is meant to be used within the CioPlp provider.');
@@ -74,6 +99,31 @@ export default function ProductCard(props: ProductCardProps) {
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
+  const handleRolloverImageState = (isShown: boolean) => {
+    setIsRolloverImageShown(isShown);
+    if (isShown && rolloverImage) {
+      const event = new CustomEvent(EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER, {
+        detail: { item },
+        bubbles: true,
+      });
+      cardRef.current?.dispatchEvent(event);
+    }
+  };
+
+  const onMouseEnter = (event: React.MouseEvent) => {
+    if (state.callbacks.onProductCardMouseEnter) {
+      state.callbacks.onProductCardMouseEnter(event, item);
+    }
+    handleRolloverImageState(true);
+  };
+
+  const onMouseLeave = (event: React.MouseEvent) => {
+    if (state.callbacks.onProductCardMouseLeave) {
+      state.callbacks.onProductCardMouseLeave(event, item);
+    }
+    handleRolloverImageState(false);
+  };
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -83,6 +133,9 @@ export default function ProductCard(props: ProductCardProps) {
           formatPrice,
           onAddToCart,
           onClick,
+          onMouseEnter,
+          onMouseLeave,
+          isRolloverImageShown,
           productCardCnstrcDataAttributes: cnstrcData,
         })
       ) : (
@@ -90,9 +143,24 @@ export default function ProductCard(props: ProductCardProps) {
           {...cnstrcData}
           className='cio-product-card'
           href={itemUrl}
+          ref={cardRef}
           onClick={(e) => onClick(e, item, productSwatch?.selectedVariation?.variationId)}>
-          <div className='cio-image-container'>
+          <div
+            className='cio-image-container'
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}>
             <img alt={itemName} src={itemImageUrl} className='cio-image' />
+            {rolloverImage && (
+              <img
+                alt={`${itemName} rollover`}
+                src={rolloverImage}
+                loading='lazy'
+                className={concatStyles(
+                  'cio-image cio-rollover-image',
+                  isRolloverImageShown && 'is-active',
+                )}
+              />
+            )}
           </div>
 
           <div className='cio-content'>
