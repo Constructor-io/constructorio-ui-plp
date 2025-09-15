@@ -244,7 +244,7 @@ describe('Testing Component: ProductCard', () => {
     expect(mouseLeaveFn).toHaveBeenCalledWith(expect.any(Object), item);
   });
 
-  test.only('should dispatch the "cio.ui-plp.productCardImageRollover" event when the rollover image is shown', async () => {
+  test('should dispatch the "cio.ui-plp.productCardImageRollover" event when the rollover image is shown', async () => {
     const item = transformResultItem(testItemWithRolloverImages);
     const itemName = item.variations[0].itemName || item.itemName;
     const callbackFn = jest.fn();
