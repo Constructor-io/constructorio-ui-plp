@@ -65,6 +65,69 @@ export interface Callbacks {
   onRedirect?: (url: string) => void;
 }
 
+interface ProductCardBaseProps {
+  /**
+   * Constructor's Transformed API Item Object.
+   */
+  item: Item;
+}
+
+/**
+ * Props that will be passed to the renderProps function
+ */
+export interface ProductCardRenderProps extends ProductCardProps {
+  /**
+   * Function to format the price. Defaults to "$0.00".
+   * Set globally at the CioPlp provider level.
+   */
+  formatPrice: (price: number) => string;
+  /**
+   * Object containing information about the current product, variation
+   */
+  productInfo: ProductInfoObject;
+  /**
+   * Callback to run on add-to-cart event.
+   * Set globally at the CioPlp provider level.
+   */
+  onAddToCart: (
+    event: React.MouseEvent,
+    item: Item,
+    revenue: number,
+    selectedVariation: string,
+  ) => void;
+  /**
+   * Callback to run on Product Card Click.
+   * Set globally at the CioPlp provider level.
+   */
+  onClick: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Mouse Enter.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseEnter: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Callback to run on Product Card Mouse Leave.
+   * Set globally at the CioPlp provider level.
+   */
+  onMouseLeave: (event: React.MouseEvent, item: Item) => void;
+  /**
+   * Boolean to show/hide the rollover image.
+   */
+  isRolloverImageShown: boolean;
+  /**
+   * Data Attributes to surface on parent div of product card.
+   */
+  productCardCnstrcDataAttributes: CnstrcData;
+}
+
+export type ProductCardProps = IncludeRenderProps<ProductCardBaseProps, ProductCardRenderProps>;
+
+export interface RenderOverrides {
+  productCard?: {
+    renderHtml?: (props: ProductCardRenderProps) => HTMLElement | ReactNode;
+  };
+}
+
 export type PlpSearchData = PlpSearchDataResults | PlpSearchDataRedirect;
 
 export interface PlpSearchDataResults {
@@ -147,6 +210,7 @@ export interface PlpContextValue {
   formatters: Formatters;
   callbacks: Callbacks;
   urlHelpers: UrlHelpers;
+  renderOverrides: RenderOverrides;
 }
 
 export interface PrimaryColorStyles {
@@ -223,6 +287,7 @@ export interface CioPlpProviderProps {
   formatters?: Partial<Formatters>;
   callbacks?: Partial<Callbacks>;
   itemFieldGetters?: Partial<ItemFieldGetters>;
+  renderOverrides?: Partial<RenderOverrides>;
   urlHelpers?: Partial<UrlHelpers>;
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
@@ -325,6 +390,7 @@ export type CnstrcData = Record<`data-cnstrc-${string}`, string | number | boole
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };
+export type RenderPropsChildren<RenderProps> = ((props: RenderProps) => ReactNode) | ReactNode;
 
 /**
  * Composes a type for a Component that accepts

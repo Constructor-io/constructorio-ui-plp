@@ -3,15 +3,45 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProductCard from '../../../src/components/ProductCard';
 import CioPlp from '../../../src/components/CioPlp';
-import { DEMO_API_KEY } from '../../../src/constants';
+import { DEMO_API_KEY, EMITTED_EVENTS } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
 import testItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import { transformResultItem } from '../../../src/utils/transformers';
 import { copyItemWithNewSalePrice } from '../../test-utils';
-import { EMITTED_EVENTS } from '../../../src/constants';
+import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
+
+const originalWindowLocation = window.location;
+
+jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
+  const Search = class {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
+    constructor() {}
+
+    getSearchResults = jest.fn().mockImplementation(() => mockApiSearchResponse);
+  };
+
+  return Search;
+});
 
 describe('Testing Component: ProductCard', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: new URL('https://example.com?q=red'),
+    });
+
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: originalWindowLocation,
+    });
+
+    jest.resetAllMocks();
+  });
+
   test('Should throw error if used outside the CioPlp', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
@@ -177,10 +207,12 @@ describe('Testing Component: ProductCard', () => {
     expect(rolloverImageEl.classList.contains('is-active')).toBe(false);
   });
 
-  test('it should fallback to the item rollover image if all variations don\'t have a rollover image', () => {
+  test("it should fallback to the item rollover image if all variations don't have a rollover image", () => {
     const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
-    clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
+    clonedItemWithRolloverImages.data.rolloverImage =
+      clonedItemWithRolloverImages.variations[0].data.rolloverImage;
     clonedItemWithRolloverImages.variations.forEach((variation) => {
+      // eslint-disable-next-line no-param-reassign
       variation.data.rolloverImage = null;
     });
     const item = transformResultItem(clonedItemWithRolloverImages);
@@ -204,7 +236,8 @@ describe('Testing Component: ProductCard', () => {
 
   test('it should not fallback to the item rollover image if some variations have a rollover image', () => {
     const clonedItemWithRolloverImages = JSON.parse(JSON.stringify(testItemWithRolloverImages));
-    clonedItemWithRolloverImages.data.rolloverImage = clonedItemWithRolloverImages.variations[0].data.rolloverImage;
+    clonedItemWithRolloverImages.data.rolloverImage =
+      clonedItemWithRolloverImages.variations[0].data.rolloverImage;
     const item = transformResultItem(clonedItemWithRolloverImages);
     const thirdVariation = item.variations[3];
 
@@ -227,10 +260,11 @@ describe('Testing Component: ProductCard', () => {
     const mouseLeaveFn = jest.fn();
 
     render(
-      <CioPlp apiKey={DEMO_API_KEY}
+      <CioPlp
+        apiKey={DEMO_API_KEY}
         callbacks={{
           onProductCardMouseEnter: mouseEnterFn,
-          onProductCardMouseLeave: mouseLeaveFn
+          onProductCardMouseLeave: mouseLeaveFn,
         }}>
         <ProductCard item={item} />
       </CioPlp>,
@@ -254,21 +288,22 @@ describe('Testing Component: ProductCard', () => {
         <ProductCard item={item} />
       </CioPlp>,
     );
-    
+
     const rolloverImageEl = screen.getByAltText(`${itemName} rollover`);
     const productCard = rolloverImageEl.closest('.cio-product-card');
     productCard.addEventListener(EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER, callbackFn);
     fireEvent.mouseEnter(rolloverImageEl);
     await waitFor(() =>
-      expect(callbackFn).toHaveBeenCalledWith(expect.objectContaining({
-        type: EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER,
-        detail: expect.objectContaining({
-          item,
+      expect(callbackFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: EMITTED_EVENTS.PRODUCT_CARD_IMAGE_ROLLOVER,
+          detail: expect.objectContaining({
+            item,
+          }),
         }),
-      }))
+      ),
     );
   });
-
 
   test('Should not throw an error when calling the custom onAddToCart handler if no variations exist', () => {
     const contextOnAddToCart = jest.fn();
@@ -292,6 +327,61 @@ describe('Testing Component: ProductCard', () => {
   test('Should render renderProps argument', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={transformResultItem(testItem)}>
+          {(props) => (
+            // Custom Rendered Price
+            <div>My Rendered Price: {props.formatPrice(props.productInfo.itemPrice)}</div>
+          )}
+        </ProductCard>
+      </CioPlp>,
+    );
+
+    screen.getByText('My Rendered Price: $90.00');
+  });
+
+  test('Should render the custom html render function if provided at the CioPlp level', async () => {
+    const renderOverrides = {
+      productCard: {
+        renderHtml: ({ productInfo, item }) => {
+          const itemId = document.createElement('div');
+          itemId.textContent = productInfo.itemId;
+          itemId.classList.add('cio-item-name');
+
+          const itemDescription = document.createElement('div');
+          itemDescription.textContent = item.description;
+
+          const itemContainer = document.createElement('div');
+          itemContainer.appendChild(itemId);
+          itemContainer.appendChild(itemDescription);
+
+          return itemContainer;
+        },
+      },
+    };
+
+    render(<CioPlp apiKey={DEMO_API_KEY} renderOverrides={renderOverrides} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(mockApiSearchResponse.response.results[0].data.id));
+      expect(screen.getByText(mockApiSearchResponse.response.results[0].data.description));
+    });
+  });
+
+  test('Should prefer render props over top-level custom html render function', () => {
+    const renderOverrides = {
+      productCard: {
+        renderHtml: ({ productInfo }) => {
+          const itemName = document.createElement('div');
+          itemName.textContent = productInfo.itemName;
+          itemName.classList.add('cio-item-name');
+
+          return itemName;
+        },
+      },
+    };
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} renderOverrides={renderOverrides}>
         <ProductCard item={transformResultItem(testItem)}>
           {(props) => (
             // Custom Rendered Price

@@ -16,7 +16,7 @@ This component offers a default layout for your PLP, while also serving as a ver
 - Context Management: [Context values](./?path=/docs/components-cioplp--code-examples#arguments-passed-to-children-via-render-props) are accessible within children of CioPlp
 - Identifies the current page context and renders Search or Browse accordingly
 
-## Default render
+## Default Render
 
 Open in full screen here:
 
@@ -94,3 +94,83 @@ For a working example, visit our Code Sandbox:
 > or via useCioPlpContext() hook.
 
 <Markdown>{RenderProps}</Markdown>
+
+
+## Overriding Product Card using Vanilla JS
+
+If you're importing the library via the [bundle approach](https://github.com/Constructor-io/constructorio-ui-plp?tab=readme-ov-file#using-the-javascript-bundle) 
+and are unable to pass JSX, you may pass a custom render function at the top level instead. This function will receive the same render props as 
+listed in [Product Card](./?path=/docs/components-productcard--code-examples#arguments-passed-to-children-via-render-props), 
+and should return a `HTMLElement`.
+
+
+```html
+<div id="plp"></div>
+
+<!-- Load the bundled plp-ui -->
+<script type="module" src="https://cdn.cnstrc.com/ui/plp/1.4.7.js"></script>
+
+<script type="module">
+  // Define your custom render function
+  const renderCustomProductCard = ({ item, productInfo, onAddToCart }) => {
+    // Parent container
+    const productCardContainer = document.createElement('div');
+    const clickableElement = document.createElement('a');
+    clickableElement.href = productInfo.itemUrl;
+
+    // Images
+    const imgContainer = document.createElement('div');
+    const img = document.createElement('img');
+    imgContainer.classList.add('cio-image-container');
+    img.src = productInfo.itemImageUrl;
+    img.alt = productInfo.itemName;
+    img.classList.add('cio-image-container');
+    imgContainer.appendChild(img);
+
+    // Content Section
+    const content = document.createElement('div');
+
+    const priceContainer = document.createElement('div');
+    const price = document.createElement('div');
+    content.classList.add('cio-content');
+    priceContainer.classList.add('cio-item-prices-container');
+    price.classList.add('cio-item-price');
+    price.id = 'cio-sale-price';
+    price.textContent = String(productInfo.itemPrice);
+    priceContainer.appendChild(price);
+
+    const itemName = document.createElement('div');
+    itemName.textContent = productInfo.itemName;
+    itemName.classList.add('cio-item-name');
+
+    content.appendChild(priceContainer);
+    content.appendChild(itemName);
+
+    // CTA
+    const button = document.createElement('button');
+    button.textContent = 'Add to Cart';
+    button.type = 'button';
+    button.onclick = (e) => console.log(e);
+    button.classList.add('cio-add-to-cart-button');
+
+    clickableElement.appendChild(imgContainer);
+    clickableElement.appendChild(content);
+    productCardContainer.appendChild(clickableElement);
+    productCardContainer.appendChild(button);
+
+    return productCardContainer;
+  };
+
+  // Initialize the PLP OS UI
+  CioPlp({
+    selector: '#plp',
+    includeCSS: true, // Include the default CSS styles. Defaults to true.
+    apiKey: 'key_M57QS8SMPdLdLx4x',
+    renderOverrides: {
+      productCard: {
+        renderHtml: renderCustomProductCard,
+      },
+    },
+  });
+</script>
+```
