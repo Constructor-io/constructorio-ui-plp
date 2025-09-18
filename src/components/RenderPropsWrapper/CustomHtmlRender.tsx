@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef, isValidElement, ReactNode } from 'react';
+import React, { useRef, isValidElement, ReactNode } from 'react';
 
 interface CustomHtmlRenderProps<T> {
   renderHtml: (props: T) => HTMLElement | ReactNode;
@@ -10,18 +10,15 @@ export default function CustomHtmlRender<T>(props: T & CustomHtmlRenderProps<T>)
   const ref = useRef<HTMLDivElement>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const customElement = useMemo(() => renderHtml(otherProps as T), [otherProps]);
+  const customElement = renderHtml(otherProps as T);
 
   const isDomElement = customElement instanceof HTMLElement;
   const isReactNode = isValidElement(customElement);
 
-  useEffect(() => {
-    if (isDomElement && ref.current) {
-      ref.current.innerHTML = ''; // Clear previous content
-      ref.current.appendChild(customElement);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otherProps]);
+  if (isDomElement && ref.current) {
+    ref.current.innerHTML = ''; // Clear previous content
+    ref.current.appendChild(customElement);
+  }
 
   if (isReactNode) {
     return customElement;
