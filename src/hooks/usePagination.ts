@@ -3,10 +3,20 @@ import useRequestConfigs from './useRequestConfigs';
 
 export interface UsePaginationProps {
   /**
+   * **⚠️ Deprecation Notice ⚠️**
+   *
+   * _This field will be deprecated in v2._
+   * _If you're looking to change the number of items requested please use `staticRequestConfigs` instead._
+   *
    * Total number of results returned by the API response
    */
   totalNumResults: number;
   /**
+   * **⚠️ Deprecation Notice ⚠️**
+   *
+   * _This field will be deprecated in v2._
+   * _If you're looking to change the number of items requested please use `staticRequestConfigs` instead._
+   *
    * Number of results returned per page
    */
   resultsPerPage?: number;
