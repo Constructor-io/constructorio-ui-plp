@@ -84,7 +84,9 @@ export default function Groups(props: GroupsWithRenderProps) {
                     type='button'
                     className='cio-see-all'
                     onClick={() => setIsShowAll(!isShowAll)}>
-                    {isShowAll ? translate('Show Less', translations) : translate('Show All', translations)}
+                    {isShowAll
+                      ? translate('Show Less', translations)
+                      : translate('Show All', translations)}
                   </button>
                 )}
               </ul>
