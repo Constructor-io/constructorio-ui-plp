@@ -76,7 +76,8 @@ export default function Sort({
             {selectedSort?.displayName ? (
               <span className='cio-plp-sort-button-label'>
                 <span className='cio-large-screen-only'>{translate('Sort by:', translations)}</span>
-                <span className='cio-mobile-only'>{translate('By', translations)}</span> {selectedSort.displayName}
+                <span className='cio-mobile-only'>{translate('By', translations)}</span>{' '}
+                {selectedSort.displayName}
               </span>
             ) : (
               translate('Sort', translations)

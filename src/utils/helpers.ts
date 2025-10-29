@@ -8,6 +8,7 @@ import { Translations } from '../types';
  * @param translations - Optional user-provided translations object
  * @returns The translated string or the original word if no translation exists
  */
+// eslint-disable-next-line import/prefer-default-export
 export const translate = (word: string, translations?: Translations): string => {
   // Define default English translations
   const localTranslations: Translations = {

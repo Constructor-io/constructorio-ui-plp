@@ -40,7 +40,8 @@ export const EMITTED_EVENTS = {
  *
  *   // Zero Results
  *   "Sorry, we didn't find:": "Sorry, we didn't find:",
- *   "Sorry, we were unable to find what you were looking for.": "Sorry, we were unable to find what you were looking for.",
+ *   "Sorry, we were unable to find what you were looking for.":
+ *     "Sorry, we were unable to find what you were looking for.",
  *   "Check for typos": "Check for typos",
  *   "Use fewer keywords": "Use fewer keywords",
  *   "Broaden your search terms": "Broaden your search terms"

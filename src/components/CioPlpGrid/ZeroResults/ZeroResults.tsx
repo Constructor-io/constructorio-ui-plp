@@ -18,7 +18,7 @@ export default function ZeroResults() {
     return (
       <>
         <div className='cio-zero-results-header'>
-          {translate("Sorry, we didn't find:", translations)} "{query}"
+          {translate("Sorry, we didn't find:", translations)} &quot;{query}&quot;
         </div>
         <ul className='cio-zero-results-option-list'>
           <li>{translate('Check for typos', translations)}</li>

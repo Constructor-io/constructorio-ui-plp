@@ -2,8 +2,15 @@
   "version": "0.2",
   "language": "en",
   "allowCompoundWords": false,
-  "dictionaries": ["en_US", "html", "css"],
-  "ignorePaths": ["lib", "docs"],
+  "dictionaries": [
+    "en_US",
+    "html",
+    "css"
+  ],
+  "ignorePaths": [
+    "lib",
+    "docs"
+  ],
   "flagWords": [],
   "words": [
     "noninteractive",
@@ -21,6 +28,33 @@
     "dtype",
     "cnstrc",
     "Catchify",
-    "cvwdacoknqeauosd1"
+    "cvwdacoknqeauosd1",
+    "résultats",
+    "Filtres",
+    "Catégories",
+    "Afficher",
+    "moins",
+    "resultados",
+    "Filtros",
+    "Ordenar",
+    "Categorias",
+    "Mostrar",
+    "sentimos",
+    "encontramos",
+    "pudimos",
+    "encontrar",
+    "buscabas",
+    "Revisa",
+    "errores",
+    "tipograficos",
+    "palabras",
+    "Amplia",
+    "terminos",
+    "busqueda",
+    "clave",
+    "todo",
+    "Usa",
+    "tus",
+    "menos"
   ]
 }
