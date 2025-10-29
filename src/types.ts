@@ -58,6 +58,36 @@ export interface Formatters {
   formatPrice: (price?: number) => string;
 }
 
+/**
+ * Translations type for internationalizing UI strings.
+ * All keys are optional - any non-provided translation will fallback to English default.
+ */
+export type Translations = {
+  // Result display
+  results?: string;
+  for?: string;
+
+  // Filters
+  Filters?: string;
+
+  // Sort
+  'Sort by:'?: string;
+  By?: string;
+  Sort?: string;
+
+  // Groups/Categories
+  Categories?: string;
+  'Show All'?: string;
+  'Show Less'?: string;
+
+  // Zero Results
+  "Sorry, we didn't find:"?: string;
+  'Sorry, we were unable to find what you were looking for.'?: string;
+  'Check for typos'?: string;
+  'Use fewer keywords'?: string;
+  'Broaden your search terms'?: string;
+};
+
 export interface Callbacks {
   onAddToCart?: (event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void;
   onProductCardClick?: (event: React.MouseEvent, item: Item) => void;
@@ -213,6 +243,7 @@ export interface PlpContextValue {
   callbacks: Callbacks;
   urlHelpers: UrlHelpers;
   renderOverrides: RenderOverrides;
+  translations?: Translations;
 }
 
 export interface PrimaryColorStyles {
@@ -295,6 +326,7 @@ export interface CioPlpProviderProps {
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
   useShopifyDefaults?: boolean;
+  translations?: Translations;
 }
 
 export type UseSortReturn = {
