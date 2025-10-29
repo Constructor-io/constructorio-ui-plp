@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
 import { PlpRangeFacet } from '../../types';
+import { translate } from '../../utils/helpers';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
 export interface FilterRangeSliderProps {
   rangedFacet: PlpRangeFacet;
@@ -46,6 +48,7 @@ const COLLAPSED_TRACK_STYLE = { left: '0%', width: '100%' };
 
 export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const { rangedFacet: facet, modifyRequestRangeFilter, isCollapsed, sliderStep = 0.1 } = props;
+  const { translations } = useCioPlpContext();
   const visibleTrack = useRef<HTMLDivElement>(null);
   const [selectedTrackStyles, setSelectedTrackStyles] = useState({});
 
@@ -193,7 +196,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
         <div className='cio-filter-ranged-slider'>
           <div className='cio-slider-inputs'>
             <span className='cio-slider-input cio-slider-input-min'>
-              <span className='cio-slider-input-prefix'>from </span>
+              <span className='cio-slider-input-prefix'>{translate('from', translations)} </span>
               <input
                 required
                 type='number'
@@ -208,7 +211,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               />
             </span>
             <div className='cio-slider-input cio-slider-input-max'>
-              <span className='cio-slider-input-prefix'>to </span>
+              <span className='cio-slider-input-prefix'>{translate('to', translations)} </span>
               <input
                 required
                 type='number'

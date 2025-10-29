@@ -80,6 +80,13 @@ export type Translations = {
   'Show All'?: string;
   'Show Less'?: string;
 
+  // Range Filter
+  from?: string;
+  to?: string;
+
+  // Product Card
+  'Add to Cart'?: string;
+
   // Zero Results
   "Sorry, we didn't find:"?: string;
   'Sorry, we were unable to find what you were looking for.'?: string;

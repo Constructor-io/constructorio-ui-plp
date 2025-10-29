@@ -23,10 +23,17 @@ All translation keys are optional - any non-provided translation will fallback t
   "By": "...",
   "Sort": "...",
 
+  // Range Filter
+  "from": "...",
+  "to": "...",
+
   // Groups/Categories
   "Categories": "...",
   "Show All": "...",
   "Show Less": "...",
+
+  // Product Card
+  "Add to Cart": "...",
 
   // Zero Results
   "Sorry, we didn't find:": "...",
