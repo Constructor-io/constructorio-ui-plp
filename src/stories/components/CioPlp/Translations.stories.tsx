@@ -51,9 +51,12 @@ function TranslationsStory({ defaultUrl }: any) {
     'Sort by:': 'Ordenar por:',
     By: 'Por',
     Sort: 'Ordenar',
+    from: 'desde',
+    to: 'hasta',
     Categories: 'Categorias',
     'Show All': 'Mostrar todo',
     'Show Less': 'Mostrar menos',
+    'Add to Cart': 'Agregar al carrito',
     "Sorry, we didn't find:": 'Lo sentimos, no encontramos:',
     'Sorry, we were unable to find what you were looking for.':
       'Lo sentimos, no pudimos encontrar lo que buscabas.',
