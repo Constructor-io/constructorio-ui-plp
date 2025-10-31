@@ -2,13 +2,12 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CioPlpGrid from '../../../src/components/CioPlpGrid';
+import CioPlpGrid, { RequestStatus } from '../../../src/components/CioPlpGrid';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
 import mockApiBrowseResponse from '../../local_examples/apiBrowseResponse.json';
-import { transformBrowseResponse, transformSearchResponse } from '../../../src/utils/transformers';
-import { RequestStatus } from '../../../src/components/CioPlpGrid/reducer';
+import { transformBrowseResponse, transformSearchResponse } from '../../../src/utils';
 import useCioPlp from '../../../src/hooks/useCioPlp';
 import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 import { getAttribute } from '../../test-utils';
@@ -339,6 +338,25 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(
         container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
       ).toEqual('test-zero-results');
+    });
+  });
+
+  test('Should render data-cnstrc-zero-result attribute on zero results page', async () => {
+    useRequestConfigs.mockImplementation(() => ({
+      getRequestConfigs: () => ({ query: 'test zero results' }),
+      setRequestConfigs: jest.fn(),
+    }));
+
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      const zeroResultsContainer = container.querySelector('[data-cnstrc-zero-result]');
+      expect(zeroResultsContainer).toBeInTheDocument();
+      expect(zeroResultsContainer.getAttribute('data-cnstrc-zero-result')).toBe('true');
     });
   });
 });
