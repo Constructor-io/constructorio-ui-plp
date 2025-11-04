@@ -89,4 +89,34 @@ describe('Testing Component on the server: CioPlpGrid', () => {
     expect(html).toContain(`data-cnstrc-num-results="${mockSearchData.response.totalNumResults}"`);
     expect(html).toContain(`data-cnstrc-result-id="${mockSearchData.resultId}"`);
   });
+
+  it('Should render CioPlpGrid with hideGroups set to true on the server', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          groupsConfigs={{ hideGroups: true }}
+          initialSearchResponse={mockSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    // Groups container should not be present when hideGroups is true
+    expect(html).not.toContain('cio-groups-container');
+    expect(html).not.toContain('cio-groups-breadcrumbs');
+  });
+
+  it('Should render CioPlpGrid with hideGroups set to false on the server', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          groupsConfigs={{ hideGroups: false }}
+          initialSearchResponse={mockSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    // Groups container should be present when hideGroups is false
+    expect(html).toContain('cio-groups-container');
+    expect(html).toContain('cio-groups-breadcrumbs');
+  });
 });

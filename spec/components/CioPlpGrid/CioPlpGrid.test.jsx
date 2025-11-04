@@ -341,4 +341,38 @@ describe('Testing Component: CioPlpGrid', () => {
       ).toEqual('test-zero-results');
     });
   });
+
+  it('Should render CioPlpGrid with hideGroups set to true on the client', async () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          groupsConfigs={{ hideGroups: true }}
+          initialSearchResponse={mockApiSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    // Groups container should not be present when hideGroups is true
+    await waitFor(() => {
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Should render CioPlpGrid with hideGroups set to false on the client', async () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          groupsConfigs={{ hideGroups: false }}
+          initialSearchResponse={mockApiSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    // Groups container should be present when hideGroups is false
+    await waitFor(() => {
+      expect(container.querySelector('.cio-groups-container')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
+    });
+  });
 });

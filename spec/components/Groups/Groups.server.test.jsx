@@ -51,4 +51,38 @@ describe('Testing Component on the server: Groups', () => {
     expect(mockChildren).toHaveBeenCalled();
     expect(html).toContain('Custom Groups');
   });
+
+  it('Should not render groups when hideGroups is true', () => {
+    const groupsPropsWithHideGroups = {
+      ...groupsProps,
+      hideGroups: true,
+    };
+
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Groups {...groupsPropsWithHideGroups} />
+      </CioPlp>,
+    );
+
+    mockTransformedGroups.forEach((group) => {
+      expect(html).not.toContain(group.displayName);
+    });
+  });
+
+  it('Should render groups when hideGroups is false', () => {
+    const groupsPropsWithHideGroups = {
+      ...groupsProps,
+      hideGroups: false,
+    };
+
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Groups {...groupsPropsWithHideGroups} />
+      </CioPlp>,
+    );
+
+    mockTransformedGroups.forEach((group) => {
+      expect(html).toContain(group.displayName);
+    });
+  });
 });

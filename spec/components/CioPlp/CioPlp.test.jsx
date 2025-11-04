@@ -1,10 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import CioPlp from '../../../src/components/CioPlp';
 import { useCioPlpContext } from '../../../src/hooks/useCioPlpContext';
 import { DEMO_API_KEY } from '../../../src/constants';
 import '@testing-library/jest-dom';
 import { mockConstructorIOClient } from '../../test-utils';
+import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 
 const originalWindowLocation = window.location;
 
@@ -70,5 +71,35 @@ describe('CioPlp React Client-Side Rendering', () => {
       </CioPlp>,
     );
     expect(getByText('https://ac.cnstrc.com')).toBeInTheDocument();
+  });
+
+  it('renders CioPlp with hideGroups set to true on the client', async () => {
+    const { container } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        groupsConfigs={{ hideGroups: true }}
+        initialSearchResponse={mockSearchResponse}
+      />,
+    );
+    // Groups container should not be present when hideGroups is true
+    await waitFor(() => {
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+    });
+  });
+
+  it('renders CioPlp with hideGroups set to false on the client', async () => {
+    const { container } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        groupsConfigs={{ hideGroups: false }}
+        initialSearchResponse={mockSearchResponse}
+      />,
+    );
+    // Groups container should be present when hideGroups is false
+    await waitFor(() => {
+      expect(container.querySelector('.cio-groups-container')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
+    });
   });
 });
