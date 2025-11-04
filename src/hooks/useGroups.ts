@@ -14,7 +14,7 @@ export interface UseGroupProps
   groups: Array<PlpItemGroup>;
 
   /**
-   * Function that takes in a PlpItemGroup and returns `true` if it should be rendered as a filter option
+   * Function that takes in a PlpItemGroup and returns `true` if the group should be hidden from the final render
    * @returns boolean
    */
   isHiddenGroupFn?: (group: PlpItemGroup) => boolean;

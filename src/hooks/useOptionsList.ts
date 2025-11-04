@@ -11,7 +11,7 @@ export interface UseOptionsListProps<T> {
    */
   initialNumOptions?: number;
   /**
-   * Function that takes in an option object T and returns `true` if it should be rendered as an option
+   * Function that takes in an option object T and returns `true` if it should NOT be rendered as an option
    * @returns boolean
    */
   isHiddenOptionFn?: (option: T) => boolean;
