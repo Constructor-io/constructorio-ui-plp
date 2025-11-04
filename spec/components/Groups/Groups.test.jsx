@@ -123,6 +123,31 @@ describe('Testing Component: Groups', () => {
       expect(mockChildren).toHaveBeenCalled();
       expect(getByText('Custom Filters')).toBeInTheDocument();
     });
+
+    it('Should exclude groups excluded by isHiddenGroupFn', () => {
+      const filtersPropsWithChildren = {
+        ...groupsProps,
+        isHiddenGroupFn: (group) => ['2', '12'].includes(group.groupId),
+      };
+
+      const { getByText, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...filtersPropsWithChildren} />
+        </CioPlp>,
+      );
+      expect(queryByText('Souvenirs')).toBeNull();
+      expect(getByText('Deals')).toBeInTheDocument();
+    });
+
+    it('Should exclude groups excluded by group.data.cio_plp_hidden', () => {
+      const { getByText, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+      expect(queryByText('Hidden Group')).toBeNull();
+      expect(getByText('Deals')).toBeInTheDocument();
+    });
   });
 
   describe(' - Behavior Tests', () => {

@@ -100,3 +100,12 @@ export const Primary: Story = {
     isCollapsed: false,
   },
 };
+
+export const IsHiddenGroupFnStory: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    isCollapsed: false,
+    isHiddenGroupFn: (group) => ['2', '12'].includes(group.groupId),
+  },
+};

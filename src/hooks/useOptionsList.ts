@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export interface UseOptionsListProps<T> {
   /**
@@ -10,21 +10,32 @@ export interface UseOptionsListProps<T> {
    * The remaining options will be hidden under a "Show All" button
    */
   initialNumOptions?: number;
+  /**
+   * Function that takes in an option object T and returns `true` if it should be rendered as an option
+   * @returns boolean
+   */
+  isHiddenOptionFn?: (option: T) => boolean;
 }
 
-export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
-  const { options, initialNumOptions = 5 } = props;
+const defaultIsHiddenOptionFn = () => false;
 
+export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
+  const { options, initialNumOptions = 5, isHiddenOptionFn = defaultIsHiddenOptionFn } = props;
+
+  const filteredOptions = useMemo(
+    () => options.filter((option) => !isHiddenOptionFn(option)),
+    [isHiddenOptionFn, options],
+  );
   const [isShowAll, setIsShowAll] = useState(false);
-  const [optionsToRender, setOptionsToRender] = useState<Array<T>>(options);
+  const [optionsToRender, setOptionsToRender] = useState<Array<T>>(filteredOptions);
 
   useEffect(() => {
     if (isShowAll) {
-      setOptionsToRender(options);
+      setOptionsToRender(filteredOptions);
     } else {
-      setOptionsToRender(options.slice(0, initialNumOptions));
+      setOptionsToRender(filteredOptions.slice(0, initialNumOptions));
     }
-  }, [isShowAll, options, initialNumOptions]);
+  }, [isShowAll, filteredOptions, initialNumOptions]);
 
   return {
     // props
