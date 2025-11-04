@@ -15,6 +15,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
     sortConfigs,
     paginationConfigs,
     filterConfigs,
+    groupsConfigs,
     ...rest
   } = props;
   const defaultMarkup = (
@@ -24,6 +25,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
       sortConfigs={sortConfigs}
       paginationConfigs={paginationConfigs}
       filterConfigs={filterConfigs}
+      groupsConfigs={groupsConfigs}
     />
   );
 

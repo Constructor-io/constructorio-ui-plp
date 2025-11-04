@@ -61,6 +61,42 @@ const meta = {
         },
       },
     },
+    paginationConfigs: {
+      description:
+        'Configuration options for pagination. Used to set windowSize of pages array and can override resultsPerPage.',
+      table: {
+        type: {
+          summary: 'UsePaginationProps',
+        },
+      },
+    },
+    sortConfigs: {
+      description: 'Configuration options for sorting functionality.',
+      table: {
+        type: {
+          summary: 'UseSortProps',
+        },
+      },
+    },
+    filterConfigs: {
+      description: 'Configuration options for filters functionality.',
+      table: {
+        type: {
+          summary: 'UseFilterProps',
+        },
+      },
+    },
+    groupsConfigs: {
+      description:
+        'Configuration options for the Groups component. Controls initialNumOptions, isCollapsed, title, and hideGroups.',
+      table: {
+        type: {
+          summary: 'GroupsProps',
+        },
+        defaultValue: { summary: '{}' },
+      },
+      control: { type: 'object' },
+    },
   },
 } satisfies Meta<typeof CioPlp>;
 
@@ -91,6 +127,22 @@ function PrimaryStory({ args, defaultUrl }: any) {
   );
 }
 
+function GroupsStory({ args, defaultUrl }: any) {
+  const [currentUrl, setCurrentUrl] = useState(defaultUrl);
+
+  return (
+    <CioPlp
+      urlHelpers={{
+        setUrl: (url) => {
+          setCurrentUrl(url);
+        },
+        getUrl: () => currentUrl,
+      }}
+      {...args}
+    />
+  );
+}
+
 export const SearchPlp: Story = {
   render: (args) => <PrimaryStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
   args: {
@@ -108,4 +160,40 @@ export const BrowsePlp: Story = {
   args: {
     apiKey: DEMO_API_KEY,
   },
+};
+
+export const CustomGroupsConfig: Story = {
+  render: (args) => <GroupsStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
+  args: {
+    apiKey: DEMO_API_KEY,
+    groupsConfigs: {
+      initialNumOptions: 3,
+      title: 'Product Categories',
+      isCollapsed: false,
+    },
+  },
+  tags: ['!dev'],
+};
+
+export const CollapsedGroups: Story = {
+  render: (args) => <GroupsStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
+  args: {
+    apiKey: DEMO_API_KEY,
+    groupsConfigs: {
+      isCollapsed: true,
+      title: 'Browse Categories',
+    },
+  },
+  tags: ['!dev'],
+};
+
+export const HiddenGroups: Story = {
+  render: (args) => <GroupsStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
+  args: {
+    apiKey: DEMO_API_KEY,
+    groupsConfigs: {
+      hideGroups: true,
+    },
+  },
+  tags: ['!dev'],
 };

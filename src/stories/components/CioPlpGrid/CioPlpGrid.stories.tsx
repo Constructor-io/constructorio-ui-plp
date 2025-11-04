@@ -67,3 +67,36 @@ function ZeroResultsStory({ args }: any) {
 export const ZeroResults: Story = {
   render: (args) => <ZeroResultsStory args={args} />,
 };
+
+export const CustomGroupsConfig: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groupsConfigs: {
+      initialNumOptions: 3,
+      title: 'Product Categories',
+      isCollapsed: false,
+    },
+  },
+  tags: ['!dev'],
+};
+
+export const CollapsedGroups: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groupsConfigs: {
+      isCollapsed: true,
+      title: 'Browse Categories',
+    },
+  },
+  tags: ['!dev'],
+};
+
+export const HiddenGroups: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groupsConfigs: {
+      hideGroups: true,
+    },
+  },
+  tags: ['!dev'],
+};

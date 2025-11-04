@@ -37,6 +37,42 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 
 <br>
 
+### Configuration Options
+
+---
+
+Configuration options for customizing component behavior within CioPlp.
+
+#### `groupsConfigs`
+
+Configuration options for the Groups component behavior.
+
+| property           | type      | default       | description                                                           |
+| ------------------ | --------- | ------------- | --------------------------------------------------------------------- |
+| initialNumOptions  | `number`  | `5`           | Number of group options to show initially. Remaining options are hidden under "Show All" button |
+| isCollapsed        | `boolean` | `false`       | Whether the groups section starts collapsed                           |
+| title              | `string`  | `"Categories"` | Custom title for the groups section                                  |
+| hideGroups         | `boolean` | `false`       | Whether to hide the groups component entirely                         |
+
+#### `paginationConfigs`
+
+Configuration options for pagination functionality.
+
+| property        | type     | description                                                    |
+| --------------- | -------- | -------------------------------------------------------------- |
+| windowSize      | `number` | Number of page buttons to show in pagination                   |
+| resultsPerPage  | `number` | Override the results per page set at Provider level           |
+
+#### `sortConfigs`
+
+Configuration options for sorting functionality. No specific configurations available yet.
+
+#### `filterConfigs`
+
+Configuration options for filters functionality. No specific configurations available yet.
+
+<br>
+
 ### `UrlHelpers`
 
 ---

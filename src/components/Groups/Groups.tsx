@@ -7,12 +7,19 @@ import { IncludeRenderProps } from '../../types';
 export interface GroupsProps extends UseGroupProps {
   isCollapsed?: boolean;
   title?: string;
+  hideGroups?: boolean;
 }
 
 export type GroupsWithRenderProps = IncludeRenderProps<GroupsProps, ReturnType<typeof useGroups>>;
 
 export default function Groups(props: GroupsWithRenderProps) {
-  const { isCollapsed: isCollapsedDefault = false, title = 'Categories', children, groups } = props;
+  const {
+    isCollapsed: isCollapsedDefault = false,
+    title = 'Categories',
+    children,
+    groups,
+    hideGroups,
+  } = props;
   const useGroupsReturn = useGroups(props);
   const {
     optionsToRender,
@@ -28,12 +35,14 @@ export default function Groups(props: GroupsWithRenderProps) {
   const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
 
   if (breadcrumbs.length === 0 && optionsToRender.length === 0) return null;
+
+  if (hideGroups) return null;
   return (
     <>
       {typeof children === 'function' ? (
         children(useGroupsReturn)
       ) : (
-        <>
+        <div className='cio-groups-container'>
           <button
             className='cio-filter-header'
             type='button'
@@ -86,7 +95,7 @@ export default function Groups(props: GroupsWithRenderProps) {
               </ul>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

@@ -65,6 +65,140 @@ export default function MyComponent() {
 }
 ```
 
+## Groups Configuration (`groupsConfigs`)
+
+The CioPlpGrid component supports configuring the Groups component behavior through the `groupsConfigs` prop. This allows you to customize how product categories are displayed and interacted with.
+
+### Custom Groups Configuration
+
+Configure groups with limited initial options and custom title:
+
+<Canvas of={CioPlpGridStories.CustomGroupsConfig} />
+
+```jsx
+import { CioPlp, CioPlpGrid } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
+
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          initialNumOptions: 3,        // Show only 3 options initially
+          title: 'Product Categories', // Custom section title
+          isCollapsed: false          // Start expanded
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Collapsed Groups
+
+Start with the groups section collapsed to save space:
+
+<Canvas of={CioPlpGridStories.CollapsedGroups} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          isCollapsed: true,           // Start collapsed
+          title: 'Browse Categories'   // Custom title
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Hidden Groups
+
+Completely hide the groups section when not needed:
+
+<Canvas of={CioPlpGridStories.HiddenGroups} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          hideGroups: true  // Hide groups entirely
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### All Available groupsConfigs Options
+
+Here's a comprehensive example showing all available configuration options:
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          // Number of group options to show initially (default: 5)
+          // Remaining options are hidden under "Show All" button
+          initialNumOptions: 4,
+
+          // Whether the groups section starts collapsed (default: false)
+          isCollapsed: false,
+
+          // Custom title for the groups section (default: "Categories")
+          title: 'Shop by Category',
+
+          // Whether to hide the groups component entirely (default: false)
+          hideGroups: false
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Responsive Groups Configuration
+
+You can also conditionally configure groups based on screen size or other factors:
+
+```jsx
+import { useState, useEffect } from 'react';
+
+export default function MyComponent() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          // Show fewer options on mobile
+          initialNumOptions: isMobile ? 2 : 5,
+          // Start collapsed on mobile to save space
+          isCollapsed: isMobile,
+          title: 'Categories'
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
 
 If you prefer to handle the rendering of the CioPlpGrid component, you may pass a Render Props function to the component.

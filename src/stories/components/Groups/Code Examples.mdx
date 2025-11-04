@@ -46,6 +46,137 @@ export default function MyComponent() {
 }
 ```
 
+## Configuration Options (`groupsConfigs`)
+
+The Groups component supports various configuration options that can be passed via `groupsConfigs` prop to customize its behavior.
+
+### Limited Initial Options
+
+Show only a specific number of group options initially, with remaining options hidden under a "Show All" button:
+
+<Canvas of={GroupsStories.LimitedOptions} />
+
+```jsx
+import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid 
+        groupsConfigs={{
+          initialNumOptions: 2  // Show only 2 options initially
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Collapsed by Default
+
+Start with the groups section collapsed:
+
+<Canvas of={GroupsStories.CollapsedByDefault} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          isCollapsed: true  // Start collapsed
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Custom Title
+
+Customize the title of the groups section:
+
+<Canvas of={GroupsStories.CustomTitle} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          title: 'Product Categories'  // Custom title
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Hidden Groups
+
+Completely hide the groups component:
+
+<Canvas of={GroupsStories.HiddenGroups} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          hideGroups: true  // Hide groups entirely
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Combined Configuration
+
+Use multiple configuration options together:
+
+<Canvas of={GroupsStories.CombinedConfigs} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          initialNumOptions: 2,
+          title: 'Browse by Category',
+          isCollapsed: false
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
+### Direct Groups Component Configuration
+
+You can also pass these configurations directly to the Groups component:
+
+```jsx
+import { Groups } from '@constructor-io/constructorio-ui-plp';
+
+export default function MyCustomComponent({ groups }) {
+  return (
+    <Groups
+      groups={groups}
+      initialNumOptions={3}
+      title="Product Categories"
+      isCollapsed={false}
+      hideGroups={false}
+    />
+  );
+}
+```
+
 ## Render Props pattern
 
 To override the default rendering of the Groups component, you may pass a Render Props function to the component.
