@@ -36,7 +36,9 @@ export function getShopifyDefaults(): {
       },
       onProductCardClick(_event: React.MouseEvent, item: Item) {
         if (typeof window !== 'undefined') {
-          window.location.href = `/products/${item.itemId}`;
+          const url = new URL(`/products/${item.itemId}`, window.location.origin);
+
+          window.location.href = url.href;
         }
       },
     },
