@@ -4,11 +4,14 @@ import type { Item, Variation } from '../../src/types';
 describe('shopifyDefaults', () => {
   const originalWindowLocation = window.location;
   const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
-  const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
+    const freshMockLocation = new URL(mockUrl);
+
     Object.defineProperty(window, 'location', {
-      value: mockLocation,
+      value: freshMockLocation,
+      writable: true,
+      configurable: true,
     });
   });
 
@@ -171,6 +174,25 @@ describe('shopifyDefaults', () => {
       defaults.callbacks.onProductCardClick?.(mockEvent, mockItem);
 
       expect(window.location.href).toBe('https://example.com/products/test-product-123');
+    });
+
+    it('should replace existing path when navigating to product', () => {
+      const defaults = getShopifyDefaults();
+      const mockItem = {
+        itemId: 'product-456',
+        itemName: 'Another Product',
+        data: {},
+      } as Item;
+      const mockEvent = {} as React.MouseEvent;
+
+      const currentPath = window.location.pathname;
+
+      expect(currentPath).toBe('/a/random/path');
+
+      defaults.callbacks.onProductCardClick?.(mockEvent, mockItem);
+
+      expect(window.location.href).toBe('https://example.com/products/product-456');
+      expect(window.location.pathname).toBe('/products/product-456');
     });
   });
 });
