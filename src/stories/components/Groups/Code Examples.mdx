@@ -50,7 +50,7 @@ export default function MyComponent() {
 ## Hide Specific Groups 
 > 📦 v1.6.1 is required for this feature
 
-To hide specific groups, you can pass [groupOptions.isHiddenGroupFn](./?path=/docs/components-groups--props) prop at the top CioPlp-level.
+To hide specific groups, you can pass [groupConfigs.isHiddenGroupFn](./?path=/docs/components-groups--props) prop at the top CioPlp-level.
 
 
 ```jsx
@@ -60,13 +60,7 @@ import '@constructor-io/constructorio-ui-plp/styles.css';
 const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 const groupConfigs = {
-  isHiddenGroupFn: (group) => { 
-    if (group.data.cio_plp_hidden === true) { // Customize this conditional!
-      return true;
-    }
-    
-    return false;
-  }
+  isHiddenGroupFn: (group) => !!group.data.cio_plp_hidden;
 }
 
 export default function MyComponent() {

@@ -48,7 +48,7 @@ export default function useGroups(props: UseGroupProps) {
     (group: PlpItemGroup) =>
       (typeof isHiddenGroupFn === 'function' && isHiddenGroupFn(group)) ||
       (typeof getIsHiddenGroupField === 'function' && getIsHiddenGroupField(group)) ||
-      false,
+      false, // Ensure that isHiddenOptionFn never returns undefined
     [isHiddenGroupFn, getIsHiddenGroupField],
   );
 
