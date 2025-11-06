@@ -54,68 +54,7 @@ The CioPlp component supports various configuration options to customize the beh
 
 ### Groups Configuration (`groupsConfigs`)
 
-Configure how product categories/groups are displayed and behave:
-
-<Canvas of={CioPlpStories.CustomGroupsConfig} />
-
-```jsx
-import { CioPlp } from "@constructor-io/constructorio-ui-plp";
-import "@constructor-io/constructorio-ui-plp/styles.css";
-
-const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
-
-export default function MyComponent() {
-  return (
-    <CioPlp
-      apiKey={DEMO_API_KEY}
-      groupsConfigs={{
-        initialNumOptions: 3,        // Show only 3 options initially
-        title: 'Product Categories', // Custom section title
-        isCollapsed: false          // Start expanded
-      }}
-    />
-  );
-}
-```
-
-### Collapsed Groups
-
-Start with groups section collapsed to save space:
-
-<Canvas of={CioPlpStories.CollapsedGroups} />
-
-```jsx
-export default function MyComponent() {
-  return (
-    <CioPlp
-      apiKey={DEMO_API_KEY}
-      groupsConfigs={{
-        isCollapsed: true,           // Start collapsed
-        title: 'Browse Categories'   // Custom title
-      }}
-    />
-  );
-}
-```
-
-### Hidden Groups
-
-Completely hide the groups section:
-
-<Canvas of={CioPlpStories.HiddenGroups} />
-
-```jsx
-export default function MyComponent() {
-  return (
-    <CioPlp
-      apiKey={DEMO_API_KEY}
-      groupsConfigs={{
-        hideGroups: true  // Hide groups entirely
-      }}
-    />
-  );
-}
-```
+Configure how product categories/groups are displayed and behave. For detailed examples and interactive demos, see the <a href='./?path=/docs/components-groups--code-examples'>Groups component documentation</a>.
 
 ### All Configuration Options
 

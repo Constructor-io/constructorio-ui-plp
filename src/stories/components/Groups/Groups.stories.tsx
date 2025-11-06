@@ -16,33 +16,14 @@ const meta = {
   },
   argTypes: {
     initialNumOptions: {
-      control: { type: 'number', min: 1, max: 20 },
       table: {
-        defaultValue: { summary: '5' },
+        defaultValue: { summary: 10 },
       },
-      description:
-        'Number of group options to show initially. Remaining options are hidden under "Show All" button.',
     },
     isCollapsed: {
-      control: { type: 'boolean' },
       table: {
-        defaultValue: { summary: 'false' },
+        defaultValue: { summary: false },
       },
-      description: 'Whether the groups section starts collapsed.',
-    },
-    title: {
-      control: { type: 'text' },
-      table: {
-        defaultValue: { summary: '"Categories"' },
-      },
-      description: 'Custom title for the groups section.',
-    },
-    hideGroups: {
-      control: { type: 'boolean' },
-      table: {
-        defaultValue: { summary: 'false' },
-      },
-      description: 'Whether to hide the groups component entirely.',
     },
   },
 } satisfies Meta<typeof Groups>;
@@ -151,17 +132,6 @@ export const HiddenGroups: Story = {
   args: {
     groups: mockTransformedGroups as Array<PlpItemGroup>,
     hideGroups: true,
-  },
-  tags: ['!dev'],
-};
-
-export const CombinedConfigs: Story = {
-  render: (args) => <PrimaryStory args={args} />,
-  args: {
-    groups: mockTransformedGroups as Array<PlpItemGroup>,
-    initialNumOptions: 2,
-    title: 'Browse by Category',
-    isCollapsed: false,
   },
   tags: ['!dev'],
 };

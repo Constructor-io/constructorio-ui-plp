@@ -4,9 +4,24 @@ import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import FilterOptionListRow from '../Filters/FilterOptionListRow';
 import { IncludeRenderProps } from '../../types';
 
+/**
+ * Props for the Groups component
+ */
 export interface GroupsProps extends UseGroupProps {
+  /**
+   * Initial collapsed state of the groups filter panel
+   * @default false
+   */
   isCollapsed?: boolean;
+  /**
+   * Title displayed in the groups filter header
+   * @default Categories
+   */
   title?: string;
+  /**
+   * Whether to hide the entire groups component
+   * @default false
+   */
   hideGroups?: boolean;
 }
 
