@@ -18,6 +18,7 @@ export default function useCioPlpProvider(
     renderOverrides = {},
     cioClient: customCioClient,
     cioClientOptions: customCioClientOptions = {},
+    translations,
   } = props;
 
   const [cioClientOptions, setCioClientOptions] = useState(customCioClientOptions);
@@ -34,6 +35,7 @@ export default function useCioPlpProvider(
       callbacks: { ...callbacks },
       urlHelpers: { ...defaultUrlHelpers, ...urlHelpers },
       renderOverrides: { ...renderOverrides },
+      translations,
     }),
     [
       cioClient,
@@ -44,6 +46,7 @@ export default function useCioPlpProvider(
       urlHelpers,
       renderOverrides,
       staticRequestConfigs,
+      translations,
     ],
   );
 

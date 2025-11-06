@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import FilterOptionListRow from '../Filters/FilterOptionListRow';
 import { IncludeRenderProps } from '../../types';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { translate } from '../../utils/helpers';
 
 export interface GroupsProps extends UseGroupProps {
   isCollapsed?: boolean;
@@ -12,7 +14,9 @@ export interface GroupsProps extends UseGroupProps {
 export type GroupsWithRenderProps = IncludeRenderProps<GroupsProps, ReturnType<typeof useGroups>>;
 
 export default function Groups(props: GroupsWithRenderProps) {
-  const { isCollapsed: isCollapsedDefault = false, title = 'Categories', children, groups } = props;
+  const { isCollapsed: isCollapsedDefault = false, title, children, groups } = props;
+  const { translations } = useCioPlpContext();
+  const translatedTitle = title || translate('Categories', translations);
   const useGroupsReturn = useGroups(props);
   const {
     optionsToRender,
@@ -38,7 +42,7 @@ export default function Groups(props: GroupsWithRenderProps) {
             className='cio-filter-header'
             type='button'
             onClick={() => setIsCollapsed(!isCollapsed)}>
-            {title}
+            {translatedTitle}
             <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
           </button>
           <div
@@ -80,7 +84,9 @@ export default function Groups(props: GroupsWithRenderProps) {
                     type='button'
                     className='cio-see-all'
                     onClick={() => setIsShowAll(!isShowAll)}>
-                    {isShowAll ? 'Show Less' : 'Show All'}
+                    {isShowAll
+                      ? translate('Show Less', translations)
+                      : translate('Show All', translations)}
                   </button>
                 )}
               </ul>

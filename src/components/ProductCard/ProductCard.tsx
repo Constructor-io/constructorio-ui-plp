@@ -4,6 +4,7 @@ import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
 import { concatStyles, getProductCardCnstrcDataAttributes } from '../../utils';
+import { translate } from '../../utils/helpers';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { ProductCardProps } from '../../types';
 import { EMITTED_EVENTS } from '../../constants';
@@ -40,6 +41,7 @@ export default function ProductCard(props: ProductCardProps) {
   const onAddToCart = useOnAddToCart(client, state.callbacks.onAddToCart);
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
+  const { translations } = state;
 
   const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
 
@@ -134,7 +136,7 @@ export default function ProductCard(props: ProductCardProps) {
           onClick={(e) =>
             onAddToCart(e, item, itemPrice, productSwatch?.selectedVariation?.variationId)
           }>
-          Add to Cart
+          {translate('Add to Cart', translations)}
         </button>
       </a>
     </RenderPropsWrapper>
