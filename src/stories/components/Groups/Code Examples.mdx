@@ -15,6 +15,7 @@ A separate filter component that allows you to filter down by groups.
 
 - Automatically updates and displays selected filters based on user requests
 - Displays the current selected group hierarchy, and allows for backward navigation
+- Automatically hides groups that are ingested with `data.cio_plp_hidden = true` (📦 v1.6.1 required)  
 
 <Canvas of={GroupsStories.Primary} />
 
@@ -42,6 +43,29 @@ export default function MyComponent() {
         }}
       </CioPlpGrid>
     </CioPlp>
+  );
+}
+```
+
+## Hide Specific Groups 
+> 📦 v1.6.1 is required for this feature
+
+To hide specific groups, you can pass [groupConfigs.isHiddenGroupFn](./?path=/docs/components-groups--props) prop at the top CioPlp-level.
+
+
+```jsx
+import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+const groupConfigs = {
+  isHiddenGroupFn: (group) => !!group.data.cio_plp_hidden;
+}
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY} groupConfigs={groupConfigs} />
   );
 }
 ```
