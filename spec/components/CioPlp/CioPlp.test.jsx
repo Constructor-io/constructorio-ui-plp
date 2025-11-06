@@ -71,4 +71,75 @@ describe('CioPlp React Client-Side Rendering', () => {
     );
     expect(getByText('https://ac.cnstrc.com')).toBeInTheDocument();
   });
+
+  describe('Shopify Defaults', () => {
+    it('should pass useShopifyDefaults prop through to provider', () => {
+      function ContextConsumer() {
+        const context = useCioPlpContext();
+
+        // Verify Shopify callbacks and urlHelpers are set
+        const hasShopifyCallbacks =
+          typeof context.callbacks.onAddToCart === 'function' &&
+          typeof context.callbacks.onProductCardClick === 'function';
+        const hasShopifyUrlHelpers = typeof context.urlHelpers.setUrl === 'function';
+
+        return (
+          <div>{hasShopifyCallbacks && hasShopifyUrlHelpers ? 'has-shopify' : 'no-shopify'}</div>
+        );
+      }
+
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY} useShopifyDefaults>
+          <ContextConsumer />
+        </CioPlp>,
+      );
+
+      expect(getByText('has-shopify')).toBeInTheDocument();
+    });
+
+    it('should not apply Shopify defaults when prop is false', () => {
+      function ContextConsumer() {
+        const context = useCioPlpContext();
+        const hasCallbacks = Object.keys(context.callbacks).length > 0;
+
+        return <div>{hasCallbacks ? 'has-callbacks' : 'no-callbacks'}</div>;
+      }
+
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY} useShopifyDefaults={false}>
+          <ContextConsumer />
+        </CioPlp>,
+      );
+
+      expect(getByText('no-callbacks')).toBeInTheDocument();
+    });
+
+    it('should allow custom callbacks to override Shopify defaults', () => {
+      const customCallback = jest.fn();
+
+      function ContextConsumer() {
+        const context = useCioPlpContext();
+
+        // Verify the custom callback is set (not the Shopify default)
+        return (
+          <div>
+            {context.callbacks.onAddToCart === customCallback
+              ? 'custom-callback'
+              : 'default-callback'}
+          </div>
+        );
+      }
+
+      const { getByText } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          useShopifyDefaults
+          callbacks={{ onAddToCart: customCallback }}>
+          <ContextConsumer />
+        </CioPlp>,
+      );
+
+      expect(getByText('custom-callback')).toBeInTheDocument();
+    });
+  });
 });

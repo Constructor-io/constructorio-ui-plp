@@ -61,6 +61,18 @@ const meta = {
         },
       },
     },
+    useShopifyDefaults: {
+      description:
+        'When enabled, applies Shopify default configurations for callbacks and URL helpers. This includes onAddToCart (adds to Shopify cart), onProductCardClick (navigates to product page), and setUrl (handles Shopify collection URLs).',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
   },
 } satisfies Meta<typeof CioPlp>;
 
