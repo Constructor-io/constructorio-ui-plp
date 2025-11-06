@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useFilter from './useFilter';
 import { PlpItemGroup } from '../types';
@@ -6,26 +6,34 @@ import useRequestConfigs from './useRequestConfigs';
 import useOptionsList, { UseOptionsListProps } from './useOptionsList';
 import useCioBreadcrumb, { Breadcrumb } from './useCioBreadcrumb';
 
-export interface UseGroupProps extends Omit<UseOptionsListProps<PlpItemGroup>, 'options'> {
+export interface UseGroupProps
+  extends Omit<UseOptionsListProps<PlpItemGroup>, 'options' | 'isHiddenOptionFn'> {
   /**
    * Used to build and render the groups filter dynamically
    */
   groups: Array<PlpItemGroup>;
+
+  /**
+   * Function that takes in a PlpItemGroup and returns `true` if the group should be hidden from the final render
+   * @returns boolean
+   */
+  isHiddenGroupFn?: (group: PlpItemGroup) => boolean;
 }
 
 export default function useGroups(props: UseGroupProps) {
-  const { groups, initialNumOptions: numOptionsProps } = props;
+  const { groups, initialNumOptions: numOptionsProps, isHiddenGroupFn } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
     throw new Error('useGroups must be used within a component that is a child of <CioPlp />');
   }
 
+  const { getIsHiddenGroupField } = contextValue.itemFieldGetters;
   const { setFilter } = useFilter({ facets: [] });
   const { getRequestConfigs } = useRequestConfigs();
   const requestConfigs = getRequestConfigs();
-  let groupOptions = groups;
 
+  let groupOptions = groups;
   let currentGroupId = requestConfigs.filters?.groupId?.toString() || null;
   if (currentGroupId || groups.length === 1) {
     currentGroupId = groups[0].groupId;
@@ -36,12 +44,21 @@ export default function useGroups(props: UseGroupProps) {
     setFilter('group_id', groupId);
   };
 
+  const isHiddenOptionFn = useCallback(
+    (group: PlpItemGroup) =>
+      (typeof isHiddenGroupFn === 'function' && isHiddenGroupFn(group)) ||
+      (typeof getIsHiddenGroupField === 'function' && getIsHiddenGroupField(group)) ||
+      false, // Ensure that isHiddenOptionFn never returns undefined
+    [isHiddenGroupFn, getIsHiddenGroupField],
+  );
+
   const { breadcrumbs, currentPage } =
     useCioBreadcrumb({ groups, filterValue: currentGroupId || 'all' }) || [];
   const { initialNumOptions, isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } =
     useOptionsList({
       options: groupOptions,
       initialNumOptions: numOptionsProps,
+      isHiddenOptionFn,
     });
 
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();

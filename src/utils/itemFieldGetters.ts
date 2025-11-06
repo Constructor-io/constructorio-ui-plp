@@ -1,4 +1,4 @@
-import { ItemFieldGetters, Item, SwatchItem, Variation } from '../types';
+import { ItemFieldGetters, Item, SwatchItem, Variation, PlpItemGroup } from '../types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getPrice(item: Item | Variation): number {
@@ -43,4 +43,8 @@ export function getSwatches(
 
 export function getSwatchPreview(variation: Variation): string {
   return variation?.data?.swatchPreview;
+}
+
+export function getIsHiddenGroupField(group: PlpItemGroup) {
+  return group?.data?.cio_plp_hidden;
 }

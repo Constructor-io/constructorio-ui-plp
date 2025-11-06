@@ -41,6 +41,7 @@ export type UseCioPlpProps = UseSearchResultsProps &
      * - `isCollapsed`: Whether the groups section starts collapsed (default: false).
      * - `title`: Custom title for the groups section (default: "Categories").
      * - `hideGroups`: Whether to hide the groups component entirely (default: false).
+     * - `isHiddenGroupFn`: Function to determine if a group should be hidden (default: undefined).
      */
     groupsConfigs?: Omit<GroupsProps, 'groups'>;
   };

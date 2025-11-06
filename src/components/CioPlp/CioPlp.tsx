@@ -18,6 +18,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
     groupsConfigs,
     ...rest
   } = props;
+
   const defaultMarkup = (
     <CioPlpGrid
       initialSearchResponse={initialSearchResponse}

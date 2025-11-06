@@ -135,3 +135,12 @@ export const HiddenGroups: Story = {
   },
   tags: ['!dev'],
 };
+
+export const IsHiddenGroupFnStory: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    isCollapsed: false,
+    isHiddenGroupFn: (group) => ['2', '12'].includes(group.groupId),
+  },
+};
