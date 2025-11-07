@@ -101,6 +101,41 @@ export const Primary: Story = {
   },
 };
 
+export const LimitedOptions: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    initialNumOptions: 2,
+    isCollapsed: false,
+  },
+};
+
+export const CollapsedByDefault: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    isCollapsed: true,
+  },
+};
+
+export const CustomTitle: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    title: 'Product Categories',
+    isCollapsed: false,
+  },
+};
+
+export const HiddenGroups: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    groups: mockTransformedGroups as Array<PlpItemGroup>,
+    hideGroups: true,
+  },
+  tags: ['!dev'],
+};
+
 export const IsHiddenGroupFnStory: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {

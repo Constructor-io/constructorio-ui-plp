@@ -124,6 +124,43 @@ describe('Testing Component: Groups', () => {
       expect(getByText('Custom Filters')).toBeInTheDocument();
     });
 
+    it('Should not render groups when hideGroups is true', async () => {
+      const groupsPropsWithHideGroups = {
+        ...groupsProps,
+        hideGroups: true,
+      };
+
+      const { container, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsPropsWithHideGroups} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        mockTransformedGroups.forEach((group) => {
+          expect(queryByText(group.displayName)).not.toBeInTheDocument();
+        });
+        expect(container.querySelector('.cio-groups')).not.toBeInTheDocument();
+      });
+    });
+
+    it('Should render groups when hideGroups is false', async () => {
+      const groupsPropsWithHideGroups = {
+        ...groupsProps,
+        hideGroups: false,
+      };
+
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsPropsWithHideGroups} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText(mockTransformedGroups[0].displayName)).toBeInTheDocument();
+      });
+    });
+
     it('Should exclude groups excluded by isHiddenGroupFn', () => {
       const filtersPropsWithChildren = {
         ...groupsProps,

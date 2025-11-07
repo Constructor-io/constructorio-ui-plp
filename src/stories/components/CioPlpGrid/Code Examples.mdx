@@ -65,6 +65,41 @@ export default function MyComponent() {
 }
 ```
 
+## Groups Configuration (`groupsConfigs`)
+
+The CioPlpGrid component supports configuring the Groups component behavior through the `groupsConfigs` prop. This allows you to customize how product categories are displayed and interacted with.
+
+For detailed examples and interactive demos of Groups configuration options, see the <a href='./?path=/docs/components-groups--code-examples'>Groups component documentation</a>.
+
+### Available groupsConfigs Options
+
+Here's a comprehensive example showing all available configuration options:
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        groupsConfigs={{
+          // Number of group options to show initially (default: 5)
+          // Remaining options are hidden under "Show All" button
+          initialNumOptions: 4,
+
+          // Whether the groups section starts collapsed (default: false)
+          isCollapsed: false,
+
+          // Custom title for the groups section (default: "Categories")
+          title: 'Shop by Category',
+
+          // Whether to hide the groups component entirely (default: false)
+          hideGroups: false
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
 
 If you prefer to handle the rendering of the CioPlpGrid component, you may pass a Render Props function to the component.

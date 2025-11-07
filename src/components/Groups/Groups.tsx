@@ -4,15 +4,37 @@ import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import FilterOptionListRow from '../Filters/FilterOptionListRow';
 import { IncludeRenderProps } from '../../types';
 
+/**
+ * Props for the Groups component
+ */
 export interface GroupsProps extends UseGroupProps {
+  /**
+   * Initial collapsed state of the groups filter panel
+   * @default false
+   */
   isCollapsed?: boolean;
+  /**
+   * Title displayed in the groups filter header
+   * @default Categories
+   */
   title?: string;
+  /**
+   * Whether to hide the entire groups component
+   * @default false
+   */
+  hideGroups?: boolean;
 }
 
 export type GroupsWithRenderProps = IncludeRenderProps<GroupsProps, ReturnType<typeof useGroups>>;
 
 export default function Groups(props: GroupsWithRenderProps) {
-  const { isCollapsed: isCollapsedDefault = false, title = 'Categories', children, groups } = props;
+  const {
+    isCollapsed: isCollapsedDefault = false,
+    title = 'Categories',
+    children,
+    groups,
+    hideGroups,
+  } = props;
   const useGroupsReturn = useGroups(props);
   const {
     optionsToRender,
@@ -28,12 +50,14 @@ export default function Groups(props: GroupsWithRenderProps) {
   const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
 
   if (breadcrumbs.length === 0 && optionsToRender.length === 0) return null;
+
+  if (hideGroups) return null;
   return (
     <>
       {typeof children === 'function' ? (
         children(useGroupsReturn)
       ) : (
-        <>
+        <div className='cio-groups-container'>
           <button
             className='cio-filter-header'
             type='button'
@@ -86,7 +110,7 @@ export default function Groups(props: GroupsWithRenderProps) {
               </ul>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
