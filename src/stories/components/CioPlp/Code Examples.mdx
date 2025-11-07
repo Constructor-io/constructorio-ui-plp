@@ -68,12 +68,12 @@ export default function MyComponent() {
         initialNumOptions: 4,        // Number of options to show initially
         isCollapsed: false,          // Whether groups start collapsed
         title: 'Shop by Category',   // Custom title
-        hideGroups: false           // Whether to hide groups entirely
+        hideGroups: false,           // Whether to hide groups entirely
+        isHiddenGroupFn: (group) => false, // Function that returns true if a particular group should not be rendered
       }}
       // Pagination configuration
       paginationConfigs={{
         windowSize: 5,              // Number of page buttons to show
-        resultsPerPage: 24          // Override results per page
       }}
       // Sort and filter configs (no specific options yet)
       sortConfigs={{}}
