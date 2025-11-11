@@ -26,7 +26,6 @@ export function getProductCardCnstrcDataAttributes(productInfo: ProductInfoObjec
   }
 
   // Only include price if it exists and there's a CTA button
-  // (The presence of itemPrice in productInfo indicates a CTA is available)
   if (itemPrice !== undefined && itemPrice !== null) {
     dataCnstrc['data-cnstrc-item-price'] = itemPrice;
   }

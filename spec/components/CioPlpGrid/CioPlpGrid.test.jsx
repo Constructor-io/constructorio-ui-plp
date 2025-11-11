@@ -338,25 +338,12 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(
         container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
       ).toEqual('test-zero-results');
-    });
-  });
-
-  test('Should render data-cnstrc-zero-result attribute on zero results page', async () => {
-    useRequestConfigs.mockImplementation(() => ({
-      getRequestConfigs: () => ({ query: 'test zero results' }),
-      setRequestConfigs: jest.fn(),
-    }));
-
-    const { container } = render(
-      <CioPlp apiKey={DEMO_API_KEY}>
-        <CioPlpGrid />
-      </CioPlp>,
-    );
-
-    await waitFor(() => {
-      const zeroResultsContainer = container.querySelector('[data-cnstrc-zero-result]');
-      expect(zeroResultsContainer).toBeInTheDocument();
-      expect(zeroResultsContainer.getAttribute('data-cnstrc-zero-result')).toBe('true');
+      expect(container.querySelector('[data-cnstrc-zero-result]')).toBeInTheDocument();
+      expect(
+        container
+          .querySelector('[data-cnstrc-zero-result]')
+          .getAttribute('data-cnstrc-zero-result'),
+      ).toBe('true');
     });
   });
 });

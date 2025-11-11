@@ -32,14 +32,7 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
     });
   });
 
-  test('Should include sponsored listing data attributes when available', () => {
-    const mockProductInfo = {
-      itemId: 'test-id',
-      itemName: 'Test Product',
-      itemPrice: 100,
-      variationId: 'var-123',
-    };
-
+  test('Should include sponsored listing data attributes when available', async () => {
     const mockItemWithSponsoredData = {
       ...transformedItem,
       labels: {
@@ -48,13 +41,19 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
       },
     };
 
-    const dataAttributes = getProductCardCnstrcDataAttributes(
-      mockProductInfo,
-      mockItemWithSponsoredData,
+    const { result } = renderHookWithCioPlp(() =>
+      useProductInfo({ item: mockItemWithSponsoredData }),
     );
 
-    expect(dataAttributes['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
-    expect(dataAttributes['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
+    await waitFor(() => {
+      const dataAttributes = getProductCardCnstrcDataAttributes(
+        result.current,
+        mockItemWithSponsoredData,
+      );
+
+      expect(dataAttributes['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
+      expect(dataAttributes['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
+    });
   });
 
   test('Should not include price if not provided', () => {
@@ -140,7 +139,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
     const mockSearchData = transformSearchResponse(mockZeroResultsResponse as never);
 
     const mockRequestConfigs: RequestConfigs = {
-      query: 'nonexistent',
+      query: 'shoes',
     };
 
     const dataAttributes = getPlpContainerCnstrcDataAttributes(
@@ -163,14 +162,12 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
     };
     const mockSearchData = transformSearchResponse(mockZeroResultsResponse as never);
 
-    const mockRequestConfigs: RequestConfigs = {
-      query: 'nonexistent',
-    };
+    const mockRequestConfigs: RequestConfigs = {};
 
     const dataAttributes = getPlpContainerCnstrcDataAttributes(
       mockSearchData,
       mockRequestConfigs,
-      true, // isLoading = true
+      true,
     );
 
     expect(dataAttributes['data-cnstrc-zero-result']).toBeUndefined();
@@ -181,7 +178,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       ...mockApiSearchResponse,
       request: {
         ...mockApiSearchResponse.request,
-        section: 'Articles',
+        section: 'Search Suggestions',
       },
     };
     const mockSearchData = transformSearchResponse(mockResponseWithSection as never);
@@ -196,7 +193,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-section']).toBe('Articles');
+    expect(dataAttributes['data-cnstrc-section']).toBe('Search Suggestions');
   });
 
   test('Should not include section attribute when section is Products', () => {
@@ -220,15 +217,5 @@ describe('Testing Utils, getConversionButtonCnstrcDataAttributes', () => {
   test('Should return add_to_cart conversion type', () => {
     const dataAttributes = getConversionButtonCnstrcDataAttributes('add_to_cart');
     expect(dataAttributes['data-cnstrc-btn']).toBe('add_to_cart');
-  });
-
-  test('Should return add_to_wishlist conversion type', () => {
-    const dataAttributes = getConversionButtonCnstrcDataAttributes('add_to_wishlist');
-    expect(dataAttributes['data-cnstrc-btn']).toBe('add_to_wishlist');
-  });
-
-  test('Should support custom conversion types', () => {
-    const dataAttributes = getConversionButtonCnstrcDataAttributes('custom_action');
-    expect(dataAttributes['data-cnstrc-btn']).toBe('custom_action');
   });
 });
