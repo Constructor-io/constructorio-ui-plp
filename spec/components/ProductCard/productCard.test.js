@@ -415,4 +415,52 @@ describe('Testing Component: ProductCard', () => {
 
     expect(screen.queryByTestId('cio-sale-price')).toBeNull();
   });
+
+  test('Should render data-cnstrc attributes on ProductCard', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute('data-cnstrc-item-id')).toBe(item.itemId);
+    expect(productCard.getAttribute('data-cnstrc-item-name')).toBe(item.itemName);
+    expect(productCard.getAttribute('data-cnstrc-item-price')).toBeTruthy();
+    expect(productCard.getAttribute('data-cnstrc-item-variation-id')).toBeTruthy();
+  });
+
+  test('Should render data-cnstrc-btn attribute on Add to Cart button', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const addToCartButton = screen.getByText('Add to Cart');
+    expect(addToCartButton.getAttribute('data-cnstrc-btn')).toBe('add_to_cart');
+  });
+
+  test('Should include sponsored listing data attributes when present', () => {
+    const itemWithSponsoredData = {
+      ...testItem,
+      labels: {
+        sl_campaign_id: 'test-campaign-123',
+        sl_campaign_owner: 'test-owner-456',
+      },
+    };
+    const item = transformResultItem(itemWithSponsoredData);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute('data-cnstrc-sl-campaign-id')).toBe('test-campaign-123');
+    expect(productCard.getAttribute('data-cnstrc-sl-campaign-owner')).toBe('test-owner-456');
+  });
 });
