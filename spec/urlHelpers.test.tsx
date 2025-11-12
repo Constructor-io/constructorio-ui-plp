@@ -163,6 +163,13 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
     expect(filterName).toBeUndefined();
     expect(filterValue).toBeUndefined();
   });
+
+  test('getStateFromUrl should extract collection_id and value from URL path', () => {
+    const mockUrl = 'https://example.com/collection_id/sale';
+    const { filterName, filterValue } = getStateFromUrl(mockUrl);
+    expect(filterName).toBe('collection_id');
+    expect(filterValue).toBe('sale');
+  });
 });
 
 describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
