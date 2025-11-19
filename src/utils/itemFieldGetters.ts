@@ -48,3 +48,7 @@ export function getSwatchPreview(variation: Variation): string {
 export function getIsHiddenGroupField(group: PlpItemGroup) {
   return group?.data?.cio_plp_hidden;
 }
+
+export function getItemUrl(item: Item): string | undefined {
+  return item?.url;
+}
