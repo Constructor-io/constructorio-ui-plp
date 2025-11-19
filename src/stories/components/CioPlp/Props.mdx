@@ -8,7 +8,6 @@ import Groups from '../../../components/Groups';
 
 <ArgTypes />
 
-
 ## Formatters
 
 Formatters will be used to modify how certain fields are rendered.
@@ -21,20 +20,26 @@ Formatters will be used to modify how certain fields are rendered.
 
 Callbacks will be composed with the library's internal tracking calls for a given event.
 
-| Property           | Type                                                                            | Description                            |
-| ------------------ | ------------------------------------------------------------------------------- | -------------------------------------- |
+| Property           | Type                                                                           | Description                            |
+| ------------------ | ------------------------------------------------------------------------------ | -------------------------------------- |
 | onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void` | Product add to cart callback function  |
-| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                 | Product click callback function        |
-| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                      | Product swatch click callback function |
-| onRedirect         | `(url: string) => void`                                                         | Redirect callback function             |
+| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                | Product click callback function        |
+| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                     | Product swatch click callback function |
+| onRedirect         | `(url: string) => void`                                                        | Redirect callback function             |
 
 ## ItemFieldGetters
 
 ItemFieldGetters maps the fields sent in the catalog feeds to the fields the library expects for rendering.
 
-| Property | Type                     | Description        |
-| -------- | ------------------------ | ------------------ |
-| getPrice | `(item: Item) => number` | Get price function |
+| Property              | Type                                                                                                                        | Description                                                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| getPrice              | `(item: Item \| Variation) => number`                                                                                       | Maps the price field from the API Response in `item.data`. Defaults to `item.data.price`                                         |
+| getSalePrice          | `(item: Item \| Variation) => number \| undefined`                                                                          | Maps the sale price from the API Response in `item.data`. Defaults to `item.data.sale_price`                                     |
+| getRolloverImage      | `(item: Item \| Variation) => string \| undefined`                                                                          | Maps the rollover/hover image URL field from the API Response in `item.data`. Defaults to `item.data.rolloverImage`              |
+| getSwatchPreview      | `(variation: Variation) => string`                                                                                          | Maps the swatch preview image URL from the API Response in `variations.data`. Defaults to `variation.data.swatchPreview`         |
+| getSwatches           | `(item: Item, retrievePrice, retrieveSwatchPreview, retrieveSalePrice, retrieveRolloverImage) => SwatchItem[] \| undefined` | Maps the swatches object from the API Response from `item.variations`. Builds a SwatchItem array by iterating through variations |
+| getIsHiddenGroupField | `(group: PlpItemGroup) => boolean \| undefined`                                                                             | Maps a custom field in item_group.data to determine if a group should be hidden. Defaults to `group.data.cio_plp_hidden`         |
+| getItemUrl            | `(item: Item) => string \| undefined`                                                                                       | Maps the product URL from the API Response. Defaults to `item.url`                                                               |
 
 ## Configuration Options
 
@@ -50,8 +55,8 @@ Configuration options for the Groups component behavior.
 
 Configuration options for pagination functionality.
 
-| Property       | Type     | Description                                          |
-| -------------- | -------- | ---------------------------------------------------- |
+| Property       | Type     | Description                                         |
+| -------------- | -------- | --------------------------------------------------- |
 | windowSize     | `number` | Number of page buttons to show in pagination        |
 | resultsPerPage | `number` | Override the results per page set at Provider level |
 
@@ -67,13 +72,13 @@ Configuration options for filters functionality. No specific configurations avai
 
 URL Helpers are used for managing the URL and request state. These functions define how this library modifies and parses the URL.
 
-| Property              | Type                                                                     | Description                                                     |
-| --------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| getUrl                | `() => string \| undefined`                                              | Get the current URL for a page (Default: getting current href) |
-| setUrl                | `(newEncodedUrlState: string) => void`                                   | Set the window href using the provided URL                     |
-| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                  | Parses the given URL string to a request configuration state   |
-| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | Convert the request configuration state to a URL string        |
-| defaultQueryStringMap | `DefaultQueryStringMap`                                                  | Provides a mapping for the query parameters that is used in URL |
+| Property              | Type                                                                    | Description                                                     |
+| --------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
+| getUrl                | `() => string \| undefined`                                             | Get the current URL for a page (Default: getting current href)  |
+| setUrl                | `(newEncodedUrlState: string) => void`                                  | Set the window href using the provided URL                      |
+| getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | Parses the given URL string to a request configuration state    |
+| getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | Convert the request configuration state to a URL string         |
+| defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Provides a mapping for the query parameters that is used in URL |
 
 ### getUrl
 
@@ -222,4 +227,4 @@ const defaultQueryStringMap = Object.freeze({
   sortOrder: 'sortOrder',
   section: 'section',
 });
-
+```
