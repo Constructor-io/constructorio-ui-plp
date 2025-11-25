@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import testRequestState from './local_examples/sampleRequestState.json';
-import testUrl from './local_examples/testJsonEncodedUrl.json';
+import testRequestState from '../local_examples/sampleRequestState.json';
+import testUrl from '../local_examples/testJsonEncodedUrl.json';
 import {
   getStateFromUrl,
   getUrlFromState,
   defaultQueryStringMap,
   getUrl,
   setUrl,
-} from '../src/utils/urlHelpers';
-import { RequestConfigs } from '../src/types';
+} from '../../src/utils';
+import { RequestConfigs } from '../../src';
 
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {

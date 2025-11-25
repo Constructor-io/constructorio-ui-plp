@@ -6,13 +6,13 @@ import {
   getProductCardCnstrcDataAttributes,
   getPlpContainerCnstrcDataAttributes,
   getConversionButtonCnstrcDataAttributes,
-} from '../src/utils';
-import useProductInfo from '../src/hooks/useProduct';
-import mockItem from './local_examples/item.json';
-import mockApiSearchResponse from './local_examples/apiSearchResponse.json';
-import mockApiBrowseResponse from './local_examples/apiBrowseResponse.json';
-import { renderHookWithCioPlp } from './test-utils';
-import { RequestConfigs } from '../src';
+} from '../../src/utils';
+import useProductInfo from '../../src/hooks/useProduct';
+import mockItem from '../local_examples/item.json';
+import mockApiSearchResponse from '../local_examples/apiSearchResponse.json';
+import mockApiBrowseResponse from '../local_examples/apiBrowseResponse.json';
+import { renderHookWithCioPlp } from '../test-utils';
+import { RequestConfigs } from '../../src';
 
 const transformedItem = transformResultItem(mockItem);
 
@@ -21,62 +21,64 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
-      const dataAttributes = getProductCardCnstrcDataAttributes(result.current, transformedItem);
+      const cnstrcDataAttributes = getProductCardCnstrcDataAttributes(result.current, {
+        labels: transformedItem.labels,
+      });
 
-      expect(dataAttributes['data-cnstrc-item-id']).toBe('KNITS00423-park bench dot');
-      expect(dataAttributes['data-cnstrc-item-name']).toBe(
+      expect(cnstrcDataAttributes['data-cnstrc-item-id']).toBe('KNITS00423-park bench dot');
+      expect(cnstrcDataAttributes['data-cnstrc-item-name']).toBe(
         'Jersey Riviera Shirt (Red Park Bench Dot)',
       );
-      expect(dataAttributes['data-cnstrc-item-price']).toBe(90);
-      expect(dataAttributes['data-cnstrc-item-variation-id']).toBe('BKT00110DG1733LR');
+      expect(cnstrcDataAttributes['data-cnstrc-item-price']).toBe(90);
+      expect(cnstrcDataAttributes['data-cnstrc-item-variation-id']).toBe('BKT00110DG1733LR');
     });
   });
 
-  test('Should include sponsored listing data attributes when available', async () => {
-    const mockItemWithSponsoredData = {
-      ...transformedItem,
+  test('Should include sponsored listing data attributes when available', () => {
+    const mockProductInfo = {
+      itemId: 'test-id',
+      itemName: 'Test Product',
+      itemPrice: 100,
+      variationId: 'var-123',
+    };
+
+    const cnstrcDataAttributes = getProductCardCnstrcDataAttributes(mockProductInfo, {
       labels: {
         sl_campaign_id: 'campaign-123',
         sl_campaign_owner: 'owner-456',
       },
-    };
-
-    const { result } = renderHookWithCioPlp(() =>
-      useProductInfo({ item: mockItemWithSponsoredData }),
-    );
-
-    await waitFor(() => {
-      const dataAttributes = getProductCardCnstrcDataAttributes(
-        result.current,
-        mockItemWithSponsoredData,
-      );
-
-      expect(dataAttributes['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
-      expect(dataAttributes['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
     });
+
+    expect(cnstrcDataAttributes['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
+    expect(cnstrcDataAttributes['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
   });
 
-  test('Should not include price if not provided', () => {
-    const mockProductInfo = {
+  test('Should only include optional attributes when provided', () => {
+    const mockProductInfoWithoutOptionals = {
       itemId: 'test-id',
       itemName: 'Test Product',
     };
 
-    const dataAttributes = getProductCardCnstrcDataAttributes(mockProductInfo);
+    const dataAttributesWithoutOptionals = getProductCardCnstrcDataAttributes(
+      mockProductInfoWithoutOptionals,
+    );
 
-    expect(dataAttributes['data-cnstrc-item-price']).toBeUndefined();
-  });
+    expect(dataAttributesWithoutOptionals['data-cnstrc-item-price']).toBeUndefined();
+    expect(dataAttributesWithoutOptionals['data-cnstrc-item-variation-id']).toBeUndefined();
 
-  test('Should not include variation ID if not provided', () => {
-    const mockProductInfo = {
+    const mockProductInfoWithOptionals = {
       itemId: 'test-id',
       itemName: 'Test Product',
       itemPrice: 50,
+      variationId: 'var-123',
     };
 
-    const dataAttributes = getProductCardCnstrcDataAttributes(mockProductInfo);
+    const dataAttributesWithOptionals = getProductCardCnstrcDataAttributes(
+      mockProductInfoWithOptionals,
+    );
 
-    expect(dataAttributes['data-cnstrc-item-variation-id']).toBeUndefined();
+    expect(dataAttributesWithOptionals['data-cnstrc-item-price']).toBe(50);
+    expect(dataAttributesWithOptionals['data-cnstrc-item-variation-id']).toBe('var-123');
   });
 });
 

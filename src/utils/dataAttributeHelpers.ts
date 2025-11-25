@@ -5,17 +5,24 @@ import {
   PlpBrowseData,
   CnstrcData,
   ProductInfoObject,
-  Item,
 } from '../types';
 import { isPlpBrowseDataResults, isPlpSearchDataResults } from './typeHelpers';
 import { getPageType } from './requestConfigsHelpers';
 
-export function getProductCardCnstrcDataAttributes(productInfo: ProductInfoObject, item?: Item) {
-  let dataCnstrc: CnstrcData = {};
+export interface ProductCardDataAttributeOptions {
+  labels?: {
+    sl_campaign_id?: string | number;
+    sl_campaign_owner?: string | number;
+  };
+}
 
+export function getProductCardCnstrcDataAttributes(
+  productInfo: ProductInfoObject,
+  options?: ProductCardDataAttributeOptions,
+) {
   const { itemId, itemPrice, itemName, variationId } = productInfo;
 
-  dataCnstrc = {
+  const dataCnstrc: CnstrcData = {
     'data-cnstrc-item-id': itemId,
     'data-cnstrc-item-name': itemName,
   };
@@ -25,18 +32,18 @@ export function getProductCardCnstrcDataAttributes(productInfo: ProductInfoObjec
     dataCnstrc['data-cnstrc-item-variation-id'] = variationId;
   }
 
-  // Only include price if it exists and there's a CTA button
+  // Only include price if it exists
   if (itemPrice !== undefined && itemPrice !== null) {
     dataCnstrc['data-cnstrc-item-price'] = itemPrice;
   }
 
   // Add sponsored listing data if available
-  if (item?.labels?.sl_campaign_id) {
-    dataCnstrc['data-cnstrc-sl-campaign-id'] = String(item.labels.sl_campaign_id);
+  if (options?.labels?.sl_campaign_id) {
+    dataCnstrc['data-cnstrc-sl-campaign-id'] = String(options.labels.sl_campaign_id);
   }
 
-  if (item?.labels?.sl_campaign_owner) {
-    dataCnstrc['data-cnstrc-sl-campaign-owner'] = String(item.labels.sl_campaign_owner);
+  if (options?.labels?.sl_campaign_owner) {
+    dataCnstrc['data-cnstrc-sl-campaign-owner'] = String(options.labels.sl_campaign_owner);
   }
 
   return dataCnstrc;

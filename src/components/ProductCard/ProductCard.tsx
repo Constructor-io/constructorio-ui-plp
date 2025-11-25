@@ -45,7 +45,9 @@ export default function ProductCard(props: ProductCardProps) {
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
-  const cnstrcData = getProductCardCnstrcDataAttributes(productInfo, item);
+  const cnstrcDataAttributes = getProductCardCnstrcDataAttributes(productInfo, {
+    labels: item.labels,
+  });
   const addToCartBtnAttrs = getConversionButtonCnstrcDataAttributes('add_to_cart');
 
   const handleRolloverImageState = (isShown: boolean) => {
@@ -84,13 +86,13 @@ export default function ProductCard(props: ProductCardProps) {
         onMouseEnter,
         onMouseLeave,
         isRolloverImageShown,
-        productCardCnstrcDataAttributes: cnstrcData,
+        productCardCnstrcDataAttributes: cnstrcDataAttributes,
       }}
       override={children}
       htmlOverride={state.renderOverrides.productCard?.renderHtml}
-      topLevelAttributes={{ ...cnstrcData, className: 'cio-product-card' }}>
+      topLevelAttributes={{ ...cnstrcDataAttributes, className: 'cio-product-card' }}>
       <a
-        {...cnstrcData}
+        {...cnstrcDataAttributes}
         className='cio-product-card'
         href={itemUrl}
         ref={cardRef}
