@@ -3,7 +3,7 @@ import {
   PlpSearchDataResults,
   PlpSearchDataRedirect,
   PlpBrowseData,
-  CnstrcData,
+  CnstrcDataAttrs,
   ProductInfoObject,
 } from '../types';
 import { isPlpBrowseDataResults, isPlpSearchDataResults } from './typeHelpers';
@@ -22,7 +22,7 @@ export function getProductCardCnstrcDataAttributes(
 ) {
   const { itemId, itemPrice, itemName, variationId } = productInfo;
 
-  const dataCnstrc: CnstrcData = {
+  const dataCnstrc: CnstrcDataAttrs = {
     'data-cnstrc-item-id': itemId,
     'data-cnstrc-item-name': itemName,
   };

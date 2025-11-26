@@ -12,7 +12,7 @@ import mockItem from '../local_examples/item.json';
 import mockApiSearchResponse from '../local_examples/apiSearchResponse.json';
 import mockApiBrowseResponse from '../local_examples/apiBrowseResponse.json';
 import { renderHookWithCioPlp } from '../test-utils';
-import { RequestConfigs } from '../../src';
+import { RequestConfigs } from '../../src/types';
 
 const transformedItem = transformResultItem(mockItem);
 
@@ -21,16 +21,16 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
-      const cnstrcDataAttributes = getProductCardCnstrcDataAttributes(result.current, {
+      const cnstrcDataAttrs = getProductCardCnstrcDataAttributes(result.current, {
         labels: transformedItem.labels,
       });
 
-      expect(cnstrcDataAttributes['data-cnstrc-item-id']).toBe('KNITS00423-park bench dot');
-      expect(cnstrcDataAttributes['data-cnstrc-item-name']).toBe(
+      expect(cnstrcDataAttrs['data-cnstrc-item-id']).toBe('KNITS00423-park bench dot');
+      expect(cnstrcDataAttrs['data-cnstrc-item-name']).toBe(
         'Jersey Riviera Shirt (Red Park Bench Dot)',
       );
-      expect(cnstrcDataAttributes['data-cnstrc-item-price']).toBe(90);
-      expect(cnstrcDataAttributes['data-cnstrc-item-variation-id']).toBe('BKT00110DG1733LR');
+      expect(cnstrcDataAttrs['data-cnstrc-item-price']).toBe(90);
+      expect(cnstrcDataAttrs['data-cnstrc-item-variation-id']).toBe('BKT00110DG1733LR');
     });
   });
 
@@ -42,15 +42,15 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
       variationId: 'var-123',
     };
 
-    const cnstrcDataAttributes = getProductCardCnstrcDataAttributes(mockProductInfo, {
+    const cnstrcDataAttrs = getProductCardCnstrcDataAttributes(mockProductInfo, {
       labels: {
         sl_campaign_id: 'campaign-123',
         sl_campaign_owner: 'owner-456',
       },
     });
 
-    expect(cnstrcDataAttributes['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
-    expect(cnstrcDataAttributes['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
+    expect(cnstrcDataAttrs['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
+    expect(cnstrcDataAttrs['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
   });
 
   test('Should only include optional attributes when provided', () => {

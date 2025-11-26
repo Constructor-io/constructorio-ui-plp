@@ -117,7 +117,7 @@ export interface ProductCardRenderProps extends ProductCardProps {
   /**
    * Data Attributes to surface on parent div of product card.
    */
-  productCardCnstrcDataAttributes: CnstrcData;
+  productCardCnstrcDataAttributes: CnstrcDataAttrs;
 }
 
 export type ProductCardProps = IncludeRenderProps<ProductCardBaseProps, ProductCardRenderProps>;
@@ -386,7 +386,7 @@ export interface PlpItemGroup {
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 
-export type CnstrcData = Record<`data-cnstrc-${string}`, string | number | boolean>;
+export type CnstrcDataAttrs = Record<`data-cnstrc-${string}`, string | number | boolean>;
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };

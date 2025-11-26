@@ -9,7 +9,7 @@ import {
   getUrl,
   setUrl,
 } from '../../src/utils';
-import { RequestConfigs } from '../../src';
+import { RequestConfigs } from '../../src/types';
 
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
