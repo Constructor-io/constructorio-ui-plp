@@ -102,7 +102,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
     expect(dataAttributes['data-cnstrc-search']).toBe(true);
     expect(dataAttributes['data-cnstrc-result-id']).toBe(mockSearchData.resultId);
     expect(dataAttributes['data-cnstrc-num-results']).toBe(mockSearchData.response.totalNumResults);
-    expect(dataAttributes['data-cnstrc-term']).toBe('shoes');
+    expect(dataAttributes['data-cnstrc-search-term']).toBe('shoes');
   });
 
   test('Should return browse data attributes', () => {

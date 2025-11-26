@@ -81,7 +81,7 @@ export function getPlpContainerCnstrcDataAttributes(
 
       // Add search term
       if (data.request?.term) {
-        dataCnstrc['data-cnstrc-term'] = data.request.term;
+        dataCnstrc['data-cnstrc-search-term'] = data.request.term;
       }
       break;
 
