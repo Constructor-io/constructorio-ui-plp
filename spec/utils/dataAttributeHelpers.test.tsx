@@ -6,6 +6,7 @@ import {
   getProductCardCnstrcDataAttributes,
   getPlpContainerCnstrcDataAttributes,
   getConversionButtonCnstrcDataAttributes,
+  cnstrcDataAttrs,
 } from '../../src/utils';
 import useProductInfo from '../../src/hooks/useProduct';
 import mockItem from '../local_examples/item.json';
@@ -21,16 +22,16 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
     const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItem }));
 
     await waitFor(() => {
-      const cnstrcDataAttrs = getProductCardCnstrcDataAttributes(result.current, {
+      const dataAttributes = getProductCardCnstrcDataAttributes(result.current, {
         labels: transformedItem.labels,
       });
 
-      expect(cnstrcDataAttrs['data-cnstrc-item-id']).toBe('KNITS00423-park bench dot');
-      expect(cnstrcDataAttrs['data-cnstrc-item-name']).toBe(
+      expect(dataAttributes[cnstrcDataAttrs.common.itemId]).toBe('KNITS00423-park bench dot');
+      expect(dataAttributes[cnstrcDataAttrs.common.itemName]).toBe(
         'Jersey Riviera Shirt (Red Park Bench Dot)',
       );
-      expect(cnstrcDataAttrs['data-cnstrc-item-price']).toBe(90);
-      expect(cnstrcDataAttrs['data-cnstrc-item-variation-id']).toBe('BKT00110DG1733LR');
+      expect(dataAttributes[cnstrcDataAttrs.common.itemPrice]).toBe(90);
+      expect(dataAttributes[cnstrcDataAttrs.common.variationId]).toBe('BKT00110DG1733LR');
     });
   });
 
@@ -42,15 +43,15 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
       variationId: 'var-123',
     };
 
-    const cnstrcDataAttrs = getProductCardCnstrcDataAttributes(mockProductInfo, {
+    const dataAttributes = getProductCardCnstrcDataAttributes(mockProductInfo, {
       labels: {
         sl_campaign_id: 'campaign-123',
         sl_campaign_owner: 'owner-456',
       },
     });
 
-    expect(cnstrcDataAttrs['data-cnstrc-sl-campaign-id']).toBe('campaign-123');
-    expect(cnstrcDataAttrs['data-cnstrc-sl-campaign-owner']).toBe('owner-456');
+    expect(dataAttributes[cnstrcDataAttrs.common.slCampaignId]).toBe('campaign-123');
+    expect(dataAttributes[cnstrcDataAttrs.common.slCampaignOwner]).toBe('owner-456');
   });
 
   test('Should only include optional attributes when provided', () => {
@@ -63,8 +64,8 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
       mockProductInfoWithoutOptionals,
     );
 
-    expect(dataAttributesWithoutOptionals['data-cnstrc-item-price']).toBeUndefined();
-    expect(dataAttributesWithoutOptionals['data-cnstrc-item-variation-id']).toBeUndefined();
+    expect(dataAttributesWithoutOptionals[cnstrcDataAttrs.common.itemPrice]).toBeUndefined();
+    expect(dataAttributesWithoutOptionals[cnstrcDataAttrs.common.variationId]).toBeUndefined();
 
     const mockProductInfoWithOptionals = {
       itemId: 'test-id',
@@ -77,8 +78,8 @@ describe('Testing Utils, getProductCardCnstrcDataAttributes', () => {
       mockProductInfoWithOptionals,
     );
 
-    expect(dataAttributesWithOptionals['data-cnstrc-item-price']).toBe(50);
-    expect(dataAttributesWithOptionals['data-cnstrc-item-variation-id']).toBe('var-123');
+    expect(dataAttributesWithOptionals[cnstrcDataAttrs.common.itemPrice]).toBe(50);
+    expect(dataAttributesWithOptionals[cnstrcDataAttrs.common.variationId]).toBe('var-123');
   });
 });
 
@@ -99,10 +100,12 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-search']).toBe(true);
-    expect(dataAttributes['data-cnstrc-result-id']).toBe(mockSearchData.resultId);
-    expect(dataAttributes['data-cnstrc-num-results']).toBe(mockSearchData.response.totalNumResults);
-    expect(dataAttributes['data-cnstrc-search-term']).toBe('shoes');
+    expect(dataAttributes[cnstrcDataAttrs.search.searchContainer]).toBe(true);
+    expect(dataAttributes[cnstrcDataAttrs.common.resultId]).toBe(mockSearchData.resultId);
+    expect(dataAttributes[cnstrcDataAttrs.common.numResults]).toBe(
+      mockSearchData.response.totalNumResults,
+    );
+    expect(dataAttributes[cnstrcDataAttrs.search.searchTerm]).toBe('shoes');
   });
 
   test('Should return browse data attributes', () => {
@@ -122,11 +125,13 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-browse']).toBe(true);
-    expect(dataAttributes['data-cnstrc-result-id']).toBe(mockBrowseData.resultId);
-    expect(dataAttributes['data-cnstrc-num-results']).toBe(mockBrowseData.response.totalNumResults);
-    expect(dataAttributes['data-cnstrc-filter-name']).toBe('group_id');
-    expect(dataAttributes['data-cnstrc-filter-value']).toBe('All');
+    expect(dataAttributes[cnstrcDataAttrs.browse.browseContainer]).toBe(true);
+    expect(dataAttributes[cnstrcDataAttrs.common.resultId]).toBe(mockBrowseData.resultId);
+    expect(dataAttributes[cnstrcDataAttrs.common.numResults]).toBe(
+      mockBrowseData.response.totalNumResults,
+    );
+    expect(dataAttributes[cnstrcDataAttrs.browse.filterName]).toBe('group_id');
+    expect(dataAttributes[cnstrcDataAttrs.browse.filterValue]).toBe('All');
   });
 
   test('Should include zero-result attribute when no results and not loading', () => {
@@ -150,7 +155,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-zero-result']).toBe(true);
+    expect(dataAttributes[cnstrcDataAttrs.common.zeroResults]).toBe(true);
   });
 
   test('Should not include zero-result attribute when loading', () => {
@@ -172,7 +177,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       true,
     );
 
-    expect(dataAttributes['data-cnstrc-zero-result']).toBeUndefined();
+    expect(dataAttributes[cnstrcDataAttrs.common.zeroResults]).toBeUndefined();
   });
 
   test('Should include section attribute when section is not Products', () => {
@@ -195,7 +200,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-section']).toBe('Search Suggestions');
+    expect(dataAttributes[cnstrcDataAttrs.common.section]).toBe('Search Suggestions');
   });
 
   test('Should not include section attribute when section is Products', () => {
@@ -211,13 +216,13 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       false,
     );
 
-    expect(dataAttributes['data-cnstrc-section']).toBeUndefined();
+    expect(dataAttributes[cnstrcDataAttrs.common.section]).toBeUndefined();
   });
 });
 
 describe('Testing Utils, getConversionButtonCnstrcDataAttributes', () => {
   test('Should return add_to_cart conversion type', () => {
     const dataAttributes = getConversionButtonCnstrcDataAttributes('add_to_cart');
-    expect(dataAttributes['data-cnstrc-btn']).toBe('add_to_cart');
+    expect(dataAttributes[cnstrcDataAttrs.common.conversionBtn]).toBe('add_to_cart');
   });
 });

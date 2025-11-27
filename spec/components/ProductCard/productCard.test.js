@@ -7,7 +7,7 @@ import { DEMO_API_KEY, EMITTED_EVENTS } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
 import testItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
-import { transformResultItem } from '../../../src/utils/transformers';
+import { transformResultItem, cnstrcDataAttrs } from '../../../src/utils';
 import { copyItemWithNewSalePrice } from '../../test-utils';
 import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
@@ -416,7 +416,7 @@ describe('Testing Component: ProductCard', () => {
     expect(screen.queryByTestId('cio-sale-price')).toBeNull();
   });
 
-  test('Should render data-cnstrc attributes on ProductCard', () => {
+  test('Should render cnstrc data attributes on ProductCard', () => {
     const item = transformResultItem(testItem);
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -425,13 +425,13 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const productCard = screen.getByRole('link');
-    expect(productCard.getAttribute('data-cnstrc-item-id')).toBe(item.itemId);
-    expect(productCard.getAttribute('data-cnstrc-item-name')).toBe(item.itemName);
-    expect(productCard.getAttribute('data-cnstrc-item-price')).toBeTruthy();
-    expect(productCard.getAttribute('data-cnstrc-item-variation-id')).toBeTruthy();
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemId)).toBe(item.itemId);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBeTruthy();
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.variationId)).toBeTruthy();
   });
 
-  test('Should render data-cnstrc-btn attribute on Add to Cart button', () => {
+  test('Should render conversion button attribute on Add to Cart button', () => {
     const item = transformResultItem(testItem);
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
@@ -440,7 +440,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const addToCartButton = screen.getByText('Add to Cart');
-    expect(addToCartButton.getAttribute('data-cnstrc-btn')).toBe('add_to_cart');
+    expect(addToCartButton.getAttribute(cnstrcDataAttrs.common.conversionBtn)).toBe('add_to_cart');
   });
 
   test('Should include sponsored listing data attributes when present', () => {
@@ -460,7 +460,7 @@ describe('Testing Component: ProductCard', () => {
     );
 
     const productCard = screen.getByRole('link');
-    expect(productCard.getAttribute('data-cnstrc-sl-campaign-id')).toBe('test-campaign-123');
-    expect(productCard.getAttribute('data-cnstrc-sl-campaign-owner')).toBe('test-owner-456');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.slCampaignId)).toBe('test-campaign-123');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.slCampaignOwner)).toBe('test-owner-456');
   });
 });
