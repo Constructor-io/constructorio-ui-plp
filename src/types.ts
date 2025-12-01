@@ -386,7 +386,7 @@ export interface PlpItemGroup {
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }
 
-export type CnstrcDataAttrs = Record<`data-cnstrc-${string}`, string | number | boolean>;
+export type CnstrcDataAttrs = Record<`data-cnstrc-${string}` | string, string | number | boolean>;
 
 // Type Extenders
 export type PropsWithChildren<P> = P & { children?: ReactNode };

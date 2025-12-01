@@ -7,7 +7,11 @@ import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
 import mockApiBrowseResponse from '../../local_examples/apiBrowseResponse.json';
-import { transformBrowseResponse, transformSearchResponse } from '../../../src/utils';
+import {
+  transformBrowseResponse,
+  transformSearchResponse,
+  cnstrcDataAttrs,
+} from '../../../src/utils';
 import useCioPlp from '../../../src/hooks/useCioPlp';
 import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 import { getAttribute } from '../../test-utils';
@@ -247,16 +251,18 @@ describe('Testing Component: CioPlpGrid', () => {
 
     await waitFor(() => {
       const getAttributeFromContainer = getAttribute(container);
-      const totalNumResults = getAttributeFromContainer('data-cnstrc-num-results');
-      const filterName = getAttributeFromContainer('data-cnstrc-filter-name');
-      const filterValue = getAttributeFromContainer('data-cnstrc-filter-value');
-      const resultId = getAttributeFromContainer('data-cnstrc-result-id');
+      const totalNumResults = getAttributeFromContainer(cnstrcDataAttrs.common.numResults);
+      const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
+      const filterName = getAttributeFromContainer(cnstrcDataAttrs.browse.filterName);
+      const filterValue = getAttributeFromContainer(cnstrcDataAttrs.browse.filterValue);
 
-      expect(container.querySelector('[data-cnstrc-browse]')).toBeInTheDocument();
+      expect(
+        container.querySelector(`[${cnstrcDataAttrs.browse.browseContainer}]`),
+      ).toBeInTheDocument();
       expect(totalNumResults).toEqual(String(mockBrowseData.response.totalNumResults));
+      expect(resultId).toEqual(String(mockBrowseData.resultId));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
       expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
-      expect(resultId).toEqual(String(mockBrowseData.resultId));
     });
   });
 
@@ -303,15 +309,17 @@ describe('Testing Component: CioPlpGrid', () => {
     );
 
     await waitFor(() => {
-      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
+      const getAttributeFromContainer = getAttribute(container);
+      const totalNumResults = getAttributeFromContainer(cnstrcDataAttrs.common.numResults);
+      const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
+      const searchTerm = getAttributeFromContainer(cnstrcDataAttrs.search.searchTerm);
+
       expect(
-        container
-          .querySelector('[data-cnstrc-num-results]')
-          .getAttribute('data-cnstrc-num-results'),
-      ).toEqual(String(mockSearchData.response.totalNumResults));
-      expect(
-        container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
-      ).toEqual(String(mockSearchData.resultId));
+        container.querySelector(`[${cnstrcDataAttrs.search.searchContainer}]`),
+      ).toBeInTheDocument();
+      expect(totalNumResults).toEqual(String(mockSearchData.response.totalNumResults));
+      expect(resultId).toEqual(mockSearchData.resultId);
+      expect(searchTerm).toEqual(mockSearchData.request.term);
     });
   });
 
@@ -328,22 +336,18 @@ describe('Testing Component: CioPlpGrid', () => {
     );
 
     await waitFor(() => {
+      const getAttributeFromContainer = getAttribute(container);
+      const totalNumResults = getAttributeFromContainer(cnstrcDataAttrs.common.numResults);
+      const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
+      const zeroResult = getAttributeFromContainer(cnstrcDataAttrs.common.zeroResults);
+
       expect(container.querySelector('.cio-zero-results-header')).toBeInTheDocument();
-      expect(container.querySelector('[data-cnstrc-search]')).toBeInTheDocument();
       expect(
-        container
-          .querySelector('[data-cnstrc-num-results]')
-          .getAttribute('data-cnstrc-num-results'),
-      ).toEqual('0');
-      expect(
-        container.querySelector('[data-cnstrc-result-id]').getAttribute('data-cnstrc-result-id'),
-      ).toEqual('test-zero-results');
-      expect(container.querySelector('[data-cnstrc-zero-result]')).toBeInTheDocument();
-      expect(
-        container
-          .querySelector('[data-cnstrc-zero-result]')
-          .getAttribute('data-cnstrc-zero-result'),
-      ).toBe('true');
+        container.querySelector(`[${cnstrcDataAttrs.search.searchContainer}]`),
+      ).toBeInTheDocument();
+      expect(totalNumResults).toEqual('0');
+      expect(resultId).toEqual('test-zero-results');
+      expect(zeroResult).toBe('true');
     });
   });
 });
