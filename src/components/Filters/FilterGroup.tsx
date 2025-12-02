@@ -23,7 +23,10 @@ export default function FilterGroup(props: FilterGroupProps) {
   };
 
   return (
-    <li className='cio-filter-group'>
+    <li
+      className={`cio-filter-group ${
+        isRangeFacet(facet) && facet.min === facet.max ? 'is-hidden' : undefined
+      }`}>
       <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
         {facet.displayName}
         <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
