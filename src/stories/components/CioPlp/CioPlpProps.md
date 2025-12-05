@@ -2,7 +2,7 @@
 
 ---
 
-When enabled, this prop applies Shopify specific default configurations for callbacks and URL helpers. Custom callbacks and URL helpers can still override these defaults.
+When enabled, this prop applies Shopify specific default configurations. Custom configurations can still override these defaults.
 
 **Type:** `boolean`
 **Default:** `false`
@@ -12,27 +12,6 @@ When enabled, this prop applies Shopify specific default configurations for call
 - `callbacks.onAddToCart`: Adds products to the Shopify cart via `/cart/add.js` API
 - `callbacks.onProductCardClick`: Navigates to `/products/{itemId}`
 - `urlHelpers.setUrl`: Converts `/group_id/` URLs to `/collections/` for Shopify compatibility
-
-**Example Usage:**
-
-```jsx
-<CioPlp apiKey='your-api-key' useShopifyDefaults />
-```
-
-**Overriding Shopify defaults:**
-
-```jsx
-<CioPlp
-  apiKey='your-api-key'
-  useShopifyDefaults
-  callbacks={{
-    onAddToCart: (event, item) => {
-      // Your custom implementation
-      console.log('Custom add to cart', item);
-    },
-  }}
-/>
-```
 
 <br>
 
