@@ -15,6 +15,7 @@ A separate filter component that allows you to filter down by groups.
 
 - Automatically updates and displays selected filters based on user requests
 - Displays the current selected group hierarchy, and allows for backward navigation
+- Automatically hides groups that are ingested with `data.cio_plp_hidden = true` (📦 v1.6.1 required)
 
 <Canvas of={GroupsStories.Primary} />
 
@@ -38,6 +39,148 @@ export default function MyComponent() {
         {(props) => {
           if (utils.isPlpSearchDataResults(props.data)) {
             return <Groups groups={props.data.response.groups} />;
+          }
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+## Configuration Options (`groupsConfigs`)
+
+The Groups component supports various configuration options that can be passed via component props, or via the `groupsConfigs` prop at the `CioPlp`-level
+
+### Show N Initial Options
+> 📦 v1.6.2 is required for this feature
+
+Show only a specific number of group options initially, with remaining options hidden under a "Show All" button:
+
+<Canvas of={GroupsStories.LimitedOptions} />
+
+```jsx
+import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      groupsConfigs={{
+        initialNumOptions: 2, // Show only 2 options initially
+      }}
+    />
+  );
+}
+```
+
+### Collapsed by Default
+> 📦 v1.6.2 is required for this feature
+
+Start with the groups section collapsed:
+
+<Canvas of={GroupsStories.CollapsedByDefault} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      groupsConfigs={{
+        isCollapsed: true, // Start collapsed
+      }}
+    />
+  );
+}
+```
+
+### Custom Title
+> 📦 v1.6.2 is required for this feature
+
+Customize the title of the groups section:
+
+<Canvas of={GroupsStories.CustomTitle} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      groupsConfigs={{
+        title: 'Product Categories', // Custom title
+      }}
+    />
+  );
+}
+```
+
+### Hidden Groups
+> 📦 v1.6.2 is required for this feature
+
+Completely hide the groups component:
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      groupsConfigs={{
+        hideGroups: true, // Hide groups entirely
+      }}
+    />
+  );
+}
+```
+
+### Hide Specific Groups
+> 📦 v1.6.1 is required for this feature
+To hide specific groups, you can pass [groupConfigs.isHiddenGroupFn](./?path=/docs/components-groups--props) prop at the top CioPlp-level.
+
+```jsx
+import { CioPlp, CioPlpGrid } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+const groupConfigs = {
+  isHiddenGroupFn: (group) => !!group.data.cio_plp_hidden;
+}
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY} groupConfigs={groupConfigs} />
+  );
+}
+```
+
+### Direct Groups Component Configuration
+
+You can also pass these configurations directly to the Groups component:
+
+```jsx
+import { CioPlp, CioPlpGrid, Groups, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyCustomComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          if (utils.isPlpSearchDataResults(props.data)) {
+            return (
+              <Groups
+                groups={props.data.response.groups}
+                initialNumOptions={3}
+                title='Product Categories'
+                isCollapsed={false}
+                hideGroups={false}
+                isHiddenGroupFn={(group) => !!group.data.cio_plp_hidden}
+              />
+            );
           }
         }}
       </CioPlpGrid>

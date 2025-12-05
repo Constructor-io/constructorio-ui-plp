@@ -265,4 +265,44 @@ describe('Testing Hook: useGroups', () => {
       expect(setOptionsToRender).not.toBeUndefined();
     });
   });
+
+  it('Should not return groups that are meant to be excluded via isHiddenGroupFn', async () => {
+    const isHiddenGroupFn = (group) => group.groupId === 'W676714';
+    const { result } = renderHookWithCioPlp(() =>
+      useGroups({ ...useGroupsProps, isHiddenGroupFn }),
+    );
+
+    await waitFor(() => {
+      const {
+        current: { optionsToRender },
+      } = result;
+
+      expect(optionsToRender.filter((group) => !isHiddenGroupFn(group)).length).toBe(
+        optionsToRender.length,
+      );
+      expect(optionsToRender.length).toBeLessThan(useGroupsProps.groups[0].children.length);
+      const rawOptions = useGroupsProps.groups[0].children;
+      const excludedGroups = rawOptions.filter((group) =>
+        optionsToRender.find((option) => option.groupId !== group.groupId),
+      );
+      expect(excludedGroups.find((group) => group.groupId === 'W676714')).toBeTruthy();
+    });
+  });
+
+  it('Should not return groups that are flagged with groups.data.cio_plp_hidden = true', async () => {
+    const { result } = renderHookWithCioPlp(() => useGroups({ ...useGroupsProps }));
+
+    await waitFor(() => {
+      const {
+        current: { optionsToRender },
+      } = result;
+
+      expect(optionsToRender.length).toBeLessThan(useGroupsProps.groups[0].children.length);
+      const rawOptions = useGroupsProps.groups[0].children;
+      const excludedGroups = rawOptions.filter((group) =>
+        optionsToRender.find((option) => option.groupId !== group.groupId),
+      );
+      expect(excludedGroups.find((group) => group.groupId === 'cio_plp_hidden_group')).toBeTruthy();
+    });
+  });
 });

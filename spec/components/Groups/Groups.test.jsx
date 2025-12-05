@@ -123,6 +123,68 @@ describe('Testing Component: Groups', () => {
       expect(mockChildren).toHaveBeenCalled();
       expect(getByText('Custom Filters')).toBeInTheDocument();
     });
+
+    it('Should not render groups when hideGroups is true', async () => {
+      const groupsPropsWithHideGroups = {
+        ...groupsProps,
+        hideGroups: true,
+      };
+
+      const { container, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsPropsWithHideGroups} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        mockTransformedGroups.forEach((group) => {
+          expect(queryByText(group.displayName)).not.toBeInTheDocument();
+        });
+        expect(container.querySelector('.cio-groups')).not.toBeInTheDocument();
+      });
+    });
+
+    it('Should render groups when hideGroups is false', async () => {
+      const groupsPropsWithHideGroups = {
+        ...groupsProps,
+        hideGroups: false,
+      };
+
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsPropsWithHideGroups} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText(mockTransformedGroups[0].displayName)).toBeInTheDocument();
+      });
+    });
+
+    it('Should exclude groups excluded by isHiddenGroupFn', () => {
+      const filtersPropsWithChildren = {
+        ...groupsProps,
+        isHiddenGroupFn: (group) => ['2', '12'].includes(group.groupId),
+      };
+
+      const { getByText, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...filtersPropsWithChildren} />
+        </CioPlp>,
+      );
+      expect(queryByText('Souvenirs')).toBeNull();
+      expect(getByText('Deals')).toBeInTheDocument();
+    });
+
+    it('Should exclude groups excluded by group.data.cio_plp_hidden', () => {
+      const { getByText, queryByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+      expect(queryByText('Hidden Group')).toBeNull();
+      expect(getByText('Deals')).toBeInTheDocument();
+    });
   });
 
   describe(' - Behavior Tests', () => {

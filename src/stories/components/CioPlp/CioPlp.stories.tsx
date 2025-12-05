@@ -98,7 +98,7 @@ function PrimaryStory({ args, defaultUrl }: any) {
         getUrl: () => currentUrl,
       }}
       {...args}>
-      <CioPlpGrid key={gridKey} />
+      <CioPlpGrid key={gridKey} groupsConfigs={args.groupsConfigs} />
     </CioPlp>
   );
 }
@@ -119,5 +119,15 @@ export const BrowsePlp: Story = {
   ),
   args: {
     apiKey: DEMO_API_KEY,
+  },
+};
+
+export const GroupConfigsIsHiddenGroupFn: Story = {
+  render: (args) => <PrimaryStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
+  args: {
+    apiKey: DEMO_API_KEY,
+    groupsConfigs: {
+      isHiddenGroupFn: (group) => ['2541', '1027', '63'].includes(group.groupId),
+    },
   },
 };

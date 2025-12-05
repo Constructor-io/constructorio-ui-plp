@@ -5998,7 +5998,10 @@
                 "count": 23,
                 "data": null,
                 "children": [],
-                "parents": [{ "display_name": "All Products", "group_id": "AP01" }, { "display_name": "Clearance", "group_id": "W676714" }]
+                "parents": [
+                  { "display_name": "All Products", "group_id": "AP01" },
+                  { "display_name": "Clearance", "group_id": "W676714" }
+                ]
               }
             ],
             "parents": [
@@ -6078,6 +6081,21 @@
             "display_name": "Kids",
             "count": 54,
             "data": null,
+            "children": [],
+            "parents": [
+              {
+                "display_name": "All Products",
+                "group_id": "AP01"
+              }
+            ]
+          },
+          {
+            "group_id": "cio_plp_hidden_group",
+            "display_name": "CIO PLP Hidden Group",
+            "count": 85,
+            "data": {
+              "cio_plp_hidden": true
+            },
             "children": [],
             "parents": [
               {

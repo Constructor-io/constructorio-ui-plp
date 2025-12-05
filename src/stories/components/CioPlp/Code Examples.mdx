@@ -48,6 +48,41 @@ For a working example, visit our Code Sandbox:
 
 - <a href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-example-fpz8sz' target='_blank' rel='noopener noreferrer'> Code Sandbox Example <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
 
+## Configuration Options
+
+The CioPlp component supports various configuration options to customize the behavior of its child components.
+
+### Groups Configuration (`groupsConfigs`)
+
+Configure how product categories/groups are displayed and behave. For detailed examples and interactive demos, see the <a href='./?path=/docs/components-groups--code-examples'>Groups component documentation</a>.
+
+### All Configuration Options
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      // Groups configuration
+      groupsConfigs={{
+        initialNumOptions: 4,        // Number of options to show initially
+        isCollapsed: false,          // Whether groups start collapsed
+        title: 'Shop by Category',   // Custom title
+        hideGroups: false,           // Whether to hide groups entirely
+        isHiddenGroupFn: (group) => false, // Function that returns true if a particular group should not be rendered
+      }}
+      // Pagination configuration
+      paginationConfigs={{
+        windowSize: 5,              // Number of page buttons to show
+      }}
+      // Sort and filter configs (no specific options yet)
+      sortConfigs={{}}
+      filterConfigs={{}}
+    />
+  );
+}
+```
+
 ## Render Props pattern
 
 Take control of the rendering logic by using Render Props through `children`.

@@ -39,7 +39,12 @@ export type CioPlpGridProps = {
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
   /**
-   * Used to set the `initialNumOptions` to limit the number of options shown initially.
+   * Configuration options for the Groups component.
+   * - `initialNumOptions`: Number of group options to show initially (default: 5).
+   *   Remaining options are hidden under "Show All" button.
+   * - `isCollapsed`: Whether the groups section starts collapsed (default: false).
+   * - `title`: Custom title for the groups section (default: "Categories").
+   * - `hideGroups`: Whether to hide the groups component entirely (default: false).
    */
   groupsConfigs?: Omit<GroupsProps, 'groups'>;
 };
@@ -153,6 +158,9 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
 
                     <div className='cio-product-tiles-container'>
                       <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
+                        {isSearchPage && (
+                          <Groups groups={data.response.groups} {...groupsConfigs} />
+                        )}
                         <Filters facets={filters.facets} />
                       </MobileModal>
 

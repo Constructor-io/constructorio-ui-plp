@@ -50,6 +50,7 @@ export interface ItemFieldGetters {
     retrieveSalePrice: ItemFieldGetters['getSalePrice'],
     retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
+  getIsHiddenGroupField: (group: PlpItemGroup) => boolean | undefined;
 }
 
 export interface Formatters {
@@ -382,7 +383,7 @@ export interface PlpItemGroup {
   groupId: string;
   displayName: string;
   count: number;
-  data: object | null;
+  data: Record<string, any> | null;
   children: Array<PlpItemGroup>;
   parents: Pick<PlpItemGroup, 'groupId' | 'displayName'>[];
 }

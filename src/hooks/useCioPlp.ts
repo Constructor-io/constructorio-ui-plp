@@ -14,7 +14,8 @@ import {
   getPlpContainerCnstrcDataAttributes,
 } from '../utils';
 import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
-import useGroups, { UseGroupProps } from './useGroups';
+import useGroups from './useGroups';
+import { GroupsProps } from '../components/Groups';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseCioPlpHook extends PlpContextValue {}
@@ -34,9 +35,15 @@ export type UseCioPlpProps = UseSearchResultsProps &
      */
     filterConfigs?: Omit<UseFilterProps, 'facets'>;
     /**
-     * Used to set the `initialNumOptions` to limit the number of options shown initially.
+     * Configuration options for the Groups component.
+     * - `initialNumOptions`: Number of group options to show initially (default: 5).
+     *   Remaining options are hidden under "Show All" button.
+     * - `isCollapsed`: Whether the groups section starts collapsed (default: false).
+     * - `title`: Custom title for the groups section (default: "Categories").
+     * - `hideGroups`: Whether to hide the groups component entirely (default: false).
+     * - `isHiddenGroupFn`: Function to determine if a group should be hidden (default: undefined).
      */
-    groupsConfigs?: Omit<UseGroupProps, 'groups'>;
+    groupsConfigs?: Omit<GroupsProps, 'groups'>;
   };
 
 export default function useCioPlp(props: UseCioPlpProps = {}) {
