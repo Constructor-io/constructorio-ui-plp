@@ -27,10 +27,9 @@ export default function useCioPlpProvider(
   const [cioClientOptions, setCioClientOptions] = useState(customCioClientOptions);
   const cioClient = useCioClient({ apiKey, cioClient: customCioClient, options: cioClientOptions });
 
-  const shopifyDefaultsValue = useShopifyDefaults ? shopifyDefaults : EMPTY_SHOPIFY_DEFAULTS;
-
-  const contextValue = useMemo(
-    (): PlpContextValue => ({
+  const contextValue = useMemo((): PlpContextValue => {
+    const shopifyDefaultsValue = useShopifyDefaults ? shopifyDefaults : EMPTY_SHOPIFY_DEFAULTS;
+    return {
       cioClient,
       cioClientOptions,
       setCioClientOptions,
@@ -40,19 +39,18 @@ export default function useCioPlpProvider(
       callbacks: { ...shopifyDefaultsValue.callbacks, ...callbacks },
       urlHelpers: { ...defaultUrlHelpers, ...shopifyDefaultsValue.urlHelpers, ...urlHelpers },
       renderOverrides: { ...renderOverrides },
-    }),
-    [
-      cioClient,
-      cioClientOptions,
-      itemFieldGetters,
-      formatters,
-      callbacks,
-      urlHelpers,
-      renderOverrides,
-      staticRequestConfigs,
-      shopifyDefaultsValue,
-    ],
-  );
+    };
+  }, [
+    cioClient,
+    cioClientOptions,
+    itemFieldGetters,
+    formatters,
+    callbacks,
+    urlHelpers,
+    renderOverrides,
+    staticRequestConfigs,
+    useShopifyDefaults,
+  ]);
 
   return contextValue;
 }
