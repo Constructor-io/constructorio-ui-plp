@@ -141,33 +141,36 @@ describe('CioPlp React Client-Side Rendering', () => {
       );
 
       expect(getByText('custom-callback')).toBeInTheDocument();
-  it('renders CioPlp with hideGroups set to true on the client', async () => {
-    const { container } = render(
-      <CioPlp
-        apiKey={DEMO_API_KEY}
-        groupsConfigs={{ hideGroups: true }}
-        initialSearchResponse={mockSearchResponse}
-      />,
-    );
-    // Groups container should not be present when hideGroups is true
-    await waitFor(() => {
-      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
-      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
     });
-  });
 
-  it('renders CioPlp with hideGroups set to false on the client', async () => {
-    const { container } = render(
-      <CioPlp
-        apiKey={DEMO_API_KEY}
-        groupsConfigs={{ hideGroups: false }}
-        initialSearchResponse={mockSearchResponse}
-      />,
-    );
-    // Groups container should be present when hideGroups is false
-    await waitFor(() => {
-      expect(container.querySelector('.cio-groups-container')).toBeInTheDocument();
-      expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
+    it('renders CioPlp with hideGroups set to true on the client', async () => {
+      const { container } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          groupsConfigs={{ hideGroups: true }}
+          initialSearchResponse={mockSearchResponse}
+        />,
+      );
+      // Groups container should not be present when hideGroups is true
+      await waitFor(() => {
+        expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+        expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+      });
+    });
+
+    it('renders CioPlp with hideGroups set to false on the client', async () => {
+      const { container } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          groupsConfigs={{ hideGroups: false }}
+          initialSearchResponse={mockSearchResponse}
+        />,
+      );
+      // Groups container should be present when hideGroups is false
+      await waitFor(() => {
+        expect(container.querySelector('.cio-groups-container')).toBeInTheDocument();
+        expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
+      });
     });
   });
 });
