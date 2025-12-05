@@ -22,8 +22,11 @@ export default function FilterGroup(props: FilterGroupProps) {
     setFilter(facetName, value);
   };
 
+  // Hide range filters when there's only a single value (no actual range to select)
+  const isSingleValueRange = isRangeFacet(facet) && facet.min === facet.max;
+
   return (
-    <li className='cio-filter-group'>
+    <li className={`cio-filter-group ${isSingleValueRange ? 'is-hidden' : ''}`}>
       <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
         {facet.displayName}
         <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />

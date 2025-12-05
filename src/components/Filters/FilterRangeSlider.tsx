@@ -36,8 +36,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   const [isModified, setIsModified] = useState(false);
 
-  const isSinglePrice = facet.min === facet.max;
-
   const isValidMinValue = (value: number | string): value is number =>
     typeof value !== 'string' && value < maxValue && value >= facet.min;
   const isValidMaxValue = (value: number | string): value is number =>
@@ -126,32 +124,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
   // Update internal state
   useEffect(() => {
-    // Handle edge case: when min === max (single price), reset the filter
-    if (facet.min === facet.max) {
-      const singleValue = facet.min;
-      setMinValue(singleValue);
-      setMaxValue(singleValue);
-      setInputMinValue(singleValue);
-      setInputMaxValue(singleValue);
-      setFilterRange(`${singleValue}-${singleValue}`);
-
-      // Clear the invalid filter from the URL if it was previously applied
-      if (
-        facet.status.min !== undefined &&
-        (facet.status.min !== singleValue || facet.status.max !== singleValue)
-      ) {
-        modifyRequestRangeFilter(`${singleValue}-${singleValue}`);
-      }
-      setIsModified(false);
-      return;
-    }
-
     if (facet.status.min !== undefined && !isModified) {
       // Initial state
       setMinValue(facet.status.min);
       setMaxValue(facet.status.max);
-      setInputMinValue(facet.status.min);
-      setInputMaxValue(facet.status.max);
       setFilterRange(`${facet.status.min}-${facet.status.max}`);
     } else if (isModified) {
       // Future updates
@@ -163,13 +139,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   // Update selected track styles
   useEffect(() => {
     const trackLen = facet.max - facet.min;
-
-    // Handle single price case (avoid division by zero)
-    if (trackLen === 0) {
-      setSelectedTrackStyles({ left: '0%', width: '0%', display: 'none' });
-      return;
-    }
-
     const rebasedStartValue = minValue - facet.min;
     const startPercentage = ((100 * rebasedStartValue) / trackLen).toFixed(2);
     const widthPercentage = ((100 * (maxValue - minValue)) / trackLen).toFixed(2);
@@ -198,7 +167,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 min={facet.min}
                 max={maxValue}
                 step={sliderStep}
-                disabled={isSinglePrice}
               />
             </span>
             <div className='cio-slider-input cio-slider-input-max'>
@@ -213,7 +181,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 min={minValue}
                 max={facet.max}
                 step={sliderStep}
-                disabled={isSinglePrice}
               />
             </div>
           </div>
@@ -222,7 +189,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             className='cio-doubly-ended-slider'
             ref={visibleTrack}
             role='presentation'
-            onClick={(e) => !isSinglePrice && onTrackClick(e)}>
+            onClick={(e) => onTrackClick(e)}>
             <div className='cio-slider-track-selected' style={selectedTrackStyles} />
             <input
               className='cio-min-slider'
@@ -234,7 +201,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               onChange={onMinSliderMove}
               onMouseUp={onSliderMoveEnd}
               onTouchEnd={onSliderMoveEnd}
-              disabled={isSinglePrice}
             />
             <input
               className='cio-max-slider'
@@ -246,7 +212,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
               onChange={onMaxSliderMove}
               onMouseUp={onSliderMoveEnd}
               onTouchEnd={onSliderMoveEnd}
-              disabled={isSinglePrice}
             />
           </div>
         </div>
