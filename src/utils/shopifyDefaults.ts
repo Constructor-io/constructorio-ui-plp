@@ -1,10 +1,12 @@
 import type { Callbacks, UrlHelpers, Item, Variation } from '../types';
 
-// eslint-disable-next-line import/prefer-default-export
-export function getShopifyDefaults(): {
+export interface ShopifyDefaults {
   urlHelpers: Pick<UrlHelpers, 'setUrl'>;
   callbacks: Pick<Callbacks, 'onAddToCart' | 'onProductCardClick'>;
-} {
+}
+
+// eslint-disable-next-line import/prefer-default-export
+export function getShopifyDefaults(): ShopifyDefaults {
   return {
     urlHelpers: {
       setUrl(url: string) {

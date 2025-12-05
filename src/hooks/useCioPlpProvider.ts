@@ -6,6 +6,8 @@ import * as defaultUrlHelpers from '../utils/urlHelpers';
 import { getShopifyDefaults } from '../utils/shopifyDefaults';
 import { PlpContextValue, IncludeRenderProps, CioPlpProviderProps } from '../types';
 
+const EMPTY_SHOPIFY_DEFAULTS = { callbacks: {}, urlHelpers: {} };
+
 export default function useCioPlpProvider(
   props: IncludeRenderProps<CioPlpProviderProps, PlpContextValue>,
 ) {
@@ -26,7 +28,7 @@ export default function useCioPlpProvider(
   const cioClient = useCioClient({ apiKey, cioClient: customCioClient, options: cioClientOptions });
 
   const shopifyDefaults = useMemo(
-    () => (useShopifyDefaults ? getShopifyDefaults() : { callbacks: {}, urlHelpers: {} }),
+    () => (useShopifyDefaults ? getShopifyDefaults() : EMPTY_SHOPIFY_DEFAULTS),
     [useShopifyDefaults],
   );
 
