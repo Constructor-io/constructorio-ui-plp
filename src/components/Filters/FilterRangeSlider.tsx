@@ -28,13 +28,19 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const visibleTrack = useRef<HTMLDivElement>(null);
   const [selectedTrackStyles, setSelectedTrackStyles] = useState({});
 
-  const [minValue, setMinValue] = useState(facet.min);
-  const [maxValue, setMaxValue] = useState(facet.max);
-  const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.status?.min || facet.min);
-  const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.status?.max || facet.max);
-  const [filterRange, setFilterRange] = useState('');
+  const isSingleValue = facet.min === facet.max;
 
-  const [isModified, setIsModified] = useState(false);
+  // When there's only one value, use the user's previous selection for display range
+  // Otherwise use the actual facet min/max
+  const displayMin =
+    isSingleValue && facet.status?.min !== undefined ? facet.status.min : facet.min;
+  const displayMax =
+    isSingleValue && facet.status?.max !== undefined ? facet.status.max : facet.max;
+
+  const [minValue, setMinValue] = useState(facet.status?.min ?? facet.min);
+  const [maxValue, setMaxValue] = useState(facet.status?.max ?? facet.max);
+  const [inputMinValue, setInputMinValue] = useState<number | ''>(facet.status?.min ?? facet.min);
+  const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.status?.max ?? facet.max);
 
   const isValidMinValue = (value: number | string): value is number =>
     typeof value !== 'string' && value < maxValue && value >= facet.min;
@@ -47,7 +53,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     if (isValidMinValue(sliderValue)) {
       setMinValue(sliderValue);
       setInputMinValue(sliderValue);
-      setIsModified(true);
     }
   };
 
@@ -57,7 +62,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     if (isValidMaxValue(sliderValue)) {
       setMaxValue(sliderValue);
       setInputMaxValue(sliderValue);
-      setIsModified(true);
     }
   };
 
@@ -74,7 +78,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
     if (isValidMaxValue(inputValue)) {
       setMaxValue(inputValue);
-      setIsModified(true);
     }
   };
 
@@ -85,13 +88,12 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
     if (isValidMinValue(inputValue)) {
       setMinValue(inputValue);
-      setIsModified(true);
     }
   };
 
   const onInputBlurApplyFilter = () => {
-    if (isModified && isValidMaxValue(inputMaxValue) && isValidMinValue(inputMinValue)) {
-      modifyRequestRangeFilter(filterRange);
+    if (isValidMaxValue(inputMaxValue) && isValidMinValue(inputMinValue)) {
+      modifyRequestRangeFilter(`${minValue}-${maxValue}`);
     }
   };
 
@@ -118,33 +120,32 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       setInputMaxValue(selectedValue);
       modifyRequestRangeFilter(newRange);
     }
-
-    setIsModified(true);
   };
 
   // Update internal state
   useEffect(() => {
-    if (facet.status.min !== undefined && !isModified) {
-      // Initial state
-      setMinValue(facet.status.min);
-      setMaxValue(facet.status.max);
-      setFilterRange(`${facet.status.min}-${facet.status.max}`);
-    } else if (isModified) {
-      // Future updates
-      setFilterRange(`${minValue}-${maxValue}`);
+    if (facet.status?.min !== undefined) {
+      const clampedMin = Math.max(displayMin, Math.min(displayMax, facet.status.min));
+      const clampedMax = Math.max(displayMin, Math.min(displayMax, facet.status.max));
+
+      setMinValue(clampedMin);
+      setMaxValue(clampedMax);
+
+      setInputMinValue(isSingleValue ? facet.status.min : clampedMin);
+      setInputMaxValue(isSingleValue ? facet.status.max : clampedMax);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minValue, maxValue, facet]);
+  }, [facet.status?.min, facet.status?.max, displayMin, displayMax, isSingleValue]);
 
   // Update selected track styles
   useEffect(() => {
-    const trackLen = facet.max - facet.min;
-    const rebasedStartValue = minValue - facet.min;
+    const trackLen = displayMax - displayMin;
+
+    const rebasedStartValue = minValue - displayMin;
     const startPercentage = ((100 * rebasedStartValue) / trackLen).toFixed(2);
     const widthPercentage = ((100 * (maxValue - minValue)) / trackLen).toFixed(2);
 
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
-  }, [minValue, maxValue, facet]);
+  }, [minValue, maxValue, facet, displayMin, displayMax]);
 
   return (
     <div
@@ -164,9 +165,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 onChange={onMinInputValueChange}
                 onBlur={onInputBlurApplyFilter}
                 placeholder={facet.min.toString()}
-                min={facet.min}
-                max={maxValue}
+                min={isSingleValue ? undefined : facet.min}
+                max={isSingleValue ? undefined : maxValue}
                 step={sliderStep}
+                disabled={isSingleValue}
               />
             </span>
             <div className='cio-slider-input cio-slider-input-max'>
@@ -178,9 +180,10 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
                 onChange={onMaxInputValueChange}
                 onBlur={onInputBlurApplyFilter}
                 placeholder={facet.max.toString()}
-                min={minValue}
-                max={facet.max}
+                min={isSingleValue ? undefined : minValue}
+                max={isSingleValue ? undefined : facet.max}
                 step={sliderStep}
+                disabled={isSingleValue}
               />
             </div>
           </div>
@@ -189,29 +192,31 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
             className='cio-doubly-ended-slider'
             ref={visibleTrack}
             role='presentation'
-            onClick={(e) => onTrackClick(e)}>
+            onClick={(e) => !isSingleValue && onTrackClick(e)}>
             <div className='cio-slider-track-selected' style={selectedTrackStyles} />
             <input
               className='cio-min-slider'
               type='range'
               step={sliderStep}
-              min={facet.min}
-              max={facet.max}
+              min={displayMin}
+              max={displayMax}
               value={minValue}
               onChange={onMinSliderMove}
               onMouseUp={onSliderMoveEnd}
               onTouchEnd={onSliderMoveEnd}
+              disabled={isSingleValue}
             />
             <input
               className='cio-max-slider'
               type='range'
               step={sliderStep}
-              min={facet.min}
-              max={facet.max}
+              min={displayMin}
+              max={displayMax}
               value={maxValue}
               onChange={onMaxSliderMove}
               onMouseUp={onSliderMoveEnd}
               onTouchEnd={onSliderMoveEnd}
+              disabled={isSingleValue}
             />
           </div>
         </div>

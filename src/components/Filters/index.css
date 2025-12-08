@@ -11,10 +11,6 @@
   list-style-type: none;
 }
 
-.cio-filter-group.is-hidden {
-  display: none;
-}
-
 .cio-filter-header {
   border: none;
   background: none;

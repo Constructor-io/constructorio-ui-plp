@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FilterGroup from '../../../src/components/Filters/FilterGroup';
 
@@ -10,19 +10,19 @@ describe('Testing Component: FilterGroup', () => {
     jest.clearAllMocks();
   });
 
-  it('Should hide range filter when min === max (single price)', () => {
+  it('Should render and disable range filter when min === max (prevent invalid selections)', () => {
     const singlePriceRangeFacet = {
       displayName: 'Price',
       name: 'price',
       type: 'range',
       data: {},
       hidden: false,
-      min: 25,
-      max: 25, // Single price scenario
-      status: { min: 25, max: 25 },
+      min: 11.2,
+      max: 11.2, // Single price scenario
+      status: { min: 5, max: 30 }, // User's previous selection out of range
     };
 
-    const { container } = render(
+    render(
       <FilterGroup
         facet={singlePriceRangeFacet}
         setFilter={mockSetFilter}
@@ -30,11 +30,18 @@ describe('Testing Component: FilterGroup', () => {
       />,
     );
 
-    const filterGroup = container.querySelector('.cio-filter-group');
-    expect(filterGroup).toHaveClass('is-hidden');
+    // Filter should still be visible
+    const filterHeader = screen.getByText('Price');
+    expect(filterHeader).toBeInTheDocument();
+
+    // Sliders should be present but disabled (only one price exists, nothing to adjust)
+    const sliders = screen.getAllByRole('slider');
+    expect(sliders).toHaveLength(2);
+    expect(sliders[0]).toBeDisabled();
+    expect(sliders[1]).toBeDisabled();
   });
 
-  it('Should show range filter when min !== max (normal range)', () => {
+  it('Should render range filter normally when min !== max', () => {
     const normalRangeFacet = {
       displayName: 'Price',
       name: 'price',
@@ -46,11 +53,14 @@ describe('Testing Component: FilterGroup', () => {
       status: { min: 1, max: 100 },
     };
 
-    const { container } = render(
+    render(
       <FilterGroup facet={normalRangeFacet} setFilter={mockSetFilter} initialNumOptions={10} />,
     );
 
-    const filterGroup = container.querySelector('.cio-filter-group');
-    expect(filterGroup).not.toHaveClass('is-hidden');
+    const filterHeader = screen.getByText('Price');
+    expect(filterHeader).toBeInTheDocument();
+
+    const sliders = screen.getAllByRole('slider');
+    expect(sliders).toHaveLength(2);
   });
 });
