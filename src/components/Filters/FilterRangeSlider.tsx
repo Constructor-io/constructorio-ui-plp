@@ -23,19 +23,34 @@ function getValueFromOnChangeEvent(e: React.ChangeEvent<HTMLInputElement>) {
   return parsedValue;
 }
 
+/**
+ * Calculate the display range for the slider.
+ * When there's only one price value (min === max), use the user's previous selection
+ * to position the knobs at the edges. Otherwise, use the actual facet min/max.
+ */
+function getDisplayRange(facet: PlpRangeFacet, isSingleValue: boolean) {
+  if (isSingleValue && facet.status?.min !== undefined && facet.status?.max !== undefined) {
+    return {
+      displayMin: facet.status.min,
+      displayMax: facet.status.max,
+    };
+  }
+  return {
+    displayMin: facet.min,
+    displayMax: facet.max,
+  };
+}
+
+// Default track styles when range collapses to a single value
+const COLLAPSED_TRACK_STYLE = { left: '0%', width: '100%' };
+
 export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const { rangedFacet: facet, modifyRequestRangeFilter, isCollapsed, sliderStep = 0.1 } = props;
   const visibleTrack = useRef<HTMLDivElement>(null);
   const [selectedTrackStyles, setSelectedTrackStyles] = useState({});
 
   const isSingleValue = facet.min === facet.max;
-
-  // When there's only one value, use the user's previous selection for display range
-  // Otherwise use the actual facet min/max
-  const displayMin =
-    isSingleValue && facet.status?.min !== undefined ? facet.status.min : facet.min;
-  const displayMax =
-    isSingleValue && facet.status?.max !== undefined ? facet.status.max : facet.max;
+  const { displayMin, displayMax } = getDisplayRange(facet, isSingleValue);
 
   const [minValue, setMinValue] = useState(facet.status?.min ?? facet.min);
   const [maxValue, setMaxValue] = useState(facet.status?.max ?? facet.max);
@@ -43,9 +58,13 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const [inputMaxValue, setInputMaxValue] = useState<number | ''>(facet.status?.max ?? facet.max);
 
   const isValidMinValue = (value: number | string): value is number =>
-    typeof value !== 'string' && value < maxValue && value >= facet.min;
+    typeof value !== 'string' &&
+    value < maxValue &&
+    value >= (isSingleValue ? displayMin : facet.min);
   const isValidMaxValue = (value: number | string): value is number =>
-    typeof value !== 'string' && value > minValue && value <= facet.max;
+    typeof value !== 'string' &&
+    value > minValue &&
+    value <= (isSingleValue ? displayMax : facet.max);
 
   const onMinSliderMove = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sliderValue = getValueFromOnChangeEvent(event);
@@ -100,6 +119,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   const onTrackClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (visibleTrack.current === null) return;
     if (event.target !== visibleTrack.current) return;
+    if (isSingleValue) return; // Prevent interaction when only one price exists
+
     const totalWidth = visibleTrack.current!.offsetWidth;
     const clickedX = event.nativeEvent.offsetX;
 
@@ -123,7 +144,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
-  // Update internal state
+  // Update internal state when facet changes
   useEffect(() => {
     if (facet.status?.min !== undefined) {
       const clampedMin = Math.max(displayMin, Math.min(displayMax, facet.status.min));
@@ -135,7 +156,15 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
       setInputMinValue(isSingleValue ? facet.status.min : clampedMin);
       setInputMaxValue(isSingleValue ? facet.status.max : clampedMax);
     }
-  }, [facet.status?.min, facet.status?.max, displayMin, displayMax, isSingleValue]);
+  }, [
+    facet.min,
+    facet.max,
+    facet.status?.min,
+    facet.status?.max,
+    displayMin,
+    displayMax,
+    isSingleValue,
+  ]);
 
   // Update selected track styles
   useEffect(() => {
@@ -143,7 +172,7 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
 
     // Prevent division by zero when range collapses
     if (trackLen === 0) {
-      setSelectedTrackStyles({ left: '0%', width: '100%' });
+      setSelectedTrackStyles(COLLAPSED_TRACK_STYLE);
       return;
     }
 

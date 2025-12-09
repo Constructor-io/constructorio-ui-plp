@@ -39,6 +39,19 @@ describe('Testing Component: FilterGroup', () => {
     expect(sliders).toHaveLength(2);
     expect(sliders[0]).toBeDisabled();
     expect(sliders[1]).toBeDisabled();
+
+    // Number inputs should also be disabled
+    const numberInputs = screen.getAllByRole('spinbutton');
+    expect(numberInputs).toHaveLength(2);
+    expect(numberInputs[0]).toBeDisabled();
+    expect(numberInputs[1]).toBeDisabled();
+
+    // Inputs should show the user's previous selection (5 and 30)
+    expect(numberInputs[0]).toHaveValue(5);
+    expect(numberInputs[1]).toHaveValue(30);
+
+    // setFilter should not be called when controls are disabled
+    expect(mockSetFilter).not.toHaveBeenCalled();
   });
 
   it('Should render range filter normally when min !== max', () => {
@@ -65,5 +78,14 @@ describe('Testing Component: FilterGroup', () => {
     expect(sliders).toHaveLength(2);
     expect(sliders[0]).not.toBeDisabled();
     expect(sliders[1]).not.toBeDisabled();
+
+    // Number inputs should also be enabled
+    const numberInputs = screen.getAllByRole('spinbutton');
+    expect(numberInputs).toHaveLength(2);
+    expect(numberInputs[0]).not.toBeDisabled();
+    expect(numberInputs[1]).not.toBeDisabled();
+
+    // setFilter should not be called on initial render
+    expect(mockSetFilter).not.toHaveBeenCalled();
   });
 });
