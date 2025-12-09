@@ -103,7 +103,8 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     const totalWidth = visibleTrack.current!.offsetWidth;
     const clickedX = event.nativeEvent.offsetX;
 
-    const selectedValue = Math.round((clickedX / totalWidth) * (facet.max - facet.min)) + facet.min;
+    const selectedValue =
+      Math.round((clickedX / totalWidth) * (displayMax - displayMin)) + displayMin;
     const distMinToClicked = Math.abs(selectedValue - minValue);
     const distMaxToClicked = Math.abs(selectedValue - maxValue);
 
@@ -140,12 +141,18 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
   useEffect(() => {
     const trackLen = displayMax - displayMin;
 
+    // Prevent division by zero when range collapses
+    if (trackLen === 0) {
+      setSelectedTrackStyles({ left: '0%', width: '100%' });
+      return;
+    }
+
     const rebasedStartValue = minValue - displayMin;
     const startPercentage = ((100 * rebasedStartValue) / trackLen).toFixed(2);
     const widthPercentage = ((100 * (maxValue - minValue)) / trackLen).toFixed(2);
 
     setSelectedTrackStyles({ left: `${startPercentage}%`, width: `${widthPercentage}%` });
-  }, [minValue, maxValue, facet, displayMin, displayMax]);
+  }, [minValue, maxValue, displayMin, displayMax]);
 
   return (
     <div

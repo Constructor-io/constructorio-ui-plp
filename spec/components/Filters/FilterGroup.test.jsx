@@ -60,7 +60,10 @@ describe('Testing Component: FilterGroup', () => {
     const filterHeader = screen.getByText('Price');
     expect(filterHeader).toBeInTheDocument();
 
+    // Sliders should be present and enabled (normal range scenario)
     const sliders = screen.getAllByRole('slider');
     expect(sliders).toHaveLength(2);
+    expect(sliders[0]).not.toBeDisabled();
+    expect(sliders[1]).not.toBeDisabled();
   });
 });
