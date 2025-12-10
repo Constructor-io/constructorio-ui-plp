@@ -1,14 +1,19 @@
-import testItem from './local_examples/item.json';
-import testRequest from './local_examples/apiSearchResponse.json';
-import { transformResponseFacets, transformResultItem } from '../src/utils/transformers';
+import testItem from '../local_examples/item.json';
+import testRequest from '../local_examples/apiSearchResponse.json';
+import {
+  transformResponseFacets,
+  transformResultItem,
+  isHierarchicalFacet,
+  isOptionFacet,
+  isRangeFacet,
+} from '../../src/utils';
 import {
   ApiFacet,
   ApiHierarchicalFacetOption,
   ApiItem,
   PlpFacetOption,
   PlpHierarchicalFacetOption,
-} from '../src/types';
-import { isHierarchicalFacet, isOptionFacet, isRangeFacet } from '../src/utils';
+} from '../../src/types';
 
 describe('Testing Transformers: transformResultItem', () => {
   test('Should return all base properties as camelCased properties', () => {

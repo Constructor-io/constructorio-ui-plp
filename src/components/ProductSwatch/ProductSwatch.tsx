@@ -2,7 +2,7 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
-import { isHexColor } from '../../utils';
+import { isHexColor, cnstrcDataAttrs } from '../../utils';
 
 export type ProductSwatchProps = IncludeRenderProps<
   {
@@ -52,23 +52,26 @@ export default function ProductSwatch(props: ProductSwatchProps) {
               const color = isHexColor(swatch?.swatchPreview)
                 ? swatch?.swatchPreview
                 : `url(${swatch?.swatchPreview})`;
+              const variationIdAttr = {
+                [cnstrcDataAttrs.common.variationId]: swatch.variationId,
+              };
 
               return (
                 <button
                   type='button'
                   key={swatch.variationId}
-                  data-cnstrc-variation-id={swatch.variationId}
                   data-testid={`cio-swatch-${swatch.variationId}`}
                   className='cio-swatch-button cio-swatch-item'
                   onClick={(e) => swatchClickHandler(e, swatch)}
                   style={{
                     background: color,
-                  }}>
+                  }}
+                  {...variationIdAttr}>
                   {isSelected && (
                     <div
-                      data-cnstrc-variation-id={swatch.variationId}
                       className='cio-swatch-selected'
                       style={{ outline: `3px solid ${color}` }}
+                      {...variationIdAttr}
                     />
                   )}
                 </button>

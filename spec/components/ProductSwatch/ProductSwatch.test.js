@@ -1,6 +1,4 @@
-/* eslint-disable @cspell/spellchecker */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, screen } from '@testing-library/react';
@@ -10,6 +8,7 @@ import { transformResultItem } from '../../../src/utils/transformers';
 import SampleItem from '../../local_examples/item.json';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
+import { cnstrcDataAttrs } from '../../../src/utils';
 
 describe('Product Swatch Component', () => {
   const swatchObject = {
@@ -64,7 +63,8 @@ describe('Product Swatch Component', () => {
     );
 
     swatchObject.swatchList.forEach((swatch) => {
-      fireEvent.click(container?.querySelector(`[data-cnstrc-variation-id=${swatch.variationId}]`));
+      const swatchSelector = `[${cnstrcDataAttrs.common.variationId}=${swatch.variationId}]`;
+      fireEvent.click(container?.querySelector(swatchSelector));
       expect(mockSelectVariation).toHaveBeenCalledWith(swatch);
     });
   });
@@ -94,18 +94,15 @@ describe('Test user interactions', () => {
   // Selected variation should change properly when swatch is clicked
   it('selected variation should change when swatch is clicked', () => {
     const { container } = render(<UseProductSwatchExample {...props} />);
+    const secondSwatchSelector = `[${cnstrcDataAttrs.common.variationId}=${SampleItem.variations[1].data.variation_id}]`;
 
     expect(container?.getElementsByClassName('cio-swatch-selected').length).toBe(1);
     expect(
-      container?.getElementsByClassName('cio-swatch-selected')[0].dataset?.cnstrcVariationId,
+      container?.getElementsByClassName('cio-swatch-selected')[0].dataset?.cnstrcItemVariationId,
     ).toBe(SampleItem?.variations?.[0].data.variation_id);
-    fireEvent.click(
-      container?.querySelector(
-        `[data-cnstrc-variation-id=${SampleItem.variations[1].data.variation_id}]`,
-      ),
-    );
+    fireEvent.click(container?.querySelector(secondSwatchSelector));
     expect(
-      container?.getElementsByClassName('cio-swatch-selected')?.[0]?.dataset?.cnstrcVariationId,
+      container?.getElementsByClassName('cio-swatch-selected')?.[0]?.dataset?.cnstrcItemVariationId,
     ).toBe(SampleItem.variations[1].data.variation_id);
   });
 });

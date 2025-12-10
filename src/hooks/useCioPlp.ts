@@ -125,10 +125,12 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
   const groups = useGroups({ groups: rawGroups, ...groupsConfigs });
 
   const data = isSearchPage ? search.data : browse.data;
+  const status = isSearchPage ? search.status : browse.status;
 
   const plpContainerCnstrcDataAttributes = getPlpContainerCnstrcDataAttributes(
     data,
     requestConfigs,
+    status === 'fetching',
   );
 
   return {
@@ -137,7 +139,7 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     searchQuery: search.query,
     browseFilterName: browse.filterName,
     browseFilterValue: browse.filterValue,
-    status: isSearchPage ? search.status : browse.status,
+    status,
     data,
     refetch,
     filters,

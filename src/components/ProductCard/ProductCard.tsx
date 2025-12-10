@@ -3,7 +3,11 @@ import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnAddToCart, useOnProductCardClick } from '../../hooks/callbacks';
 import ProductSwatch from '../ProductSwatch';
 import useProductInfo from '../../hooks/useProduct';
-import { concatStyles, getProductCardCnstrcDataAttributes } from '../../utils';
+import {
+  concatStyles,
+  getProductCardCnstrcDataAttributes,
+  getConversionButtonCnstrcDataAttributes,
+} from '../../utils';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { ProductCardProps } from '../../types';
 import { EMITTED_EVENTS } from '../../constants';
@@ -41,7 +45,10 @@ export default function ProductCard(props: ProductCardProps) {
   const { formatPrice } = state.formatters;
   const onClick = useOnProductCardClick(client, state.callbacks.onProductCardClick);
 
-  const cnstrcData = getProductCardCnstrcDataAttributes(productInfo);
+  const cnstrcDataAttrs = getProductCardCnstrcDataAttributes(productInfo, {
+    labels: item.labels,
+  });
+  const addToCartBtnAttrs = getConversionButtonCnstrcDataAttributes('add_to_cart');
 
   const handleRolloverImageState = (isShown: boolean) => {
     setIsRolloverImageShown(isShown);
@@ -79,13 +86,13 @@ export default function ProductCard(props: ProductCardProps) {
         onMouseEnter,
         onMouseLeave,
         isRolloverImageShown,
-        productCardCnstrcDataAttributes: cnstrcData,
+        productCardCnstrcDataAttributes: cnstrcDataAttrs,
       }}
       override={children}
       htmlOverride={state.renderOverrides.productCard?.renderHtml}
-      topLevelAttributes={{ ...cnstrcData, className: 'cio-product-card' }}>
+      topLevelAttributes={{ ...cnstrcDataAttrs, className: 'cio-product-card' }}>
       <a
-        {...cnstrcData}
+        {...cnstrcDataAttrs}
         className='cio-product-card'
         href={itemUrl}
         ref={cardRef}
@@ -129,6 +136,7 @@ export default function ProductCard(props: ProductCardProps) {
           {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
         </div>
         <button
+          {...addToCartBtnAttrs}
           className='cio-add-to-cart-button'
           type='button'
           onClick={(e) =>
