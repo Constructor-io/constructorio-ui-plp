@@ -6,8 +6,6 @@ import * as defaultUrlHelpers from '../utils/urlHelpers';
 import { shopifyDefaults } from '../utils/shopifyDefaults';
 import { PlpContextValue, IncludeRenderProps, CioPlpProviderProps } from '../types';
 
-const EMPTY_SHOPIFY_DEFAULTS = { callbacks: {}, urlHelpers: {} };
-
 export default function useCioPlpProvider(
   props: IncludeRenderProps<CioPlpProviderProps, PlpContextValue>,
 ) {
@@ -27,30 +25,34 @@ export default function useCioPlpProvider(
   const [cioClientOptions, setCioClientOptions] = useState(customCioClientOptions);
   const cioClient = useCioClient({ apiKey, cioClient: customCioClient, options: cioClientOptions });
 
-  const contextValue = useMemo((): PlpContextValue => {
-    const shopifyDefaultsValue = useShopifyDefaults ? shopifyDefaults : EMPTY_SHOPIFY_DEFAULTS;
-    return {
+  const contextValue = useMemo(
+    (): PlpContextValue => ({
       cioClient,
       cioClientOptions,
       setCioClientOptions,
       staticRequestConfigs,
       itemFieldGetters: { ...defaultGetters, ...itemFieldGetters },
       formatters: { ...defaultFormatters, ...formatters },
-      callbacks: { ...shopifyDefaultsValue.callbacks, ...callbacks },
-      urlHelpers: { ...defaultUrlHelpers, ...shopifyDefaultsValue.urlHelpers, ...urlHelpers },
+      callbacks: { ...(useShopifyDefaults && shopifyDefaults.callbacks), ...callbacks },
+      urlHelpers: {
+        ...defaultUrlHelpers,
+        ...(useShopifyDefaults && shopifyDefaults.urlHelpers),
+        ...urlHelpers,
+      },
       renderOverrides: { ...renderOverrides },
-    };
-  }, [
-    cioClient,
-    cioClientOptions,
-    itemFieldGetters,
-    formatters,
-    callbacks,
-    urlHelpers,
-    renderOverrides,
-    staticRequestConfigs,
-    useShopifyDefaults,
-  ]);
+    }),
+    [
+      cioClient,
+      cioClientOptions,
+      itemFieldGetters,
+      formatters,
+      callbacks,
+      urlHelpers,
+      renderOverrides,
+      staticRequestConfigs,
+      useShopifyDefaults,
+    ],
+  );
 
   return contextValue;
 }
