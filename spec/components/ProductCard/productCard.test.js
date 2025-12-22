@@ -147,6 +147,34 @@ describe('Testing Component: ProductCard', () => {
     );
   });
 
+  test('Should use href from getItemUrl in anchor tag', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const anchorElement = screen.getByRole('link');
+    expect(anchorElement.getAttribute('href')).toBe(item.url);
+  });
+
+  test('Should use custom href if getItemUrl is overridden', () => {
+    const item = transformResultItem(testItem);
+    const customHref = 'https://custom-url.com/product';
+    const customGetItemUrl = jest.fn(() => customHref);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} itemFieldGetters={{ getItemUrl: customGetItemUrl }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const anchorElement = screen.getByRole('link');
+    expect(anchorElement.getAttribute('href')).toBe(customHref);
+    expect(customGetItemUrl).toHaveBeenCalled();
+  });
+
   test('Should pass expected props, including the updated selectedVariation when a swatch has been selected, to the custom onAddToCart handler if defined', () => {
     const contextOnAddToCart = jest.fn();
     const item = transformResultItem(testItem);

@@ -6,6 +6,7 @@ import {
   getPrice as defaultGetPrice,
   getSalePrice as defaultGetSalePrice,
   getRolloverImage as defaultGetRolloverImage,
+  getItemUrl as defaultGetItemUrl,
 } from '../utils/itemFieldGetters';
 
 const useProductInfo: UseProductInfo = ({ item }) => {
@@ -21,11 +22,17 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   const getRolloverImage = tryCatchify(
     state?.itemFieldGetters?.getRolloverImage || defaultGetRolloverImage,
   );
+  const getItemUrl = tryCatchify(state?.itemFieldGetters?.getItemUrl || defaultGetItemUrl);
 
   const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
   const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
   const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
-  const itemUrl = productSwatch?.selectedVariation?.url || item.url;
+  // Get href - merge variation URL into item if variation is selected
+  const itemWithVariationUrl = productSwatch?.selectedVariation
+    ? { ...item, url: productSwatch.selectedVariation.url }
+    : item;
+  const itemUrl = getItemUrl(itemWithVariationUrl) || productSwatch?.selectedVariation?.url;
+
   const variationId = productSwatch?.selectedVariation?.variationId;
   let rolloverImage = productSwatch?.selectedVariation?.rolloverImage;
 
