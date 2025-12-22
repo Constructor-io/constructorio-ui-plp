@@ -6,6 +6,7 @@ import { DEMO_API_KEY } from '../../../src/constants';
 import { transformSearchResponse } from '../../../src/utils/transformers';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 import { RequestStatus } from '../../../src/components/CioPlpGrid/reducer';
+import { cnstrcDataAttrs } from '../../../src/utils';
 
 jest.mock('../../../src/styles.css', () => ({}));
 jest.mock('../../../src/hooks/useSearchResults');
@@ -85,9 +86,11 @@ describe('Testing Component on the server: CioPlpGrid', () => {
       </CioPlp>,
     );
 
-    expect(html).toContain('data-cnstrc-search');
-    expect(html).toContain(`data-cnstrc-num-results="${mockSearchData.response.totalNumResults}"`);
-    expect(html).toContain(`data-cnstrc-result-id="${mockSearchData.resultId}"`);
+    expect(html).toContain(cnstrcDataAttrs.search.searchContainer);
+    expect(html).toContain(
+      `${cnstrcDataAttrs.common.numResults}="${mockSearchData.response.totalNumResults}"`,
+    );
+    expect(html).toContain(`${cnstrcDataAttrs.common.resultId}="${mockSearchData.resultId}"`);
   });
 
   it('Should render CioPlpGrid with hideGroups set to true on the server', () => {

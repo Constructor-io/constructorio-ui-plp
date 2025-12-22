@@ -7,7 +7,7 @@ import { DEMO_API_KEY, EMITTED_EVENTS } from '../../../src/constants';
 import testItem from '../../local_examples/item.json';
 import testItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
 import testItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
-import { transformResultItem } from '../../../src/utils/transformers';
+import { transformResultItem, cnstrcDataAttrs } from '../../../src/utils';
 import { copyItemWithNewSalePrice } from '../../test-utils';
 import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
@@ -414,5 +414,78 @@ describe('Testing Component: ProductCard', () => {
     );
 
     expect(screen.queryByTestId('cio-sale-price')).toBeNull();
+  });
+
+  test('Should render cnstrc data attributes on ProductCard', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemId)).toBe(item.itemId);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBe('90');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.variationId)).toBeTruthy();
+  });
+
+  test('Should not include price or variation ID when not provided', () => {
+    const itemWithoutOptionals = {
+      ...testItem,
+      data: {
+        ...testItem.data,
+        price: undefined,
+        variation_id: undefined,
+      },
+    };
+    const item = transformResultItem(itemWithoutOptionals);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBeNull();
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.variationId)).toBeNull();
+    // But should still have required attributes
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemId)).toBe(item.itemId);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
+  });
+
+  test('Should render conversion button attribute on Add to Cart button', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const addToCartButton = screen.getByText('Add to Cart');
+    expect(addToCartButton.getAttribute(cnstrcDataAttrs.common.conversionBtn)).toBe('add_to_cart');
+  });
+
+  test('Should include sponsored listing data attributes when present', () => {
+    const itemWithSponsoredData = {
+      ...testItem,
+      labels: {
+        sl_campaign_id: 'test-campaign-123',
+        sl_campaign_owner: 'test-owner-456',
+      },
+    };
+    const item = transformResultItem(itemWithSponsoredData);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.slCampaignId)).toBe('test-campaign-123');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.slCampaignOwner)).toBe('test-owner-456');
   });
 });
