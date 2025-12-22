@@ -427,8 +427,33 @@ describe('Testing Component: ProductCard', () => {
     const productCard = screen.getByRole('link');
     expect(productCard.getAttribute(cnstrcDataAttrs.common.itemId)).toBe(item.itemId);
     expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
-    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBeTruthy();
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBe('90');
     expect(productCard.getAttribute(cnstrcDataAttrs.common.variationId)).toBeTruthy();
+  });
+
+  test('Should not include price or variation ID when not provided', () => {
+    const itemWithoutOptionals = {
+      ...testItem,
+      data: {
+        ...testItem.data,
+        price: undefined,
+        variation_id: undefined,
+      },
+    };
+    const item = transformResultItem(itemWithoutOptionals);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    const productCard = screen.getByRole('link');
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemPrice)).toBeNull();
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.variationId)).toBeNull();
+    // But should still have required attributes
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemId)).toBe(item.itemId);
+    expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
   });
 
   test('Should render conversion button attribute on Add to Cart button', () => {
