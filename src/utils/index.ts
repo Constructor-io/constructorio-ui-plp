@@ -7,3 +7,4 @@ export * from './dataAttributeHelpers';
 export * from './urlHelpers';
 export * from './requestConfigsHelpers';
 export * from './common';
+export * from './shopifyDefaults';

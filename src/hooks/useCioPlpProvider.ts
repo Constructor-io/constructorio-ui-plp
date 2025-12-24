@@ -3,6 +3,7 @@ import useCioClient from './useCioClient';
 import * as defaultGetters from '../utils/itemFieldGetters';
 import * as defaultFormatters from '../utils/formatters';
 import * as defaultUrlHelpers from '../utils/urlHelpers';
+import { shopifyDefaults } from '../utils/shopifyDefaults';
 import { PlpContextValue, IncludeRenderProps, CioPlpProviderProps } from '../types';
 
 export default function useCioPlpProvider(
@@ -18,6 +19,7 @@ export default function useCioPlpProvider(
     renderOverrides = {},
     cioClient: customCioClient,
     cioClientOptions: customCioClientOptions = {},
+    useShopifyDefaults = false,
   } = props;
 
   const [cioClientOptions, setCioClientOptions] = useState(customCioClientOptions);
@@ -31,8 +33,12 @@ export default function useCioPlpProvider(
       staticRequestConfigs,
       itemFieldGetters: { ...defaultGetters, ...itemFieldGetters },
       formatters: { ...defaultFormatters, ...formatters },
-      callbacks: { ...callbacks },
-      urlHelpers: { ...defaultUrlHelpers, ...urlHelpers },
+      callbacks: { ...(useShopifyDefaults && shopifyDefaults.callbacks), ...callbacks },
+      urlHelpers: {
+        ...defaultUrlHelpers,
+        ...(useShopifyDefaults && shopifyDefaults.urlHelpers),
+        ...urlHelpers,
+      },
       renderOverrides: { ...renderOverrides },
     }),
     [
@@ -44,6 +50,7 @@ export default function useCioPlpProvider(
       urlHelpers,
       renderOverrides,
       staticRequestConfigs,
+      useShopifyDefaults,
     ],
   );
 
