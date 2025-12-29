@@ -22,9 +22,11 @@ describe('shopifyDefaults', () => {
   });
 
   describe('shopifyDefaults', () => {
-    it('should return an object with urlHelpers and callbacks', () => {
+    it('should return an object with selector, urlHelpers and callbacks', () => {
+      expect(shopifyDefaults).toHaveProperty('selector');
       expect(shopifyDefaults).toHaveProperty('urlHelpers');
       expect(shopifyDefaults).toHaveProperty('callbacks');
+      expect(shopifyDefaults.selector).toBe('#cio-plp-ui-container');
       expect(shopifyDefaults.urlHelpers).toHaveProperty('setUrl');
       expect(shopifyDefaults.callbacks).toHaveProperty('onAddToCart');
       expect(shopifyDefaults.callbacks).toHaveProperty('onProductCardClick');

@@ -1,12 +1,14 @@
 import type { Callbacks, UrlHelpers, Item, Variation } from '../types';
 
 export interface ShopifyDefaults {
+  selector: string;
   urlHelpers: Pick<UrlHelpers, 'setUrl'>;
   callbacks: Pick<Callbacks, 'onAddToCart' | 'onProductCardClick'>;
 }
 
 // eslint-disable-next-line import/prefer-default-export
 export const shopifyDefaults: ShopifyDefaults = {
+  selector: '#cio-plp-ui-container',
   urlHelpers: {
     setUrl(url: string) {
       const modifiedUrl = url.replace('/group_id', '/collections');

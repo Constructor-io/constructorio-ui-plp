@@ -2,12 +2,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import CioPlpComponent from './components/CioPlp';
+import { shopifyDefaults } from './utils/shopifyDefaults';
 import './styles.css';
 
-const CioPlp = ({ selector, includeCSS = true, ...rest }) => {
+const CioPlp = ({ selector, includeCSS = true, useShopifyDefaults, ...rest }) => {
   if (document) {
     const stylesheet = document.getElementById('cio-plp-styles');
-    const containerElement = document.querySelector(selector);
+    const containerSelector =
+      selector || (useShopifyDefaults ? shopifyDefaults.selector : undefined);
+    const containerElement = containerSelector ? document.querySelector(containerSelector) : null;
 
     if (!containerElement) {
       // eslint-disable-next-line no-console
@@ -26,7 +29,7 @@ const CioPlp = ({ selector, includeCSS = true, ...rest }) => {
 
     ReactDOM.createRoot(containerElement).render(
       <React.StrictMode>
-        <CioPlpComponent {...rest} />
+        <CioPlpComponent {...rest} useShopifyDefaults={useShopifyDefaults} />
       </React.StrictMode>,
     );
   }

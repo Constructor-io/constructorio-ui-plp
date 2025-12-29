@@ -50,6 +50,34 @@ CioPlp({
 });
 ```
 
+### 🛍️ Shopify-Specific Defaults
+
+When integrating with Shopify themes, you can use the `useShopifyDefaults` prop to enable Shopify-specific behavior:
+
+```jsx
+<CioPlp apiKey='your-api-key' useShopifyDefaults=true />
+```
+
+**What it provides:**
+
+- `callbacks.onAddToCart`: Adds products to the Shopify cart via `/cart/add.js` API
+- `callbacks.onProductCardClick`: Navigates to `/products/{itemId}`
+- `urlHelpers.setUrl`: Converts `/group_id/` URLs to `/collections/` for Shopify compatibility
+
+**For the JavaScript Bundle:**
+
+When using `useShopifyDefaults` with the bundled version, you can omit the `selector` parameter and it will default to `#cio-plp-ui-container`:
+
+```js
+CioPlp({
+  apiKey: 'your-api-key',
+  useShopifyDefaults: true,
+  // selector defaults to '#cio-plp-ui-container'
+});
+```
+
+**Note:** Any custom `callbacks` or `urlHelpers` you provide will override the Shopify defaults.
+
 ## Custom Styling
 
 ### Library Defaults
