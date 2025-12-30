@@ -55,7 +55,7 @@ CioPlp({
 When integrating with Shopify themes, you can use the `useShopifyDefaults` prop to enable Shopify-specific behavior:
 
 ```jsx
-<CioPlp apiKey='your-api-key' useShopifyDefaults=true />
+<CioPlp apiKey='your-api-key' useShopifyDefaults={true} />
 ```
 
 **What it provides:**
