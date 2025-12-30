@@ -294,6 +294,7 @@ export interface CioPlpProviderProps {
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
+  useShopifyDefaults?: boolean;
 }
 
 export type UseSortReturn = {
