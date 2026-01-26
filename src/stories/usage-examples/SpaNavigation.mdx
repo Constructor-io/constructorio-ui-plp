@@ -22,8 +22,9 @@ The immediate workaround is to **override `urlHelpers`** when you render the PLP
 ## Checklist
 - **Override `urlHelpers.setUrl`** to call your router (`navigate`, `history.pushState`, etc.) instead of doing a hard navigation.
 - **Ensure the PLP refetches** after URL changes (the library reads state from the URL, but data fetching happens on mount).
-- **Remount `<CioPlp />` on URL changes** (recommended) by keying it off an incrementing `plpKey` counter (example below).
+- **Remount `<CioPlp />` on URL changes** (required) by keying it off the current URL (example below).
 - **Add `key` to iterable components** in any custom render overrides you provide (and in your own wrappers), to avoid React reconciliation issues.
+- **Override `callbacks.onRedirect`** if your API returns redirect responses.
 
 ---
 
@@ -71,15 +72,10 @@ function useSpaUrlHelpers() {
 export function PlpPage() {
   const { getUrl, setUrl } = useSpaUrlHelpers();
   const currentUrl = getUrl();
-  const [plpKey, setPlpKey] = React.useState(1);
-
-  React.useEffect(() => {
-    setPlpKey((key) => key + 1);
-  }, [currentUrl]);
 
   return (
     <CioPlp
-      key={plpKey}
+      key={currentUrl}
       apiKey="YOUR_KEY"
       urlHelpers={{
         getUrl,
@@ -132,6 +128,7 @@ export function PlpPage() {
 
   return (
     <CioPlp
+      key={href}
       apiKey="YOUR_KEY"
       urlHelpers={urlHelpers}
     />
@@ -243,7 +240,7 @@ The library already has keys in most default markup, but if you are:
           <h3>{facet.displayName ?? facet.name}</h3>
 
           {(facet.options ?? []).map((opt) => (
-            <label key={`${facet.name}:${opt.value}`}> 
+            <label key={`${facet.name}:${opt.value}`}>
               <input
                 type="checkbox"
                 onChange={(e) => {
