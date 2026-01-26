@@ -24,7 +24,6 @@ The immediate workaround is to **override `urlHelpers`** when you render the PLP
 - **Ensure the PLP refetches** after URL changes (the library reads state from the URL, but data fetching happens on mount).
 - **Remount `<CioPlp />` on URL changes** (required) by keying it off the current URL (example below).
 - **Add `key` to iterable components** in any custom render overrides you provide (and in your own wrappers), to avoid React reconciliation issues.
-- **Override `callbacks.onRedirect`** if your API returns redirect responses.
 
 ---
 
