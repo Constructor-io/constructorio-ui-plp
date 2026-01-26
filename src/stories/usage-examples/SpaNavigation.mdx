@@ -36,6 +36,7 @@ You can pass `urlHelpers` into `<CioPlpProvider />` / `<CioPlp />`. The provider
 ```tsx
 import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
 
 function useSpaUrlHelpers() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export function PlpPage() {
 
 #### Notes
 - Facets/sort/pagination will now update the URL via `navigate(...)` without reloading.
-- The PLP reads request state from the URL, but fetch hooks currently run on mount. In SPA routing, URL updates do not necessarily remount components, so updating a `plpKey` counter and passing it as the `<CioPlp />` `key` is a simple way to ensure it refetches.
+- The PLP reads request state from the URL, but fetch hooks currently run on mount. In SPA routing, URL updates do not necessarily remount components, so passing the current URL as the `<CioPlp />` `key` is a simple way to ensure it refetches.
 
 ---
 
@@ -97,6 +98,7 @@ If the app has a custom router:
 
 ```tsx
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
 
 function useHistoryLocation() {
   const [href, setHref] = useState(() => window.location.href);
@@ -265,3 +267,13 @@ The library already has keys in most default markup, but if you are:
 - Prefer router navigation (`navigate`, `router.push`) over `pushState` if the app already has routing—your router will handle re-rendering and scroll restoration.
 - If you also see full reloads on redirects, override the library callback:
   - `callbacks.onRedirect = (url) => navigate(url)` (router) instead of `window.location.replace(url)`.
+
+```tsx
+<CioPlp
+  apiKey="YOUR_KEY"
+  urlHelpers={{ getUrl, setUrl }}
+  callbacks={{
+    onRedirect: (url) => navigate(url), // SPA redirect instead of window.location.replace
+  }}
+/>
+```
