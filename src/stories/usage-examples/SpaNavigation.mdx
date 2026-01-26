@@ -73,6 +73,16 @@ export function PlpPage() {
   const { getUrl, setUrl } = useSpaUrlHelpers();
   const currentUrl = getUrl();
 
+  // If the URL is too long, you can use an incremental counter based on the URL changes as the key:
+  //
+  // const [plpKey, setPlpKey] = useState(1);
+  //
+  // React.useEffect(() => {
+  //   setPlpKey((key) => key + 1);
+  // }, [currentUrl]);
+  //
+  // return <CioPlp key={plpKey} {...} />
+
   return (
     <CioPlp
       key={currentUrl}
@@ -126,6 +136,16 @@ export function PlpPage() {
   }, []);
 
   const urlHelpers = useMemo(() => ({ getUrl, setUrl }), [getUrl, setUrl]);
+
+  // If the href is too long, you can use an incremental counter based on the href changes as the key:
+  //
+  // const [plpKey, setPlpKey] = useState(1);
+  //
+  // React.useEffect(() => {
+  //   setPlpKey((key) => key + 1);
+  // }, [href]);
+  //
+  // return <CioPlp key={plpKey} {...} />
 
   return (
     <CioPlp
