@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { PlpMultipleFacet } from '../../types';
+import { PlpMultipleFacet, PlpSingleFacet } from '../../types';
 import useOptionsList from '../../hooks/useOptionsList';
 
 export interface UseFilterOptionsListProps {
-  multipleFacet: PlpMultipleFacet;
+  multipleFacet: PlpMultipleFacet | PlpSingleFacet;
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
@@ -25,8 +25,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const [selectedOptionMap, setSelectedOptionMap] = useState({});
 
   const onOptionSelect = (optionValue: string) => {
-    const newMap = { ...selectedOptionMap };
-    newMap[optionValue] = !newMap[optionValue];
+    const newMap = facet.type === 'multiple' ? { ...selectedOptionMap } : {};
+    newMap[optionValue] = !selectedOptionMap[optionValue];
 
     const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
     setSelectedOptionMap(newMap);
