@@ -1,0 +1,298 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title='Usage Examples/SPA Navigation' />
+
+# SPA Navigation Guide: Prevent Full Page Reloads for Facets / Sort / Pagination
+
+## Why this happens
+In this PLP UI library, **facet selection**, **sort changes**, and **pagination** ultimately call `setRequestConfigs(...)`, which computes a new URL and then calls `urlHelpers.setUrl(newUrl)`.
+
+By default, `urlHelpers.setUrl` does this:
+
+```ts
+window.location.href = newUrlWithEncodedState;
+```
+
+That causes a **full document navigation** (hard reload) and breaks SPA UX.
+
+The immediate workaround is to **override `urlHelpers`** when you render the PLP Provider, so URL updates go through **your SPA router** (push/replace state) instead of `window.location.href`.
+
+---
+
+## Checklist
+- **Override `urlHelpers.setUrl`** to call your router (`navigate`, `history.pushState`, etc.) instead of doing a hard navigation.
+- **Ensure the PLP refetches** after URL changes (the library reads state from the URL, but data fetching happens on mount).
+- **Remount `<CioPlp />` on URL changes** (required) by keying it off the current URL (example below).
+- **Add `key` to iterable components** in any custom render overrides you provide (and in your own wrappers), to avoid React reconciliation issues.
+
+---
+
+## Step 1: Provide custom `urlHelpers` to the Provider
+You can pass `urlHelpers` into `<CioPlpProvider />` / `<CioPlp />`. The provider merges your helpers with defaults, so you only need to override what you care about (typically `getUrl` and `setUrl`).
+
+### Option A: React Router (v6) example
+
+```tsx
+import React, { useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+
+function useSpaUrlHelpers() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getUrl = useCallback(() => {
+    // Important: must be an absolute URL because the library uses `new URL(url)`
+    return `${window.location.origin}${location.pathname}${location.search}${location.hash}`;
+  }, [location.pathname, location.search, location.hash]);
+
+  const setUrl = useCallback(
+    (newUrlWithEncodedState: string) => {
+      // Parse the absolute URL and navigate using SPA routing (no reload)
+      const next = new URL(newUrlWithEncodedState, window.location.origin);
+
+      navigate(
+        {
+          pathname: next.pathname,
+          search: next.search,
+          hash: next.hash,
+        },
+        {
+          // choose replace vs push based on your UX preference
+          replace: false,
+        },
+      );
+    },
+    [navigate],
+  );
+
+  return { getUrl, setUrl };
+}
+
+export function PlpPage() {
+  const { getUrl, setUrl } = useSpaUrlHelpers();
+  const currentUrl = getUrl();
+
+  // If the URL is too long, you can use an incremental counter based on the URL changes as the key:
+  //
+  // const [plpKey, setPlpKey] = useState(1);
+  //
+  // React.useEffect(() => {
+  //   setPlpKey((key) => key + 1);
+  // }, [currentUrl]);
+  //
+  // return <CioPlp key={plpKey} {...} />
+
+  return (
+    <CioPlp
+      key={currentUrl}
+      apiKey="YOUR_KEY"
+      urlHelpers={{
+        getUrl,
+        setUrl,
+      }}
+    />
+  );
+}
+```
+
+#### Notes
+- Facets/sort/pagination will now update the URL via `navigate(...)` without reloading.
+- The PLP reads request state from the URL, but fetch hooks currently run on mount. In SPA routing, URL updates do not necessarily remount components, so passing the current URL as the `<CioPlp />` `key` is a simple way to ensure it refetches.
+
+---
+
+### Option B: “Generic SPA Router” (uses `history.pushState`) example
+If the app has a custom router:
+
+```tsx
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+
+function useHistoryLocation() {
+  const [href, setHref] = useState(() => window.location.href);
+
+  useEffect(() => {
+    const onPopState = () => setHref(window.location.href);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  return href;
+}
+
+export function PlpPage() {
+  // Forces re-render when URL changes via back/forward
+  const href = useHistoryLocation();
+
+  const getUrl = useCallback(() => href, [href]);
+
+  const setUrl = useCallback((newUrlWithEncodedState: string) => {
+    // update the URL without reloading the page
+    window.history.pushState({}, '', newUrlWithEncodedState);
+
+    // ensure React updates (since pushState doesn't emit popstate)
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, []);
+
+  const urlHelpers = useMemo(() => ({ getUrl, setUrl }), [getUrl, setUrl]);
+
+  // If the href is too long, you can use an incremental counter based on the href changes as the key:
+  //
+  // const [plpKey, setPlpKey] = useState(1);
+  //
+  // React.useEffect(() => {
+  //   setPlpKey((key) => key + 1);
+  // }, [href]);
+  //
+  // return <CioPlp key={plpKey} {...} />
+
+  return (
+    <CioPlp
+      key={href}
+      apiKey="YOUR_KEY"
+      urlHelpers={urlHelpers}
+    />
+  );
+}
+```
+
+#### Notes
+- This works even without React Router.
+- If the app already has a router, it’s cleaner to call that router instead of manually pushing history.
+
+---
+
+## Step 2: How this fixes each interaction
+
+### Facet selection (filtering)
+Facet clicks call the library’s `setFilter(...)`, which calls:
+- `setRequestConfigs({ filters: newFilters, page: 1 })`
+- which builds a new URL
+- which calls your overridden `urlHelpers.setUrl(...)`
+
+Result: URL changes (SPA), then results refresh (no reload).
+
+### Sort options
+Sort changes call:
+- `setRequestConfigs({ sortBy, sortOrder, page: 1 })`
+
+Same flow. Your router owns navigation.
+
+### Pagination
+Pagination calls:
+- `setRequestConfigs({ page, resultsPerPage })`
+
+Same flow.
+
+---
+
+## Step 3: Add `key` to iterable components
+The library already has keys in most default markup, but if you are:
+- providing `children` render-props for `Filters`, `Sort`, or `Pagination`, or
+- rendering lists inside your custom overrides
+
+…ensure stable keys to avoid React glitches (especially when URL/state changes quickly).
+
+### Example: custom Pagination render with correct keys
+
+```tsx
+<Pagination totalNumResults={totalNumResults} resultsPerPage={numResultsPerPage}>
+  {({ pages, currentPage, goToPage, nextPage, prevPage }) => (
+    <nav>
+      <button type="button" onClick={() => prevPage()}>
+        Prev
+      </button>
+
+      {pages.map((page) => (
+        <button
+          type="button"
+          key={page === -1 ? `ellipsis-${currentPage}` : `page-${page}`}
+          onClick={() => goToPage(page)}
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
+          {page === -1 ? '…' : page}
+        </button>
+      ))}
+
+      <button type="button" onClick={() => nextPage()}>
+        Next
+      </button>
+    </nav>
+  )}
+</Pagination>
+```
+
+### Example: custom Sort render with correct keys
+
+```tsx
+<Sort sortOptions={sortOptions}>
+  {({ sortOptions, selectedSort, changeSelectedSort }) => (
+    <div>
+      {sortOptions.map((opt) => (
+        <button
+          type="button"
+          key={`${opt.sortBy}-${opt.sortOrder}`}
+          onClick={() => changeSelectedSort(opt)}
+          aria-pressed={
+            selectedSort?.sortBy === opt.sortBy && selectedSort?.sortOrder === opt.sortOrder
+          }
+        >
+          {opt.displayName}
+        </button>
+      ))}
+    </div>
+  )}
+</Sort>
+```
+
+### Example: custom Facets render with correct keys
+
+```tsx
+<Filters facets={facets}>
+  {({ facets, setFilter, clearFilters }) => (
+    <aside>
+      <button type="button" onClick={clearFilters}>
+        Clear
+      </button>
+
+      {facets.map((facet) => (
+        <section key={facet.name}>
+          <h3>{facet.displayName ?? facet.name}</h3>
+
+          {(facet.options ?? []).map((opt) => (
+            <label key={`${facet.name}:${opt.value}`}>
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  // Generic pattern; use the filter value type your facet expects.
+                  setFilter(facet.name, e.target.checked ? opt.value : null);
+                }}
+              />
+              {opt.displayName ?? String(opt.value)}
+            </label>
+          ))}
+        </section>
+      ))}
+    </aside>
+  )}
+</Filters>
+```
+
+---
+
+## Practical Guidance / Gotchas
+- **Absolute URLs are required** for `getStateFromUrl(url)` because it does `new URL(url)`. So your `getUrl()` should return `window.location.href`-style absolute URLs.
+- Prefer router navigation (`navigate`, `router.push`) over `pushState` if the app already has routing—your router will handle re-rendering and scroll restoration.
+- If you also see full reloads on redirects, override the library callback:
+  - `callbacks.onRedirect = (url) => navigate(url)` (router) instead of `window.location.replace(url)`.
+
+```tsx
+<CioPlp
+  apiKey="YOUR_KEY"
+  urlHelpers={{ getUrl, setUrl }}
+  callbacks={{
+    onRedirect: (url) => navigate(url), // SPA redirect instead of window.location.replace
+  }}
+/>
+```
