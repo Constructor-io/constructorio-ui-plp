@@ -753,4 +753,127 @@ describe('Testing Component: Filters', () => {
       });
     });
   });
+
+  describe(' - Facet Blacklisting Tests', () => {
+    it('Should not render facets when isHiddenFacetFn returns true', async () => {
+      const isHiddenFacetFn = (facet) => facet.name === 'color'; // lowercase 'color'
+      const { queryByText, getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockTransformedFacets} isHiddenFacetFn={isHiddenFacetFn} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Color facet should not be rendered
+        expect(queryByText('Color')).not.toBeInTheDocument();
+        // Other facets should still render
+        const otherFacet = mockTransformedFacets.find((f) => f.name !== 'color');
+        expect(getByText(otherFacet.displayName)).toBeInTheDocument();
+      });
+    });
+
+    it('Should not render facets with data.cio_plp_hidden = true', async () => {
+      const facetsWithHidden = mockTransformedFacets.map((facet, index) => ({
+        ...facet,
+        data: {
+          ...facet.data,
+          cio_plp_hidden: index === 0, // Hide first facet
+        },
+      }));
+
+      const { queryByText, getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={facetsWithHidden} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // First facet should not be rendered
+        expect(queryByText(facetsWithHidden[0].displayName)).not.toBeInTheDocument();
+        // Other facets should still render
+        expect(getByText(facetsWithHidden[1].displayName)).toBeInTheDocument();
+      });
+    });
+
+    it('Should not render options when isHiddenFacetOptionFn returns true', async () => {
+      const colorFacet = mockTransformedFacets.find((f) => f.name === 'color'); // lowercase
+      const optionToHide = colorFacet.options[0];
+      const isHiddenFacetOptionFn = (option) => option.value === optionToHide.value;
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[colorFacet]} isHiddenFacetOptionFn={isHiddenFacetOptionFn} initialNumOptions={100} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // The hidden option should not be rendered
+        const colorFilterGroup = container.querySelector('.cio-filter-group');
+        const optionLabels = colorFilterGroup.querySelectorAll('.cio-filter-multiple-option label');
+        const optionTexts = Array.from(optionLabels).map((label) => label.textContent);
+
+        expect(optionTexts).not.toContain(optionToHide.displayName);
+        // Other options should still render
+        expect(optionTexts.length).toBe(colorFacet.options.length - 1);
+      });
+    });
+
+    it('Should not render options with data.cio_plp_hidden = true', async () => {
+      const colorFacet = mockTransformedFacets.find((f) => f.name === 'color'); // lowercase
+      const facetWithHiddenOption = {
+        ...colorFacet,
+        options: colorFacet.options.map((option, index) => ({
+          ...option,
+          data: {
+            ...option.data,
+            cio_plp_hidden: index === 0, // Hide first option
+          },
+        })),
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[facetWithHiddenOption]} initialNumOptions={100} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const colorFilterGroup = container.querySelector('.cio-filter-group');
+        const optionLabels = colorFilterGroup.querySelectorAll('.cio-filter-multiple-option label');
+        const optionTexts = Array.from(optionLabels).map((label) => label.textContent);
+
+        // First option should not be rendered
+        expect(optionTexts).not.toContain(colorFacet.options[0].displayName);
+        // Other options should still render
+        expect(optionTexts.length).toBe(colorFacet.options.length - 1);
+      });
+    });
+
+    it('Should hide facets from both isHiddenFacetFn and data.cio_plp_hidden', async () => {
+      const facetsWithHidden = mockTransformedFacets.map((facet, index) => ({
+        ...facet,
+        data: {
+          ...facet.data,
+          cio_plp_hidden: index === 0, // Hide first facet via metadata
+        },
+      }));
+
+      const isHiddenFacetFn = (facet) => facet.name === facetsWithHidden[1].name; // Hide second facet via fn
+
+      const { queryByText, container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={facetsWithHidden} isHiddenFacetFn={isHiddenFacetFn} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Both first and second facets should be hidden
+        expect(queryByText(facetsWithHidden[0].displayName)).not.toBeInTheDocument();
+        expect(queryByText(facetsWithHidden[1].displayName)).not.toBeInTheDocument();
+        // Remaining facets should render
+        const filterGroups = container.querySelectorAll('.cio-filter-group');
+        expect(filterGroups.length).toBe(facetsWithHidden.length - 2);
+      });
+    });
+  });
 });

@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
-import { PlpMultipleFacet } from '../../types';
+import { useCallback, useEffect, useState } from 'react';
+import { PlpFacetOption, PlpMultipleFacet } from '../../types';
 import useOptionsList from '../../hooks/useOptionsList';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
 export interface UseFilterOptionsListProps {
   multipleFacet: PlpMultipleFacet;
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
+  /**
+   * Function that takes in a PlpFacetOption and returns `true` if the option should be hidden from the final render
+   * @returns boolean
+   */
+  isHiddenFacetOptionFn?: (option: PlpFacetOption) => boolean;
 }
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
@@ -15,11 +21,23 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
+    isHiddenFacetOptionFn,
   } = props;
+
+  const { getIsHiddenFacetOptionField } = useCioPlpContext().itemFieldGetters;
+
+  const isHiddenOptionFn = useCallback(
+    (option: PlpFacetOption) =>
+      (typeof isHiddenFacetOptionFn === 'function' && isHiddenFacetOptionFn(option)) ||
+      (typeof getIsHiddenFacetOptionField === 'function' && getIsHiddenFacetOptionField(option)) ||
+      false,
+    [isHiddenFacetOptionFn, getIsHiddenFacetOptionField],
+  );
 
   const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
     options: facet.options,
     initialNumOptions,
+    isHiddenOptionFn,
   });
 
   const [selectedOptionMap, setSelectedOptionMap] = useState({});

@@ -1,4 +1,12 @@
-import { ItemFieldGetters, Item, SwatchItem, Variation, PlpItemGroup } from '../types';
+import {
+  ItemFieldGetters,
+  Item,
+  SwatchItem,
+  Variation,
+  PlpItemGroup,
+  PlpFacet,
+  PlpFacetOption,
+} from '../types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getPrice(item: Item | Variation): number {
@@ -47,6 +55,14 @@ export function getSwatchPreview(variation: Variation): string {
 
 export function getIsHiddenGroupField(group: PlpItemGroup) {
   return group?.data?.cio_plp_hidden;
+}
+
+export function getIsHiddenFacetField(facet: PlpFacet) {
+  return facet?.data?.cio_plp_hidden;
+}
+
+export function getIsHiddenFacetOptionField(option: PlpFacetOption) {
+  return (option?.data as Record<string, any>)?.cio_plp_hidden;
 }
 
 export function getItemUrl(item: Item): string | undefined {

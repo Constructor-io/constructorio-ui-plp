@@ -48,3 +48,46 @@ export const Primary: Story = {
     facets: mockTransformedFacets as Array<PlpFacet>,
   },
 };
+
+/**
+ * Use `isHiddenFacetFn` to hide entire facet groups based on custom logic.
+ * In this example, the "Color" facet is hidden.
+ */
+export const HiddenFacets: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    isHiddenFacetFn: (facet: PlpFacet) => facet.name === 'color',
+  },
+};
+
+/**
+ * Use `isHiddenFacetOptionFn` to hide specific options within facets.
+ * In this example, the "Black" and "Blue" color options are hidden.
+ */
+export const HiddenFacetOptions: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    isHiddenFacetOptionFn: (option) => option.value === 'Black' || option.value === 'Blue',
+    initialNumOptions: 20,
+  },
+};
+
+/**
+ * Facets and options with `data.cio_plp_hidden = true` in their metadata
+ * are automatically hidden without needing custom functions.
+ * This example shows facets with the hidden metadata flag.
+ */
+export const HiddenViaMetadata: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: (mockTransformedFacets as Array<PlpFacet>).map((facet, index) => ({
+      ...facet,
+      data: {
+        ...facet.data,
+        cio_plp_hidden: index === 0, // Hide the first facet (Color)
+      },
+    })),
+  },
+};

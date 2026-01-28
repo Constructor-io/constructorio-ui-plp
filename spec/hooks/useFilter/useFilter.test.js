@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom';
 import { renderHook, waitFor } from '@testing-library/react';
+import React from 'react';
 import useFilter from '../../../src/hooks/useFilter';
 import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 import { transformSearchResponse } from '../../../src/utils';
 import { renderHookWithCioPlp } from '../../test-utils';
+import { CioPlpProvider } from '../../../src/components/CioPlp';
+import { DEMO_API_KEY } from '../../../src/constants';
 
 describe('Testing Hook: useFilter', () => {
   const originalWindowLocation = window.location;
@@ -234,6 +237,156 @@ describe('Testing Hook: useFilter', () => {
       expect(requestConfig.filters).toBeUndefined();
       expect(requestConfig.resultsPerPage).toBe(12);
       expect(requestConfig.section.toString()).toBe('Search Suggestions');
+    });
+  });
+
+  describe('isHiddenFacetFn', () => {
+    it('Should filter out facets when isHiddenFacetFn returns true', async () => {
+      const isHiddenFacetFn = (facet) => facet.name === 'brand'; // lowercase
+      const useFilterPropsWithHiddenFn = {
+        ...useFilterProps,
+        isHiddenFacetFn,
+      };
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        expect(facets.length).toBe(searchData.response.facets.length - 1);
+        expect(facets.find((f) => f.name === 'brand')).toBeUndefined();
+      });
+    });
+
+    it('Should not filter facets when isHiddenFacetFn returns false', async () => {
+      const isHiddenFacetFn = () => false;
+      const useFilterPropsWithHiddenFn = {
+        ...useFilterProps,
+        isHiddenFacetFn,
+      };
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        expect(facets.length).toBe(searchData.response.facets.length);
+      });
+    });
+
+    it('Should filter facets by multiple conditions', async () => {
+      const isHiddenFacetFn = (facet) => facet.type === 'range';
+      const useFilterPropsWithHiddenFn = {
+        ...useFilterProps,
+        isHiddenFacetFn,
+      };
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        // Should filter out all range type facets
+        expect(facets.every((f) => f.type !== 'range')).toBe(true);
+      });
+    });
+  });
+
+  describe('getIsHiddenFacetField via metadata', () => {
+    it('Should filter out facets with data.cio_plp_hidden = true', async () => {
+      // Create facets with hidden flag
+      const facetsWithHidden = searchData.response.facets.map((facet, index) => ({
+        ...facet,
+        data: {
+          ...facet.data,
+          cio_plp_hidden: index === 0, // Hide first facet
+        },
+      }));
+
+      const useFilterPropsWithHiddenData = {
+        facets: facetsWithHidden,
+      };
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenData));
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        expect(facets.length).toBe(facetsWithHidden.length - 1);
+        // First facet should be hidden
+        expect(facets[0].name).not.toBe(facetsWithHidden[0].name);
+      });
+    });
+
+    it('Should use custom getIsHiddenFacetField from itemFieldGetters', async () => {
+      // Create a custom field getter that hides facets with a custom field
+      const customGetIsHiddenFacetField = (facet) => facet.data?.customHidden === true;
+
+      const facetsWithCustomField = searchData.response.facets.map((facet, index) => ({
+        ...facet,
+        data: {
+          ...facet.data,
+          customHidden: index === 1, // Hide second facet
+        },
+      }));
+
+      const { result } = renderHook(
+        () => useFilter({ facets: facetsWithCustomField }),
+        {
+          wrapper: ({ children }) => (
+            <CioPlpProvider
+              apiKey={DEMO_API_KEY}
+              itemFieldGetters={{ getIsHiddenFacetField: customGetIsHiddenFacetField }}
+            >
+              {children}
+            </CioPlpProvider>
+          ),
+        }
+      );
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        expect(facets.length).toBe(facetsWithCustomField.length - 1);
+        // Second facet should be hidden
+        expect(facets.find((f) => f.name === facetsWithCustomField[1].name)).toBeUndefined();
+      });
+    });
+
+    it('Should prioritize isHiddenFacetFn over getIsHiddenFacetField', async () => {
+      // Both methods should work together - if either returns true, facet is hidden
+      const facetsWithHidden = searchData.response.facets.map((facet, index) => ({
+        ...facet,
+        data: {
+          ...facet.data,
+          cio_plp_hidden: index === 0, // Hide first facet via metadata
+        },
+      }));
+
+      const isHiddenFacetFn = (facet) => facet.name === facetsWithHidden[1].name; // Also hide second facet via fn
+
+      const useFilterPropsWithBoth = {
+        facets: facetsWithHidden,
+        isHiddenFacetFn,
+      };
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithBoth));
+
+      await waitFor(() => {
+        const {
+          current: { facets },
+        } = result;
+
+        // Both first and second facets should be hidden
+        expect(facets.length).toBe(facetsWithHidden.length - 2);
+        expect(facets.find((f) => f.name === facetsWithHidden[0].name)).toBeUndefined();
+        expect(facets.find((f) => f.name === facetsWithHidden[1].name)).toBeUndefined();
+      });
     });
   });
 });

@@ -83,3 +83,80 @@ export default function MyComponent() {
 `UseFilterReturn`
 
 <Markdown>{UseFilterReturn}</Markdown>
+
+## Hiding Facets and Options
+
+You can hide facets or individual facet options using two methods:
+
+### Method 1: Custom Function
+
+Use `isHiddenFacetFn` to hide entire facet groups and `isHiddenFacetOptionFn` to hide specific options.
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide the "price" facet entirely
+  const isHiddenFacetFn = (facet) => facet.name === 'price';
+
+  // Hide specific color options
+  const isHiddenFacetOptionFn = (option) =>
+    option.value === 'Black' || option.value === 'Blue';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFacetFn={isHiddenFacetFn}
+              isHiddenFacetOptionFn={isHiddenFacetOptionFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.HiddenFacets} />
+
+<Canvas of={FiltersStories.HiddenFacetOptions} />
+
+### Method 2: Metadata Field
+
+Add `cio_plp_hidden: true` to the `data` field of facets or facet options in your Constructor.io dashboard.
+These items will be automatically hidden without requiring custom functions.
+
+```json
+{
+  "name": "internal_category",
+  "displayName": "Internal Category",
+  "type": "multiple",
+  "data": {
+    "cio_plp_hidden": true
+  }
+}
+```
+
+<Canvas of={FiltersStories.HiddenViaMetadata} />
+
+### Custom Field Getter
+
+You can also customize the metadata field used for hiding by providing a custom `itemFieldGetters` to `CioPlpProvider`:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  itemFieldGetters={{
+    getIsHiddenFacetField: (facet) => facet.data?.myCustomHiddenField,
+    getIsHiddenFacetOptionField: (option) => option.data?.myCustomHiddenField,
+  }}>
+  {/* ... */}
+</CioPlp>
+```
