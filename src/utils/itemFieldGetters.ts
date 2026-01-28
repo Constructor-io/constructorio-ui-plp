@@ -62,7 +62,7 @@ export function getIsHiddenFacetField(facet: PlpFacet) {
 }
 
 export function getIsHiddenFacetOptionField(option: PlpFacetOption) {
-  return (option?.data as Record<string, any>)?.cio_plp_hidden;
+  return option?.data?.cio_plp_hidden;
 }
 
 export function getItemUrl(item: Item): string | undefined {
