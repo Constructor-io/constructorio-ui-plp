@@ -15,7 +15,7 @@ export interface FilterGroupProps {
    * Function that takes in a PlpFacetOption and returns `true` if the option should be hidden from the final render
    * @returns boolean
    */
-  isHiddenFacetOptionFn?: (option: PlpFacetOption) => boolean;
+  isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -25,7 +25,7 @@ export default function FilterGroup(props: FilterGroupProps) {
     initialNumOptions = 10,
     sliderStep,
     facetSliderSteps,
-    isHiddenFacetOptionFn,
+    isHiddenFilterOptionFn,
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -47,7 +47,7 @@ export default function FilterGroup(props: FilterGroupProps) {
           multipleFacet={facet}
           modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
-          isHiddenFacetOptionFn={isHiddenFacetOptionFn}
+          isHiddenFilterOptionFn={isHiddenFilterOptionFn}
         />
       )}
 

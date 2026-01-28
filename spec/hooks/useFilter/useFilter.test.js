@@ -240,12 +240,12 @@ describe('Testing Hook: useFilter', () => {
     });
   });
 
-  describe('isHiddenFacetFn', () => {
-    it('Should filter out facets when isHiddenFacetFn returns true', async () => {
-      const isHiddenFacetFn = (facet) => facet.name === 'brand'; // lowercase
+  describe('isHiddenFilterFn', () => {
+    it('Should filter out facets when isHiddenFilterFn returns true', async () => {
+      const isHiddenFilterFn = (facet) => facet.name === 'brand'; // lowercase
       const useFilterPropsWithHiddenFn = {
         ...useFilterProps,
-        isHiddenFacetFn,
+        isHiddenFilterFn,
       };
       const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
 
@@ -259,11 +259,11 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('Should not filter facets when isHiddenFacetFn returns false', async () => {
-      const isHiddenFacetFn = () => false;
+    it('Should not filter facets when isHiddenFilterFn returns false', async () => {
+      const isHiddenFilterFn = () => false;
       const useFilterPropsWithHiddenFn = {
         ...useFilterProps,
-        isHiddenFacetFn,
+        isHiddenFilterFn,
       };
       const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
 
@@ -277,10 +277,10 @@ describe('Testing Hook: useFilter', () => {
     });
 
     it('Should filter facets by multiple conditions', async () => {
-      const isHiddenFacetFn = (facet) => facet.type === 'range';
+      const isHiddenFilterFn = (facet) => facet.type === 'range';
       const useFilterPropsWithHiddenFn = {
         ...useFilterProps,
-        isHiddenFacetFn,
+        isHiddenFilterFn,
       };
       const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithHiddenFn));
 
@@ -295,7 +295,7 @@ describe('Testing Hook: useFilter', () => {
     });
   });
 
-  describe('getIsHiddenFacetField via metadata', () => {
+  describe('getIsHiddenFilterField via metadata', () => {
     it('Should filter out facets with data.cio_plp_hidden = true', async () => {
       // Create facets with hidden flag
       const facetsWithHidden = searchData.response.facets.map((facet, index) => ({
@@ -322,9 +322,9 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('Should use custom getIsHiddenFacetField from itemFieldGetters', async () => {
+    it('Should use custom getIsHiddenFilterField from itemFieldGetters', async () => {
       // Create a custom field getter that hides facets with a custom field
-      const customGetIsHiddenFacetField = (facet) => facet.data?.customHidden === true;
+      const customGetIsHiddenFilterField = (facet) => facet.data?.customHidden === true;
 
       const facetsWithCustomField = searchData.response.facets.map((facet, index) => ({
         ...facet,
@@ -340,7 +340,7 @@ describe('Testing Hook: useFilter', () => {
           wrapper: ({ children }) => (
             <CioPlpProvider
               apiKey={DEMO_API_KEY}
-              itemFieldGetters={{ getIsHiddenFacetField: customGetIsHiddenFacetField }}
+              itemFieldGetters={{ getIsHiddenFilterField: customGetIsHiddenFilterField }}
             >
               {children}
             </CioPlpProvider>
@@ -359,7 +359,7 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('Should prioritize isHiddenFacetFn over getIsHiddenFacetField', async () => {
+    it('Should prioritize isHiddenFilterFn over getIsHiddenFilterField', async () => {
       // Both methods should work together - if either returns true, facet is hidden
       const facetsWithHidden = searchData.response.facets.map((facet, index) => ({
         ...facet,
@@ -369,11 +369,11 @@ describe('Testing Hook: useFilter', () => {
         },
       }));
 
-      const isHiddenFacetFn = (facet) => facet.name === facetsWithHidden[1].name; // Also hide second facet via fn
+      const isHiddenFilterFn = (facet) => facet.name === facetsWithHidden[1].name; // Also hide second facet via fn
 
       const useFilterPropsWithBoth = {
         facets: facetsWithHidden,
-        isHiddenFacetFn,
+        isHiddenFilterFn,
       };
       const { result } = renderHookWithCioPlp(() => useFilter(useFilterPropsWithBoth));
 

@@ -14,12 +14,12 @@ export type FiltersProps = UseFilterProps & {
    * Function that takes in a PlpFacetOption and returns `true` if the option should be hidden from the final render
    * @returns boolean
    */
-  isHiddenFacetOptionFn?: (option: PlpFacetOption) => boolean;
+  isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
 };
 export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
 
 export default function Filters(props: FiltersWithRenderProps) {
-  const { children, initialNumOptions, isHiddenFacetOptionFn, ...useFiltersProps } = props;
+  const { children, initialNumOptions, isHiddenFilterOptionFn, ...useFiltersProps } = props;
   const { facets, setFilter, sliderStep, facetSliderSteps, clearFilters } =
     useFilter(useFiltersProps);
 
@@ -42,7 +42,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               setFilter={setFilter}
               sliderStep={sliderStep}
               facetSliderSteps={facetSliderSteps}
-              isHiddenFacetOptionFn={isHiddenFacetOptionFn}
+              isHiddenFilterOptionFn={isHiddenFilterOptionFn}
               key={facet.name}
             />
           ))}

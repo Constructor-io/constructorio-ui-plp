@@ -755,11 +755,11 @@ describe('Testing Component: Filters', () => {
   });
 
   describe(' - Facet Blacklisting Tests', () => {
-    it('Should not render facets when isHiddenFacetFn returns true', async () => {
-      const isHiddenFacetFn = (facet) => facet.name === 'color'; // lowercase 'color'
+    it('Should not render facets when isHiddenFilterFn returns true', async () => {
+      const isHiddenFilterFn = (facet) => facet.name === 'color'; // lowercase 'color'
       const { queryByText, getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={mockTransformedFacets} isHiddenFacetFn={isHiddenFacetFn} />
+          <Filters facets={mockTransformedFacets} isHiddenFilterFn={isHiddenFilterFn} />
         </CioPlp>,
       );
 
@@ -795,14 +795,14 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Should not render options when isHiddenFacetOptionFn returns true', async () => {
+    it('Should not render options when isHiddenFilterOptionFn returns true', async () => {
       const colorFacet = mockTransformedFacets.find((f) => f.name === 'color'); // lowercase
       const optionToHide = colorFacet.options[0];
-      const isHiddenFacetOptionFn = (option) => option.value === optionToHide.value;
+      const isHiddenFilterOptionFn = (option) => option.value === optionToHide.value;
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFacetOptionFn={isHiddenFacetOptionFn} initialNumOptions={100} />
+          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
         </CioPlp>,
       );
 
@@ -849,7 +849,7 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Should hide facets from both isHiddenFacetFn and data.cio_plp_hidden', async () => {
+    it('Should hide facets from both isHiddenFilterFn and data.cio_plp_hidden', async () => {
       const facetsWithHidden = mockTransformedFacets.map((facet, index) => ({
         ...facet,
         data: {
@@ -858,11 +858,11 @@ describe('Testing Component: Filters', () => {
         },
       }));
 
-      const isHiddenFacetFn = (facet) => facet.name === facetsWithHidden[1].name; // Hide second facet via fn
+      const isHiddenFilterFn = (facet) => facet.name === facetsWithHidden[1].name; // Hide second facet via fn
 
       const { queryByText, container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={facetsWithHidden} isHiddenFacetFn={isHiddenFacetFn} />
+          <Filters facets={facetsWithHidden} isHiddenFilterFn={isHiddenFilterFn} />
         </CioPlp>,
       );
 

@@ -92,7 +92,7 @@ You can hide facets or individual facet options using two methods:
 
 #### Hiding Entire Facets
 
-Use `isHiddenFacetFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
+Use `isHiddenFilterFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
 
 ```jsx
 import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
@@ -102,7 +102,7 @@ const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 export default function MyComponent() {
   // Hide the "price" facet entirely
-  const isHiddenFacetFn = (facet) => facet.name === 'price';
+  const isHiddenFilterFn = (facet) => facet.name === 'price';
 
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
@@ -111,7 +111,7 @@ export default function MyComponent() {
           return (
             <Filters
               facets={props.filters.facets}
-              isHiddenFacetFn={isHiddenFacetFn}
+              isHiddenFilterFn={isHiddenFilterFn}
             />
           );
         }}
@@ -121,11 +121,11 @@ export default function MyComponent() {
 }
 ```
 
-<Canvas of={FiltersStories.HiddenFacets} />
+<Canvas of={FiltersStories.HiddenFilters} />
 
 #### Hiding Specific Options
 
-Use `isHiddenFacetOptionFn` to hide specific options within facets. In this example, the "Black" and "Blue" color options are hidden:
+Use `isHiddenFilterOptionFn` to hide specific options within facets. In this example, the "Black" and "Blue" color options are hidden:
 
 ```jsx
 import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
@@ -135,7 +135,7 @@ const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 export default function MyComponent() {
   // Hide specific color options
-  const isHiddenFacetOptionFn = (option) =>
+  const isHiddenFilterOptionFn = (option) =>
     option.value === 'Black' || option.value === 'Blue';
 
   return (
@@ -145,7 +145,7 @@ export default function MyComponent() {
           return (
             <Filters
               facets={props.filters.facets}
-              isHiddenFacetOptionFn={isHiddenFacetOptionFn}
+              isHiddenFilterOptionFn={isHiddenFilterOptionFn}
             />
           );
         }}
@@ -155,7 +155,7 @@ export default function MyComponent() {
 }
 ```
 
-<Canvas of={FiltersStories.HiddenFacetOptions} />
+<Canvas of={FiltersStories.HiddenFilterOptions} />
 
 ### Method 2: Metadata Field
 
@@ -183,8 +183,8 @@ You can also customize the metadata field used for hiding by providing a custom 
 <CioPlp
   apiKey={DEMO_API_KEY}
   itemFieldGetters={{
-    getIsHiddenFacetField: (facet) => facet.data?.myCustomField,
-    getIsHiddenFacetOptionField: (option) => option.data?.myCustomField,
+    getIsHiddenFilterField: (facet) => facet.data?.myCustomField,
+    getIsHiddenFilterOptionField: (option) => option.data?.myCustomField,
   }}>
   {/* ... */}
 </CioPlp>

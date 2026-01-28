@@ -51,8 +51,8 @@ export interface ItemFieldGetters {
     retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
   getIsHiddenGroupField: (group: PlpItemGroup) => boolean | undefined;
-  getIsHiddenFacetField: (facet: PlpFacet) => boolean | undefined;
-  getIsHiddenFacetOptionField: (option: PlpFacetOption) => boolean | undefined;
+  getIsHiddenFilterField: (facet: PlpFacet) => boolean | undefined;
+  getIsHiddenFilterOptionField: (option: PlpFacetOption) => boolean | undefined;
   getItemUrl: (item: Item) => string | undefined;
 }
 

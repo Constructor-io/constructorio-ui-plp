@@ -57,11 +57,11 @@ export function getIsHiddenGroupField(group: PlpItemGroup) {
   return group?.data?.cio_plp_hidden;
 }
 
-export function getIsHiddenFacetField(facet: PlpFacet) {
+export function getIsHiddenFilterField(facet: PlpFacet) {
   return facet?.data?.cio_plp_hidden;
 }
 
-export function getIsHiddenFacetOptionField(option: PlpFacetOption) {
+export function getIsHiddenFilterOptionField(option: PlpFacetOption) {
   return option?.data?.cio_plp_hidden;
 }
 

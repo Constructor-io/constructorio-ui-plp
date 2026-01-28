@@ -12,7 +12,7 @@ export interface UseFilterOptionsListProps {
    * Function that takes in a PlpFacetOption and returns `true` if the option should be hidden from the final render
    * @returns boolean
    */
-  isHiddenFacetOptionFn?: (option: PlpFacetOption) => boolean;
+  isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
 }
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
@@ -21,17 +21,17 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
-    isHiddenFacetOptionFn,
+    isHiddenFilterOptionFn,
   } = props;
 
-  const { getIsHiddenFacetOptionField } = useCioPlpContext().itemFieldGetters;
+  const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
 
   const isHiddenOptionFn = useCallback(
     (option: PlpFacetOption) =>
-      (typeof isHiddenFacetOptionFn === 'function' && isHiddenFacetOptionFn(option)) ||
-      (typeof getIsHiddenFacetOptionField === 'function' && getIsHiddenFacetOptionField(option)) ||
+      (typeof isHiddenFilterOptionFn === 'function' && isHiddenFilterOptionFn(option)) ||
+      (typeof getIsHiddenFilterOptionField === 'function' && getIsHiddenFilterOptionField(option)) ||
       false,
-    [isHiddenFacetOptionFn, getIsHiddenFacetOptionField],
+    [isHiddenFilterOptionFn, getIsHiddenFilterOptionField],
   );
 
   const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
