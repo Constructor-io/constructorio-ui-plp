@@ -29,7 +29,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const isHiddenOptionFn = useCallback(
     (option: PlpFacetOption) =>
       (typeof isHiddenFilterOptionFn === 'function' && isHiddenFilterOptionFn(option)) ||
-      (typeof getIsHiddenFilterOptionField === 'function' && getIsHiddenFilterOptionField(option)) ||
+      (typeof getIsHiddenFilterOptionField === 'function' &&
+        getIsHiddenFilterOptionField(option)) ||
       false,
     [isHiddenFilterOptionFn, getIsHiddenFilterOptionField],
   );
