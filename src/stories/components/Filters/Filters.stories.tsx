@@ -51,13 +51,13 @@ export const Primary: Story = {
 
 /**
  * Use `isHiddenFacetFn` to hide entire facet groups based on custom logic.
- * In this example, the "Color" facet is hidden.
+ * In this example, the "Price" facet is hidden.
  */
 export const HiddenFacets: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    isHiddenFacetFn: (facet: PlpFacet) => facet.name === 'color',
+    isHiddenFacetFn: (facet: PlpFacet) => facet.name === 'price',
   },
 };
 
@@ -82,11 +82,11 @@ export const HiddenFacetOptions: Story = {
 export const HiddenViaMetadata: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    facets: (mockTransformedFacets as Array<PlpFacet>).map((facet, index) => ({
+    facets: (mockTransformedFacets as Array<PlpFacet>).map((facet) => ({
       ...facet,
       data: {
         ...facet.data,
-        cio_plp_hidden: index === 0, // Hide the first facet (Color)
+        cio_plp_hidden: facet.name === 'price', // Hide the Price facet
       },
     })),
   },

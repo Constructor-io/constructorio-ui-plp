@@ -90,7 +90,9 @@ You can hide facets or individual facet options using two methods:
 
 ### Method 1: Custom Function
 
-Use `isHiddenFacetFn` to hide entire facet groups and `isHiddenFacetOptionFn` to hide specific options.
+#### Hiding Entire Facets
+
+Use `isHiddenFacetFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
 
 ```jsx
 import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
@@ -102,10 +104,6 @@ export default function MyComponent() {
   // Hide the "price" facet entirely
   const isHiddenFacetFn = (facet) => facet.name === 'price';
 
-  // Hide specific color options
-  const isHiddenFacetOptionFn = (option) =>
-    option.value === 'Black' || option.value === 'Blue';
-
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
       <CioPlpGrid>
@@ -114,7 +112,6 @@ export default function MyComponent() {
             <Filters
               facets={props.filters.facets}
               isHiddenFacetFn={isHiddenFacetFn}
-              isHiddenFacetOptionFn={isHiddenFacetOptionFn}
             />
           );
         }}
@@ -126,6 +123,38 @@ export default function MyComponent() {
 
 <Canvas of={FiltersStories.HiddenFacets} />
 
+#### Hiding Specific Options
+
+Use `isHiddenFacetOptionFn` to hide specific options within facets. In this example, the "Black" and "Blue" color options are hidden:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide specific color options
+  const isHiddenFacetOptionFn = (option) =>
+    option.value === 'Black' || option.value === 'Blue';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFacetOptionFn={isHiddenFacetOptionFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
 <Canvas of={FiltersStories.HiddenFacetOptions} />
 
 ### Method 2: Metadata Field
@@ -135,9 +164,9 @@ These items will be automatically hidden without requiring custom functions.
 
 ```json
 {
-  "name": "internal_category",
-  "displayName": "Internal Category",
-  "type": "multiple",
+  "name": "price",
+  "displayName": "Price",
+  "type": "range",
   "data": {
     "cio_plp_hidden": true
   }
@@ -154,8 +183,8 @@ You can also customize the metadata field used for hiding by providing a custom 
 <CioPlp
   apiKey={DEMO_API_KEY}
   itemFieldGetters={{
-    getIsHiddenFacetField: (facet) => facet.data?.myCustomHiddenField,
-    getIsHiddenFacetOptionField: (option) => option.data?.myCustomHiddenField,
+    getIsHiddenFacetField: (facet) => facet.data?.myCustomField,
+    getIsHiddenFacetOptionField: (option) => option.data?.myCustomField,
   }}>
   {/* ... */}
 </CioPlp>
