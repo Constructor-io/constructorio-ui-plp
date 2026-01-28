@@ -38,6 +38,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     options: facet.options,
     initialNumOptions,
     isHiddenOptionFn,
+    nestedOptionsKey: 'options', // Enable recursive filtering for hierarchical facet options
   });
 
   const [selectedOptionMap, setSelectedOptionMap] = useState({});

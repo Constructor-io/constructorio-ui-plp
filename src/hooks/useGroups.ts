@@ -59,6 +59,7 @@ export default function useGroups(props: UseGroupProps) {
       options: groupOptions,
       initialNumOptions: numOptionsProps,
       isHiddenOptionFn,
+      nestedOptionsKey: 'children', // Enable recursive filtering for group children
     });
 
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();

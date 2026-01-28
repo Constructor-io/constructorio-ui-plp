@@ -15,17 +15,51 @@ export interface UseOptionsListProps<T> {
    * @returns boolean
    */
   isHiddenOptionFn?: (option: T) => boolean;
+  /**
+   * Key name for nested options array (e.g., 'options' for hierarchical facets, 'children' for groups).
+   * When provided, filtering will be applied recursively to nested options.
+   */
+  nestedOptionsKey?: string;
 }
 
 const defaultIsHiddenOptionFn = () => false;
 
-export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
-  const { options, initialNumOptions = 5, isHiddenOptionFn = defaultIsHiddenOptionFn } = props;
+/**
+ * Recursively filters options and their nested children
+ */
+function filterOptionsRecursively<T>(
+  options: Array<T>,
+  isHiddenFn: (option: T) => boolean,
+  nestedKey: string,
+): Array<T> {
+  return options
+    .filter((option) => !isHiddenFn(option))
+    .map((option) => {
+      const nestedOptions = (option as Record<string, any>)[nestedKey];
+      if (Array.isArray(nestedOptions) && nestedOptions.length > 0) {
+        return {
+          ...option,
+          [nestedKey]: filterOptionsRecursively(nestedOptions, isHiddenFn, nestedKey),
+        };
+      }
+      return option;
+    });
+}
 
-  const filteredOptions = useMemo(
-    () => options.filter((option) => !isHiddenOptionFn(option)),
-    [isHiddenOptionFn, options],
-  );
+export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
+  const {
+    options,
+    initialNumOptions = 5,
+    isHiddenOptionFn = defaultIsHiddenOptionFn,
+    nestedOptionsKey,
+  } = props;
+
+  const filteredOptions = useMemo(() => {
+    if (nestedOptionsKey) {
+      return filterOptionsRecursively(options, isHiddenOptionFn, nestedOptionsKey);
+    }
+    return options.filter((option) => !isHiddenOptionFn(option));
+  }, [isHiddenOptionFn, options, nestedOptionsKey]);
   const [isShowAll, setIsShowAll] = useState(false);
   const [optionsToRender, setOptionsToRender] = useState<Array<T>>(filteredOptions);
 
