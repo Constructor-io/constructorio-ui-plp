@@ -2,30 +2,27 @@ import { useEffect, useState } from 'react';
 import { PlpMultipleFacet, PlpSingleFacet } from '../../types';
 import useOptionsList from '../../hooks/useOptionsList';
 
-export interface UseFilterOptionsListProps {
-  /** @deprecated Use `facet` instead */
-  multipleFacet?: PlpMultipleFacet | PlpSingleFacet;
-  facet?: PlpMultipleFacet | PlpSingleFacet;
+interface UseFilterOptionsListPropsBase {
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
 }
+interface UseFilterOptionsListPropsLegacy extends UseFilterOptionsListPropsBase {
+  /** @deprecated Use `facet` instead */
+  multipleFacet: PlpMultipleFacet | PlpSingleFacet;
+}
+
+interface UseFilterOptionsListPropsNew extends UseFilterOptionsListPropsBase {
+  facet: PlpMultipleFacet | PlpSingleFacet;
+}
+
+export type UseFilterOptionsListProps =
+  | UseFilterOptionsListPropsLegacy
+  | UseFilterOptionsListPropsNew;
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
-  const {
-    facet: facetProp,
-    multipleFacet,
-    initialNumOptions,
-    modifyRequestMultipleFilter,
-    isCollapsed,
-  } = props;
-
-  // Prefer new prop, fall back to deprecated prop
-  const facet = facetProp ?? multipleFacet;
-
-  if (!facet) {
-    throw new Error('Either `facet` or `multipleFacet` must be provided');
-  }
+  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed } = props;
+  const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
     options: facet.options,

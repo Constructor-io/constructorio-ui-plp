@@ -145,22 +145,4 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
     });
   });
 
-  describe('Error handling', () => {
-    it('Should throw error when neither facet nor multipleFacet is provided', () => {
-      // Suppress console.error for this test since we expect an error
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      expect(() => {
-        render(
-          <FilterOptionsList
-            modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
-            initialNumOptions={10}
-            isCollapsed={false}
-          />,
-        );
-      }).toThrow('Either `facet` or `multipleFacet` must be provided');
-
-      consoleSpy.mockRestore();
-    });
-  });
 });
