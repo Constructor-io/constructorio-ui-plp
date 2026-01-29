@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { PlpFacet } from '../../types';
-import { isMultipleOrBucketedFacet, isRangeFacet } from '../../utils';
+import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
@@ -29,10 +29,10 @@ export default function FilterGroup(props: FilterGroupProps) {
         <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
       </button>
 
-      {isMultipleOrBucketedFacet(facet) && (
+      {(isMultipleOrBucketedFacet(facet) || isSingleFacet(facet)) && (
         <FilterOptionsList
           isCollapsed={isCollapsed}
-          multipleFacet={facet}
+          facet={facet}
           modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
         />

@@ -59,6 +59,37 @@ const mockFacetsWithDuplicateValues = [
   },
 ];
 
+const mockSingleFacet = {
+  displayName: 'Size',
+  name: 'size',
+  type: 'single',
+  data: {},
+  hidden: false,
+  options: [
+    {
+      status: '',
+      count: 120,
+      displayName: 'Small',
+      value: 'small',
+      data: {},
+    },
+    {
+      status: '',
+      count: 98,
+      displayName: 'Medium',
+      value: 'medium',
+      data: {},
+    },
+    {
+      status: '',
+      count: 75,
+      displayName: 'Large',
+      value: 'large',
+      data: {},
+    },
+  ],
+};
+
 describe('Testing Component: Filters', () => {
   const originalWindowLocation = window.location;
 
@@ -751,6 +782,72 @@ describe('Testing Component: Filters', () => {
         const filtersAfterInputChange = getRequestFilters(container);
         expect(filtersAfterInputChange.price[0].indexOf('88')).not.toBe(-1);
       });
+    });
+
+    it('Single Facet: Should render options for single type facet', async () => {
+      const { getByText, container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockSingleFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('Size')).toBeInTheDocument();
+        expect(getByText('Small')).toBeInTheDocument();
+        expect(getByText('Medium')).toBeInTheDocument();
+        expect(getByText('Large')).toBeInTheDocument();
+
+        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+        expect(checkboxes).toHaveLength(3);
+      });
+    });
+
+    it('Single Facet: Selecting an option should de-select other options', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockSingleFacet]} />
+        </CioPlp>,
+      );
+
+      const smallCheckbox = container.querySelector('input[id="size-small"]');
+      const mediumCheckbox = container.querySelector('input[id="size-medium"]');
+      const largeCheckbox = container.querySelector('input[id="size-large"]');
+
+      // Select "Small" option
+      fireEvent.click(smallCheckbox);
+      expect(smallCheckbox).toBeChecked();
+      expect(mediumCheckbox).not.toBeChecked();
+      expect(largeCheckbox).not.toBeChecked();
+
+      // Select "Medium" option - should de-select "Small"
+      fireEvent.click(mediumCheckbox);
+      expect(smallCheckbox).not.toBeChecked();
+      expect(mediumCheckbox).toBeChecked();
+      expect(largeCheckbox).not.toBeChecked();
+
+      // Select "Large" option - should de-select "Medium"
+      fireEvent.click(largeCheckbox);
+      expect(smallCheckbox).not.toBeChecked();
+      expect(mediumCheckbox).not.toBeChecked();
+      expect(largeCheckbox).toBeChecked();
+    });
+
+    it('Single Facet: Selecting an already selected option should de-select it', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockSingleFacet]} />
+        </CioPlp>,
+      );
+
+      const smallCheckbox = container.querySelector('input[id="size-small"]');
+
+      // Select "Small" option
+      fireEvent.click(smallCheckbox);
+      expect(smallCheckbox).toBeChecked();
+
+      // Click "Small" again - should de-select it
+      fireEvent.click(smallCheckbox);
+      expect(smallCheckbox).not.toBeChecked();
     });
   });
 });
