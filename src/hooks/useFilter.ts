@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import { PlpFacet, PlpFilterValue } from '../types';
 import useRequestConfigs from './useRequestConfigs';
@@ -23,17 +24,36 @@ export interface UseFilterProps {
    * Per-facet slider step configuration
    */
   facetSliderSteps?: Record<string, number>;
+  /**
+   * Function that takes in a PlpFacet and returns `true` if the facet should be hidden from the final render
+   * @returns boolean
+   */
+  isHiddenFilterFn?: (facet: PlpFacet) => boolean;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
-  const { facets, sliderStep, facetSliderSteps } = props;
+  const { facets, sliderStep, facetSliderSteps, isHiddenFilterFn } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
     throw new Error('useFilter must be used within a component that is a child of <CioPlp />');
   }
 
+  const { getIsHiddenFilterField } = contextValue.itemFieldGetters;
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+
+  const isHiddenFilter = useCallback(
+    (facet: PlpFacet) =>
+      (typeof isHiddenFilterFn === 'function' && isHiddenFilterFn(facet)) ||
+      (typeof getIsHiddenFilterField === 'function' && getIsHiddenFilterField(facet)) ||
+      false,
+    [isHiddenFilterFn, getIsHiddenFilterField],
+  );
+
+  const filteredFacets = useMemo(
+    () => facets.filter((facet) => !isHiddenFilter(facet)),
+    [facets, isHiddenFilter],
+  );
 
   const setFilter = (filterName: string, filterValue: PlpFilterValue) => {
     const newFilters = getRequestConfigs().filters || {};
@@ -52,7 +72,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   };
 
   return {
-    facets,
+    facets: filteredFacets,
     setFilter,
     sliderStep,
     facetSliderSteps,

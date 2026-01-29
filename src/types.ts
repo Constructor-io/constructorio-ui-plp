@@ -51,6 +51,8 @@ export interface ItemFieldGetters {
     retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
   getIsHiddenGroupField: (group: PlpItemGroup) => boolean | undefined;
+  getIsHiddenFilterField: (facet: PlpFacet) => boolean | undefined;
+  getIsHiddenFilterOptionField: (option: PlpFacetOption) => boolean | undefined;
   getItemUrl: (item: Item) => string | undefined;
 }
 
@@ -370,14 +372,14 @@ export interface PlpFacetOption {
   count: number;
   displayName: string;
   value: string;
-  data: object;
+  data: Record<string, any>;
   range?: ['-inf' | number, 'inf' | number];
   options?: Array<PlpHierarchicalFacetOption>;
 }
 
 export interface PlpHierarchicalFacetOption extends PlpFacetOption {
   options: Array<PlpHierarchicalFacetOption>;
-  data: object & { parentValue: string | null };
+  data: Record<string, any> & { parentValue: string | null };
 }
 
 export interface PlpItemGroup {

@@ -83,3 +83,111 @@ export default function MyComponent() {
 `UseFilterReturn`
 
 <Markdown>{UseFilterReturn}</Markdown>
+
+## Hiding Facets and Options
+
+You can hide facets or individual facet options using three methods:
+
+> **Note:** This functionality is intended for **conditional rendering per page**. For example, showing a facet on search results but hiding it on category pages. If a facet or option should be hidden across your entire site, use the hidden facets feature in the Constructor.io dashboard or API instead. Hidden facets configured through the dashboard are excluded from API responses entirely, which is more efficient than client-side filtering.
+
+### Method 1: Custom Function
+
+#### Hiding Entire Facets
+
+Use `isHiddenFilterFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide the "price" facet entirely
+  const isHiddenFilterFn = (facet) => facet.name === 'price';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFilterFn={isHiddenFilterFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.HiddenFilters} />
+
+#### Hiding Specific Options
+
+Use `isHiddenFilterOptionFn` to hide specific options within facets. In this example, the "Black" and "Blue" color options are hidden:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide specific color options
+  const isHiddenFilterOptionFn = (option) =>
+    option.value === 'Black' || option.value === 'Blue';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.HiddenFilterOptions} />
+
+### Method 2: Metadata Field
+
+Add `cio_plp_hidden: true` to the `data` field of facets or facet options in your Constructor.io dashboard.
+These items will be automatically hidden without requiring custom functions.
+
+```json
+{
+  "name": "price",
+  "displayName": "Price",
+  "type": "range",
+  "data": {
+    "cio_plp_hidden": true
+  }
+}
+```
+
+<Canvas of={FiltersStories.HiddenViaMetadata} />
+
+### Method 3: Custom Field Getter
+
+You can also customize the metadata field used for hiding by providing a custom `itemFieldGetters` to `CioPlpProvider`:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  itemFieldGetters={{
+    getIsHiddenFilterField: (facet) => facet.data?.myCustomField,
+    getIsHiddenFilterOptionField: (option) => option.data?.myCustomField,
+  }}>
+  {/* ... */}
+</CioPlp>
+```
