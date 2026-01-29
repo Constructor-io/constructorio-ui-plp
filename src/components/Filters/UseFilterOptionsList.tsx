@@ -3,7 +3,9 @@ import { PlpMultipleFacet, PlpSingleFacet } from '../../types';
 import useOptionsList from '../../hooks/useOptionsList';
 
 export interface UseFilterOptionsListProps {
-  multipleFacet: PlpMultipleFacet | PlpSingleFacet;
+  /** @deprecated Use `facet` instead */
+  multipleFacet?: PlpMultipleFacet | PlpSingleFacet;
+  facet?: PlpMultipleFacet | PlpSingleFacet;
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
@@ -11,11 +13,19 @@ export interface UseFilterOptionsListProps {
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const {
-    multipleFacet: facet,
+    facet: facetProp,
+    multipleFacet,
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
   } = props;
+
+  // Prefer new prop, fall back to deprecated prop
+  const facet = facetProp ?? multipleFacet;
+
+  if (!facet) {
+    throw new Error('Either `facet` or `multipleFacet` must be provided');
+  }
 
   const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
     options: facet.options,

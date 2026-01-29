@@ -32,7 +32,7 @@ export default function FilterGroup(props: FilterGroupProps) {
       {(isMultipleOrBucketedFacet(facet) || isSingleFacet(facet)) && (
         <FilterOptionsList
           isCollapsed={isCollapsed}
-          multipleFacet={facet}
+          facet={facet}
           modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
         />
