@@ -1,5 +1,7 @@
 import React from 'react';
 import useRequestConfigs from '../../../hooks/useRequestConfigs';
+import { useCioPlpContext } from '../../../hooks/useCioPlpContext';
+import { translate } from '../../../utils/helpers';
 
 /**
  * Renders the 'no results' component if search results returns no items.
@@ -10,15 +12,18 @@ import useRequestConfigs from '../../../hooks/useRequestConfigs';
 export default function ZeroResults() {
   const { getRequestConfigs } = useRequestConfigs();
   const { query } = getRequestConfigs();
+  const { translations } = useCioPlpContext();
 
   if (query) {
     return (
       <>
-        <div className='cio-zero-results-header'>Sorry, we didn’t find: “{query}”</div>
+        <div className='cio-zero-results-header'>
+          {translate("Sorry, we didn't find:", translations)} &quot;{query}&quot;
+        </div>
         <ul className='cio-zero-results-option-list'>
-          <li>Check for typos</li>
-          <li>Use fewer keywords</li>
-          <li>Broaden your search terms</li>
+          <li>{translate('Check for typos', translations)}</li>
+          <li>{translate('Use fewer keywords', translations)}</li>
+          <li>{translate('Broaden your search terms', translations)}</li>
         </ul>
       </>
     );
@@ -27,12 +32,12 @@ export default function ZeroResults() {
   return (
     <>
       <div className='cio-zero-results-header'>
-        Sorry, we were unable to find what you were looking for.
+        {translate('Sorry, we were unable to find what you were looking for.', translations)}
       </div>
       <ul className='cio-zero-results-option-list'>
-        <li>Check for typos</li>
-        <li>Use fewer keywords</li>
-        <li>Broaden your search terms</li>
+        <li>{translate('Check for typos', translations)}</li>
+        <li>{translate('Use fewer keywords', translations)}</li>
+        <li>{translate('Broaden your search terms', translations)}</li>
       </ul>
     </>
   );
