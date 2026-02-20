@@ -58,6 +58,7 @@ export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
     if (nestedOptionsKey) {
       return filterOptionsRecursively(options, isHiddenOptionFn, nestedOptionsKey);
     }
+    
     return options.filter((option) => !isHiddenOptionFn(option));
   }, [isHiddenOptionFn, options, nestedOptionsKey]);
   const [isShowAll, setIsShowAll] = useState(false);
