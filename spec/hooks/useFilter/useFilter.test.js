@@ -198,6 +198,96 @@ describe('Testing Hook: useFilter', () => {
     });
   });
 
+  describe('getIsCollapsed', () => {
+    const mockFacetsWithMetadata = require('../../local_examples/sampleFacetsWithCollapsedMetadata.json');
+    const facetWithMetadata = mockFacetsWithMetadata[0]; // Color - has cio_render_collapsed: true
+    const facetWithoutMetadata = mockFacetsWithMetadata[1]; // Size - no cio_render_collapsed
+
+    it('Should return getIsCollapsed function', async () => {
+      const { result } = renderHookWithCioPlp(() => useFilter(useFilterProps));
+
+      await waitFor(() => {
+        expect(typeof result.current.getIsCollapsed).toBe('function');
+      });
+    });
+
+    it('Should return true for facets with cio_render_collapsed metadata', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata] }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
+      });
+    });
+
+    it('renderCollapsed=true should collapse all facets', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], renderCollapsed: true }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(true);
+      });
+    });
+
+    it('renderCollapsed=false should expand all facets, overriding metadata', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], renderCollapsed: false }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(false);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
+      });
+    });
+
+    it('collapsedFacets array should collapse only specified facets', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: [facetWithMetadata, facetWithoutMetadata],
+          collapsedFacets: ['size'],
+        }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(false);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(true);
+      });
+    });
+
+    it('collapsedFacets as comma-separated string should work', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: [facetWithMetadata, facetWithoutMetadata],
+          collapsedFacets: 'color, size',
+        }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(true);
+      });
+    });
+
+    it('collapsedFacets should take precedence over renderCollapsed', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: [facetWithMetadata, facetWithoutMetadata],
+          renderCollapsed: true,
+          collapsedFacets: ['color'],
+        }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
+      });
+    });
+  });
+
   it('Should remove all filters but not other request params when clearFilters is called', async () => {
     const initialProps = {
       staticRequestConfigs: {
