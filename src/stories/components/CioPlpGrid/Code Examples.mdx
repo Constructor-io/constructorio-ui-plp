@@ -100,6 +100,36 @@ export default function MyComponent() {
 }
 ```
 
+## Filters Configuration (`filterConfigs`)
+
+The CioPlpGrid component supports configuring the Filters component behavior through the `filterConfigs` prop. This allows you to control the default collapsed state of filter groups.
+
+For detailed examples and interactive demos of Filters configuration options, see the <a href='./?path=/docs/components-filters--code-examples'>Filters component documentation</a>.
+
+### Available filterConfigs Options
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid
+        filterConfigs={{
+          // When true, all filter groups start collapsed (default: undefined)
+          // For per-facet control, use collapsedFacets instead (see Filters docs)
+          renderCollapsed: false,
+
+          // Global slider step for all range facets (default: 0.1)
+          sliderStep: 0.1,
+
+          // Per-facet slider step overrides
+          facetSliderSteps: { price: 1 },
+        }}
+      />
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
 
 If you prefer to handle the rendering of the CioPlpGrid component, you may pass a Render Props function to the component.

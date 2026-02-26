@@ -51,4 +51,27 @@ describe('Testing Component on the server: Filters', () => {
     expect(mockChildren).toHaveBeenCalled();
     expect(html).toContain('Custom Filters');
   });
+
+  it('Should render all filter groups collapsed when renderCollapsed is true', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} renderCollapsed />
+      </CioPlp>,
+    );
+
+    // Collapsed state uses cio-arrow-up, expanded uses cio-arrow-down
+    expect(html).toContain('cio-arrow-up');
+    expect(html).not.toContain('cio-arrow-down');
+  });
+
+  it('Should render all filter groups expanded when renderCollapsed is false', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} renderCollapsed={false} />
+      </CioPlp>,
+    );
+
+    expect(html).toContain('cio-arrow-down');
+    expect(html).not.toContain('cio-arrow-up');
+  });
 });

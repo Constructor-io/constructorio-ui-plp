@@ -31,7 +31,11 @@ export type UseCioPlpProps = UseSearchResultsProps &
      */
     sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
     /**
-     * No configurations available yet.
+     * Configuration options for the Filters component.
+     * - `sliderStep`: Global slider step for all range facets.
+     * - `facetSliderSteps`: Per-facet slider step configuration.
+     * - `renderCollapsed`: When true, all filter groups render collapsed by default.
+     * - `collapsedFacets`: List of facet names (or comma-separated string) to render collapsed.
      */
     filterConfigs?: Omit<UseFilterProps, 'facets'>;
     /**

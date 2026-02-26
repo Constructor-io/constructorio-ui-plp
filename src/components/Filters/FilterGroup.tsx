@@ -11,11 +11,19 @@ export interface FilterGroupProps {
   initialNumOptions?: number;
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
+  defaultCollapsed?: boolean;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
-  const { facet, setFilter, initialNumOptions = 10, sliderStep, facetSliderSteps } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const {
+    facet,
+    setFilter,
+    initialNumOptions = 10,
+    sliderStep,
+    facetSliderSteps,
+    defaultCollapsed = false,
+  } = props;
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: any) => {

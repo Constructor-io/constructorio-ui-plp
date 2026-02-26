@@ -42,6 +42,108 @@ export default function MyComponent() {
 }
 ```
 
+## Configuration Options (`filterConfigs`)
+
+The Filters component supports various configuration options that can be passed via component props, or via the `filterConfigs` prop at the `CioPlp`-level.
+
+### Collapse All Filter Groups
+
+Render all filter groups collapsed by default:
+
+<Canvas of={FiltersStories.AllCollapsed} />
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        renderCollapsed: true, // All filter groups start collapsed
+      }}
+    />
+  );
+}
+```
+
+### Collapse Specific Filter Groups
+
+Collapse only specific filter groups by their facet name:
+
+<Canvas of={FiltersStories.SpecificFacetsCollapsed} />
+
+```jsx
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        collapsedFacets: ['color', 'price'], // Only these facets start collapsed
+      }}
+    />
+  );
+}
+```
+
+> For bundled/Connector users, `collapsedFacets` also accepts a comma-separated string: `"color, price"`.
+
+### Collapse via Facet Metadata
+
+Filter groups can also be collapsed based on facet metadata set on the Constructor Dashboard. If a facet has `data.cio_render_collapsed` set to a truthy value, the filter group will render collapsed by default — no code changes required.
+
+<Canvas of={FiltersStories.CollapsedViaMetadata} />
+
+> In this example, the **Color** and **Price** facets have `cio_render_collapsed: true` in their metadata.
+
+### Priority Order
+
+When multiple collapse configurations are present, they are applied in this order:
+
+1. **`collapsedFacets`** (per-facet prop) — highest priority
+2. **`renderCollapsed`** (global prop)
+3. **Facet metadata** (`data.cio_render_collapsed`) — lowest priority
+
+### Direct Filters Component Configuration
+
+You can also pass collapse configurations directly to the Filters component instead of using `filterConfigs`:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+// Collapse all filter groups
+export function AllCollapsed() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => (
+          <Filters facets={props.filters.facets} renderCollapsed />
+        )}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+
+// Collapse only specific filter groups
+export function SpecificCollapsed() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => (
+          <Filters facets={props.filters.facets} collapsedFacets={['color', 'price']} />
+        )}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
 
 To override the default rendering of the Filters component, you may pass a Render Props function to the component.
