@@ -1,0 +1,34 @@
+[
+  {
+    "displayName": "Color",
+    "name": "color",
+    "type": "multiple",
+    "data": { "cio_render_collapsed": true },
+    "hidden": false,
+    "options": [
+      { "status": "", "count": 155, "displayName": "Black", "value": "Black", "data": {} },
+      { "status": "", "count": 45, "displayName": "Blue", "value": "Blue", "data": {} }
+    ]
+  },
+  {
+    "displayName": "Size",
+    "name": "size",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      { "status": "", "count": 120, "displayName": "Small", "value": "small", "data": {} },
+      { "status": "", "count": 98, "displayName": "Medium", "value": "medium", "data": {} }
+    ]
+  },
+  {
+    "displayName": "Price",
+    "name": "price",
+    "type": "range",
+    "data": { "cio_render_collapsed": true },
+    "hidden": false,
+    "min": 1,
+    "max": 100,
+    "status": {}
+  }
+]
