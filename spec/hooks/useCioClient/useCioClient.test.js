@@ -63,4 +63,21 @@ describe('Testing Hook: useCioClient', () => {
       ...clientOptions,
     });
   });
+
+  test('Should use custom version when provided in options', () => {
+    const key = 'xx';
+    const customVersion = 'cio-ui-plp-bundled-1.0.0';
+    const clientOptions = {
+      version: customVersion,
+      serviceUrl: 'https://special.cnstrc.com',
+    };
+
+    const { result } = renderHook(({ apiKey, options }) => useCioClient({ apiKey, options }), {
+      initialProps: { apiKey: key, options: clientOptions },
+    });
+
+    const client = result.current;
+    expect(client.options.version).toBe(customVersion);
+    expect(client.options.serviceUrl).toBe('https://special.cnstrc.com');
+  });
 });

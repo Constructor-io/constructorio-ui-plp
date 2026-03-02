@@ -200,6 +200,43 @@
     ]
   },
   {
+    "displayName": "Size",
+    "name": "size",
+    "type": "single",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 120,
+        "displayName": "Small",
+        "value": "small",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 98,
+        "displayName": "Medium",
+        "value": "medium",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 75,
+        "displayName": "Large",
+        "value": "large",
+        "data": {}
+      },
+      {
+        "status": "",
+        "count": 62,
+        "displayName": "X-Large",
+        "value": "x-large",
+        "data": {}
+      }
+    ]
+  },
+  {
     "displayName": "Subject",
     "name": "subject",
     "type": "hierarchical",

@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PlpFacetOption, PlpMultipleFacet } from '../../types';
+import { PlpFacetOption, PlpMultipleFacet, PlpSingleFacet } from '../../types';
 import useOptionsList from '../../hooks/useOptionsList';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
-export interface UseFilterOptionsListProps {
-  multipleFacet: PlpMultipleFacet;
+interface UseFilterOptionsListPropsBase {
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
   initialNumOptions: number;
   isCollapsed: boolean;
@@ -14,6 +13,18 @@ export interface UseFilterOptionsListProps {
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
 }
+interface UseFilterOptionsListPropsLegacy extends UseFilterOptionsListPropsBase {
+  /** @deprecated Use `facet` instead */
+  multipleFacet: PlpMultipleFacet | PlpSingleFacet;
+}
+
+interface UseFilterOptionsListPropsNew extends UseFilterOptionsListPropsBase {
+  facet: PlpMultipleFacet | PlpSingleFacet;
+}
+
+export type UseFilterOptionsListProps =
+  | UseFilterOptionsListPropsLegacy
+  | UseFilterOptionsListPropsNew;
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const {
@@ -23,6 +34,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     isCollapsed,
     isHiddenFilterOptionFn,
   } = props;
+  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed } = props;
+  const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
 
@@ -45,8 +58,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const [selectedOptionMap, setSelectedOptionMap] = useState({});
 
   const onOptionSelect = (optionValue: string) => {
-    const newMap = { ...selectedOptionMap };
-    newMap[optionValue] = !newMap[optionValue];
+    const newMap = facet.type === 'multiple' ? { ...selectedOptionMap } : {};
+    newMap[optionValue] = !selectedOptionMap[optionValue];
 
     const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
     setSelectedOptionMap(newMap);

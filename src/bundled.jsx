@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import CioPlpComponent from './components/CioPlp';
 import { shopifyDefaults } from './utils/shopifyDefaults';
+import versionNumber from './version';
 import './styles.css';
 
 const CioPlp = ({ selector, includeCSS = true, useShopifyDefaults, ...rest }) => {
@@ -29,7 +30,14 @@ const CioPlp = ({ selector, includeCSS = true, useShopifyDefaults, ...rest }) =>
 
     ReactDOM.createRoot(containerElement).render(
       <React.StrictMode>
-        <CioPlpComponent {...rest} useShopifyDefaults={useShopifyDefaults} />
+        <CioPlpComponent
+          {...rest}
+          useShopifyDefaults={useShopifyDefaults}
+          cioClientOptions={{
+            ...rest.cioClientOptions,
+            version: `cio-ui-plp-bundled-${versionNumber}`,
+          }}
+        />
       </React.StrictMode>,
     );
   }
