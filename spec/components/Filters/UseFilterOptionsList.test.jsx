@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FilterOptionsList from '../../../src/components/Filters/FilterOptionsList';
+import { renderWithCioPlp } from '../../test-utils';
 
 const mockModifyRequestMultipleFilter = jest.fn();
 
@@ -37,7 +38,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
 
   describe('Using new "facet" prop', () => {
     it('Should render options when using the new facet prop with multiple type', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           facet={mockMultipleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -52,7 +53,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
     });
 
     it('Should render options when using the new facet prop with single type', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           facet={mockSingleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -66,7 +67,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
     });
 
     it('Should handle option selection when using new facet prop', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           facet={mockMultipleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -82,7 +83,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
 
   describe('Using deprecated "multipleFacet" prop', () => {
     it('Should render options when using the deprecated multipleFacet prop with multiple type', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           multipleFacet={mockMultipleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -97,7 +98,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
     });
 
     it('Should render options when using the deprecated multipleFacet prop with single type', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           multipleFacet={mockSingleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -111,7 +112,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
     });
 
     it('Should handle option selection when using deprecated multipleFacet prop', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           multipleFacet={mockMultipleFacet}
           modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
@@ -127,7 +128,7 @@ describe('UseFilterOptionsList - Prop Backwards Compatibility', () => {
 
   describe('Prop precedence', () => {
     it('Should prefer new facet prop over deprecated multipleFacet when both are provided', () => {
-      render(
+      renderWithCioPlp(
         <FilterOptionsList
           facet={mockMultipleFacet}
           multipleFacet={mockSingleFacet}
