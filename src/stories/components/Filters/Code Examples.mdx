@@ -92,6 +92,8 @@ You can hide facets or individual facet options using three methods (📦 v1.9.0
 
 ### Method 1: Custom Function
 
+Each function must return a boolean: `true` to hide the facet or option, `false` to render it.
+
 #### Hiding Entire Facets
 
 Use `isHiddenFilterFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
@@ -179,7 +181,8 @@ These items will be automatically hidden without requiring custom functions.
 
 ### Method 3: Custom Field Getter
 
-You can also customize the metadata field used for hiding by providing a custom `itemFieldGetters` to `CioPlpProvider`:
+You can also customize the metadata field used for hiding by providing a custom `itemFieldGetters` to `CioPlpProvider`.
+Each getter must return a boolean: `true` to hide the item, `false` to render it.
 
 ```jsx
 <CioPlp
