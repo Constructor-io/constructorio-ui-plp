@@ -27,14 +27,8 @@ export type UseFilterOptionsListProps =
   | UseFilterOptionsListPropsNew;
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
-  const {
-    multipleFacet: facet,
-    initialNumOptions,
-    modifyRequestMultipleFilter,
-    isCollapsed,
-    isHiddenFilterOptionFn,
-  } = props;
-  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed } = props;
+  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed, isHiddenFilterOptionFn } =
+    props;
   const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
