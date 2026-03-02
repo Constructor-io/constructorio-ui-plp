@@ -33,7 +33,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     : item;
   const itemUrl = getItemUrl(itemWithVariationUrl) || productSwatch?.selectedVariation?.url;
 
-  const variationId = productSwatch?.selectedVariation?.variationId;
+  const variationId = productSwatch?.selectedVariation?.variationId || item.variationId;
   let rolloverImage = productSwatch?.selectedVariation?.rolloverImage;
 
   // Fallback to item's rollover image if all variations don't have a rollover image
