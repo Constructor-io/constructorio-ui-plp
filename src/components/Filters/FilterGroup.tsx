@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PlpFacet } from '../../types';
+import type { PlpFacet, PlpFacetOption } from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
@@ -11,6 +11,11 @@ export interface FilterGroupProps {
   initialNumOptions?: number;
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
+  /**
+   * Function that takes in a PlpFacetOption and returns `true` if the option should be hidden from the final render
+   * @returns boolean
+   */
+  isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
   defaultCollapsed?: boolean;
 }
 
@@ -21,6 +26,7 @@ export default function FilterGroup(props: FilterGroupProps) {
     initialNumOptions = 10,
     sliderStep,
     facetSliderSteps,
+    isHiddenFilterOptionFn,
     defaultCollapsed = false,
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
@@ -43,6 +49,7 @@ export default function FilterGroup(props: FilterGroupProps) {
           facet={facet}
           modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
+          isHiddenFilterOptionFn={isHiddenFilterOptionFn}
         />
       )}
 

@@ -44,26 +44,44 @@ describe('Testing Hook: useProductInfo', () => {
   });
 
   it('Should return correctly after a different variation is selected', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItemWithRolloverImages }));
+    const { result } = renderHookWithCioPlp(() =>
+      useProductInfo({ item: transformedItemWithRolloverImages }),
+    );
 
     await waitFor(() => {
       const {
-        current: { productSwatch, itemName, itemImageUrl, itemUrl, itemPrice, itemSalePrice, rolloverImage },
+        current: {
+          productSwatch,
+          itemName,
+          itemImageUrl,
+          itemUrl,
+          itemPrice,
+          itemSalePrice,
+          rolloverImage,
+        },
       } = result;
       const { selectVariation, swatchList } = productSwatch;
       selectVariation(swatchList[1]);
 
       expect(itemName).toEqual(swatchList[1].itemName);
-      expect(itemImageUrl).toEqual(swatchList[1].imageUrl || transformedItemWithRolloverImages.imageUrl);
+      expect(itemImageUrl).toEqual(
+        swatchList[1].imageUrl || transformedItemWithRolloverImages.imageUrl,
+      );
       expect(itemUrl).toEqual(swatchList[1].url || transformedItemWithRolloverImages.url);
-      expect(itemPrice).toEqual(swatchList[1].price || transformedItemWithRolloverImages.data.price);
-      expect(itemSalePrice).toEqual(swatchList[1].salePrice || transformedItemWithRolloverImages.data.salePrice);
+      expect(itemPrice).toEqual(
+        swatchList[1].price || transformedItemWithRolloverImages.data.price,
+      );
+      expect(itemSalePrice).toEqual(
+        swatchList[1].salePrice || transformedItemWithRolloverImages.data.salePrice,
+      );
       expect(rolloverImage).toEqual(swatchList[1].rolloverImage);
     });
   });
 
   it('Should fallback to the item rolloverImage if it is not available in the variation', async () => {
-    const { result } = renderHookWithCioPlp(() => useProductInfo({ item: transformedItemWithRolloverImages }));
+    const { result } = renderHookWithCioPlp(() =>
+      useProductInfo({ item: transformedItemWithRolloverImages }),
+    );
 
     await waitFor(() => {
       const {
@@ -110,6 +128,28 @@ describe('Testing Hook: useProductInfo', () => {
       expect(itemUrl).toEqual(transformedItem.url);
       expect(itemPrice).toBeUndefined();
       expect(itemSalePrice).toBeUndefined();
+    });
+  });
+
+  it('Should fallback to item.variationId when getSwatches throws an error', async () => {
+    const { result } = renderHookWithCioPlp(
+      () => useProductInfo({ item: transformedItemWithSalePrice }),
+      {
+        initialProps: {
+          itemFieldGetters: {
+            getSwatches: () => {
+              throw new Error();
+            },
+          },
+        },
+      },
+    );
+
+    await waitFor(() => {
+      const {
+        current: { variationId },
+      } = result;
+      expect(variationId).toEqual(transformedItemWithSalePrice.variationId);
     });
   });
 
