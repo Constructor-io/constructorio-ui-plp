@@ -65,6 +65,10 @@ export function getIsHiddenFilterOptionField(option: PlpFacetOption) {
   return option?.data?.cio_plp_hidden;
 }
 
+export function getIsCollapsedFacetField(facet: PlpFacet): boolean | undefined {
+  return facet?.data?.cio_render_collapsed ? true : undefined;
+}
+
 export function getItemUrl(item: Item): string | undefined {
   return item?.url;
 }
