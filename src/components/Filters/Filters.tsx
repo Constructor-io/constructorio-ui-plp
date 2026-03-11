@@ -34,7 +34,7 @@ export default function Filters(props: FiltersWithRenderProps) {
           clearFilters,
         })
       ) : (
-        <div className='cio-filters'>
+        <ul className='cio-filters'>
           {facets.map((facet) => (
             <FilterGroup
               facet={facet}
@@ -46,7 +46,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               key={facet.name}
             />
           ))}
-        </div>
+        </ul>
       )}
     </>
   );
