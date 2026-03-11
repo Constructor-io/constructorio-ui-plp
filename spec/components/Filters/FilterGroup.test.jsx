@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FilterGroup from '../../../src/components/Filters/FilterGroup';
+import CioPlp from '../../../src/components/CioPlp';
+import { DEMO_API_KEY } from '../../../src/constants';
 
 const mockSetFilter = jest.fn();
 
@@ -68,12 +70,14 @@ describe('Testing Component: FilterGroup', () => {
     };
 
     render(
-      <FilterGroup
-        facet={multipleFacet}
-        setFilter={mockSetFilter}
-        initialNumOptions={10}
-        defaultCollapsed
-      />,
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          defaultCollapsed
+        />
+      </CioPlp>,
     );
 
     const arrow = screen
@@ -97,12 +101,14 @@ describe('Testing Component: FilterGroup', () => {
     };
 
     render(
-      <FilterGroup
-        facet={multipleFacet}
-        setFilter={mockSetFilter}
-        initialNumOptions={10}
-        defaultCollapsed={false}
-      />,
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          defaultCollapsed={false}
+        />
+      </CioPlp>,
     );
 
     const arrow = screen
