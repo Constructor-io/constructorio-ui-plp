@@ -52,6 +52,18 @@ describe('Testing Component on the server: Filters', () => {
     expect(html).toContain('Custom Filters');
   });
 
+  it('Should render all filter groups expanded by default (backwards compatibility)', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} />
+      </CioPlp>,
+    );
+
+    // Default behavior: all filter groups should be expanded
+    expect(html).toContain('cio-arrow-down');
+    expect(html).not.toContain('cio-arrow-up');
+  });
+
   it('Should render all filter groups collapsed when renderCollapsed is true', () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>

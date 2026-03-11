@@ -58,20 +58,6 @@ export type CioPlpGridWithRenderProps = IncludeRenderProps<
   ReturnType<typeof useCioPlp>
 >;
 
-/**
- * When filterConfigs.renderCollapsed is set and groupsConfigs.isCollapsed is not explicitly set,
- * apply the global collapse setting to the Groups filter as well.
- */
-function resolveGroupsConfigs(
-  filterConfigs?: Omit<UseFilterProps, 'facets'>,
-  groupsConfigs?: Omit<GroupsProps, 'groups'>,
-): Omit<GroupsProps, 'groups'> | undefined {
-  if (filterConfigs?.renderCollapsed !== undefined && groupsConfigs?.isCollapsed === undefined) {
-    return { ...groupsConfigs, isCollapsed: filterConfigs.renderCollapsed };
-  }
-  return groupsConfigs;
-}
-
 export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const {
     spinner,
@@ -84,8 +70,6 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     children,
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  const resolvedGroupsConfigs = resolveGroupsConfigs(filterConfigs, groupsConfigs);
 
   const plpData = useCioPlp({
     initialSearchResponse,
@@ -155,9 +139,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
               {data.response?.results?.length ? (
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
-                    {isSearchPage && (
-                      <Groups groups={data.response.groups} {...resolvedGroupsConfigs} />
-                    )}
+                    {isSearchPage && <Groups groups={data.response.groups} {...groupsConfigs} />}
                     <Filters facets={filters.facets} {...filterConfigs} />
                   </div>
                   <div className='cio-products-container' {...plpContainerCnstrcDataAttributes}>
@@ -181,7 +163,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                     <div className='cio-product-tiles-container'>
                       <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
                         {isSearchPage && (
-                          <Groups groups={data.response.groups} {...resolvedGroupsConfigs} />
+                          <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
                         <Filters facets={filters.facets} {...filterConfigs} />
                       </MobileModal>

@@ -66,7 +66,7 @@ export function getIsHiddenFilterOptionField(option: PlpFacetOption) {
 }
 
 export function getIsCollapsedFacetField(facet: PlpFacet): boolean | undefined {
-  return facet?.data?.cio_render_collapsed ? true : undefined;
+  return facet?.data?.cio_render_collapsed;
 }
 
 export function getItemUrl(item: Item): string | undefined {

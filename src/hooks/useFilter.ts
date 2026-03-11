@@ -34,8 +34,6 @@ export interface UseFilterProps {
    * When true, all filter groups render collapsed by default.
    * When false, all filter groups render expanded by default.
    * Individual facet overrides via `collapsedFacets` or facet metadata take precedence.
-   * When used via `filterConfigs` in CioPlpGrid, this also applies to the Groups filter
-   * unless `groupsConfigs.isCollapsed` is explicitly set.
    */
   renderCollapsed?: boolean;
   /**

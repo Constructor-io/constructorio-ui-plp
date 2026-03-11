@@ -174,6 +174,22 @@ describe('CioPlp React Client-Side Rendering', () => {
     });
   });
 
+  const expectAllFilterGroupsCollapsed = (container) => {
+    const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
+    expect(arrows.length).toBeGreaterThan(0);
+    arrows.forEach((arrow) => {
+      expect(arrow).toHaveClass('cio-arrow-up');
+    });
+  };
+
+  const expectAllFilterGroupsExpanded = (container) => {
+    const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
+    expect(arrows.length).toBeGreaterThan(0);
+    arrows.forEach((arrow) => {
+      expect(arrow).toHaveClass('cio-arrow-down');
+    });
+  };
+
   it('renders CioPlp with filterConfigs renderCollapsed set to true on the client', async () => {
     const { container } = render(
       <CioPlp
@@ -184,12 +200,7 @@ describe('CioPlp React Client-Side Rendering', () => {
     );
 
     await waitFor(() => {
-      // All filter group arrows should indicate collapsed state (cio-arrow-up)
-      const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
-      expect(arrows.length).toBeGreaterThan(0);
-      arrows.forEach((arrow) => {
-        expect(arrow).toHaveClass('cio-arrow-up');
-      });
+      expectAllFilterGroupsCollapsed(container);
     });
   });
 
@@ -203,54 +214,7 @@ describe('CioPlp React Client-Side Rendering', () => {
     );
 
     await waitFor(() => {
-      // All filter group arrows should indicate expanded state (cio-arrow-down)
-      const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
-      expect(arrows.length).toBeGreaterThan(0);
-      arrows.forEach((arrow) => {
-        expect(arrow).toHaveClass('cio-arrow-down');
-      });
-    });
-  });
-
-  it('renders CioPlp with filterConfigs renderCollapsed=true also collapsing the Groups filter', async () => {
-    const { container } = render(
-      <CioPlp
-        apiKey={DEMO_API_KEY}
-        filterConfigs={{ renderCollapsed: true }}
-        initialSearchResponse={mockSearchResponse}
-      />,
-    );
-
-    await waitFor(() => {
-      // Groups filter renders on search pages via initialSearchResponse
-      const groupsArrow = container.querySelector('.cio-groups-container .cio-arrow');
-      expect(groupsArrow).toBeInTheDocument();
-      expect(groupsArrow).toHaveClass('cio-arrow-up');
-    });
-  });
-
-  it('renders CioPlp with groupsConfigs.isCollapsed overriding filterConfigs.renderCollapsed for Groups', async () => {
-    const { container } = render(
-      <CioPlp
-        apiKey={DEMO_API_KEY}
-        filterConfigs={{ renderCollapsed: true }}
-        groupsConfigs={{ isCollapsed: false }}
-        initialSearchResponse={mockSearchResponse}
-      />,
-    );
-
-    await waitFor(() => {
-      // Groups filter should be expanded (groupsConfigs.isCollapsed=false overrides filterConfigs.renderCollapsed=true)
-      const groupsArrow = container.querySelector('.cio-groups-container .cio-arrow');
-      expect(groupsArrow).toBeInTheDocument();
-      expect(groupsArrow).toHaveClass('cio-arrow-down');
-
-      // Facet filter groups should still be collapsed
-      const filterArrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
-      expect(filterArrows.length).toBeGreaterThan(0);
-      filterArrows.forEach((arrow) => {
-        expect(arrow).toHaveClass('cio-arrow-up');
-      });
+      expectAllFilterGroupsExpanded(container);
     });
   });
 });
