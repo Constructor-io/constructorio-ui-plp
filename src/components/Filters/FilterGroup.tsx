@@ -16,6 +16,7 @@ export interface FilterGroupProps {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  defaultCollapsed?: boolean;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -26,8 +27,9 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
+    defaultCollapsed = false,
   } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: any) => {

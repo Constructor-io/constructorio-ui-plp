@@ -38,8 +38,9 @@ ItemFieldGetters maps the fields sent in the catalog feeds to the fields the lib
 | getRolloverImage      | `(item: Item \| Variation) => string \| undefined`                                                                          | Maps the rollover/hover image URL field from the API Response in `item.data`. Defaults to `item.data.rolloverImage`              |
 | getSwatchPreview      | `(variation: Variation) => string`                                                                                          | Maps the swatch preview image URL from the API Response in `variations.data`. Defaults to `variation.data.swatchPreview`         |
 | getSwatches           | `(item: Item, retrievePrice, retrieveSwatchPreview, retrieveSalePrice, retrieveRolloverImage) => SwatchItem[] \| undefined` | Maps the swatches object from the API Response from `item.variations`. Builds a SwatchItem array by iterating through variations |
-| getIsHiddenGroupField | `(group: PlpItemGroup) => boolean \| undefined`                                                                             | Maps a custom field in item_group.data to determine if a group should be hidden. Defaults to `group.data.cio_plp_hidden`         |
-| getItemUrl            | `(item: Item) => string \| undefined`                                                                                       | Maps the product URL from the API Response. Defaults to `item.url`                                                               |
+| getIsHiddenGroupField    | `(group: PlpItemGroup) => boolean \| undefined`                                                                             | Maps a custom field in item_group.data to determine if a group should be hidden. Defaults to `group.data.cio_plp_hidden`         |
+| getIsCollapsedFacetField | `(facet: PlpFacet) => boolean \| undefined`                                                                                 | Maps a custom field in facet.data to determine if a filter group should render collapsed. Defaults to `facet.data.cio_render_collapsed` |
+| getItemUrl               | `(item: Item) => string \| undefined`                                                                                       | Maps the product URL from the API Response. Defaults to `item.url`                                                               |
 
 ## Configuration Options
 
@@ -66,7 +67,14 @@ Configuration options for sorting functionality. No specific configurations avai
 
 ### `filterConfigs`
 
-Configuration options for filters functionality. No specific configurations available yet.
+Configuration options for filters functionality. For detailed examples and interactive demos, see the <a href='./?path=/docs/components-filters--code-examples'>Filters component documentation</a>.
+
+| Property        | Type                   | Description                                                                                                          |
+| --------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| renderCollapsed | `boolean`              | When `true`, all filter groups render collapsed by default. When `false`, all render expanded (overrides metadata).    |
+| collapsedFacets | `string[] \| string`   | List of facet names to render collapsed. Accepts an array or comma-separated string. Takes highest precedence.        |
+| sliderStep      | `number`               | Global slider step for all range facets.                                                                              |
+| facetSliderSteps| `Record<string, number>` | Per-facet slider step configuration.                                                                                |
 
 ## UrlHelpers
 

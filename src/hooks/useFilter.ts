@@ -9,6 +9,7 @@ export interface UseFilterReturn {
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
   clearFilters: () => void;
+  getIsCollapsed: (facet: PlpFacet) => boolean;
 }
 
 export interface UseFilterProps {
@@ -29,10 +30,29 @@ export interface UseFilterProps {
    * @returns boolean
    */
   isHiddenFilterFn?: (facet: PlpFacet) => boolean;
+  /**
+   * When true, all filter groups render collapsed by default.
+   * When false, all filter groups render expanded by default.
+   * Individual facet overrides via `collapsedFacets` or facet metadata take precedence.
+   */
+  renderCollapsed?: boolean;
+  /**
+   * List of facet names that should render collapsed by default.
+   * Takes precedence over `renderCollapsed` and facet metadata.
+   * Accepts a string array or a comma-separated string (for bundled/Connector users).
+   */
+  collapsedFacets?: string[] | string;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
-  const { facets, sliderStep, facetSliderSteps, isHiddenFilterFn } = props;
+  const {
+    facets,
+    sliderStep,
+    facetSliderSteps,
+    isHiddenFilterFn,
+    renderCollapsed,
+    collapsedFacets,
+  } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -40,6 +60,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   }
 
   const { getIsHiddenFilterField } = contextValue.itemFieldGetters;
+  const { getIsCollapsedFacetField } = contextValue.itemFieldGetters;
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
 
   const isHiddenFilter = useCallback(
@@ -71,11 +92,46 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs({ filters: {}, page: 1 });
   };
 
+  // Parse collapsedFacets string into array for bundled/Connector users
+  const parsedCollapsedFacets = useMemo(
+    () =>
+      typeof collapsedFacets === 'string'
+        ? collapsedFacets
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : collapsedFacets,
+    [collapsedFacets],
+  );
+
+  const getIsCollapsed = useCallback(
+    (facet: PlpFacet): boolean => {
+      // Priority 1: Per-facet prop (collapsedFacets)
+      if (parsedCollapsedFacets && parsedCollapsedFacets.length > 0) {
+        return parsedCollapsedFacets.includes(facet.name);
+      }
+
+      // Priority 2: Global prop (renderCollapsed)
+      if (renderCollapsed !== undefined) {
+        return renderCollapsed;
+      }
+
+      // Priority 3: Facet metadata field (cio_render_collapsed)
+      if (typeof getIsCollapsedFacetField === 'function') {
+        return !!getIsCollapsedFacetField(facet);
+      }
+
+      return false;
+    },
+    [parsedCollapsedFacets, renderCollapsed, getIsCollapsedFacetField],
+  );
+
   return {
     facets: filteredFacets,
     setFilter,
     sliderStep,
     facetSliderSteps,
     clearFilters,
+    getIsCollapsed,
   };
 }
