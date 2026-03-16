@@ -29,6 +29,7 @@ export const cnstrcDataAttrs = {
     zeroResults: 'data-cnstrc-zero-result',
     slCampaignId: 'data-cnstrc-sl-campaign-id',
     slCampaignOwner: 'data-cnstrc-sl-campaign-owner',
+    resultPage: 'data-cnstrc-result-page',
   },
   search: {
     searchContainer: 'data-cnstrc-search',
@@ -84,6 +85,7 @@ export function getPlpContainerCnstrcDataAttributes(
   const { filterName, filterValue } = requestConfigs;
   const pageType = getPageType(requestConfigs);
   const isZeroResults = data.response.totalNumResults === 0;
+  const resultPage = requestConfigs.page || 1;
   let dataCnstrc: CnstrcDataAttrs = {};
 
   switch (pageType) {
@@ -91,6 +93,7 @@ export function getPlpContainerCnstrcDataAttributes(
       dataCnstrc = {
         [cnstrcDataAttrs.browse.browseContainer]: true,
         [cnstrcDataAttrs.common.numResults]: data.response.totalNumResults,
+        [cnstrcDataAttrs.common.resultPage]: resultPage,
         [cnstrcDataAttrs.common.resultId]: data.resultId,
         [cnstrcDataAttrs.browse.filterName]: filterName!,
         [cnstrcDataAttrs.browse.filterValue]: filterValue!,
@@ -102,6 +105,7 @@ export function getPlpContainerCnstrcDataAttributes(
         [cnstrcDataAttrs.search.searchContainer]: true,
         [cnstrcDataAttrs.common.resultId]: data.resultId,
         [cnstrcDataAttrs.common.numResults]: data.response.totalNumResults,
+        [cnstrcDataAttrs.common.resultPage]: resultPage,
       };
 
       // Add search term
