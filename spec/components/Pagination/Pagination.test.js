@@ -12,15 +12,13 @@ const originalWindowLocation = window.location;
 beforeEach(() => {
   window.innerWidth = 1024;
   fireEvent(window, new Event('resize'));
-  Object.defineProperty(window, 'location', {
-    value: new URL('https://example.com'),
-  });
+  delete window.location;
+  window.location = new URL('https://example.com');
 });
 
 afterAll(() => {
-  Object.defineProperty(window, 'location', {
-    value: originalWindowLocation,
-  });
+  delete window.location;
+  window.location = originalWindowLocation;
 });
 
 describe('Pagination Component', () => {

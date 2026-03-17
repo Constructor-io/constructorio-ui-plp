@@ -171,15 +171,13 @@ describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
   const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: mockLocation,
-    });
+    delete (window as any).location;
+    window.location = mockLocation as any;
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete (window as any).location;
+    window.location = originalWindowLocation;
   });
 
   test('getUrl should get the full url by default', () => {

@@ -98,15 +98,13 @@ describe('Testing Component: Filters', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    delete window.location;
+    window.location = new URL('https://example.com');
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete window.location;
+    window.location = originalWindowLocation;
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
@@ -235,8 +233,8 @@ describe('Testing Component: Filters', () => {
         const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
         const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
 
-        expect(selectableTrack.style.width).toBe('100.00%');
-        expect(selectableTrack.style.left).toBe('0.00%');
+        expect(selectableTrack.style.width).toBe('100%');
+        expect(selectableTrack.style.left).toBe('0%');
 
         expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
         expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
@@ -333,8 +331,8 @@ describe('Testing Component: Filters', () => {
         const minInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-min-slider');
         const maxInputSlider = container.querySelector('.cio-doubly-ended-slider .cio-max-slider');
 
-        expect(selectableTrack.style.width).toBe('75.00%');
-        expect(selectableTrack.style.left).toBe('0.00%');
+        expect(selectableTrack.style.width).toBe('75%');
+        expect(selectableTrack.style.left).toBe('0%');
 
         expect(minInputSlider.min).toBe(mockPriceFacet.min.toString());
         expect(minInputSlider.max).toBe(mockPriceFacet.max.toString());
@@ -899,7 +897,11 @@ describe('Testing Component: Filters', () => {
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
+          <Filters
+            facets={[colorFacet]}
+            isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            initialNumOptions={100}
+          />
         </CioPlp>,
       );
 
