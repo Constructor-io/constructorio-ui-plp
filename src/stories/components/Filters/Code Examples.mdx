@@ -146,12 +146,7 @@ export default function MyComponent() {
     <CioPlp apiKey={DEMO_API_KEY}>
       <CioPlpGrid>
         {(props) => {
-          return (
-            <Filters
-              facets={props.filters.facets}
-              isHiddenFilterFn={isHiddenFilterFn}
-            />
-          );
+          return <Filters facets={props.filters.facets} isHiddenFilterFn={isHiddenFilterFn} />;
         }}
       </CioPlpGrid>
     </CioPlp>
@@ -173,8 +168,7 @@ const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 export default function MyComponent() {
   // Hide specific color options
-  const isHiddenFilterOptionFn = (option) =>
-    option.value === 'Black' || option.value === 'Blue';
+  const isHiddenFilterOptionFn = (option) => option.value === 'Black' || option.value === 'Blue';
 
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
@@ -279,7 +273,10 @@ export default function MyComponent() {
         {(props) => (
           <Filters
             facets={props.filters.facets}
-            perFacetConfigs={{ color: { renderVisual: true }, 'Base Color': { renderVisual: true } }}
+            perFacetConfigs={{
+              color: { renderVisual: true },
+              'Base Color': { renderVisual: true },
+            }}
           />
         )}
       </CioPlpGrid>
@@ -295,11 +292,13 @@ export default function MyComponent() {
 The visual filter configuration is resolved in the following priority order:
 
 **Facet-level (should this facet render visually?):**
+
 1. `perFacetConfigs[name].renderVisual` — explicit per-facet override
 2. `isVisualFilterFn(facet)` — callback
 3. `facet.data.cio_render_visual` — metadata
 
 **Option-level (what visual to show?):**
+
 1. `getVisualImageUrl(option)` — callback (image takes priority)
 2. `getVisualColorHex(option)` — callback
 3. `option.data.image_url` — metadata
