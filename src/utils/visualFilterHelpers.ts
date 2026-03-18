@@ -18,7 +18,7 @@ export function shouldRenderVisualFacet(
   return facet.data?.cio_render_visual === true;
 }
 
-interface VisualOption {
+export interface VisualOption {
   type: 'image' | 'color';
   value: string;
 }
