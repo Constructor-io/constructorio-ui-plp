@@ -264,9 +264,9 @@ export default function MyComponent() {
 
 <Canvas of={FiltersStories.VisualFilterViaCallback} />
 
-### Method 3: Per-Facet Config (`filterConfigs`)
+### Method 3: Per-Facet Config (`perFacetConfigs`)
 
-Use `filterConfigs` to enable visual rendering per facet. This has the highest priority and overrides both callbacks and metadata.
+Use `perFacetConfigs` to enable visual rendering per facet. This has the highest priority and overrides both callbacks and metadata.
 
 ```jsx
 import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
@@ -279,7 +279,7 @@ export default function MyComponent() {
         {(props) => (
           <Filters
             facets={props.filters.facets}
-            filterConfigs={{ color: { renderVisual: true }, 'Base Color': { renderVisual: true } }}
+            perFacetConfigs={{ color: { renderVisual: true }, 'Base Color': { renderVisual: true } }}
           />
         )}
       </CioPlpGrid>
@@ -288,14 +288,14 @@ export default function MyComponent() {
 }
 ```
 
-<Canvas of={FiltersStories.VisualFilterViaFilterConfigs} />
+<Canvas of={FiltersStories.VisualFilterViaPerFacetConfigs} />
 
 ### Priority Order
 
 The visual filter configuration is resolved in the following priority order:
 
 **Facet-level (should this facet render visually?):**
-1. `filterConfigs[name].renderVisual` — explicit per-facet override
+1. `perFacetConfigs[name].renderVisual` — explicit per-facet override
 2. `isVisualFilterFn(facet)` — callback
 3. `facet.data.cio_render_visual` — metadata
 

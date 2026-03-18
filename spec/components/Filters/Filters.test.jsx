@@ -957,12 +957,12 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Should respect filterConfigs override to disable visual rendering', async () => {
+    it('Should respect perFacetConfigs override to disable visual rendering', async () => {
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={[mockVisualFacet]}
-            filterConfigs={{ color: { renderVisual: false } }}
+            perFacetConfigs={{ color: { renderVisual: false } }}
           />
         </CioPlp>,
       );
@@ -976,7 +976,7 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Should respect filterConfigs override to enable visual rendering', async () => {
+    it('Should respect perFacetConfigs override to enable visual rendering', async () => {
       const facetWithoutVisualData = {
         ...mockVisualFacet,
         data: {},
@@ -986,7 +986,7 @@ describe('Testing Component: Filters', () => {
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={[facetWithoutVisualData]}
-            filterConfigs={{ color: { renderVisual: true } }}
+            perFacetConfigs={{ color: { renderVisual: true } }}
           />
         </CioPlp>,
       );
@@ -1046,7 +1046,11 @@ describe('Testing Component: Filters', () => {
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
+          <Filters
+            facets={[colorFacet]}
+            isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            initialNumOptions={100}
+          />
         </CioPlp>,
       );
 

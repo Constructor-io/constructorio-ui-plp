@@ -160,14 +160,14 @@ export const VisualFilterViaCallback: Story = {
 };
 
 /**
- * Use `filterConfigs` to enable visual rendering per facet.
+ * Use `perFacetConfigs` to enable visual rendering per facet.
  * This overrides both the `isVisualFilterFn` callback and `data.cio_render_visual`.
  */
-export const VisualFilterViaFilterConfigs: Story = {
+export const VisualFilterViaPerFacetConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockFacetsWithVisualColor,
-    filterConfigs: { color: { renderVisual: true }, 'Base Color': { renderVisual: true } },
+    perFacetConfigs: { color: { renderVisual: true }, 'Base Color': { renderVisual: true } },
     initialNumOptions: 20,
   },
 };

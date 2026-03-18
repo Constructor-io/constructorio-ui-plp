@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PlpFacet, PlpFacetOption, FilterConfig } from '../../types';
+import type { PlpFacet, PlpFacetOption, FacetConfig } from '../../types';
 import {
   isMultipleOrBucketedFacet,
   isRangeFacet,
@@ -24,7 +24,7 @@ export interface FilterGroupProps {
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
-  filterConfigs?: Record<string, FilterConfig>;
+  perFacetConfigs?: Record<string, FacetConfig>;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -38,9 +38,9 @@ export default function FilterGroup(props: FilterGroupProps) {
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
-    filterConfigs,
+    perFacetConfigs,
   } = props;
-  const isVisual = shouldRenderVisualFacet(facet, filterConfigs, isVisualFilterFn);
+  const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);

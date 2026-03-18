@@ -415,7 +415,7 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
   rawResponse?: OriginalType;
 };
 
-export interface FilterConfig {
+export interface FacetConfig {
   renderVisual?: boolean;
 }
 

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpFacet, PlpFacetOption, PlpFilterValue, FilterConfig } from '../types';
+import { PlpFacet, PlpFacetOption, PlpFilterValue, FacetConfig } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
@@ -12,7 +12,7 @@ export interface UseFilterReturn {
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
-  filterConfigs?: Record<string, FilterConfig>;
+  perFacetConfigs?: Record<string, FacetConfig>;
 }
 
 export interface UseFilterProps {
@@ -48,7 +48,7 @@ export interface UseFilterProps {
   /**
    * Per-facet configuration overrides
    */
-  filterConfigs?: Record<string, FilterConfig>;
+  perFacetConfigs?: Record<string, FacetConfig>;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
@@ -60,7 +60,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
-    filterConfigs,
+    perFacetConfigs,
   } = props;
   const contextValue = useCioPlpContext();
 
@@ -109,6 +109,6 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
-    filterConfigs,
+    perFacetConfigs,
   };
 }

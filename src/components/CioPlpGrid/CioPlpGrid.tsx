@@ -34,9 +34,6 @@ export type CioPlpGridProps = {
    * No configurations available yet.
    */
   sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
-  /**
-   * No configurations available yet.
-   */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
   /**
    * Configuration options for the Groups component.

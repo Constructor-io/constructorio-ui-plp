@@ -29,7 +29,7 @@ export default function Filters(props: FiltersWithRenderProps) {
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
-    filterConfigs,
+    perFacetConfigs,
   } = useFilter(useFiltersProps);
 
   return (
@@ -44,7 +44,7 @@ export default function Filters(props: FiltersWithRenderProps) {
           getVisualImageUrl,
           getVisualColorHex,
           isVisualFilterFn,
-          filterConfigs,
+          perFacetConfigs,
         })
       ) : (
         <div className='cio-filters'>
@@ -59,7 +59,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               getVisualImageUrl={getVisualImageUrl}
               getVisualColorHex={getVisualColorHex}
               isVisualFilterFn={isVisualFilterFn}
-              filterConfigs={filterConfigs}
+              perFacetConfigs={perFacetConfigs}
               key={facet.name}
             />
           ))}

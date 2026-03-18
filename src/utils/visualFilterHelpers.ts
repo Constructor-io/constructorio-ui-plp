@@ -1,14 +1,14 @@
-import { PlpFacet, PlpFacetOption, FilterConfig } from '../types';
+import { PlpFacet, PlpFacetOption, FacetConfig } from '../types';
 
 export function shouldRenderVisualFacet(
   facet: PlpFacet,
-  filterConfigs?: Record<string, FilterConfig>,
+  perFacetConfigs?: Record<string, FacetConfig>,
   isVisualFilterFn?: (facet: PlpFacet) => boolean,
 ): boolean {
-  const perFilterConfig = filterConfigs?.[facet.name];
+  const perFacetConfig = perFacetConfigs?.[facet.name];
 
-  if (perFilterConfig?.renderVisual !== undefined) {
-    return perFilterConfig.renderVisual;
+  if (perFacetConfig?.renderVisual !== undefined) {
+    return perFacetConfig.renderVisual;
   }
 
   if (typeof isVisualFilterFn === 'function') {
