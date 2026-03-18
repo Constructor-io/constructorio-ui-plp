@@ -85,7 +85,7 @@ export function getPlpContainerCnstrcDataAttributes(
   const { filterName, filterValue } = requestConfigs;
   const pageType = getPageType(requestConfigs);
   const isZeroResults = data.response.totalNumResults === 0;
-  const resultPage = requestConfigs.page || 1;
+  const resultPage = data?.request?.page || requestConfigs.page || 1;
   let dataCnstrc: CnstrcDataAttrs = {};
 
   switch (pageType) {

@@ -264,7 +264,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(resultId).toEqual(String(mockBrowseData.resultId));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
       expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
-      expect(resultPage).toEqual(String(mockBrowseData.request.page.toString()));
+      expect(resultPage).toEqual(String(mockBrowseData.request.page));
     });
   });
 
@@ -323,7 +323,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(totalNumResults).toEqual(String(mockSearchData.response.totalNumResults));
       expect(resultId).toEqual(mockSearchData.resultId);
       expect(searchTerm).toEqual(mockSearchData.request.term);
-      expect(resultPage).toEqual(mockSearchData.request.page.toString());
+      expect(resultPage).toEqual(String(mockSearchData.request.page));
     });
   });
 
