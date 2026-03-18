@@ -20,8 +20,17 @@ export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterR
 
 export default function Filters(props: FiltersWithRenderProps) {
   const { children, initialNumOptions, isHiddenFilterOptionFn, ...useFiltersProps } = props;
-  const { facets, setFilter, sliderStep, facetSliderSteps, clearFilters } =
-    useFilter(useFiltersProps);
+  const {
+    facets,
+    setFilter,
+    sliderStep,
+    facetSliderSteps,
+    clearFilters,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    filterConfigs,
+  } = useFilter(useFiltersProps);
 
   return (
     <>
@@ -32,6 +41,10 @@ export default function Filters(props: FiltersWithRenderProps) {
           sliderStep,
           facetSliderSteps,
           clearFilters,
+          getVisualImageUrl,
+          getVisualColorHex,
+          isVisualFilterFn,
+          filterConfigs,
         })
       ) : (
         <div className='cio-filters'>
@@ -43,6 +56,10 @@ export default function Filters(props: FiltersWithRenderProps) {
               sliderStep={sliderStep}
               facetSliderSteps={facetSliderSteps}
               isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+              getVisualImageUrl={getVisualImageUrl}
+              getVisualColorHex={getVisualColorHex}
+              isVisualFilterFn={isVisualFilterFn}
+              filterConfigs={filterConfigs}
               key={facet.name}
             />
           ))}

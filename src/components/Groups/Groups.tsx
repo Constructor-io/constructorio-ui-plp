@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import useGroups, { UseGroupProps } from '../../hooks/useGroups';
-import FilterOptionListRow from '../Filters/FilterOptionListRow';
+import { FilterOption } from '@constructor-io/constructorio-ui-components';
 import { IncludeRenderProps } from '../../types';
 
 /**
@@ -87,8 +87,8 @@ export default function Groups(props: GroupsWithRenderProps) {
               </div>
               <ul>
                 {optionsToRender.map((option) => (
-                  <FilterOptionListRow
-                    showCheckbox={false}
+                  <FilterOption
+                    checkboxPosition='none'
                     key={option.groupId}
                     id={option.groupId}
                     optionValue={option.groupId}

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpFacet, PlpFilterValue } from '../types';
+import { PlpFacet, PlpFacetOption, PlpFilterValue, FilterConfig } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
@@ -9,6 +9,10 @@ export interface UseFilterReturn {
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
   clearFilters: () => void;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  filterConfigs?: Record<string, FilterConfig>;
 }
 
 export interface UseFilterProps {
@@ -29,10 +33,35 @@ export interface UseFilterProps {
    * @returns boolean
    */
   isHiddenFilterFn?: (facet: PlpFacet) => boolean;
+  /**
+   * Callback to resolve an image URL for a filter option (visual filters)
+   */
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  /**
+   * Callback to resolve a hex color for a filter option (visual filters)
+   */
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  /**
+   * Callback to determine if a facet should render as visual filter
+   */
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  /**
+   * Per-facet configuration overrides
+   */
+  filterConfigs?: Record<string, FilterConfig>;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
-  const { facets, sliderStep, facetSliderSteps, isHiddenFilterFn } = props;
+  const {
+    facets,
+    sliderStep,
+    facetSliderSteps,
+    isHiddenFilterFn,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    filterConfigs,
+  } = props;
   const contextValue = useCioPlpContext();
 
   if (!contextValue) {
@@ -77,5 +106,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     sliderStep,
     facetSliderSteps,
     clearFilters,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    filterConfigs,
   };
 }
