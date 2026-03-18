@@ -5,3 +5,7 @@
 | sliderStep       | `number`                                                    | Global slider step for all range facets                                |
 | facetSliderSteps | `Record<string, number>`                                    | Per-facet slider step configuration                                    |
 | clearFilters     | `() => void`                                                | Function to clear all filters                                          |
+| isVisualFilterFn | `(facet: PlpFacet) => boolean`                           | Callback to determine if a facet should render as visual               |
+| getVisualColorHex | `(option: PlpFacetOption) => string \| undefined`          | Callback to resolve a hex color for a filter option                    |
+| getVisualImageUrl | `(option: PlpFacetOption) => string \| undefined`          | Callback to resolve an image URL for a filter option                   |
+| filterConfigs     | `Record<string, FilterConfig>`                      | Per-facet configuration overrides                                      |
