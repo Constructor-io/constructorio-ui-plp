@@ -127,7 +127,7 @@ describe('Testing Component: Filters', () => {
         showAllButtons.forEach((btn) => fireEvent.click(btn));
 
         mockTransformedFacets.forEach((facetGroup) => {
-          expect(getByText(facetGroup.displayName).toBeInTheDocument);
+          expect(getByText(facetGroup.displayName)).toBeInTheDocument();
 
           if (facetGroup.type === 'multiple') {
             // eslint-disable-next-line max-nested-callbacks
@@ -221,7 +221,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -270,7 +270,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -319,7 +319,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
