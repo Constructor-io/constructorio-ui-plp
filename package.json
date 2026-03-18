@@ -37,7 +37,7 @@
     "dist/constructorio-ui-plp-bundled.js"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=20"
   },
   "types": "lib/types/index.d.ts",
   "scripts": {
