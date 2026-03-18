@@ -416,6 +416,10 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
   rawResponse?: OriginalType;
 };
 
+export interface FacetConfig {
+  renderVisual?: boolean;
+}
+
 /**
  * Given a Type T and a set of keys K (pipe-delimited string), make those keys optional.
  */

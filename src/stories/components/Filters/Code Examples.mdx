@@ -248,12 +248,7 @@ export default function MyComponent() {
     <CioPlp apiKey={DEMO_API_KEY}>
       <CioPlpGrid>
         {(props) => {
-          return (
-            <Filters
-              facets={props.filters.facets}
-              isHiddenFilterFn={isHiddenFilterFn}
-            />
-          );
+          return <Filters facets={props.filters.facets} isHiddenFilterFn={isHiddenFilterFn} />;
         }}
       </CioPlpGrid>
     </CioPlp>
@@ -275,8 +270,7 @@ const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 export default function MyComponent() {
   // Hide specific color options
-  const isHiddenFilterOptionFn = (option) =>
-    option.value === 'Black' || option.value === 'Blue';
+  const isHiddenFilterOptionFn = (option) => option.value === 'Black' || option.value === 'Blue';
 
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
@@ -296,3 +290,119 @@ export default function MyComponent() {
 ```
 
 <Canvas of={FiltersStories.HiddenFilterOptions} />
+
+## Visual Filters
+
+The Filters component can render color swatches and image thumbnails instead of plain text checkboxes using the shared `FilterOptionVisual` component. There are three ways to configure visual filters, listed below in order of priority.
+
+### Method 1: Metadata Field
+
+Set `cio_render_visual: true` on the facet's `data` in the Constructor dashboard, and `hex_color` or `image_url` on each option's `data`.
+
+```json
+{
+  "name": "color",
+  "displayName": "Color",
+  "type": "multiple",
+  "data": {
+    "cio_render_visual": true
+  },
+  "options": [
+    {
+      "value": "Red",
+      "data": {
+        "hex_color": "#FF0000"
+      }
+    },
+    {
+      "value": "Floral",
+      "data": {
+        "image_url": "https://example.com/floral-pattern.jpg"
+      }
+    }
+  ]
+}
+```
+
+<Canvas of={FiltersStories.VisualColorFilters} />
+
+### Method 2: Callback Functions
+
+Use `isVisualFilterFn` to designate which facets render visually, and `getVisualColorHex` / `getVisualImageUrl` to resolve visual data per option.
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const colorHexMap = {
+  Black: '#000000',
+  Blue: '#0000FF',
+  Red: '#FF0000',
+  // ...
+};
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => (
+          <Filters
+            facets={props.filters.facets}
+            isVisualFilterFn={(facet) => ['color', 'Base Color'].includes(facet.name)}
+            getVisualColorHex={(option) => colorHexMap[option.value]}
+          />
+        )}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.VisualFilterViaCallback} />
+
+### Method 3: Per-Facet Config (`perFacetConfigs`)
+
+Use `perFacetConfigs` to enable visual rendering per facet. This has the highest priority and overrides both callbacks and metadata.
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => (
+          <Filters
+            facets={props.filters.facets}
+            perFacetConfigs={{
+              color: { renderVisual: true },
+              'Base Color': { renderVisual: true },
+            }}
+          />
+        )}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.VisualFilterViaPerFacetConfigs} />
+
+### Priority Order
+
+The visual filter configuration is resolved in the following priority order:
+
+**Facet-level (should this facet render visually?):**
+
+1. `perFacetConfigs[name].renderVisual` — explicit per-facet override
+2. `isVisualFilterFn(facet)` — callback
+3. `facet.data.cio_render_visual` — metadata
+
+**Option-level (what visual to show?):**
+
+1. `getVisualImageUrl(option)` — callback (image takes priority)
+2. `getVisualColorHex(option)` — callback
+3. `option.data.image_url` — metadata
+4. `option.data.hex_color` — metadata
+5. Falls back to standard text filter if none match

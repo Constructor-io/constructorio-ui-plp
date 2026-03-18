@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
-import { PlpFacet, PlpFilterValue } from '../types';
+import { PlpFacet, PlpFacetOption, PlpFilterValue, FacetConfig } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UseFilterReturn {
@@ -9,6 +9,10 @@ export interface UseFilterReturn {
   sliderStep?: number;
   facetSliderSteps?: Record<string, number>;
   clearFilters: () => void;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  perFacetConfigs?: Record<string, FacetConfig>;
   getIsCollapsed: (facet: PlpFacet) => boolean;
 }
 
@@ -31,6 +35,22 @@ export interface UseFilterProps {
    */
   isHiddenFilterFn?: (facet: PlpFacet) => boolean;
   /**
+   * Callback to resolve an image URL for a filter option (visual filters)
+   */
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  /**
+   * Callback to resolve a hex color for a filter option (visual filters)
+   */
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  /**
+   * Callback to determine if a facet should render as visual filter
+   */
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  /**
+   * Per-facet configuration overrides
+   */
+  perFacetConfigs?: Record<string, FacetConfig>;
+  /**
    * When true, all filter groups render collapsed by default.
    * When false, all filter groups render expanded by default.
    * Individual facet overrides via `collapsedFacets` or facet metadata take precedence.
@@ -50,6 +70,10 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterFn,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    perFacetConfigs,
     renderCollapsed,
     collapsedFacets,
   } = props;
@@ -132,6 +156,10 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     sliderStep,
     facetSliderSteps,
     clearFilters,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    perFacetConfigs,
     getIsCollapsed,
   };
 }
