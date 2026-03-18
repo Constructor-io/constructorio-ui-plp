@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import type { PlpFacet, PlpFacetOption, FilterConfig } from '../../types';
-import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet, shouldRenderVisualFacet } from '../../utils';
+import {
+  isMultipleOrBucketedFacet,
+  isRangeFacet,
+  isSingleFacet,
+  shouldRenderVisualFacet,
+} from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';

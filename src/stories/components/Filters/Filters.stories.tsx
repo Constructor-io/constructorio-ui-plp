@@ -27,7 +27,7 @@ const colorHexMap: Record<string, string> = {
   Natural: '#F5DEB3',
   Metallic: '#AAA9AD',
   Cream: '#FFFDD0',
-  'No Colour': '#E0E0E0',
+  'No Color': '#E0E0E0',
   'Navy Blue': '#000080',
   'N/A': '#E0E0E0',
   Khaki: '#C3B091',
@@ -163,7 +163,7 @@ export const VisualFilterViaCallback: Story = {
  * Use `filterConfigs` to enable visual rendering per facet.
  * This overrides both the `isVisualFilterFn` callback and `data.cio_render_visual`.
  */
-export const VisualFilterViafilterConfigs: Story = {
+export const VisualFilterViaFilterConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockFacetsWithVisualColor,

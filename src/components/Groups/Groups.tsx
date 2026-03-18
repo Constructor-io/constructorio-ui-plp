@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import { FilterOption } from '@constructor-io/constructorio-ui-components';
+import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import { IncludeRenderProps } from '../../types';
 
 /**

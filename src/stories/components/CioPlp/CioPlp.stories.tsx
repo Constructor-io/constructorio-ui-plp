@@ -28,7 +28,7 @@ const colorHexMap: Record<string, string> = {
   Natural: '#F5DEB3',
   Metallic: '#AAA9AD',
   Cream: '#FFFDD0',
-  'No Colour': '#E0E0E0',
+  'No Color': '#E0E0E0',
   'Navy Blue': '#000080',
   'N/A': '#E0E0E0',
   Khaki: '#C3B091',
@@ -132,7 +132,11 @@ function PrimaryStory({ args, defaultUrl }: any) {
         getUrl: () => currentUrl,
       }}
       {...args}>
-      <CioPlpGrid key={gridKey} groupsConfigs={args.groupsConfigs} filterConfigs={args.filterConfigs} />
+      <CioPlpGrid
+        key={gridKey}
+        groupsConfigs={args.groupsConfigs}
+        filterConfigs={args.filterConfigs}
+      />
     </CioPlp>
   );
 }
