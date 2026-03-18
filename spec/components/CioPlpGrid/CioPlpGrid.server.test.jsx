@@ -91,6 +91,7 @@ describe('Testing Component on the server: CioPlpGrid', () => {
       `${cnstrcDataAttrs.common.numResults}="${mockSearchData.response.totalNumResults}"`,
     );
     expect(html).toContain(`${cnstrcDataAttrs.common.resultId}="${mockSearchData.resultId}"`);
+    expect(html).toContain(`${cnstrcDataAttrs.common.resultPage}="${mockSearchData.request.page}"`);
   });
 
   it('Should render CioPlpGrid with hideGroups set to true on the server', () => {
