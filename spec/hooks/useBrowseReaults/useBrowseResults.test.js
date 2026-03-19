@@ -16,15 +16,13 @@ describe('Testing Hook: useBrowseResults', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: mockLocation,
-    });
+    delete window.location;
+    window.location = mockLocation;
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete window.location;
+    window.location = originalWindowLocation;
 
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();

@@ -8,17 +8,13 @@ describe('shopifyDefaults', () => {
   beforeEach(() => {
     const freshMockLocation = new URL(mockUrl);
 
-    Object.defineProperty(window, 'location', {
-      value: freshMockLocation,
-      writable: true,
-      configurable: true,
-    });
+    delete (window as any).location;
+    window.location = freshMockLocation as any;
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete (window as any).location;
+    window.location = originalWindowLocation;
   });
 
   describe('shopifyDefaults', () => {

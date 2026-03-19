@@ -26,18 +26,16 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js
 
 describe('Testing Component: ProductCard', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com?q=red'),
-    });
+    delete window.location;
+    window.location = new URL('https://example.com?q=red');
 
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete window.location;
+    window.location = originalWindowLocation;
 
     jest.resetAllMocks();
   });

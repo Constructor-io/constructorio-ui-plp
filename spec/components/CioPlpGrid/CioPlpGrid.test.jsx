@@ -60,18 +60,16 @@ describe('Testing Component: CioPlpGrid', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    delete window.location;
+    window.location = new URL('https://example.com');
 
     useCioPlp.mockImplementation(actualUseCioPlp);
     useRequestConfigs.mockImplementation(actualUseRequestConfigs);
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete window.location;
+    window.location = originalWindowLocation;
     jest.restoreAllMocks();
   });
 

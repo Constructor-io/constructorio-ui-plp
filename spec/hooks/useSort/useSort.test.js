@@ -14,16 +14,13 @@ describe('Testing Hook: useSort', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    delete window.location;
+    window.location = new URL('https://example.com');
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
-    window.location.href = `https://example.com`;
+    delete window.location;
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 

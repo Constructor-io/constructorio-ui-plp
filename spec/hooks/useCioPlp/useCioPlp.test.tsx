@@ -8,19 +8,15 @@ const originalWindowLocation = window.location;
 
 describe('Testing Hook: useCioPlp', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    delete (window as any).location;
+    window.location = new URL('https://example.com?q=shirts') as any;
 
     jest.clearAllMocks();
-
-    window.location.href = 'https://example.com?q=shirts';
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    delete (window as any).location;
+    window.location = originalWindowLocation;
   });
 
   it('Should throw error if called outside of PlpContext', () => {
