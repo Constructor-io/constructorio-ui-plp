@@ -30,7 +30,7 @@ export default function Filters(props: FiltersWithRenderProps) {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
-    getIsCollapsed
+    getIsCollapsed,
   } = useFilter(useFiltersProps);
 
   return (
