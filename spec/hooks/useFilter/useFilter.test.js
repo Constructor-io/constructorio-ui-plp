@@ -309,6 +309,22 @@ describe('Testing Hook: useFilter', () => {
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
       });
     });
+
+    it('perFacetConfigs collapsed=false should override cio_render_collapsed metadata', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: [facetWithMetadata, facetWithoutMetadata],
+          perFacetConfigs: { color: { collapsed: false } },
+        }),
+      );
+
+      await waitFor(() => {
+        // color has cio_render_collapsed: true in metadata, but perFacetConfigs overrides it
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(false);
+        // size has no config and no metadata, defaults to false
+        expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
+      });
+    });
   });
 
   it('Should remove all filters but not other request params when clearFilters is called', async () => {

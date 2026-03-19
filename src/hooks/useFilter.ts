@@ -76,8 +76,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     throw new Error('useFilter must be used within a component that is a child of <CioPlp />');
   }
 
-  const { getIsHiddenFilterField } = contextValue.itemFieldGetters;
-  const { getIsCollapsedFacetField } = contextValue.itemFieldGetters;
+  const { getIsHiddenFilterField, getIsCollapsedFacetField } = contextValue.itemFieldGetters;
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
 
   const isHiddenFilter = useCallback(

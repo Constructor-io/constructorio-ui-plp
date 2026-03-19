@@ -79,6 +79,8 @@ export default function MyComponent() {
         perFacetConfigs: {                     // Per-facet configuration overrides
           color: { collapsed: true },          // Collapse specific facets
         },
+        isVisualFilterFn: (facet) => ['color', 'Base Color'].includes(facet.name),
+        getVisualColorHex: (option) => colorHexMap[option.value],
       }}
       // Pagination configuration
       paginationConfigs={{
@@ -86,11 +88,6 @@ export default function MyComponent() {
       }}
       // Sort config (no specific options yet)
       sortConfigs={{}}
-      // Filter configuration with visual filter support
-      filterConfigs={{
-        isVisualFilterFn: (facet) => ['color', 'Base Color'].includes(facet.name),
-        getVisualColorHex: (option) => colorHexMap[option.value],
-      }}
     />
   );
 }

@@ -9,4 +9,4 @@
 | getVisualColorHex | `(option: PlpFacetOption) => string \| undefined`           | Callback to resolve a hex color for a filter option                    |
 | getVisualImageUrl | `(option: PlpFacetOption) => string \| undefined`           | Callback to resolve an image URL for a filter option                   |
 | perFacetConfigs   | `Record<string, FacetConfig>`                               | Per-facet configuration overrides                                      |
-| getIsCollapsed   | `(facet: PlpFacet) => boolean`                              | Returns whether a facet should render collapsed, based on `perFacetConfigs`, `renderCollapsed`, or metadata |
+| getIsCollapsed    | `(facet: PlpFacet) => boolean`                              | Returns whether a facet should render collapsed, based on `perFacetConfigs`, `renderCollapsed`, or metadata |
