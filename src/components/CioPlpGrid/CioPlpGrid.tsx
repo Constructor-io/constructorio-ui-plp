@@ -39,7 +39,7 @@ export type CioPlpGridProps = {
    * - `sliderStep`: Global slider step for all range facets.
    * - `facetSliderSteps`: Per-facet slider step configuration.
    * - `renderCollapsed`: When true, all filter groups render collapsed by default.
-   * - `collapsedFacets`: List of facet names (or comma-separated string) to render collapsed.
+   * - `perFacetConfigs`: Per-facet configuration overrides (e.g. `{ color: { collapsed: true } }`).
    */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
   /**

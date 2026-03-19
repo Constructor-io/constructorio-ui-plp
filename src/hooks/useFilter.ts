@@ -53,15 +53,9 @@ export interface UseFilterProps {
   /**
    * When true, all filter groups render collapsed by default.
    * When false, all filter groups render expanded by default.
-   * Individual facet overrides via `collapsedFacets` or facet metadata take precedence.
+   * Individual facet overrides via `perFacetConfigs` or facet metadata take precedence.
    */
   renderCollapsed?: boolean;
-  /**
-   * List of facet names that should render collapsed by default.
-   * Takes precedence over `renderCollapsed` and facet metadata.
-   * Accepts a string array or a comma-separated string (for bundled/Connector users).
-   */
-  collapsedFacets?: string[] | string;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
@@ -75,7 +69,6 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     isVisualFilterFn,
     perFacetConfigs,
     renderCollapsed,
-    collapsedFacets,
   } = props;
   const contextValue = useCioPlpContext();
 
@@ -116,23 +109,11 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs({ filters: {}, page: 1 });
   };
 
-  // Parse collapsedFacets string into array for bundled/Connector users
-  const parsedCollapsedFacets = useMemo(
-    () =>
-      typeof collapsedFacets === 'string'
-        ? collapsedFacets
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : collapsedFacets,
-    [collapsedFacets],
-  );
-
   const getIsCollapsed = useCallback(
     (facet: PlpFacet): boolean => {
-      // Priority 1: Per-facet prop (collapsedFacets)
-      if (parsedCollapsedFacets && parsedCollapsedFacets.length > 0) {
-        return parsedCollapsedFacets.includes(facet.name);
+      // Priority 1: Per-facet config (perFacetConfigs)
+      if (perFacetConfigs?.[facet.name]?.collapsed !== undefined) {
+        return perFacetConfigs[facet.name].collapsed!;
       }
 
       // Priority 2: Global prop (renderCollapsed)
@@ -147,7 +128,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
 
       return false;
     },
-    [parsedCollapsedFacets, renderCollapsed, getIsCollapsedFacetField],
+    [perFacetConfigs, renderCollapsed, getIsCollapsedFacetField],
   );
 
   return {

@@ -71,7 +71,7 @@ const meta = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    collapsedFacets: {
+    perFacetConfigs: {
       table: {
         defaultValue: { summary: 'undefined' },
       },
@@ -201,7 +201,7 @@ export const SpecificFacetsCollapsed: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    collapsedFacets: ['color', 'price'],
+    perFacetConfigs: { color: { collapsed: true }, price: { collapsed: true } },
   },
 };
 

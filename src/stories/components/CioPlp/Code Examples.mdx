@@ -71,11 +71,14 @@ export default function MyComponent() {
         hideGroups: false,           // Whether to hide groups entirely
         isHiddenGroupFn: (group) => false, // Function that returns true if a particular group should not be rendered
       }}
-      // Filters configuration (see Filters docs for collapsedFacets option)
+      // Filters configuration
       filterConfigs={{
         renderCollapsed: false,                // When true, all filter groups start collapsed
         sliderStep: 0.1,                       // Global slider step for range facets
         facetSliderSteps: { price: 1 },        // Per-facet slider step overrides
+        perFacetConfigs: {                     // Per-facet configuration overrides
+          color: { collapsed: true },          // Collapse specific facets
+        },
       }}
       // Pagination configuration
       paginationConfigs={{

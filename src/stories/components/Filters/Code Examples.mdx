@@ -72,7 +72,7 @@ export default function MyComponent() {
 
 ### Collapse Specific Filter Groups (📦 v1.10.0 required)
 
-Collapse only specific filter groups by their facet name:
+Collapse only specific filter groups by their facet name using `perFacetConfigs`:
 
 <Canvas of={FiltersStories.SpecificFacetsCollapsed} />
 
@@ -82,14 +82,15 @@ export default function MyComponent() {
     <CioPlp
       apiKey={DEMO_API_KEY}
       filterConfigs={{
-        collapsedFacets: ['color', 'price'], // Only these facets start collapsed
+        perFacetConfigs: {
+          color: { collapsed: true },
+          price: { collapsed: true },
+        },
       }}
     />
   );
 }
 ```
-
-> For bundled/Connector users, `collapsedFacets` also accepts a comma-separated string: `"color, price"`.
 
 ### Collapse via Facet Metadata
 
@@ -103,7 +104,7 @@ Filter groups can also be collapsed based on facet metadata set on the Construct
 
 When multiple collapse configurations are present, they are applied in this order:
 
-1. **`collapsedFacets`** (per-facet prop) — highest priority
+1. **`perFacetConfigs[name].collapsed`** (per-facet config) — highest priority
 2. **`renderCollapsed`** (global prop)
 3. **Facet metadata** (`data.cio_render_collapsed`) — lowest priority
 
@@ -136,7 +137,13 @@ export function SpecificCollapsed() {
     <CioPlp apiKey={DEMO_API_KEY}>
       <CioPlpGrid>
         {(props) => (
-          <Filters facets={props.filters.facets} collapsedFacets={['color', 'price']} />
+          <Filters
+            facets={props.filters.facets}
+            perFacetConfigs={{
+              color: { collapsed: true },
+              price: { collapsed: true },
+            }}
+          />
         )}
       </CioPlpGrid>
     </CioPlp>
