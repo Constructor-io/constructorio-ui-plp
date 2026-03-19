@@ -111,8 +111,9 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   const getIsCollapsed = useCallback(
     (facet: PlpFacet): boolean => {
       // Priority 1: Per-facet config (perFacetConfigs)
-      if (perFacetConfigs?.[facet.name]?.collapsed !== undefined) {
-        return perFacetConfigs[facet.name].collapsed!;
+      const collapsed = perFacetConfigs?.[facet.name]?.collapsed;
+      if (collapsed !== undefined) {
+        return collapsed;
       }
 
       // Priority 2: Global prop (renderCollapsed)
