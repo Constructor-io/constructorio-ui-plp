@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import type { PlpFacet, PlpFacetOption } from '../../types';
-import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
+import type { PlpFacet, PlpFacetOption, FacetConfig } from '../../types';
+import {
+  isMultipleOrBucketedFacet,
+  isRangeFacet,
+  isSingleFacet,
+  shouldRenderVisualFacet,
+} from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
@@ -16,6 +21,10 @@ export interface FilterGroupProps {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  perFacetConfigs?: Record<string, FacetConfig>;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -26,7 +35,12 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    perFacetConfigs,
   } = props;
+  const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
@@ -48,6 +62,9 @@ export default function FilterGroup(props: FilterGroupProps) {
           modifyRequestMultipleFilter={onFilterSelect(facet.name)}
           initialNumOptions={initialNumOptions}
           isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+          isVisual={isVisual}
+          getVisualImageUrl={getVisualImageUrl}
+          getVisualColorHex={getVisualColorHex}
         />
       )}
 

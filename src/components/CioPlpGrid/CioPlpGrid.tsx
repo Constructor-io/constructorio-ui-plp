@@ -34,9 +34,6 @@ export type CioPlpGridProps = {
    * No configurations available yet.
    */
   sortConfigs?: Omit<UseSortProps, 'sortOptions'>;
-  /**
-   * No configurations available yet.
-   */
   filterConfigs?: Omit<UseFilterProps, 'facets'>;
   /**
    * Configuration options for the Groups component.
@@ -161,7 +158,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
-                        <Filters facets={filters.facets} />
+                        <Filters facets={filters.facets} {...filterConfigs} />
                       </MobileModal>
 
                       {data.response?.results?.map((item) => (

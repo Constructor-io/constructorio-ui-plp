@@ -127,7 +127,7 @@ describe('Testing Component: Filters', () => {
         showAllButtons.forEach((btn) => fireEvent.click(btn));
 
         mockTransformedFacets.forEach((facetGroup) => {
-          expect(getByText(facetGroup.displayName).toBeInTheDocument);
+          expect(getByText(facetGroup.displayName)).toBeInTheDocument();
 
           if (facetGroup.type === 'multiple') {
             // eslint-disable-next-line max-nested-callbacks
@@ -221,7 +221,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -270,7 +270,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -319,7 +319,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -851,6 +851,153 @@ describe('Testing Component: Filters', () => {
     });
   });
 
+  describe(' - Visual Filter Tests', () => {
+    const mockVisualFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: { cio_render_visual: true },
+      hidden: false,
+      options: [
+        {
+          status: '',
+          count: 10,
+          displayName: 'Red',
+          value: 'red',
+          data: { hex_color: '#FF0000' },
+        },
+        {
+          status: '',
+          count: 8,
+          displayName: 'Blue',
+          value: 'blue',
+          data: { image_url: 'https://example.com/blue.png' },
+        },
+        {
+          status: '',
+          count: 5,
+          displayName: 'Plain',
+          value: 'plain',
+          data: {},
+        },
+      ],
+    };
+
+    it('Should render FilterOptionVisual for options with visual data in a visual facet', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(2);
+      });
+    });
+
+    it('Should fall back to standard FilterOption for options without visual data in a visual facet', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const standardOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        // 2 visual options (Red with hex_color, Blue with image_url)
+        // 1 standard option (Plain with no visual data)
+        expect(visualOptions.length).toBe(2);
+        expect(standardOptions.length).toBe(1);
+      });
+    });
+
+    it('Should render standard FilterOption when facet is not visual', async () => {
+      const nonVisualFacet = {
+        ...mockVisualFacet,
+        data: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[nonVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(0);
+
+        const filterOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        expect(filterOptions.length).toBe(3);
+      });
+    });
+
+    it('Should render visual options via getVisualImageUrl callback', async () => {
+      const facetWithoutMetadata = {
+        ...mockVisualFacet,
+        options: mockVisualFacet.options.map((o) => ({ ...o, data: {} })),
+      };
+
+      const getVisualImageUrl = (option) => {
+        if (option.value === 'red') return 'https://example.com/red.png';
+        return undefined;
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[facetWithoutMetadata]} getVisualImageUrl={getVisualImageUrl} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(1);
+      });
+    });
+
+    it('Should respect perFacetConfigs override to disable visual rendering', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={[mockVisualFacet]}
+            perFacetConfigs={{ color: { renderVisual: false } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(0);
+
+        const filterOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        expect(filterOptions.length).toBe(3);
+      });
+    });
+
+    it('Should respect perFacetConfigs override to enable visual rendering', async () => {
+      const facetWithoutVisualData = {
+        ...mockVisualFacet,
+        data: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={[facetWithoutVisualData]}
+            perFacetConfigs={{ color: { renderVisual: true } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(2);
+      });
+    });
+  });
+
   describe(' - Facet Blacklisting Tests', () => {
     it('Should not render facets when isHiddenFilterFn returns true', async () => {
       const isHiddenFilterFn = (facet) => facet.name === 'color'; // lowercase 'color'
@@ -899,7 +1046,11 @@ describe('Testing Component: Filters', () => {
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
+          <Filters
+            facets={[colorFacet]}
+            isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            initialNumOptions={100}
+          />
         </CioPlp>,
       );
 

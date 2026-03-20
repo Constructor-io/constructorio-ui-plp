@@ -7,6 +7,7 @@ export { default as useSearchResults } from './hooks/useSearchResults';
 export { default as useBrowseResults } from './hooks/useBrowseResults';
 export { default as useCioClient } from './hooks/useCioClient';
 export { default as useFilter } from './hooks/useFilter';
+export type { UseFilterReturn, UseFilterProps } from './hooks/useFilter';
 export { default as useGroups } from './hooks/useGroups';
 export { default as useOptionsList } from './hooks/useOptionsList';
 export { default as useSort } from './hooks/useSort';
