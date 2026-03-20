@@ -233,13 +233,15 @@ export type Variation = Omit<
 
 export type SortOrder = 'ascending' | 'descending';
 
+export type VariationsMapResponse = Array<Record<string, unknown>> | Record<string, unknown>;
+
 export interface Item {
   matchedTerms: Array<string>;
   isSlotted: boolean;
   labels: Record<string, unknown>;
   itemName: string;
   variations?: Variation[];
-  variationsMap?: VariationsMap;
+  variationsMap?: VariationsMapResponse;
 
   // Flattened Data Object
   itemId: string;
