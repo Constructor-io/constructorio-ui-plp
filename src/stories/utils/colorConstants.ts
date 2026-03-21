@@ -1,0 +1,27 @@
+export const colorHexMap: Record<string, string> = {
+  Black: '#000000',
+  Blue: '#0000FF',
+  Brown: '#8B4513',
+  Neutral: '#C8B89A',
+  Grey: '#808080',
+  Pink: '#FFC0CB',
+  White: '#FFFFFF',
+  Gold: '#FFD700',
+  Green: '#008000',
+  Multi: '#FF00FF',
+  Tan: '#D2B48C',
+  Silver: '#C0C0C0',
+  Red: '#FF0000',
+  Yellow: '#FFFF00',
+  Purple: '#800080',
+  Orange: '#FFA500',
+  Natural: '#F5DEB3',
+  Metallic: '#AAA9AD',
+  Cream: '#FFFDD0',
+  'No Color': '#E0E0E0',
+  'Navy Blue': '#000080',
+  'N/A': '#E0E0E0',
+  Khaki: '#C3B091',
+};
+
+export const COLOR_FACET_NAMES = ['color', 'Base Color'];

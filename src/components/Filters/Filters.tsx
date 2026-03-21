@@ -30,6 +30,7 @@ export default function Filters(props: FiltersWithRenderProps) {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
+    getIsCollapsed,
   } = useFilter(useFiltersProps);
 
   return (
@@ -45,6 +46,7 @@ export default function Filters(props: FiltersWithRenderProps) {
           getVisualColorHex,
           isVisualFilterFn,
           perFacetConfigs,
+          getIsCollapsed,
         })
       ) : (
         <div className='cio-filters'>
@@ -60,6 +62,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               getVisualColorHex={getVisualColorHex}
               isVisualFilterFn={isVisualFilterFn}
               perFacetConfigs={perFacetConfigs}
+              defaultCollapsed={getIsCollapsed(facet)}
               key={facet.name}
             />
           ))}
