@@ -53,23 +53,18 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/browse.js
   return Browse;
 });
 
-const originalWindowLocation = window.location;
-
 describe('Testing Component: CioPlpGrid', () => {
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    delete window.location;
-    window.location = new URL('https://example.com');
+    window.__setTestURL__('https://example.com');
 
     useCioPlp.mockImplementation(actualUseCioPlp);
     useRequestConfigs.mockImplementation(actualUseRequestConfigs);
   });
 
   afterEach(() => {
-    delete window.location;
-    window.location = originalWindowLocation;
     jest.restoreAllMocks();
   });
 

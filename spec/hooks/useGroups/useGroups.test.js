@@ -6,7 +6,6 @@ import { transformSearchResponse } from '../../../src/utils/transformers';
 import { renderHookWithCioPlp } from '../../test-utils';
 
 describe('Testing Hook: useGroups', () => {
-  const originalWindowLocation = window.location;
   const testGroupA = 'W676714'; // Clearance
   const testGroupB = 'W127085'; // Men
   const currentGroup = 'AP01';
@@ -16,13 +15,10 @@ describe('Testing Hook: useGroups', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    delete window.location;
-    window.location = new URL('https://example.com');
+    window.__setTestURL__('https://example.com');
   });
 
   afterEach(() => {
-    delete window.location;
-    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 

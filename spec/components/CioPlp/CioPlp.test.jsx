@@ -7,21 +7,15 @@ import '@testing-library/jest-dom';
 import { mockConstructorIOClient } from '../../test-utils';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 
-const originalWindowLocation = window.location;
-
 describe('CioPlp React Client-Side Rendering', () => {
   beforeEach(() => {
-    delete window.location;
-    window.location = new URL('https://example.com?q=red');
+    window.__setTestURL__('https://example.com?q=red');
 
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
-    delete window.location;
-    window.location = originalWindowLocation;
-
     jest.resetAllMocks();
   });
 

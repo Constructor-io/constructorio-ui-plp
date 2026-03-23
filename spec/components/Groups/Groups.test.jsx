@@ -11,20 +11,15 @@ import { getStateFromUrl } from '../../../src/utils/urlHelpers';
 const groupsProps = { groups: mockTransformedGroups };
 
 describe('Testing Component: Groups', () => {
-  const originalWindowLocation = window.location;
-
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    delete window.location;
-    window.location = new URL('https://example.com');
+    window.__setTestURL__('https://example.com');
   });
 
   afterAll(() => {
-    delete window.location;
-    window.location = originalWindowLocation;
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
