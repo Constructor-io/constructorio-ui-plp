@@ -10,6 +10,7 @@ import { CioPlpProvider } from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 
 describe('Testing Hook: useFilter', () => {
+  const originalWindowLocation = window.location;
   const testBrandA = 'AnonymousCompany';
   const testBrandB = 'Constructor';
 
@@ -18,10 +19,11 @@ describe('Testing Hook: useFilter', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    window.__setTestURL__('https://example.com');
+    window.location = 'https://example.com';
   });
 
   afterEach(() => {
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 

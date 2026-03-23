@@ -7,15 +7,18 @@ import { transformBrowseResponse } from '../../../src/utils/transformers';
 import '@testing-library/jest-dom';
 
 describe('Testing Hook: useBrowseResults', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    window.__setTestURL__('https://example.com/group_id/All');
+    window.location = 'https://example.com/group_id/All';
   });
 
   afterEach(() => {
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
     jest.clearAllTimers(); // Clear all timers after each test

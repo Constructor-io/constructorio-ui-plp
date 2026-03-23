@@ -13,12 +13,10 @@ describe('Testing Component: Breadcrumbs', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    delete window.location;
-    window.location = new URL('https://example.com');
+    window.location = 'https://example.com';
   });
 
   afterAll(() => {
-    delete window.location;
     window.location = originalWindowLocation;
     jest.resetAllMocks();
   });

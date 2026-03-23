@@ -9,9 +9,15 @@ const paginationProps = {
   windowSize: 10,
 };
 
+const originalWindowLocation = window.location;
+
 describe('usePagination', () => {
   beforeEach(() => {
-    window.__setTestURL__('https://example.com');
+    window.location = 'https://example.com';
+  });
+
+  afterAll(() => {
+    window.location = originalWindowLocation;
   });
 
   it('should initialize with the first page', () => {

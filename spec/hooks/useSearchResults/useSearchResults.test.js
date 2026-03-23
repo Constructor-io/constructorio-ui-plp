@@ -7,15 +7,18 @@ import { transformSearchResponse } from '../../../src/utils/transformers';
 import { getUrlFromState } from '../../../src/utils/urlHelpers';
 
 describe('Testing Hook: useSearchResults', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    window.__setTestURL__('https://example.com/search?q=Linen');
+    window.location = 'https://example.com/search?q=Linen';
   });
 
   afterEach(() => {
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
     jest.clearAllTimers(); // Clear all timers after each test

@@ -2,10 +2,15 @@ import { shopifyDefaults } from '../../src/utils/shopifyDefaults';
 import type { Item, Variation } from '../../src/types';
 
 describe('shopifyDefaults', () => {
+  const originalWindowLocation = window.location;
   const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
 
   beforeEach(() => {
-    (window as any).__setTestURL__(mockUrl);
+    window.location = mockUrl;
+  });
+
+  afterEach(() => {
+    window.location = originalWindowLocation;
   });
 
   describe('shopifyDefaults', () => {

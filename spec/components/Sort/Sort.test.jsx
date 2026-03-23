@@ -8,15 +8,18 @@ import { transformSearchResponse } from '../../../src/utils/transformers';
 import mockSearchResponse from '../../local_examples/apiSearchResponse.json';
 
 describe('Testing Component: Sort', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    window.__setTestURL__('https://example.com');
+    window.location = 'https://example.com';
   });
 
   afterAll(() => {
+    window.location = originalWindowLocation;
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 

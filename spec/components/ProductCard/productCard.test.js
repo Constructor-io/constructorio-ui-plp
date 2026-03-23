@@ -23,14 +23,17 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js
 });
 
 describe('Testing Component: ProductCard', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
-    window.__setTestURL__('https://example.com?q=red');
+    window.location = 'https://example.com?q=red';
 
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
+    window.location = originalWindowLocation;
     jest.resetAllMocks();
   });
 

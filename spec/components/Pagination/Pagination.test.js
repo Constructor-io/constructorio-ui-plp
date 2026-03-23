@@ -7,10 +7,16 @@ import Pagination from '../../../src/components/Pagination';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 
+const originalWindowLocation = window.location;
+
 beforeEach(() => {
   window.innerWidth = 1024;
   fireEvent(window, new Event('resize'));
-  window.__setTestURL__('https://example.com');
+  window.location = 'https://example.com';
+});
+
+afterAll(() => {
+  window.location = originalWindowLocation;
 });
 
 describe('Pagination Component', () => {

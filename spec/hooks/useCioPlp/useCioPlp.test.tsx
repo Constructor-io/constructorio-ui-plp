@@ -4,11 +4,17 @@ import { mockConstructorIOClient, renderHookWithCioPlp } from '../../test-utils'
 import { PlpSearchDataResults, PlpSortOption } from '../../../src/types';
 import apiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
+const originalWindowLocation = window.location;
+
 describe('Testing Hook: useCioPlp', () => {
   beforeEach(() => {
-    (window as any).__setTestURL__('https://example.com?q=shirts');
+    window.location = 'https://example.com?q=shirts';
 
     jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    window.location = originalWindowLocation;
   });
 
   it('Should throw error if called outside of PlpContext', () => {

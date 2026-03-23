@@ -166,10 +166,15 @@ describe('Testing Default UrlHelpers: getStateFromUrl', () => {
 });
 
 describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
+  const originalWindowLocation = window.location;
   const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
 
   beforeEach(() => {
-    (window as any).__setTestURL__(mockUrl);
+    window.location = mockUrl;
+  });
+
+  afterEach(() => {
+    window.location = originalWindowLocation;
   });
 
   test('getUrl should get the full url by default', () => {

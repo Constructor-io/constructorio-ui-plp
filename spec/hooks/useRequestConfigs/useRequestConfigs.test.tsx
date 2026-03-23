@@ -8,9 +8,15 @@ import { DEMO_API_KEY } from '../../../src/constants';
 import { getStateFromUrl as defaultGetStateFromUrl } from '../../../src/utils/urlHelpers';
 import { RequestConfigs } from '../../../src/types';
 
+const originalWindowLocation = window.location;
+
 describe('Testing Hook: useRequestConfigs', () => {
   beforeEach(() => {
-    (window as any).__setTestURL__('https://example.com');
+    window.location = 'https://example.com';
+  });
+
+  afterAll(() => {
+    window.location = originalWindowLocation;
   });
 
   it('Should throw error if called outside of PlpContext', () => {

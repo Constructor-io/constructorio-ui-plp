@@ -1,6 +1,5 @@
 const JSDOMEnvironment = require('jest-environment-jsdom').default;
-const LocationImpl =
-  require('jsdom/lib/jsdom/living/window/Location-impl.js').implementation;
+const LocationImpl = require('jsdom/lib/jsdom/living/window/Location-impl.js').implementation;
 const { serializeURL } = require('whatwg-url');
 
 // Custom Jest environment that patches jsdom's navigation to use the public
@@ -10,13 +9,11 @@ const { serializeURL } = require('whatwg-url');
 class CustomJSDOMEnvironment extends JSDOMEnvironment {
   async setup() {
     await super.setup();
-    const dom = this.dom;
+    const { dom } = this;
 
     LocationImpl.prototype._locationObjectNavigate = function (url) {
       dom.reconfigure({ url: serializeURL(url) });
     };
-
-    this.global.__setTestURL__ = (url) => dom.reconfigure({ url });
   }
 }
 
