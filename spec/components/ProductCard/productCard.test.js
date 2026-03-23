@@ -11,8 +11,6 @@ import { transformResultItem, cnstrcDataAttrs } from '../../../src/utils';
 import { copyItemWithNewSalePrice } from '../../test-utils';
 import mockApiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
-const originalWindowLocation = window.location;
-
 jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
   const Search = class {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
@@ -25,20 +23,17 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js
 });
 
 describe('Testing Component: ProductCard', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com?q=red'),
-    });
+    window.location = 'https://example.com?q=red';
 
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
-
+    window.location = originalWindowLocation;
     jest.resetAllMocks();
   });
 

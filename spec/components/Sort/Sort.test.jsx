@@ -15,15 +15,11 @@ describe('Testing Component: Sort', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    window.location = 'https://example.com';
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    window.location = originalWindowLocation;
     jest.resetAllMocks(); // This will reset all mocks after each test
   });
 
