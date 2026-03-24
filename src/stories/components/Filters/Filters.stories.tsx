@@ -124,10 +124,10 @@ export const OverrideRoot: Story = {
             <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
               {(facet as PlpMultipleFacet).options.map((option) => (
                 <li key={option.value}>
-                  <label>
+                  <div>
                     <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
                     {option.displayName} ({option.count})
-                  </label>
+                  </div>
                 </li>
               ))}
             </ul>
