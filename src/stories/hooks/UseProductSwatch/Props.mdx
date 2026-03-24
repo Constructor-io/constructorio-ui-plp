@@ -4,13 +4,13 @@ import * as UseProductSwatchStories from './UseProductSwatch.stories';
 <Meta of={UseProductSwatchStories} name='Props' />
 
 # useProductSwatch
-Hook takes an item `Item` as a parameter and returns product swatch state and controls `swatchObject`.
+Hook takes an `Item` and an optional `config` object as parameters and returns product swatch state and controls (`swatchObject`).
 
 ## Parameters
 <ArgTypes />
 
 ### Item
-  | property              | type                   | description       | 
+  | property          | type                   | description       |
   | :-----------------| :----------------------| :---------------- |
   | itemName          | `string`               | Item name         |
   | description       | `string`               | Item description  |
@@ -26,11 +26,23 @@ Hook takes an item `Item` as a parameter and returns product swatch state and co
   | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the [variations_map](https://docs.constructor.com/reference/shared-variations-mapping) parameter. Null if `variations` exists  |
   | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
 
+### Config
+
+> 📦 v1.9.1 is required for this feature
+
+  | property           | type     | description |
+  | :------------------| :--------| :---------- |
+  | maxVisibleSwatches | `number` | Maximum number of swatches to display. When set, the hook splits `swatchList` into `visibleSwatches` and `hiddenSwatches`. |
+
 ## Returns
 
 `swatchObject`
-  | property          | type                          | description|
-  | :-----------------| ------------------------------| :--------- |
-  | swatchList        | `SwatchItem[]`                | Represents the List of [SwatchItems](../?path=/docs/components-productswatch--props#swatchitem) to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
+  | property          | type                          | description |
+  | :-----------------| ------------------------------| :---------- |
+  | swatchList        | `SwatchItem[]`                | Represents the List of [SwatchItems](../?path=/docs/components-productswatch--props#swatchitem) to be rendered. |
   | selectedVariation | `SwatchItem`                  | Currently Selected SwatchItem object |
   | selectVariation   | `(swatch: SwatchItem) => void`| Function to change the currently selected SwatchItem object |
+  | visibleSwatches   | `SwatchItem[] \| undefined`   | Subset of `swatchList` limited by `maxVisibleSwatches`. Equals `swatchList` when no config is set. (📦 v1.9.1 required) |
+  | hiddenSwatches    | `SwatchItem[] \| undefined`   | Swatches beyond the `maxVisibleSwatches` limit. `undefined` when no limit is set or no swatches are hidden. (📦 v1.9.1 required) |
+  | totalSwatchCount  | `number`                      | Total number of swatches in `swatchList`. (📦 v1.9.1 required) |
+  | hasMoreSwatches   | `boolean`                     | Whether there are hidden swatches beyond the visible limit. (📦 v1.9.1 required) |
