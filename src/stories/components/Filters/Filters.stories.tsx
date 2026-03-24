@@ -101,9 +101,23 @@ export const OverrideRoot: Story = {
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
     filterGroupOverrides: {
-      reactNode: ({ facet, isCollapsed, toggleIsCollapsed, onFilterSelect }: FilterGroupRenderProps) => (
-        <li style={{ border: '1px solid #ccc', padding: '12px', marginBottom: '8px', listStyle: 'none' }}>
-          <button type='button' onClick={toggleIsCollapsed} style={{ fontWeight: 'bold', cursor: 'pointer' }}>
+      reactNode: ({
+        facet,
+        isCollapsed,
+        toggleIsCollapsed,
+        onFilterSelect,
+      }: FilterGroupRenderProps) => (
+        <li
+          style={{
+            border: '1px solid #ccc',
+            padding: '12px',
+            marginBottom: '8px',
+            listStyle: 'none',
+          }}>
+          <button
+            type='button'
+            onClick={toggleIsCollapsed}
+            style={{ fontWeight: 'bold', cursor: 'pointer' }}>
             {facet.displayName} {isCollapsed ? '▶' : '▼'}
           </button>
           {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
@@ -111,10 +125,7 @@ export const OverrideRoot: Story = {
               {(facet as PlpMultipleFacet).options.map((option) => (
                 <li key={option.value}>
                   <label>
-                    <input
-                      type='checkbox'
-                      onChange={() => onFilterSelect([option.value])}
-                    />
+                    <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
                     {option.displayName} ({option.count})
                   </label>
                 </li>
@@ -153,9 +164,7 @@ export const OverrideHeader: Story = {
               borderRadius: '4px',
             }}>
             <span style={{ fontWeight: 600 }}>{facet.displayName}</span>
-            <span style={{ fontSize: '12px', color: 'blue' }}>
-              {isCollapsed ? 'Show' : 'Hide'}
-            </span>
+            <span style={{ fontSize: '12px', color: 'blue' }}>{isCollapsed ? 'Show' : 'Hide'}</span>
           </div>
         ),
       },
@@ -177,7 +186,14 @@ export const OverrideOptionsList: Story = {
           if (isCollapsed || facet.type === 'range' || !('options' in facet)) return null;
           const multipleFacet = facet as PlpMultipleFacet;
           return (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', padding: '8px 0', width: '300px' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '6px',
+                padding: '8px 0',
+                width: '300px',
+              }}>
               {multipleFacet.options.map((option) => (
                 <button
                   key={option.value}

@@ -13,13 +13,12 @@ import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
-import { IncludeRenderProps } from '../../types';
+import { IncludeRenderProps, FilterGroupOverrides } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
-import { FilterGroupOverrides } from '../../types';
 import useCioPlp from '../../hooks/useCioPlp';
 import Breadcrumbs from '../Breadcrumbs';
 

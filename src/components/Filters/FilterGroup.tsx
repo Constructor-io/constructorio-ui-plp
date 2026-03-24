@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import type { PlpFacet, PlpFacetOption, FilterGroupOverrides, FilterGroupRenderProps } from '../../types';
+import type {
+  PlpFacet,
+  PlpFacetOption,
+  FilterGroupOverrides,
+  FilterGroupRenderProps,
+} from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
