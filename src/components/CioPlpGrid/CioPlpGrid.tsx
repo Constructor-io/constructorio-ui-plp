@@ -13,7 +13,7 @@ import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
-import { IncludeRenderProps } from '../../types';
+import { IncludeRenderProps, SwatchConfigs } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
@@ -47,6 +47,14 @@ export type CioPlpGridProps = {
    * - `hideGroups`: Whether to hide the groups component entirely (default: false).
    */
   groupsConfigs?: Omit<GroupsProps, 'groups'>;
+  /**
+   * Configuration options for swatch display behavior on product cards.
+   * - `maxVisibleSwatches`: Maximum number of swatches to display before showing a "View more" button.
+   *   When not set, all swatches are shown.
+   * - `showMoreLabel`: Custom label for the "View more" button (default: "View more >").
+   *   Can be a static string or a function receiving the hidden swatch count.
+   */
+  swatchConfigs?: SwatchConfigs;
 };
 
 export type CioPlpGridWithRenderProps = IncludeRenderProps<
@@ -63,6 +71,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     sortConfigs,
     paginationConfigs,
     groupsConfigs,
+    swatchConfigs,
     children,
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -166,7 +175,11 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
 
                       {data.response?.results?.map((item) => (
                         <div className='cio-product-tile' key={item.itemId}>
-                          <ProductCard key={item.itemId} item={item} />
+                          <ProductCard
+                            key={item.itemId}
+                            item={item}
+                            swatchConfigs={swatchConfigs}
+                          />
                         </div>
                       ))}
                     </div>

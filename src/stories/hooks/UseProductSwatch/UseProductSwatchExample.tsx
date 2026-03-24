@@ -6,11 +6,12 @@ import CioPlp from '../../../components/CioPlp';
 import { DEMO_API_KEY } from '../../../constants';
 
 export default function UseProductSwatchExample(props: UseProductSwatchProps) {
+  const { item } = props;
   const swatchObject = useProductSwatch(props);
 
   return (
     <CioPlp apiKey={DEMO_API_KEY}>
-      <ProductSwatch swatchObject={swatchObject} />
+      <ProductSwatch swatchObject={swatchObject} item={item} />
     </CioPlp>
   );
 }
