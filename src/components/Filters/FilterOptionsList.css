@@ -2,3 +2,8 @@
   margin: 0;
   padding: 0;
 }
+
+/* Backwards compatibility temporary fix - will be removed in the next major version */
+.cio-filter-multiple-option .cio-filter-option-label {
+  line-height: 1.2;
+}

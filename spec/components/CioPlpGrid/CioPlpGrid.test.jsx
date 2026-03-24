@@ -255,6 +255,7 @@ describe('Testing Component: CioPlpGrid', () => {
       const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
       const filterName = getAttributeFromContainer(cnstrcDataAttrs.browse.filterName);
       const filterValue = getAttributeFromContainer(cnstrcDataAttrs.browse.filterValue);
+      const resultPage = getAttributeFromContainer(cnstrcDataAttrs.common.resultPage);
 
       expect(
         container.querySelector(`[${cnstrcDataAttrs.browse.browseContainer}]`),
@@ -263,6 +264,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(resultId).toEqual(String(mockBrowseData.resultId));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
       expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
+      expect(resultPage).toEqual(String(mockBrowseData.request.page));
     });
   });
 
@@ -313,6 +315,7 @@ describe('Testing Component: CioPlpGrid', () => {
       const totalNumResults = getAttributeFromContainer(cnstrcDataAttrs.common.numResults);
       const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
       const searchTerm = getAttributeFromContainer(cnstrcDataAttrs.search.searchTerm);
+      const resultPage = getAttributeFromContainer(cnstrcDataAttrs.common.resultPage);
 
       expect(
         container.querySelector(`[${cnstrcDataAttrs.search.searchContainer}]`),
@@ -320,6 +323,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(totalNumResults).toEqual(String(mockSearchData.response.totalNumResults));
       expect(resultId).toEqual(mockSearchData.resultId);
       expect(searchTerm).toEqual(mockSearchData.request.term);
+      expect(resultPage).toEqual(String(mockSearchData.request.page));
     });
   });
 
