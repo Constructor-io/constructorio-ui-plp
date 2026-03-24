@@ -19,6 +19,7 @@ import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { UsePaginationProps } from '../../hooks/usePagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
+import { FilterGroupOverrides } from '../../types';
 import useCioPlp from '../../hooks/useCioPlp';
 import Breadcrumbs from '../Breadcrumbs';
 
@@ -37,7 +38,13 @@ export type CioPlpGridProps = {
   /**
    * No configurations available yet.
    */
-  filterConfigs?: Omit<UseFilterProps, 'facets'>;
+  filterConfigs?: Omit<UseFilterProps, 'facets'> & {
+    /**
+     * Override slots for each FilterGroup sub-component.
+     * @see FilterGroupOverrides
+     */
+    filterGroupOverrides?: FilterGroupOverrides;
+  };
   /**
    * Configuration options for the Groups component.
    * - `initialNumOptions`: Number of group options to show initially (default: 5).
@@ -161,7 +168,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
-                        <Filters facets={filters.facets} />
+                        <Filters facets={filters.facets} {...filterConfigs} />
                       </MobileModal>
 
                       {data.response?.results?.map((item) => (

@@ -420,3 +420,53 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
  */
 export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
   Partial<Pick<Type, Keys>>;
+
+// --- Component Overrides ---
+
+/**
+ * Override definition for a single component slot.
+ *
+ * Accepts either:
+ * - A render-props function `(props: T) => ReactNode` for full control with state access
+ * - A static `ReactNode` for simple replacements
+ */
+export interface ComponentOverrideProps<T> {
+  reactNode?: RenderPropsChildren<T>;
+}
+
+/**
+ * Wrapper type that adds a `componentOverrides` prop of shape `T` to a component.
+ */
+export type IncludeComponentOverrides<T> = {
+  componentOverrides?: T;
+};
+
+/**
+ * Render props passed to every FilterGroup override function.
+ * Provides the full state needed to rebuild any part of a filter group.
+ */
+export interface FilterGroupRenderProps {
+  /** The facet data for this filter group */
+  facet: PlpFacet;
+  /** Whether this filter group is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Callback to apply a filter value for this facet */
+  onFilterSelect: (value: any) => void;
+}
+
+/**
+ * Component override slots available on `FilterGroup`.
+ *
+ * Each key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
+ * - **root** — replaces the entire `<li>` filter group element
+ * - **header** — replaces the header button (facet name + collapse arrow)
+ * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
+ * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
+ */
+export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
+  header?: ComponentOverrideProps<FilterGroupRenderProps>;
+  optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
+  rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
+};
