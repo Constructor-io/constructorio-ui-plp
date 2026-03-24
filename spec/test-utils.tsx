@@ -71,6 +71,21 @@ function copyItemWithNewSalePrice(item, mockSalePrice) {
   };
 }
 
+function copyItemWithVariationPrices(item, { variationPrice, variationSalePrice }) {
+  const itemCopy = { ...item };
+  if (itemCopy.variations && Array.isArray(itemCopy.variations)) {
+    itemCopy.variations = itemCopy.variations.map((variation) => ({
+      ...variation,
+      data: {
+        ...variation.data,
+        ...(variationPrice !== undefined && { price: variationPrice }),
+        ...(variationSalePrice !== undefined && { sale_price: variationSalePrice }),
+      },
+    }));
+  }
+  return itemCopy;
+}
+
 export {
   customRender as renderWithCioPlp,
   customRenderHook as renderHookWithCioPlp,
@@ -79,4 +94,5 @@ export {
   delay,
   getAttribute,
   copyItemWithNewSalePrice,
+  copyItemWithVariationPrices,
 };
