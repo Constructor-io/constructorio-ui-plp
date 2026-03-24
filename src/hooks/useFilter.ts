@@ -13,6 +13,7 @@ export interface UseFilterReturn {
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
   perFacetConfigs?: Record<string, FacetConfig>;
+  getIsCollapsed: (facet: PlpFacet) => boolean;
 }
 
 export interface UseFilterProps {
@@ -49,6 +50,12 @@ export interface UseFilterProps {
    * Per-facet configuration overrides
    */
   perFacetConfigs?: Record<string, FacetConfig>;
+  /**
+   * When true, all filter groups render collapsed by default.
+   * When false, all filter groups render expanded by default.
+   * Individual facet overrides via `perFacetConfigs` or facet metadata take precedence.
+   */
+  renderCollapsed?: boolean;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
@@ -61,6 +68,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
+    renderCollapsed,
   } = props;
   const contextValue = useCioPlpContext();
 
@@ -68,7 +76,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     throw new Error('useFilter must be used within a component that is a child of <CioPlp />');
   }
 
-  const { getIsHiddenFilterField } = contextValue.itemFieldGetters;
+  const { getIsHiddenFilterField, getIsCollapsedFacetField } = contextValue.itemFieldGetters;
   const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
 
   const isHiddenFilter = useCallback(
@@ -100,6 +108,29 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     setRequestConfigs({ filters: {}, page: 1 });
   };
 
+  const getIsCollapsed = useCallback(
+    (facet: PlpFacet): boolean => {
+      // Priority 1: Per-facet config (perFacetConfigs)
+      const collapsed = perFacetConfigs?.[facet.name]?.collapsed;
+      if (collapsed !== undefined) {
+        return collapsed;
+      }
+
+      // Priority 2: Global prop (renderCollapsed)
+      if (renderCollapsed !== undefined) {
+        return renderCollapsed;
+      }
+
+      // Priority 3: Facet metadata field (cio_render_collapsed)
+      if (typeof getIsCollapsedFacetField === 'function') {
+        return !!getIsCollapsedFacetField(facet);
+      }
+
+      return false;
+    },
+    [perFacetConfigs, renderCollapsed, getIsCollapsedFacetField],
+  );
+
   return {
     facets: filteredFacets,
     setFilter,
@@ -110,5 +141,6 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
+    getIsCollapsed,
   };
 }

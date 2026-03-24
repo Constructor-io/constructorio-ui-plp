@@ -53,6 +53,7 @@ export interface ItemFieldGetters {
   getIsHiddenGroupField: (group: PlpItemGroup) => boolean | undefined;
   getIsHiddenFilterField: (facet: PlpFacet) => boolean | undefined;
   getIsHiddenFilterOptionField: (option: PlpFacetOption) => boolean | undefined;
+  getIsCollapsedFacetField: (facet: PlpFacet) => boolean | undefined;
   getItemUrl: (item: Item) => string | undefined;
 }
 
@@ -417,6 +418,7 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
 
 export interface FacetConfig {
   renderVisual?: boolean;
+  collapsed?: boolean;
 }
 
 /**

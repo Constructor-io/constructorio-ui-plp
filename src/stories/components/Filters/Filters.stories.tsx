@@ -5,35 +5,15 @@ import Filters from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
 import { PlpFacet, PlpFacetOption } from '../../../types';
 import { DEMO_API_KEY } from '../../../constants';
+import { colorHexMap, COLOR_FACET_NAMES } from '../../utils/colorConstants';
 import '../../../styles.css';
 
-const colorHexMap: Record<string, string> = {
-  Black: '#000000',
-  Blue: '#0000FF',
-  Brown: '#8B4513',
-  Neutral: '#C8B89A',
-  Grey: '#808080',
-  Pink: '#FFC0CB',
-  White: '#FFFFFF',
-  Gold: '#FFD700',
-  Green: '#008000',
-  Multi: '#FF00FF',
-  Tan: '#D2B48C',
-  Silver: '#C0C0C0',
-  Red: '#FF0000',
-  Yellow: '#FFFF00',
-  Purple: '#800080',
-  Orange: '#FFA500',
-  Natural: '#F5DEB3',
-  Metallic: '#AAA9AD',
-  Cream: '#FFFDD0',
-  'No Color': '#E0E0E0',
-  'Navy Blue': '#000080',
-  'N/A': '#E0E0E0',
-  Khaki: '#C3B091',
-};
-
-const COLOR_FACET_NAMES = ['color', 'Base Color'];
+const mockFacetsWithCollapsedMetadata = (mockTransformedFacets as Array<PlpFacet>).map((facet) => {
+  if (facet.name === 'color' || facet.name === 'price') {
+    return { ...facet, data: { ...facet.data, cio_render_collapsed: true } };
+  }
+  return facet;
+});
 
 const mockFacetsWithVisualColor = (mockTransformedFacets as Array<PlpFacet>).map((facet) => {
   if (!COLOR_FACET_NAMES.includes(facet.name) || !('options' in facet)) return facet;
@@ -57,6 +37,16 @@ const meta = {
     initialNumOptions: {
       table: {
         defaultValue: { summary: '10' },
+      },
+    },
+    renderCollapsed: {
+      table: {
+        defaultValue: { summary: 'undefined' },
+      },
+    },
+    perFacetConfigs: {
+      table: {
+        defaultValue: { summary: 'undefined' },
       },
     },
   },
@@ -169,5 +159,28 @@ export const VisualFilterViaPerFacetConfigs: Story = {
     facets: mockFacetsWithVisualColor,
     perFacetConfigs: { color: { renderVisual: true }, 'Base Color': { renderVisual: true } },
     initialNumOptions: 20,
+  },
+};
+
+export const AllCollapsed: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    renderCollapsed: true,
+  },
+};
+
+export const SpecificFacetsCollapsed: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    perFacetConfigs: { color: { collapsed: true }, price: { collapsed: true } },
+  },
+};
+
+export const CollapsedViaMetadata: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockFacetsWithCollapsedMetadata,
   },
 };
