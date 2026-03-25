@@ -884,9 +884,11 @@ describe('Testing Component: Filters', () => {
           <Filters
             {...filterProps}
             filterGroupOverrides={{
-              reactNode: ({ facet }) => (
-                <div data-testid='custom-root'>{facet.displayName} Override</div>
-              ),
+              root: {
+                reactNode: ({ facet }) => (
+                  <div data-testid='custom-root'>{facet.displayName} Override</div>
+                )
+              },
             }}
           />
         </CioPlp>,

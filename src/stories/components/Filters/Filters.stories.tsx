@@ -93,7 +93,7 @@ export const HiddenViaMetadata: Story = {
 };
 
 /**
- * Use `filterGroupOverrides.reactNode` to replace the entire FilterGroup with a custom component.
+ * Use `filterGroupOverrides.root.reactNode` to replace the entire FilterGroup with a custom component.
  * The render function receives `FilterGroupRenderProps` with full state access.
  */
 export const OverrideRoot: Story = {
@@ -101,39 +101,41 @@ export const OverrideRoot: Story = {
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
     filterGroupOverrides: {
-      reactNode: ({
-        facet,
-        isCollapsed,
-        toggleIsCollapsed,
-        onFilterSelect,
-      }: FilterGroupRenderProps) => (
-        <li
-          style={{
-            border: '1px solid #ccc',
-            padding: '12px',
-            marginBottom: '8px',
-            listStyle: 'none',
-          }}>
-          <button
-            type='button'
-            onClick={toggleIsCollapsed}
-            style={{ fontWeight: 'bold', cursor: 'pointer' }}>
-            {facet.displayName} {isCollapsed ? '▶' : '▼'}
-          </button>
-          {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
-            <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
-              {(facet as PlpMultipleFacet).options.map((option) => (
-                <li key={option.value}>
-                  <div>
-                    <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
-                    {option.displayName} ({option.count})
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ),
+      root: {
+        reactNode: ({
+          facet,
+          isCollapsed,
+          toggleIsCollapsed,
+          onFilterSelect,
+        }: FilterGroupRenderProps) => (
+          <li
+            style={{
+              border: '1px solid #ccc',
+              padding: '12px',
+              marginBottom: '8px',
+              listStyle: 'none',
+            }}>
+            <button
+              type='button'
+              onClick={toggleIsCollapsed}
+              style={{ fontWeight: 'bold', cursor: 'pointer' }}>
+              {facet.displayName} {isCollapsed ? '▶' : '▼'}
+            </button>
+            {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
+              <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
+                {(facet as PlpMultipleFacet).options.map((option) => (
+                  <li key={option.value}>
+                    <div>
+                      <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
+                      {option.displayName} ({option.count})
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        )
+      },
     },
   },
 };

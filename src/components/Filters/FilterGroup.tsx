@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import type {
   PlpFacet,
   PlpFacetOption,
+  PlpFilterValue,
   FilterGroupOverrides,
   FilterGroupRenderProps,
+  IncludeComponentOverrides,
 } from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
@@ -11,7 +13,7 @@ import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 
-export interface FilterGroupProps {
+export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupOverrides> {
   facet: PlpFacet;
   setFilter: UseFilterReturn['setFilter'];
   initialNumOptions?: number;
@@ -22,11 +24,6 @@ export interface FilterGroupProps {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
-  /**
-   * Override slots for sub-components of FilterGroup.
-   * @see FilterGroupOverrides
-   */
-  componentOverrides?: FilterGroupOverrides;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -42,7 +39,7 @@ export default function FilterGroup(props: FilterGroupProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
-  const onFilterSelect = (facetName: string) => (value: any) => {
+  const onFilterSelect = (facetName: string) => (value: PlpFilterValue) => {
     setFilter(facetName, value);
   };
 
@@ -54,7 +51,7 @@ export default function FilterGroup(props: FilterGroupProps) {
   };
 
   return (
-    <RenderPropsWrapper props={renderProps} override={componentOverrides?.reactNode}>
+    <RenderPropsWrapper props={renderProps} override={componentOverrides?.root?.reactNode}>
       <li className='cio-filter-group'>
         <RenderPropsWrapper props={renderProps} override={componentOverrides?.header?.reactNode}>
           <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>

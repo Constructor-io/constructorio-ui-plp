@@ -176,7 +176,7 @@ describe('Testing Component: FilterGroup', () => {
         key: 'reactNode',
         label: 'root',
         facet: mockMultipleFacet,
-        buildOverrides: (fn) => ({ reactNode: fn }),
+        buildOverrides: (fn) => ({ root: { reactNode: fn } }),
         needsProvider: false,
       },
       {

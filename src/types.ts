@@ -453,7 +453,7 @@ export interface FilterGroupRenderProps {
   /** Toggle the collapsed state */
   toggleIsCollapsed: () => void;
   /** Callback to apply a filter value for this facet */
-  onFilterSelect: (value: any) => void;
+  onFilterSelect: (value: PlpFilterValue) => void;
 }
 
 /**
@@ -465,7 +465,8 @@ export interface FilterGroupRenderProps {
  * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
  * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
  */
-export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
+export type FilterGroupOverrides = {
+  root?: ComponentOverrideProps<FilterGroupRenderProps>;
   header?: ComponentOverrideProps<FilterGroupRenderProps>;
   optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
   rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
