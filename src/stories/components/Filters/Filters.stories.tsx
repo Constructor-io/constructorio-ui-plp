@@ -134,7 +134,7 @@ export const OverrideRoot: Story = {
               </ul>
             )}
           </li>
-        )
+        ),
       },
     },
   },
