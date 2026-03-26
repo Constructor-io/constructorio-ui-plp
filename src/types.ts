@@ -19,6 +19,7 @@ import {
   BrowseRequestType,
   FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
 
 export {
   Nullable,
@@ -420,3 +421,34 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
  */
 export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
   Partial<Pick<Type, Keys>>;
+
+/**
+ * Render props passed to every FilterGroup override function.
+ * Provides the full state needed to rebuild any part of a filter group.
+ */
+export interface FilterGroupRenderProps {
+  /** The facet data for this filter group */
+  facet: PlpFacet;
+  /** Whether this filter group is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Callback to apply a filter value for this facet */
+  onFilterSelect: (value: PlpFilterValue) => void;
+}
+
+/**
+ * Component override slots available on `FilterGroup`.
+ *
+ * Each key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
+ * - **root** — replaces the entire `<li>` filter group element
+ * - **header** — replaces the header button (facet name + collapse arrow)
+ * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
+ * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
+ */
+export type FilterGroupOverrides = {
+  root?: ComponentOverrideProps<FilterGroupRenderProps>;
+  header?: ComponentOverrideProps<FilterGroupRenderProps>;
+  optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
+  rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
+};

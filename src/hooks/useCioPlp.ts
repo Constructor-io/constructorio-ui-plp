@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { PlpContextValue, PlpFacet, PlpItemGroup, PlpSortOption } from '../types';
+import {
+  PlpContextValue,
+  PlpFacet,
+  PlpItemGroup,
+  PlpSortOption,
+  FilterGroupOverrides,
+} from '../types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
@@ -33,7 +39,9 @@ export type UseCioPlpProps = UseSearchResultsProps &
     /**
      * No configurations available yet.
      */
-    filterConfigs?: Omit<UseFilterProps, 'facets'>;
+    filterConfigs?: Omit<UseFilterProps, 'facets'> & {
+      filterGroupOverrides?: FilterGroupOverrides;
+    };
     /**
      * Configuration options for the Groups component.
      * - `initialNumOptions`: Number of group options to show initially (default: 5).
