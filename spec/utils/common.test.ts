@@ -14,7 +14,7 @@ describe('isValidSalePrice', () => {
     { salePrice: null, usualPrice: 90, expected: false, desc: 'null salePrice' },
     { salePrice: 10, usualPrice: null, expected: false, desc: 'null usualPrice' },
   ])('returns $expected when $desc', ({ salePrice, usualPrice, expected }) => {
-    // here are "any" assertions because we have similar in codebase
-    expect(isValidSalePrice(salePrice as any, usualPrice as any)).toBe(expected);
+    // Cast to any to test runtime behavior with null, which TypeScript would normally reject
+    expect(isValidSalePrice(salePrice as unknown as number, usualPrice as unknown as number)).toBe(expected);
   });
 });

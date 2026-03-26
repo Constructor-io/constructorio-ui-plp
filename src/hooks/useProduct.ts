@@ -24,9 +24,9 @@ const useProductInfo: UseProductInfo = ({ item }) => {
   );
   const getItemUrl = tryCatchify(state?.itemFieldGetters?.getItemUrl || defaultGetItemUrl);
 
-  const itemName = productSwatch?.selectedVariation?.itemName ?? item.itemName;
-  const itemPrice = productSwatch?.selectedVariation?.price ?? getPrice(item);
-  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl ?? item.imageUrl;
+  const itemName = productSwatch?.selectedVariation?.itemName || item.itemName;
+  const itemPrice = productSwatch?.selectedVariation?.price || getPrice(item);
+  const itemImageUrl = productSwatch?.selectedVariation?.imageUrl || item.imageUrl;
   // Get href - merge variation URL into item if variation is selected
   const itemWithVariationUrl = productSwatch?.selectedVariation
     ? { ...item, url: productSwatch.selectedVariation.url }
