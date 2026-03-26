@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { PlpContextValue, PlpFacet, PlpItemGroup, PlpSortOption, FilterGroupOverrides } from '../types';
+import {
+  PlpContextValue,
+  PlpFacet,
+  PlpItemGroup,
+  PlpSortOption,
+  FilterGroupOverrides,
+} from '../types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
