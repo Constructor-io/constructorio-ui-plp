@@ -35,10 +35,5 @@ export function removeNullValuesFromObject(obj: Object) {
 }
 
 export function isValidSalePrice(salePrice?: number, usualPrice?: number) {
-  return (
-    salePrice != null &&
-    usualPrice != null &&
-    salePrice >= 0 &&
-    salePrice < usualPrice
-  );
+  return salePrice != null && usualPrice != null && salePrice >= 0 && salePrice < usualPrice;
 }
