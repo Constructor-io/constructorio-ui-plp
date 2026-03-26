@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
 import type {
   PlpFacet,
   PlpFacetOption,
   PlpFilterValue,
   FilterGroupOverrides,
   FilterGroupRenderProps,
-  IncludeComponentOverrides,
 } from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';

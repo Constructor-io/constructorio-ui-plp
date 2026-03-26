@@ -19,6 +19,7 @@ import {
   BrowseRequestType,
   FacetOption as ApiFacetOption,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
 
 export {
   Nullable,
@@ -420,26 +421,6 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
  */
 export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
   Partial<Pick<Type, Keys>>;
-
-// --- Component Overrides ---
-
-/**
- * Override definition for a single component slot.
- *
- * Accepts either:
- * - A render-props function `(props: T) => ReactNode` for full control with state access
- * - A static `ReactNode` for simple replacements
- */
-export interface ComponentOverrideProps<T> {
-  reactNode?: RenderPropsChildren<T>;
-}
-
-/**
- * Wrapper type that adds a `componentOverrides` prop of shape `T` to a component.
- */
-export type IncludeComponentOverrides<T> = {
-  componentOverrides?: T;
-};
 
 /**
  * Render props passed to every FilterGroup override function.

@@ -173,29 +173,25 @@ describe('Testing Component: FilterGroup', () => {
   describe(' - componentOverrides', () => {
     const overrideSlots = [
       {
-        key: 'reactNode',
-        label: 'root',
+        key: 'root',
         facet: mockMultipleFacet,
         buildOverrides: (fn) => ({ root: { reactNode: fn } }),
         needsProvider: false,
       },
       {
         key: 'header',
-        label: 'header',
         facet: mockMultipleFacet,
         buildOverrides: (fn) => ({ header: { reactNode: fn } }),
         needsProvider: true,
       },
       {
         key: 'optionsList',
-        label: 'optionsList',
         facet: mockMultipleFacet,
         buildOverrides: (fn) => ({ optionsList: { reactNode: fn } }),
         needsProvider: false,
       },
       {
         key: 'rangeSlider',
-        label: 'rangeSlider',
         facet: mockRangeFacet,
         buildOverrides: (fn) => ({ rangeSlider: { reactNode: fn } }),
         needsProvider: false,
@@ -203,12 +199,12 @@ describe('Testing Component: FilterGroup', () => {
     ];
 
     describe.each(overrideSlots)(
-      'override: $label',
-      ({ label, facet, buildOverrides, needsProvider }) => {
+      'override: $key',
+      ({ key, facet, buildOverrides, needsProvider }) => {
         const renderFn = (ui) => (needsProvider ? renderWithProvider(ui) : render(ui));
 
-        it(`Should replace ${label} with custom content`, () => {
-          const overrideFn = () => <div data-testid={`custom-${label}`}>Custom {label}</div>;
+        it(`Should replace ${key} with custom content`, () => {
+          const overrideFn = () => <div data-testid={`custom-${key}`}>Custom {key}</div>;
 
           renderFn(
             <FilterGroup
@@ -219,10 +215,10 @@ describe('Testing Component: FilterGroup', () => {
             />,
           );
 
-          expect(screen.getByTestId(`custom-${label}`)).toBeInTheDocument();
+          expect(screen.getByTestId(`custom-${key}`)).toBeInTheDocument();
         });
 
-        it(`Should pass correct render props to ${label} override`, () => {
+        it(`Should pass correct render props to ${key} override`, () => {
           const spy = jest.fn().mockReturnValue(<div>Override</div>);
 
           renderFn(
