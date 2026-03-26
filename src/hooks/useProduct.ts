@@ -43,7 +43,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const { itemId } = item;
 
-  let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
+  let salePrice = productSwatch?.selectedVariation?.salePrice ?? getSalePrice(item);
   let hasSalePrice = true;
 
   if (!isValidSalePrice(salePrice, itemPrice)) {

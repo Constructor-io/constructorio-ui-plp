@@ -5,7 +5,7 @@ import { transformResultItem } from '../../../src/utils/transformers';
 import mockItem from '../../local_examples/item.json';
 import mockItemWithSalePrice from '../../local_examples/itemWithSalePrice.json';
 import mockItemWithRolloverImages from '../../local_examples/itemWithRolloverImages.json';
-import { renderHookWithCioPlp, copyItemWithNewSalePrice } from '../../test-utils';
+import { renderHookWithCioPlp, copyItemWithNewSalePrice, copyItemWithVariationPrices } from '../../test-utils';
 
 describe('Testing Hook: useProductInfo', () => {
   beforeEach(() => {
@@ -178,6 +178,53 @@ describe('Testing Hook: useProductInfo', () => {
     });
   });
 
+  describe('Testing zero values in variation merging (nullish coalescing)', () => {
+    it('Should respect variation salePrice of 0 and not fall back to item salePrice', async () => {
+      const item = transformResultItem(
+        copyItemWithVariationPrices(mockItemWithSalePrice, {
+          variationSalePrice: 0,
+        }),
+      );
+      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+
+      await waitFor(() => {
+        const { productSwatch } = result.current;
+        const { swatchList, selectVariation } = productSwatch;
+        // Select a variation that has salePrice: 0
+        if (swatchList.length > 0) {
+          selectVariation(swatchList[0]);
+        }
+      });
+
+      await waitFor(() => {
+        // salePrice 0 is valid (0 < price), should be preserved
+        expect(result.current.salePrice).toEqual(0);
+        expect(result.current.hasSalePrice).toBe(true);
+      });
+    });
+
+    it('Should respect variation price of 0 and not fall back to item price', async () => {
+      const item = transformResultItem(
+        copyItemWithVariationPrices(mockItemWithSalePrice, {
+          variationPrice: 0,
+        }),
+      );
+      const { result } = renderHookWithCioPlp(() => useProductInfo({ item }));
+
+      await waitFor(() => {
+        const { productSwatch } = result.current;
+        const { swatchList, selectVariation } = productSwatch;
+        if (swatchList.length > 0) {
+          selectVariation(swatchList[0]);
+        }
+      });
+
+      await waitFor(() => {
+        expect(result.current.itemPrice).toEqual(0);
+      });
+    });
+  });
+
   describe('Testing sale price handling logic', () => {
     describe.each([
       {
@@ -203,7 +250,7 @@ describe('Testing Hook: useProductInfo', () => {
       {
         desc: 'zero salePrice',
         salePrice: 0,
-        expected: undefined,
+        expected: 0,
       },
     ])('When $desc', ({ salePrice, expected }) => {
       it(`Should return ${expected === undefined ? 'undefined' : expected} for salePrice`, async () => {
