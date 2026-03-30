@@ -13,15 +13,11 @@ const originalWindowLocation = window.location;
 
 describe('usePagination', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    window.location = 'https://example.com';
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    window.location = originalWindowLocation;
   });
 
   it('should initialize with the first page', () => {
