@@ -8,6 +8,7 @@ import {
   Result,
   Nullable,
   Group,
+  BaseGroup,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 import {
   Item,
@@ -202,7 +203,7 @@ export function transformResponseSortOptions(options?: Partial<SortOption>[]): P
   return [];
 }
 
-export function transformItemGroups(groups?: Group[]): PlpItemGroup[] {
+export function transformItemGroups(groups?: (Group | BaseGroup)[]): PlpItemGroup[] {
   if (groups) {
     return groups.map(
       (itemGroup) =>

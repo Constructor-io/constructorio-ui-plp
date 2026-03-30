@@ -4,6 +4,7 @@ module.exports = {
     {
       displayName: 'client',
       testEnvironment: 'jsdom',
+      setupFiles: ['whatwg-fetch'],
       moduleNameMapper: {
         '\\.css$': require.resolve('./spec/mock-styles.js'),
         '\\.svg$': require.resolve('./spec/mock-icons.js'),

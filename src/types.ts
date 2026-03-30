@@ -9,6 +9,7 @@ import {
   SearchResponse,
   GetBrowseResultsResponse,
   VariationsMap,
+  VariationsMapResponse,
   FilterExpression,
   FmtOptions,
   Nullable,
@@ -18,6 +19,8 @@ import {
   SearchParameters,
   BrowseRequestType,
   FacetOption as ApiFacetOption,
+  RangeMax,
+  RangeMin,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
 
 export {
@@ -29,6 +32,7 @@ export {
   ApiFacet,
   ApiFacetOption,
   ApiGroup,
+  VariationsMapResponse,
 };
 
 export interface ApiHierarchicalFacetOption extends ApiFacetOption {
@@ -239,7 +243,7 @@ export interface Item {
   labels: Record<string, unknown>;
   itemName: string;
   variations?: Variation[];
-  variationsMap?: VariationsMap;
+  variationsMap?: VariationsMapResponse;
 
   // Flattened Data Object
   itemId: string;
@@ -373,7 +377,7 @@ export interface PlpFacetOption {
   displayName: string;
   value: string;
   data: Record<string, any>;
-  range?: ['-inf' | number, 'inf' | number];
+  range?: [RangeMin, RangeMax];
   options?: Array<PlpHierarchicalFacetOption>;
 }
 
