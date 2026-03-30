@@ -24,7 +24,13 @@ describe('Testing Hook: useProductSwatch', () => {
   });
 
   const transformedItem = transformResultItem(mockItem);
-  const expectedSwatch = getSwatches(transformedItem, getPrice, getSwatchPreview, getSalePrice, getRolloverImage);
+  const expectedSwatch = getSwatches(
+    transformedItem,
+    getPrice,
+    getSwatchPreview,
+    getSalePrice,
+    getRolloverImage,
+  );
 
   it('Should throw error if called outside of PlpContext', () => {
     expect(() => renderHook(() => useProductSwatch())).toThrow();
@@ -130,9 +136,109 @@ describe('Testing Hook: useProductSwatch', () => {
     });
 
     await waitFor(() => {
-      const { current: { selectedVariation } } = result;
+      const {
+        current: { selectedVariation },
+      } = result;
 
       expect(selectedVariation.rolloverImage).toBe('#e04062');
+    });
+  });
+
+  describe('maxVisibleSwatches config', () => {
+    it('Should return all swatches as visible when no config is provided', async () => {
+      const { result } = renderHookWithCioPlp(() => useProductSwatch({ item: transformedItem }));
+
+      await waitFor(() => {
+        const {
+          current: {
+            swatchList,
+            visibleSwatches,
+            hiddenSwatches,
+            hasMoreSwatches,
+            totalSwatchCount,
+          },
+        } = result;
+
+        expect(visibleSwatches).toEqual(swatchList);
+        expect(hiddenSwatches).toBeUndefined();
+        expect(hasMoreSwatches).toBe(false);
+        expect(totalSwatchCount).toBe(swatchList.length);
+      });
+    });
+
+    it('Should split swatches when maxVisibleSwatches is less than total', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useProductSwatch({ item: transformedItem, config: { maxVisibleSwatches: 2 } }),
+      );
+
+      await waitFor(() => {
+        const {
+          current: {
+            swatchList,
+            visibleSwatches,
+            hiddenSwatches,
+            hasMoreSwatches,
+            totalSwatchCount,
+          },
+        } = result;
+
+        expect(visibleSwatches).toHaveLength(2);
+        expect(visibleSwatches).toEqual(swatchList.slice(0, 2));
+        expect(hiddenSwatches).toEqual(swatchList.slice(2));
+        expect(hasMoreSwatches).toBe(true);
+        expect(totalSwatchCount).toBe(swatchList.length);
+      });
+    });
+
+    it('Should return all swatches as visible when maxVisibleSwatches exceeds total', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useProductSwatch({ item: transformedItem, config: { maxVisibleSwatches: 100 } }),
+      );
+
+      await waitFor(() => {
+        const {
+          current: { swatchList, visibleSwatches, hiddenSwatches, hasMoreSwatches },
+        } = result;
+
+        expect(visibleSwatches).toEqual(swatchList);
+        expect(hiddenSwatches).toBeUndefined();
+        expect(hasMoreSwatches).toBe(false);
+      });
+    });
+
+    it('Should return all swatches as visible when maxVisibleSwatches equals total', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useProductSwatch({
+          item: transformedItem,
+          config: { maxVisibleSwatches: expectedSwatch.length },
+        }),
+      );
+
+      await waitFor(() => {
+        const {
+          current: { swatchList, visibleSwatches, hiddenSwatches, hasMoreSwatches },
+        } = result;
+
+        expect(visibleSwatches).toEqual(swatchList);
+        expect(hiddenSwatches).toBeUndefined();
+        expect(hasMoreSwatches).toBe(false);
+      });
+    });
+
+    it('Should hide all swatches when maxVisibleSwatches is 0', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useProductSwatch({ item: transformedItem, config: { maxVisibleSwatches: 0 } }),
+      );
+
+      await waitFor(() => {
+        const {
+          current: { swatchList, visibleSwatches, hiddenSwatches, hasMoreSwatches },
+        } = result;
+
+        expect(visibleSwatches).toHaveLength(0);
+        expect(hiddenSwatches).toEqual(swatchList);
+        expect(hasMoreSwatches).toBe(true);
+      });
     });
   });
 });

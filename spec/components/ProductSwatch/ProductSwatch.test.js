@@ -11,37 +11,47 @@ import { DEMO_API_KEY } from '../../../src/constants';
 import { cnstrcDataAttrs } from '../../../src/utils';
 
 describe('Product Swatch Component', () => {
-  const swatchObject = {
-    swatchList: [
-      {
-        url: 'abc.com',
-        imageUrl: 'abc.img',
-        itemName: 'abc',
-        variationId: 'abc',
-        swatchPreview: '#FFFFFF',
-      },
-      {
-        url: 'def.com',
-        imageUrl: 'def.img',
-        itemName: 'def',
-        variationId: 'def',
-        swatchPreview: '#AAAAAA',
-      },
-    ],
-    selectedVariation: {
+  const swatchList = [
+    {
       url: 'abc.com',
       imageUrl: 'abc.img',
       itemName: 'abc',
       variationId: 'abc',
       swatchPreview: '#FFFFFF',
     },
+    {
+      url: 'def.com',
+      imageUrl: 'def.img',
+      itemName: 'def',
+      variationId: 'def',
+      swatchPreview: '#AAAAAA',
+    },
+  ];
+
+  const swatchObject = {
+    swatchList,
+    selectedVariation: swatchList[0],
     selectVariation: jest.fn(),
+    visibleSwatches: swatchList,
+    hiddenSwatches: undefined,
+    totalSwatchCount: 2,
+    hasMoreSwatches: false,
+  };
+
+  const item = {
+    itemName: 'Test Product',
+    itemId: 'test-1',
+    url: 'https://example.com/product',
+    matchedTerms: [],
+    isSlotted: false,
+    labels: {},
+    data: {},
   };
 
   it('renders a swatch for each variation with swatchPreview', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <ProductSwatch swatchObject={swatchObject} />
+        <ProductSwatch swatchObject={swatchObject} item={item} />
       </CioPlp>,
     );
 
@@ -58,7 +68,7 @@ describe('Product Swatch Component', () => {
 
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <ProductSwatch swatchObject={mockSwatchObject} />
+        <ProductSwatch swatchObject={mockSwatchObject} item={item} />
       </CioPlp>,
     );
 
@@ -74,6 +84,7 @@ describe('Product Swatch Component', () => {
 
     const productSwatchProps = {
       swatchObject,
+      item,
       children: mockChildren,
     };
 
@@ -84,6 +95,128 @@ describe('Product Swatch Component', () => {
     );
     expect(mockChildren).toHaveBeenCalled();
     expect(screen.getByText('Custom Render')).toBeInTheDocument();
+  });
+
+  it('passes item to render props children', () => {
+    const mockChildren = jest.fn().mockReturnValue(<div>Custom Render</div>);
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductSwatch swatchObject={swatchObject} item={item}>
+          {mockChildren}
+        </ProductSwatch>
+      </CioPlp>,
+    );
+
+    expect(mockChildren).toHaveBeenCalledWith(expect.objectContaining({ item }));
+  });
+
+  describe('View More button', () => {
+    const hiddenSwatches = [
+      {
+        url: 'ghi.com',
+        imageUrl: 'ghi.img',
+        itemName: 'ghi',
+        variationId: 'ghi',
+        swatchPreview: '#333333',
+      },
+    ];
+
+    const swatchObjectWithMore = {
+      ...swatchObject,
+      visibleSwatches: swatchList,
+      hiddenSwatches,
+      totalSwatchCount: 3,
+      hasMoreSwatches: true,
+    };
+
+    it('does not render when hasMoreSwatches is false', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch swatchObject={swatchObject} item={item} />
+        </CioPlp>,
+      );
+
+      expect(screen.queryByTestId('cio-swatch-show-more')).not.toBeInTheDocument();
+    });
+
+    it('renders when hasMoreSwatches is true', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('cio-swatch-show-more')).toBeInTheDocument();
+    });
+
+    it('renders only visible swatches, not hidden ones', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+        </CioPlp>,
+      );
+
+      expect(container.getElementsByClassName('cio-swatch-item').length).toBe(2);
+    });
+
+    it('displays default label', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('cio-swatch-show-more')).toHaveTextContent('View more >');
+    });
+
+    it('displays custom string label', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch
+            swatchObject={swatchObjectWithMore}
+            item={item}
+            showMoreLabel='See all colors'
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('cio-swatch-show-more')).toHaveTextContent('See all colors');
+    });
+
+    it('displays custom function label with hidden count', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <ProductSwatch
+            swatchObject={swatchObjectWithMore}
+            item={item}
+            showMoreLabel={(count) => `+${count} more`}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('cio-swatch-show-more')).toHaveTextContent('+1 more');
+    });
+
+    it('calls onShowMoreSwatches callback when provided', () => {
+      const mockOnShowMore = jest.fn();
+
+      render(
+        <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onShowMoreSwatches: mockOnShowMore }}>
+          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+        </CioPlp>,
+      );
+
+      fireEvent.click(screen.getByTestId('cio-swatch-show-more'));
+      expect(mockOnShowMore).toHaveBeenCalledTimes(1);
+      expect(mockOnShowMore).toHaveBeenCalledWith(
+        expect.any(Object),
+        item,
+        swatchObjectWithMore.selectedVariation,
+        hiddenSwatches,
+        expect.any(Function),
+      );
+    });
   });
 });
 
