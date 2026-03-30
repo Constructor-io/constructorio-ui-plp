@@ -7,8 +7,8 @@ export function shouldRenderVisualFacet(
 ): boolean {
   const perFacetConfig = perFacetConfigs?.[facet.name];
 
-  if (perFacetConfig?.renderVisual !== undefined) {
-    return perFacetConfig.renderVisual;
+  if (perFacetConfig?.isVisualFacet !== undefined) {
+    return perFacetConfig.isVisualFacet;
   }
 
   if (typeof isVisualFilterFn === 'function') {
