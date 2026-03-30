@@ -63,7 +63,7 @@ export default function MyComponent() {
     <CioPlp
       apiKey={DEMO_API_KEY}
       filterConfigs={{
-        renderCollapsed: true, // All filter groups start collapsed
+        defaultCollapsed: true, // All filter groups start collapsed
       }}
     />
   );
@@ -83,8 +83,8 @@ export default function MyComponent() {
       apiKey={DEMO_API_KEY}
       filterConfigs={{
         perFacetConfigs: {
-          color: { collapsed: true },
-          price: { collapsed: true },
+          color: { isCollapsed: true },
+          price: { isCollapsed: true },
         },
       }}
     />
@@ -104,9 +104,9 @@ Filter groups can also be collapsed based on facet metadata set on the Construct
 
 When multiple collapse configurations are present, they are applied in this order:
 
-1. **`perFacetConfigs[name].collapsed`** (per-facet config) — highest priority
-2. **`renderCollapsed`** (global prop)
-3. **Facet metadata** (`data.cio_render_collapsed`) — lowest priority
+1. **`perFacetConfigs[name].isCollapsed`** (per-facet config) — highest priority
+2. **Facet metadata** (`data.cio_render_collapsed`)
+3. **`defaultCollapsed`** (global prop) — lowest priority
 
 ### Direct Filters Component Configuration
 
@@ -124,7 +124,7 @@ export function AllCollapsed() {
     <CioPlp apiKey={DEMO_API_KEY}>
       <CioPlpGrid>
         {(props) => (
-          <Filters facets={props.filters.facets} renderCollapsed />
+          <Filters facets={props.filters.facets} defaultCollapsed />
         )}
       </CioPlpGrid>
     </CioPlp>
@@ -140,8 +140,8 @@ export function SpecificCollapsed() {
           <Filters
             facets={props.filters.facets}
             perFacetConfigs={{
-              color: { collapsed: true },
-              price: { collapsed: true },
+              color: { isCollapsed: true },
+              price: { isCollapsed: true },
             }}
           />
         )}
@@ -383,8 +383,8 @@ export default function MyComponent() {
           <Filters
             facets={props.filters.facets}
             perFacetConfigs={{
-              color: { renderVisual: true },
-              'Base Color': { renderVisual: true },
+              color: { isVisualFacet: true },
+              'Base Color': { isVisualFacet: true },
             }}
           />
         )}
@@ -402,7 +402,7 @@ The visual filter configuration is resolved in the following priority order:
 
 **Facet-level (should this facet render visually?):**
 
-1. `perFacetConfigs[name].renderVisual` — explicit per-facet override
+1. `perFacetConfigs[name].isVisualFacet` — explicit per-facet override
 2. `isVisualFilterFn(facet)` — callback
 3. `facet.data.cio_render_visual` — metadata
 

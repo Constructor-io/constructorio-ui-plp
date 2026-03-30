@@ -64,10 +64,10 @@ describe('Testing Component on the server: Filters', () => {
     expect(html).not.toContain('cio-arrow-up');
   });
 
-  it('Should render all filter groups collapsed when renderCollapsed is true', () => {
+  it('Should render all filter groups collapsed when defaultCollapsed is true', () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters {...filterProps} renderCollapsed />
+        <Filters {...filterProps} defaultCollapsed />
       </CioPlp>,
     );
 
@@ -76,10 +76,10 @@ describe('Testing Component on the server: Filters', () => {
     expect(html).not.toContain('cio-arrow-down');
   });
 
-  it('Should render all filter groups expanded when renderCollapsed is false', () => {
+  it('Should render all filter groups expanded when defaultCollapsed is false', () => {
     const html = renderToString(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <Filters {...filterProps} renderCollapsed={false} />
+        <Filters {...filterProps} defaultCollapsed={false} />
       </CioPlp>,
     );
 

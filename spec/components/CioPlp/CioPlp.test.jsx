@@ -190,11 +190,11 @@ describe('CioPlp React Client-Side Rendering', () => {
     });
   };
 
-  it('renders CioPlp with filterConfigs renderCollapsed set to true on the client', async () => {
+  it('renders CioPlp with filterConfigs defaultCollapsed set to true on the client', async () => {
     const { container } = render(
       <CioPlp
         apiKey={DEMO_API_KEY}
-        filterConfigs={{ renderCollapsed: true }}
+        filterConfigs={{ defaultCollapsed: true }}
         initialSearchResponse={mockSearchResponse}
       />,
     );
@@ -204,11 +204,11 @@ describe('CioPlp React Client-Side Rendering', () => {
     });
   });
 
-  it('renders CioPlp with filterConfigs renderCollapsed set to false on the client', async () => {
+  it('renders CioPlp with filterConfigs defaultCollapsed set to false on the client', async () => {
     const { container } = render(
       <CioPlp
         apiKey={DEMO_API_KEY}
-        filterConfigs={{ renderCollapsed: false }}
+        filterConfigs={{ defaultCollapsed: false }}
         initialSearchResponse={mockSearchResponse}
       />,
     );

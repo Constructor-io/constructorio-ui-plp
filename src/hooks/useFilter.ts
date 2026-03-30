@@ -55,7 +55,7 @@ export interface UseFilterProps {
    * When false, all filter groups render expanded by default.
    * Individual facet overrides via `perFacetConfigs` or facet metadata take precedence.
    */
-  renderCollapsed?: boolean;
+  defaultCollapsed?: boolean;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
@@ -68,7 +68,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
-    renderCollapsed,
+    defaultCollapsed,
   } = props;
   const contextValue = useCioPlpContext();
 
@@ -111,24 +111,27 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
   const getIsCollapsed = useCallback(
     (facet: PlpFacet): boolean => {
       // Priority 1: Per-facet config (perFacetConfigs)
-      const collapsed = perFacetConfigs?.[facet.name]?.collapsed;
-      if (collapsed !== undefined) {
-        return collapsed;
+      const isCollapsed = perFacetConfigs?.[facet.name]?.isCollapsed;
+      if (isCollapsed !== undefined) {
+        return isCollapsed;
       }
 
-      // Priority 2: Global prop (renderCollapsed)
-      if (renderCollapsed !== undefined) {
-        return renderCollapsed;
-      }
-
-      // Priority 3: Facet metadata field (cio_render_collapsed)
-      if (typeof getIsCollapsedFacetField === 'function') {
+      // Priority 2: Facet metadata field (cio_render_collapsed)
+      if (
+        typeof getIsCollapsedFacetField === 'function' &&
+        getIsCollapsedFacetField(facet) !== undefined
+      ) {
         return !!getIsCollapsedFacetField(facet);
+      }
+
+      // Priority 3: Global prop (defaultCollapsed)
+      if (defaultCollapsed !== undefined) {
+        return defaultCollapsed;
       }
 
       return false;
     },
-    [perFacetConfigs, renderCollapsed, getIsCollapsedFacetField],
+    [perFacetConfigs, defaultCollapsed, getIsCollapsedFacetField],
   );
 
   return {

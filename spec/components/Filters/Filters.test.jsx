@@ -964,7 +964,7 @@ describe('Testing Component: Filters', () => {
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={[mockVisualFacet]}
-            perFacetConfigs={{ color: { renderVisual: false } }}
+            perFacetConfigs={{ color: { isVisualFacet: false } }}
           />
         </CioPlp>,
       );
@@ -988,7 +988,7 @@ describe('Testing Component: Filters', () => {
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={[facetWithoutVisualData]}
-            perFacetConfigs={{ color: { renderVisual: true } }}
+            perFacetConfigs={{ color: { isVisualFacet: true } }}
           />
         </CioPlp>,
       );
@@ -1155,10 +1155,10 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Interface 2 (Global prop): renderCollapsed=true should collapse all filter groups', async () => {
+    it('Interface 2 (Global prop): defaultCollapsed=true should collapse all filter groups', async () => {
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={mockFacetsWithMetadata} renderCollapsed />
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed />
         </CioPlp>,
       );
 
@@ -1174,31 +1174,34 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Interface 2 (Global prop): renderCollapsed=false should expand all filter groups, overriding metadata', async () => {
+    it('Interface 2 (Global prop): defaultCollapsed=false should not override facet metadata', async () => {
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={mockFacetsWithMetadata} renderCollapsed={false} />
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed={false} />
         </CioPlp>,
       );
 
       await waitFor(() => {
+        // Color has cio_render_collapsed: true metadata, which takes precedence over defaultCollapsed
         const colorHeader = getByText('Color').closest('.cio-filter-group');
-        expect(isFilterGroupExpanded(colorHeader)).toBe(true);
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
 
+        // Size has no metadata, falls through to defaultCollapsed=false
         const sizeHeader = getByText('Size').closest('.cio-filter-group');
         expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
 
+        // Price has cio_render_collapsed: true metadata, which takes precedence over defaultCollapsed
         const priceHeader = getByText('Price').closest('.cio-filter-group');
-        expect(isFilterGroupExpanded(priceHeader)).toBe(true);
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
       });
     });
 
-    it('Interface 3 (Per-facet config): perFacetConfigs collapsed should collapse only specified facets', async () => {
+    it('Interface 3 (Per-facet config): perFacetConfigs isCollapsed should collapse only specified facets', async () => {
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={mockFacetsWithMetadata}
-            perFacetConfigs={{ color: { collapsed: true }, price: { collapsed: true } }}
+            perFacetConfigs={{ color: { isCollapsed: true }, price: { isCollapsed: true } }}
           />
         </CioPlp>,
       );
@@ -1215,27 +1218,27 @@ describe('Testing Component: Filters', () => {
       });
     });
 
-    it('Priority: perFacetConfigs collapsed=false should override renderCollapsed=true', async () => {
+    it('Priority: perFacetConfigs isCollapsed=false should override defaultCollapsed=true', async () => {
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={mockFacetsWithMetadata}
-            renderCollapsed
-            perFacetConfigs={{ size: { collapsed: false } }}
+            defaultCollapsed
+            perFacetConfigs={{ size: { isCollapsed: false } }}
           />
         </CioPlp>,
       );
 
       await waitFor(() => {
-        // color falls through to renderCollapsed=true
+        // color has cio_render_collapsed metadata -> collapsed
         const colorHeader = getByText('Color').closest('.cio-filter-group');
         expect(isFilterGroupExpanded(colorHeader)).toBe(false);
 
-        // size explicitly set to collapsed: false via perFacetConfigs
+        // size explicitly set to isCollapsed: false via perFacetConfigs
         const sizeHeader = getByText('Size').closest('.cio-filter-group');
         expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
 
-        // price falls through to renderCollapsed=true
+        // price has cio_render_collapsed metadata -> collapsed
         const priceHeader = getByText('Price').closest('.cio-filter-group');
         expect(isFilterGroupExpanded(priceHeader)).toBe(false);
       });
@@ -1244,7 +1247,7 @@ describe('Testing Component: Filters', () => {
     it('Collapsed filter groups can still be toggled open by clicking the header', async () => {
       const { getByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={mockFacetsWithMetadata} renderCollapsed />
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed />
         </CioPlp>,
       );
 
@@ -1267,7 +1270,7 @@ describe('Testing Component: Filters', () => {
 
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={mockFacetsWithMetadata} renderCollapsed>
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed>
             {mockChildren}
           </Filters>
         </CioPlp>,

@@ -417,8 +417,8 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
 };
 
 export interface FacetConfig {
-  renderVisual?: boolean;
-  collapsed?: boolean;
+  isVisualFacet?: boolean;
+  isCollapsed?: boolean;
 }
 
 /**

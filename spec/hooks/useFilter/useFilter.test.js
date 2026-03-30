@@ -225,9 +225,9 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('renderCollapsed=true should collapse all facets', async () => {
+    it('defaultCollapsed=true should collapse all facets', async () => {
       const { result } = renderHookWithCioPlp(() =>
-        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], renderCollapsed: true }),
+        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], defaultCollapsed: true }),
       );
 
       await waitFor(() => {
@@ -236,38 +236,39 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('renderCollapsed=false should expand all facets, overriding metadata', async () => {
+    it('defaultCollapsed=false should not override facet metadata', async () => {
       const { result } = renderHookWithCioPlp(() =>
-        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], renderCollapsed: false }),
+        useFilter({ facets: [facetWithMetadata, facetWithoutMetadata], defaultCollapsed: false }),
       );
 
       await waitFor(() => {
-        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(false);
+        // facetWithMetadata has cio_render_collapsed: true, metadata takes precedence over defaultCollapsed
+        expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
       });
     });
 
-    it('perFacetConfigs collapsed should collapse specified facets while others follow lower priorities', async () => {
+    it('perFacetConfigs isCollapsed should collapse specified facets while others follow lower priorities', async () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: [facetWithMetadata, facetWithoutMetadata],
-          perFacetConfigs: { size: { collapsed: true } },
+          perFacetConfigs: { size: { isCollapsed: true } },
         }),
       );
 
       await waitFor(() => {
         // color is not in perFacetConfigs, falls through to metadata (cio_render_collapsed: true)
         expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
-        // size is explicitly set to collapsed: true via perFacetConfigs
+        // size is explicitly set to isCollapsed: true via perFacetConfigs
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(true);
       });
     });
 
-    it('perFacetConfigs collapsed should collapse multiple specified facets', async () => {
+    it('perFacetConfigs isCollapsed should collapse multiple specified facets', async () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: [facetWithMetadata, facetWithoutMetadata],
-          perFacetConfigs: { color: { collapsed: true }, size: { collapsed: true } },
+          perFacetConfigs: { color: { isCollapsed: true }, size: { isCollapsed: true } },
         }),
       );
 
@@ -277,44 +278,44 @@ describe('Testing Hook: useFilter', () => {
       });
     });
 
-    it('perFacetConfigs collapsed should take precedence over renderCollapsed', async () => {
+    it('perFacetConfigs isCollapsed should take precedence over defaultCollapsed', async () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: [facetWithMetadata, facetWithoutMetadata],
-          renderCollapsed: true,
-          perFacetConfigs: { color: { collapsed: true } },
+          defaultCollapsed: true,
+          perFacetConfigs: { color: { isCollapsed: true } },
         }),
       );
 
       await waitFor(() => {
         expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
-        // size is not in perFacetConfigs, falls through to renderCollapsed=true
+        // size is not in perFacetConfigs, falls through to defaultCollapsed=true
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(true);
       });
     });
 
-    it('perFacetConfigs collapsed=false should override renderCollapsed=true', async () => {
+    it('perFacetConfigs isCollapsed=false should override defaultCollapsed=true', async () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: [facetWithMetadata, facetWithoutMetadata],
-          renderCollapsed: true,
-          perFacetConfigs: { size: { collapsed: false } },
+          defaultCollapsed: true,
+          perFacetConfigs: { size: { isCollapsed: false } },
         }),
       );
 
       await waitFor(() => {
-        // color falls through to renderCollapsed=true
+        // color has cio_render_collapsed metadata -> collapsed
         expect(result.current.getIsCollapsed(facetWithMetadata)).toBe(true);
-        // size explicitly set to collapsed: false
+        // size explicitly set to isCollapsed: false
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
       });
     });
 
-    it('perFacetConfigs collapsed=false should override cio_render_collapsed metadata', async () => {
+    it('perFacetConfigs isCollapsed=false should override cio_render_collapsed metadata', async () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: [facetWithMetadata, facetWithoutMetadata],
-          perFacetConfigs: { color: { collapsed: false } },
+          perFacetConfigs: { color: { isCollapsed: false } },
         }),
       );
 

@@ -39,7 +39,7 @@ const meta = {
         defaultValue: { summary: '10' },
       },
     },
-    renderCollapsed: {
+    defaultCollapsed: {
       table: {
         defaultValue: { summary: 'undefined' },
       },
@@ -157,7 +157,7 @@ export const VisualFilterViaPerFacetConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockFacetsWithVisualColor,
-    perFacetConfigs: { color: { renderVisual: true }, 'Base Color': { renderVisual: true } },
+    perFacetConfigs: { color: { isVisualFacet: true }, 'Base Color': { isVisualFacet: true } },
     initialNumOptions: 20,
   },
 };
@@ -166,7 +166,7 @@ export const AllCollapsed: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    renderCollapsed: true,
+    defaultCollapsed: true,
   },
 };
 
@@ -174,7 +174,7 @@ export const SpecificFacetsCollapsed: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    perFacetConfigs: { color: { collapsed: true }, price: { collapsed: true } },
+    perFacetConfigs: { color: { isCollapsed: true }, price: { isCollapsed: true } },
   },
 };
 
