@@ -51,9 +51,11 @@ export interface UseFilterProps {
    */
   perFacetConfigs?: Record<string, FacetConfig>;
   /**
-   * When true, all filter groups render collapsed by default.
-   * When false, all filter groups render expanded by default.
-   * Individual facet overrides via `perFacetConfigs` or facet metadata take precedence.
+   * Global default collapse behavior for filter groups when no facet metadata
+   * (`cio_render_collapsed`) or `perFacetConfigs` override is provided.
+   * When `true`, unmatched filter groups render collapsed by default;
+   * when `false`, they render expanded by default.
+   * Facet metadata and per-facet overrides via `perFacetConfigs` take precedence.
    */
   defaultCollapsed?: boolean;
 }
@@ -117,11 +119,12 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
       }
 
       // Priority 2: Facet metadata field (cio_render_collapsed)
-      if (
-        typeof getIsCollapsedFacetField === 'function' &&
-        getIsCollapsedFacetField(facet) !== undefined
-      ) {
-        return !!getIsCollapsedFacetField(facet);
+      const collapsedFromMetadata =
+        typeof getIsCollapsedFacetField === 'function'
+          ? getIsCollapsedFacetField(facet)
+          : undefined;
+      if (collapsedFromMetadata !== undefined) {
+        return !!collapsedFromMetadata;
       }
 
       // Priority 3: Global prop (defaultCollapsed)

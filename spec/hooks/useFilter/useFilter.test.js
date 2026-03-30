@@ -326,6 +326,32 @@ describe('Testing Hook: useFilter', () => {
         expect(result.current.getIsCollapsed(facetWithoutMetadata)).toBe(false);
       });
     });
+
+    it('Should use custom getIsCollapsedFacetField from itemFieldGetters', async () => {
+      const customGetIsCollapsedFacetField = (facet) => facet.data?.customCollapsed;
+
+      const facetsWithCustomField = [
+        { ...facetWithoutMetadata, data: { customCollapsed: true } },
+        { ...facetWithMetadata, data: { customCollapsed: false } },
+      ];
+
+      const { result } = renderHook(() => useFilter({ facets: facetsWithCustomField }), {
+        wrapper: ({ children }) => (
+          <CioPlpProvider
+            apiKey={DEMO_API_KEY}
+            itemFieldGetters={{ getIsCollapsedFacetField: customGetIsCollapsedFacetField }}>
+            {children}
+          </CioPlpProvider>
+        ),
+      });
+
+      await waitFor(() => {
+        // size has customCollapsed: true via custom getter
+        expect(result.current.getIsCollapsed(facetsWithCustomField[0])).toBe(true);
+        // color has customCollapsed: false via custom getter (overrides original cio_render_collapsed)
+        expect(result.current.getIsCollapsed(facetsWithCustomField[1])).toBe(false);
+      });
+    });
   });
 
   it('Should remove all filters but not other request params when clearFilters is called', async () => {
