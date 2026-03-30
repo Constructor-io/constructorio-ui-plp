@@ -432,6 +432,19 @@ describe('Testing Component: ProductCard', () => {
     screen.getByText('$21.00');
   });
 
+  test('Should render sale price when salePrice is zero', () => {
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <ProductCard
+          item={transformResultItem(copyItemWithNewSalePrice(testItemWithSalePrice, 0))}
+        />
+      </CioPlp>,
+    );
+
+    expect(document.getElementById('cio-sale-price')).not.toBeNull();
+    screen.getByText('$0.00');
+  });
+
   test('Should not render sale price when salePrice is undefined', () => {
     render(
       <CioPlp apiKey={DEMO_API_KEY}>
