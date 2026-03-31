@@ -47,22 +47,15 @@ const useProductSwatch: UseProductSwatch = ({ item, config }) => {
     setSelectedVariation(swatch);
   };
 
-  const visibleSwatches = useMemo(() => {
+  const { visibleSwatches, hiddenSwatches } = useMemo(() => {
     if (!swatchList || maxVisibleSwatches === undefined) {
-      return swatchList;
+      return { visibleSwatches: swatchList, hiddenSwatches: undefined };
     }
 
-    return swatchList.slice(0, maxVisibleSwatches);
-  }, [swatchList, maxVisibleSwatches]);
-
-  const hiddenSwatches = useMemo(() => {
-    if (!swatchList || maxVisibleSwatches === undefined) {
-      return undefined;
-    }
-
+    const visible = swatchList.slice(0, maxVisibleSwatches);
     const hidden = swatchList.slice(maxVisibleSwatches);
 
-    return hidden.length > 0 ? hidden : undefined;
+    return { visibleSwatches: visible, hiddenSwatches: hidden.length > 0 ? hidden : undefined };
   }, [swatchList, maxVisibleSwatches]);
 
   const totalSwatchCount = swatchList?.length ?? 0;

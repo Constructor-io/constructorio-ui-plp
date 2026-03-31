@@ -184,7 +184,7 @@ describe('Product Swatch Component', () => {
       expect(screen.getByTestId('cio-swatch-show-more')).toHaveTextContent('See all colors');
     });
 
-    it('displays custom function label with hidden count', () => {
+    it('displays custom function label using the count of hidden swatches', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <ProductSwatch
