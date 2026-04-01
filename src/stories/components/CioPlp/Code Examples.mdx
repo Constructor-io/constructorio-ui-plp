@@ -75,9 +75,13 @@ export default function MyComponent() {
       paginationConfigs={{
         windowSize: 5,              // Number of page buttons to show
       }}
-      // Sort and filter configs (no specific options yet)
+      // Sort configuration
       sortConfigs={{}}
-      filterConfigs={{}}
+      // Filter configuration with visual filter support
+      filterConfigs={{
+        isVisualFilterFn: (facet) => ['color', 'Base Color'].includes(facet.name),
+        getVisualColorHex: (option) => colorHexMap[option.value],
+      }}
     />
   );
 }

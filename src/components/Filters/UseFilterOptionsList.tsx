@@ -12,6 +12,9 @@ interface UseFilterOptionsListPropsBase {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  isVisual?: boolean;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
 }
 interface UseFilterOptionsListPropsLegacy extends UseFilterOptionsListPropsBase {
   /** @deprecated Use `facet` instead */
@@ -27,8 +30,15 @@ export type UseFilterOptionsListProps =
   | UseFilterOptionsListPropsNew;
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
-  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed, isHiddenFilterOptionFn } =
-    props;
+  const {
+    initialNumOptions,
+    modifyRequestMultipleFilter,
+    isCollapsed,
+    isHiddenFilterOptionFn,
+    isVisual,
+    getVisualImageUrl,
+    getVisualColorHex,
+  } = props;
   const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
@@ -76,6 +86,9 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
+    isVisual,
+    getVisualImageUrl,
+    getVisualColorHex,
 
     // useFilterOptionsList
     isShowAll,
