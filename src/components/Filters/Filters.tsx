@@ -19,12 +19,7 @@ export type FiltersProps = UseFilterProps & {
 export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
 
 export default function Filters(props: FiltersWithRenderProps) {
-  const {
-    children,
-    initialNumOptions,
-    isHiddenFilterOptionFn,
-    ...useFiltersProps
-  } = props;
+  const { children, initialNumOptions, isHiddenFilterOptionFn, ...useFiltersProps } = props;
   const { facets, setFilter, sliderStep, facetSliderSteps, clearFilters } =
     useFilter(useFiltersProps);
 

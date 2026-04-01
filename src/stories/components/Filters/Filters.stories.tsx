@@ -95,48 +95,51 @@ export const HiddenViaMetadata: Story = {
 };
 
 /**
- * Use `componentOverrides.filterGroup.reactNode` on the CioPlp provider to replace the entire FilterGroup with a custom component.
+ * Use `componentOverrides.filterGroup.reactNode` on the CioPlp provider
+ * to replace the entire FilterGroup with a custom component.
  * The render function receives `FilterGroupRenderProps` with full state access.
  */
 export const OverrideRoot: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    componentOverrides: { filterGroup: {
-      reactNode: ({
-        facet,
-        isCollapsed,
-        toggleIsCollapsed,
-        onFilterSelect,
-      }: FilterGroupRenderProps) => (
-        <li
-          style={{
-            border: '1px solid #ccc',
-            padding: '12px',
-            marginBottom: '8px',
-            listStyle: 'none',
-          }}>
-          <button
-            type='button'
-            onClick={toggleIsCollapsed}
-            style={{ fontWeight: 'bold', cursor: 'pointer' }}>
-            {facet.displayName} {isCollapsed ? '▶' : '▼'}
-          </button>
-          {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
-            <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
-              {(facet as PlpMultipleFacet).options.map((option) => (
-                <li key={option.value}>
-                  <div>
-                    <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
-                    {option.displayName} ({option.count})
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ),
-    } },
+    componentOverrides: {
+      filterGroup: {
+        reactNode: ({
+          facet,
+          isCollapsed,
+          toggleIsCollapsed,
+          onFilterSelect,
+        }: FilterGroupRenderProps) => (
+          <li
+            style={{
+              border: '1px solid #ccc',
+              padding: '12px',
+              marginBottom: '8px',
+              listStyle: 'none',
+            }}>
+            <button
+              type='button'
+              onClick={toggleIsCollapsed}
+              style={{ fontWeight: 'bold', cursor: 'pointer' }}>
+              {facet.displayName} {isCollapsed ? '▶' : '▼'}
+            </button>
+            {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
+              <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
+                {(facet as PlpMultipleFacet).options.map((option) => (
+                  <li key={option.value}>
+                    <div>
+                      <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
+                      {option.displayName} ({option.count})
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ),
+      },
+    },
   },
 };
 
@@ -148,29 +151,33 @@ export const OverrideHeader: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    componentOverrides: { filterGroup: {
-      header: {
-        reactNode: ({ facet, isCollapsed, toggleIsCollapsed }: FilterGroupRenderProps) => (
-          <div
-            role='button'
-            tabIndex={0}
-            onClick={toggleIsCollapsed}
-            onKeyDown={(e) => e.key === 'Enter' && toggleIsCollapsed()}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '8px 12px',
-              backgroundColor: '#f5f5f5',
-              cursor: 'pointer',
-              borderRadius: '4px',
-            }}>
-            <span style={{ fontWeight: 600 }}>{facet.displayName}</span>
-            <span style={{ fontSize: '12px', color: 'blue' }}>{isCollapsed ? 'Show' : 'Hide'}</span>
-          </div>
-        ),
+    componentOverrides: {
+      filterGroup: {
+        header: {
+          reactNode: ({ facet, isCollapsed, toggleIsCollapsed }: FilterGroupRenderProps) => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={toggleIsCollapsed}
+              onKeyDown={(e) => e.key === 'Enter' && toggleIsCollapsed()}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 12px',
+                backgroundColor: '#f5f5f5',
+                cursor: 'pointer',
+                borderRadius: '4px',
+              }}>
+              <span style={{ fontWeight: 600 }}>{facet.displayName}</span>
+              <span style={{ fontSize: '12px', color: 'blue' }}>
+                {isCollapsed ? 'Show' : 'Hide'}
+              </span>
+            </div>
+          ),
+        },
       },
-    } },
+    },
   },
 };
 
@@ -182,42 +189,44 @@ export const OverrideOptionsList: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    componentOverrides: { filterGroup: {
-      optionsList: {
-        reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
-          if (isCollapsed || facet.type === 'range' || !('options' in facet)) return null;
-          const multipleFacet = facet as PlpMultipleFacet;
-          return (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '6px',
-                padding: '8px 0',
-                width: '300px',
-              }}>
-              {multipleFacet.options.map((option) => (
-                <button
-                  key={option.value}
-                  type='button'
-                  onClick={() => onFilterSelect([option.value])}
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: '16px',
-                    border: '1px solid #ddd',
-                    backgroundColor: option.status === 'selected' ? '#333' : '#fff',
-                    color: option.status === 'selected' ? '#fff' : '#333',
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                  }}>
-                  {option.displayName}
-                </button>
-              ))}
-            </div>
-          );
+    componentOverrides: {
+      filterGroup: {
+        optionsList: {
+          reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
+            if (isCollapsed || facet.type === 'range' || !('options' in facet)) return null;
+            const multipleFacet = facet as PlpMultipleFacet;
+            return (
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '6px',
+                  padding: '8px 0',
+                  width: '300px',
+                }}>
+                {multipleFacet.options.map((option) => (
+                  <button
+                    key={option.value}
+                    type='button'
+                    onClick={() => onFilterSelect([option.value])}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '16px',
+                      border: '1px solid #ddd',
+                      backgroundColor: option.status === 'selected' ? '#333' : '#fff',
+                      color: option.status === 'selected' ? '#fff' : '#333',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                    }}>
+                    {option.displayName}
+                  </button>
+                ))}
+              </div>
+            );
+          },
         },
       },
-    } },
+    },
   },
 };
 
@@ -229,29 +238,31 @@ export const OverrideRangeSlider: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    componentOverrides: { filterGroup: {
-      rangeSlider: {
-        reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
-          if (isCollapsed || facet.type !== 'range') return null;
-          const rangeFacet = facet as PlpFacet & { min: number; max: number };
-          return (
-            <div style={{ padding: '8px 0' }}>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span>${rangeFacet.min}</span>
-                <input
-                  type='range'
-                  min={rangeFacet.min}
-                  max={rangeFacet.max}
-                  style={{ flex: 1 }}
-                  onChange={(e) => onFilterSelect(`${rangeFacet.min}-${e.target.value}`)}
-                />
-                <span>${rangeFacet.max}</span>
+    componentOverrides: {
+      filterGroup: {
+        rangeSlider: {
+          reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
+            if (isCollapsed || facet.type !== 'range') return null;
+            const rangeFacet = facet as PlpFacet & { min: number; max: number };
+            return (
+              <div style={{ padding: '8px 0' }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span>${rangeFacet.min}</span>
+                  <input
+                    type='range'
+                    min={rangeFacet.min}
+                    max={rangeFacet.max}
+                    style={{ flex: 1 }}
+                    onChange={(e) => onFilterSelect(`${rangeFacet.min}-${e.target.value}`)}
+                  />
+                  <span>${rangeFacet.max}</span>
+                </div>
               </div>
-            </div>
-          );
+            );
+          },
         },
       },
-    } },
+    },
   },
 };
 
@@ -263,14 +274,16 @@ export const OverrideHeaderStatic: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    componentOverrides: { filterGroup: {
-      header: {
-        reactNode: (
-          <div style={{ padding: '8px 12px', backgroundColor: '#e8f4fd', borderRadius: '4px' }}>
-            <strong>Custom Static Header</strong>
-          </div>
-        ),
+    componentOverrides: {
+      filterGroup: {
+        header: {
+          reactNode: (
+            <div style={{ padding: '8px 12px', backgroundColor: '#e8f4fd', borderRadius: '4px' }}>
+              <strong>Custom Static Header</strong>
+            </div>
+          ),
+        },
       },
-    } },
+    },
   },
 };
