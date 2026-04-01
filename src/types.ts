@@ -216,6 +216,7 @@ export interface PlpContextValue {
   callbacks: Callbacks;
   urlHelpers: UrlHelpers;
   renderOverrides: RenderOverrides;
+  componentOverrides: PlpComponentOverrides;
 }
 
 export interface PrimaryColorStyles {
@@ -298,6 +299,7 @@ export interface CioPlpProviderProps {
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
   useShopifyDefaults?: boolean;
+  componentOverrides?: Partial<PlpComponentOverrides>;
 }
 
 export type UseSortReturn = {
@@ -440,15 +442,18 @@ export interface FilterGroupRenderProps {
 /**
  * Component override slots available on `FilterGroup`.
  *
- * Each key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
- * - **root** — replaces the entire `<li>` filter group element
+ * Top-level `reactNode` replaces the entire `<li>` filter group element.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
  * - **header** — replaces the header button (facet name + collapse arrow)
  * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
  * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
  */
-export type FilterGroupOverrides = {
-  root?: ComponentOverrideProps<FilterGroupRenderProps>;
+export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
   header?: ComponentOverrideProps<FilterGroupRenderProps>;
   optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
   rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
 };
+
+export interface PlpComponentOverrides {
+  filterGroup?: FilterGroupOverrides;
+}

@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import CioPlpGrid from '../../../components/CioPlpGrid';
 import { DEMO_API_KEY } from '../../../constants';
-import { FilterGroupRenderProps } from '../../../types';
 import '../../../styles.css';
 
 const meta = {
@@ -67,41 +66,4 @@ function ZeroResultsStory({ args }: any) {
 
 export const ZeroResults: Story = {
   render: (args) => <ZeroResultsStory args={args} />,
-};
-
-/**
- * Use `filterConfigs.filterGroupOverrides` to customize filter group sub-components
- * within CioPlpGrid. This example replaces the header with a custom styled version.
- */
-export const WithFilterGroupOverrides: Story = {
-  render: (args) => <PrimaryStory args={args} />,
-  args: {
-    filterConfigs: {
-      filterGroupOverrides: {
-        header: {
-          reactNode: ({ facet, isCollapsed, toggleIsCollapsed }: FilterGroupRenderProps) => (
-            <div
-              role='button'
-              tabIndex={0}
-              onClick={toggleIsCollapsed}
-              onKeyDown={(e) => e.key === 'Enter' && toggleIsCollapsed()}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '8px 12px',
-                backgroundColor: '#f5f5f5',
-                cursor: 'pointer',
-                borderRadius: '4px',
-              }}>
-              <span style={{ fontWeight: 600 }}>{facet.displayName}</span>
-              <span style={{ fontSize: '12px', color: 'blue' }}>
-                {isCollapsed ? 'Show' : 'Hide'}
-              </span>
-            </div>
-          ),
-        },
-      },
-    },
-  },
 };

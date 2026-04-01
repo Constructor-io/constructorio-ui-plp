@@ -27,17 +27,19 @@ type Story = StoryObj<typeof meta>;
 
 function PrimaryStory({ args }: any) {
   const [currentUrl, setCurrentUrl] = useState(window.location.href);
+  const { componentOverrides, ...filtersArgs } = args;
 
   return (
     <CioPlp
       apiKey={DEMO_API_KEY}
+      componentOverrides={componentOverrides}
       urlHelpers={{
         setUrl: (url) => {
           setCurrentUrl(url);
         },
         getUrl: () => currentUrl,
       }}>
-      <Filters {...args} />
+      <Filters {...filtersArgs} />
     </CioPlp>
   );
 }
@@ -93,62 +95,60 @@ export const HiddenViaMetadata: Story = {
 };
 
 /**
- * Use `filterGroupOverrides.root.reactNode` to replace the entire FilterGroup with a custom component.
+ * Use `componentOverrides.filterGroup.reactNode` on the CioPlp provider to replace the entire FilterGroup with a custom component.
  * The render function receives `FilterGroupRenderProps` with full state access.
  */
 export const OverrideRoot: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    filterGroupOverrides: {
-      root: {
-        reactNode: ({
-          facet,
-          isCollapsed,
-          toggleIsCollapsed,
-          onFilterSelect,
-        }: FilterGroupRenderProps) => (
-          <li
-            style={{
-              border: '1px solid #ccc',
-              padding: '12px',
-              marginBottom: '8px',
-              listStyle: 'none',
-            }}>
-            <button
-              type='button'
-              onClick={toggleIsCollapsed}
-              style={{ fontWeight: 'bold', cursor: 'pointer' }}>
-              {facet.displayName} {isCollapsed ? '▶' : '▼'}
-            </button>
-            {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
-              <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
-                {(facet as PlpMultipleFacet).options.map((option) => (
-                  <li key={option.value}>
-                    <div>
-                      <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
-                      {option.displayName} ({option.count})
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ),
-      },
-    },
+    componentOverrides: { filterGroup: {
+      reactNode: ({
+        facet,
+        isCollapsed,
+        toggleIsCollapsed,
+        onFilterSelect,
+      }: FilterGroupRenderProps) => (
+        <li
+          style={{
+            border: '1px solid #ccc',
+            padding: '12px',
+            marginBottom: '8px',
+            listStyle: 'none',
+          }}>
+          <button
+            type='button'
+            onClick={toggleIsCollapsed}
+            style={{ fontWeight: 'bold', cursor: 'pointer' }}>
+            {facet.displayName} {isCollapsed ? '▶' : '▼'}
+          </button>
+          {!isCollapsed && facet.type !== 'range' && 'options' in facet && (
+            <ul style={{ paddingLeft: '16px', marginTop: '8px' }}>
+              {(facet as PlpMultipleFacet).options.map((option) => (
+                <li key={option.value}>
+                  <div>
+                    <input type='checkbox' onChange={() => onFilterSelect([option.value])} />
+                    {option.displayName} ({option.count})
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ),
+    } },
   },
 };
 
 /**
- * Use `filterGroupOverrides.header` to replace only the header button
+ * Use `componentOverrides.filterGroup.header` on the CioPlp provider to replace only the header button
  * while keeping the default options list and range slider.
  */
 export const OverrideHeader: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    filterGroupOverrides: {
+    componentOverrides: { filterGroup: {
       header: {
         reactNode: ({ facet, isCollapsed, toggleIsCollapsed }: FilterGroupRenderProps) => (
           <div
@@ -170,19 +170,19 @@ export const OverrideHeader: Story = {
           </div>
         ),
       },
-    },
+    } },
   },
 };
 
 /**
- * Use `filterGroupOverrides.optionsList` to replace the checkbox options list
+ * Use `componentOverrides.filterGroup.optionsList` on the CioPlp provider to replace the checkbox options list
  * with a custom implementation. Only affects multiple/single facets.
  */
 export const OverrideOptionsList: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    filterGroupOverrides: {
+    componentOverrides: { filterGroup: {
       optionsList: {
         reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
           if (isCollapsed || facet.type === 'range' || !('options' in facet)) return null;
@@ -217,19 +217,19 @@ export const OverrideOptionsList: Story = {
           );
         },
       },
-    },
+    } },
   },
 };
 
 /**
- * Use `filterGroupOverrides.rangeSlider` to replace the range slider
+ * Use `componentOverrides.filterGroup.rangeSlider` on the CioPlp provider to replace the range slider
  * with a custom implementation. Only affects range-type facets.
  */
 export const OverrideRangeSlider: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    filterGroupOverrides: {
+    componentOverrides: { filterGroup: {
       rangeSlider: {
         reactNode: ({ facet, isCollapsed, onFilterSelect }: FilterGroupRenderProps) => {
           if (isCollapsed || facet.type !== 'range') return null;
@@ -251,7 +251,7 @@ export const OverrideRangeSlider: Story = {
           );
         },
       },
-    },
+    } },
   },
 };
 
@@ -263,7 +263,7 @@ export const OverrideHeaderStatic: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockTransformedFacets as Array<PlpFacet>,
-    filterGroupOverrides: {
+    componentOverrides: { filterGroup: {
       header: {
         reactNode: (
           <div style={{ padding: '8px 12px', backgroundColor: '#e8f4fd', borderRadius: '4px' }}>
@@ -271,6 +271,6 @@ export const OverrideHeaderStatic: Story = {
           </div>
         ),
       },
-    },
+    } },
   },
 };

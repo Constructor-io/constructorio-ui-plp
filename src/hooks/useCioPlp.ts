@@ -4,7 +4,6 @@ import {
   PlpFacet,
   PlpItemGroup,
   PlpSortOption,
-  FilterGroupOverrides,
 } from '../types';
 import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
@@ -39,9 +38,7 @@ export type UseCioPlpProps = UseSearchResultsProps &
     /**
      * No configurations available yet.
      */
-    filterConfigs?: Omit<UseFilterProps, 'facets'> & {
-      filterGroupOverrides?: FilterGroupOverrides;
-    };
+    filterConfigs?: Omit<UseFilterProps, 'facets'>;
     /**
      * Configuration options for the Groups component.
      * - `initialNumOptions`: Number of group options to show initially (default: 5).

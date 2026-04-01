@@ -12,6 +12,7 @@ import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
 export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupOverrides> {
   facet: PlpFacet;
@@ -34,8 +35,10 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
-    componentOverrides,
+    componentOverrides: componentOverridesProp,
   } = props;
+  const context = useCioPlpContext();
+  const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.filterGroup;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
@@ -51,7 +54,7 @@ export default function FilterGroup(props: FilterGroupProps) {
   };
 
   return (
-    <RenderPropsWrapper props={renderProps} override={componentOverrides?.root?.reactNode}>
+    <RenderPropsWrapper props={renderProps} override={componentOverrides?.reactNode}>
       <li className='cio-filter-group'>
         <RenderPropsWrapper props={renderProps} override={componentOverrides?.header?.reactNode}>
           <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
