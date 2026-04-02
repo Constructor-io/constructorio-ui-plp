@@ -60,16 +60,11 @@ export default function Pagination(props: PaginationWithRenderProps) {
         })
       ) : (
         <div ref={pagesRef} className='cio-pagination'>
-          {useAnchors ? (
-            <>
-              <a
-                href={currentPage && currentPage > 1 ? getPageUrl(currentPage - 1) : undefined}
-                onClick={(e) => { e.preventDefault(); prevPage(); }}
-                data-testid='cio-pagination-prev-button'
-                aria-label='Previous page'>
-                &lt;
-              </a>
-              {pages.map((page, i) =>
+          <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
+            &lt;
+          </button>
+          {useAnchors
+            ? pages.map((page, i) =>
                 page === -1 ? (
                   <span key={`${page},${i}`} className='cio-pagination-ellipsis'>...</span>
                 ) : (
@@ -82,21 +77,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
                     {page}
                   </a>
                 ),
-              )}
-              <a
-                href={currentPage && currentPage < totalPages ? getPageUrl(currentPage + 1) : undefined}
-                onClick={(e) => { e.preventDefault(); nextPage(); }}
-                data-testid='cio-pagination-next-button'
-                aria-label='Next page'>
-                &gt;
-              </a>
-            </>
-          ) : (
-            <>
-              <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
-                &lt;
-              </button>
-              {pages.map((page, i) => (
+              )
+            : pages.map((page, i) => (
                 <button
                   onClick={() => goToPage(page)}
                   type='button'
@@ -105,11 +87,9 @@ export default function Pagination(props: PaginationWithRenderProps) {
                   {page === -1 ? <span>...</span> : page}
                 </button>
               ))}
-              <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
-                &gt;
-              </button>
-            </>
-          )}
+          <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
+            &gt;
+          </button>
         </div>
       )}
     </>

@@ -81,7 +81,7 @@ describe('Pagination Component', () => {
 });
 
 describe('Pagination with useAnchors', () => {
-  it('renders anchor elements instead of buttons when useAnchors is true', () => {
+  it('renders page numbers as anchors and prev/next as buttons', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={100} useAnchors />
@@ -91,20 +91,21 @@ describe('Pagination with useAnchors', () => {
     const anchors = container.querySelectorAll('.cio-pagination a');
     const buttons = container.querySelectorAll('.cio-pagination button');
     expect(anchors.length).toBeGreaterThan(0);
-    expect(buttons.length).toBe(0);
+    // prev and next remain as buttons
+    expect(buttons.length).toBe(2);
   });
 
-  it('renders prev and next as anchor elements with correct test ids', () => {
+  it('prev and next remain as buttons with correct test ids', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={100} useAnchors />
       </CioPlp>,
     );
 
-    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
-    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
-    expect(prevAnchor).toBeInTheDocument();
-    expect(nextAnchor).toBeInTheDocument();
+    const prevButton = container.querySelector('button[data-testid="cio-pagination-prev-button"]');
+    const nextButton = container.querySelector('button[data-testid="cio-pagination-next-button"]');
+    expect(prevButton).toBeInTheDocument();
+    expect(nextButton).toBeInTheDocument();
   });
 
   it('page anchors have href attributes containing page parameter', () => {
@@ -114,23 +115,12 @@ describe('Pagination with useAnchors', () => {
       </CioPlp>,
     );
 
-    const pageAnchors = container.querySelectorAll('.cio-pagination a:not([data-testid])');
+    const pageAnchors = container.querySelectorAll('.cio-pagination a');
     const anchorsWithHref = Array.from(pageAnchors).filter((a) => a.getAttribute('href'));
     expect(anchorsWithHref.length).toBeGreaterThan(0);
     anchorsWithHref.forEach((a) => {
       expect(a.getAttribute('href')).toContain('page=');
     });
-  });
-
-  it('prev button has no href on page 1', () => {
-    const { container } = render(
-      <CioPlp apiKey={DEMO_API_KEY}>
-        <Pagination totalNumResults={100} useAnchors />
-      </CioPlp>,
-    );
-
-    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
-    expect(prevAnchor).not.toHaveAttribute('href');
   });
 
   it('active page has aria-current="page"', () => {
@@ -158,7 +148,7 @@ describe('Pagination with useAnchors', () => {
     });
   });
 
-  it('still renders buttons when useAnchors is not set', () => {
+  it('still renders all buttons when useAnchors is not set', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={100} />
