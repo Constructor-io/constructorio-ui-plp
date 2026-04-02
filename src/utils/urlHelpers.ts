@@ -137,6 +137,8 @@ export function getUrlFromState(state: RequestConfigs, url: string): string {
     }
 
     if (encodedVal) {
+      // Don't append page=1 to URL since it's the default and affects SEO
+      if (key === 'page' && val === 1) return;
       params.set(defaultQueryStringMap[key], encodedVal);
     }
   });

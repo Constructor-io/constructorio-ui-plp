@@ -107,6 +107,18 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(url.pathname).toBe('/path/collection_id/Styles');
   });
 
+  test('Should not append page=1 to the URL', () => {
+    const state = { query: 'item', page: 1 } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.has('page')).toBe(false);
+  });
+
+  test('Should still append page to the URL when page > 1', () => {
+    const state = { query: 'item', page: 2 } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.get('page')).toBe('2');
+  });
+
   test('Should retain pathname when filterName and filterValue are not provided', () => {
     const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
     const url = new URL(
