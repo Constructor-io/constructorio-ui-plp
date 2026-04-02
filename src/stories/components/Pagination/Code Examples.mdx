@@ -38,6 +38,29 @@ export default function MyComponent() {
 }
 ```
 
+## SEO-friendly anchors
+
+> **⚠️ Deprecation Notice:** The `useAnchors` prop will be removed in v2. Anchor-based rendering will become the default behavior. We recommend enabling it now to prepare for the migration.
+
+Set `useAnchors` to render pagination as `<a href>` anchor elements, making paginated content discoverable by search engine crawlers like Google.
+
+```jsx
+import { CioPlp, CioPlpGrid, utils } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid paginationConfigs={{ useAnchors: true }}>
+        {/* Pagination links will render as <a href="?page=2">2</a> etc. */}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
 ## Render Props pattern
 
 If you prefer handle the rendering of the Pagination component, you may pass a Render Props function to the component.
@@ -49,7 +72,7 @@ import '@constructor-io/constructorio-ui-plp/styles.css';
 const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomPagination(props) {
-  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages } = props;
+  const { currentPage, goToPage, nextPage, pages, prevPage, totalPages, getPageUrl } = props;
   return (
     <>
       <div>Total Pages: {totalPages}</div>

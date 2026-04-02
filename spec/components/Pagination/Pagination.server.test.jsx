@@ -22,6 +22,23 @@ describe('Testing Component on the server: Pagination', () => {
     });
   });
 
+  it('renders anchor elements when useAnchors is true', () => {
+    const paginationProps = {
+      totalNumResults: 100,
+      useAnchors: true,
+    };
+
+    act(() => {
+      const html = renderToString(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Pagination {...paginationProps} />
+        </CioPlp>,
+      );
+      expect(html).toContain('<a');
+      expect(html).not.toContain('href=');
+    });
+  });
+
   it('renders with render props', () => {
     const mockChildren = jest.fn().mockReturnValue(<div>Custom Pagination</div>);
 

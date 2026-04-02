@@ -2,6 +2,7 @@
     display: inline-block;
 }
 
+.cio-pagination a,
 .cio-pagination button {
     color: black;
     float: left;
@@ -12,14 +13,27 @@
     border: 1px solid #eee;
     margin: 0 4px;
     cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    box-sizing: border-box;
 }
 
+.cio-pagination a.selected,
 .cio-pagination button.selected {
     background-color: #000;
     color: white;
     border: 1px solid #000;
 }
 
+.cio-pagination a:hover:not(.selected),
 .cio-pagination button:hover:not(.selected) {
     background-color: #eee;
+}
+
+.cio-pagination .cio-pagination-ellipsis {
+    float: left;
+    padding: 8px 16px;
+    margin: 0 4px;
 }
