@@ -133,5 +133,35 @@ describe('usePagination', () => {
       const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
       expect(result.current.getPageUrl(9999)).toBeUndefined();
     });
+
+    it('should preserve existing query parameters when generating page URL', () => {
+      Object.defineProperty(window, 'location', {
+        value: new URL('https://example.com?q=shoes&sortBy=price&sortOrder=ascending&filters%5Bcolor%5D=red'),
+      });
+
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      const url = result.current.getPageUrl(3);
+
+      expect(url).toContain('page=3');
+      expect(url).toContain('q=shoes');
+      expect(url).toContain('sortBy=price');
+      expect(url).toContain('sortOrder=ascending');
+      expect(url).toContain('filters');
+      expect(url).toContain('red');
+    });
+
+    it('should only update page param without affecting other parameters', () => {
+      Object.defineProperty(window, 'location', {
+        value: new URL('https://example.com?q=shirt&page=1&numResults=10'),
+      });
+
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      const url = result.current.getPageUrl(5);
+
+      expect(url).toContain('page=5');
+      expect(url).toContain('q=shirt');
+      expect(url).toContain('numResults=10');
+      expect(url).not.toContain('page=1');
+    });
   });
 });

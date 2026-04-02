@@ -44,6 +44,10 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     setUrl(newUrl);
   };
 
+  // Read-only counterpart to setRequestConfigs: parses the current URL state,
+  // swaps in the given page number, and rebuilds the URL — without navigating.
+  // Used to generate href values for pagination anchors at render time.
+  // Respects any custom urlHelpers provided via the CioPlp context.
   const getUrlForPage = (page: number): string | undefined => {
     const currentUrl = getUrl();
     if (!currentUrl) return undefined;
