@@ -3,15 +3,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
 
-export type PaginationProps = UsePaginationProps;
+export type PaginationProps = UsePaginationProps & {
+  /**
+   * **⚠️ Deprecation Notice ⚠️**
+   *
+   * _This prop will be removed in v2. Anchor-based rendering will become the default behavior._
+   *
+   * When true, renders pagination controls as `<a href>` anchor elements instead of `<button>` elements.
+   * This enables search engine crawlers (e.g., Google) to discover and index paginated content.
+   * JavaScript-enabled browsers still use SPA navigation via onClick + preventDefault.
+   */
+  useAnchors?: boolean;
+};
 export type PaginationWithRenderProps = IncludeRenderProps<PaginationProps, UsePaginationReturn>;
 
 export default function Pagination(props: PaginationWithRenderProps) {
-  const { totalNumResults, resultsPerPage, windowSize = 5, children } = props;
+  const { totalNumResults, resultsPerPage, windowSize = 5, useAnchors, children } = props;
   const [pageWindowSize, setPageWindowSize] = useState(windowSize);
   const pagesRef = useRef<HTMLDivElement>(null);
 
-  const { currentPage, goToPage, nextPage, prevPage, pages, totalPages } = usePagination({
+  const { currentPage, goToPage, nextPage, prevPage, pages, totalPages, getPageUrl } = usePagination({
     totalNumResults,
     resultsPerPage,
     windowSize: pageWindowSize,
@@ -45,24 +56,60 @@ export default function Pagination(props: PaginationWithRenderProps) {
           pages,
           prevPage,
           totalPages,
+          getPageUrl,
         })
       ) : (
         <div ref={pagesRef} className='cio-pagination'>
-          <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
-            &lt;
-          </button>
-          {pages.map((page, i) => (
-            <button
-              onClick={() => goToPage(page)}
-              type='button'
-              key={`${page},${i}`}
-              className={currentPage === page ? 'selected' : ''}>
-              {page === -1 ? <span>...</span> : page}
-            </button>
-          ))}
-          <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
-            &gt;
-          </button>
+          {useAnchors ? (
+            <>
+              <a
+                href={currentPage && currentPage > 1 ? getPageUrl(currentPage - 1) : undefined}
+                onClick={(e) => { e.preventDefault(); prevPage(); }}
+                data-testid='cio-pagination-prev-button'
+                aria-label='Previous page'>
+                &lt;
+              </a>
+              {pages.map((page, i) =>
+                page === -1 ? (
+                  <span key={`${page},${i}`} className='cio-pagination-ellipsis'>...</span>
+                ) : (
+                  <a
+                    href={getPageUrl(page)}
+                    onClick={(e) => { e.preventDefault(); goToPage(page); }}
+                    key={`${page},${i}`}
+                    className={currentPage === page ? 'selected' : ''}
+                    aria-current={currentPage === page ? 'page' : undefined}>
+                    {page}
+                  </a>
+                ),
+              )}
+              <a
+                href={currentPage && currentPage < totalPages ? getPageUrl(currentPage + 1) : undefined}
+                onClick={(e) => { e.preventDefault(); nextPage(); }}
+                data-testid='cio-pagination-next-button'
+                aria-label='Next page'>
+                &gt;
+              </a>
+            </>
+          ) : (
+            <>
+              <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
+                &lt;
+              </button>
+              {pages.map((page, i) => (
+                <button
+                  onClick={() => goToPage(page)}
+                  type='button'
+                  key={`${page},${i}`}
+                  className={currentPage === page ? 'selected' : ''}>
+                  {page === -1 ? <span>...</span> : page}
+                </button>
+              ))}
+              <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
+                &gt;
+              </button>
+            </>
+          )}
         </div>
       )}
     </>

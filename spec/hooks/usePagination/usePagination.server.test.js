@@ -36,4 +36,11 @@ describe('Testing Hook on the server: usePagination', () => {
     });
     expect(result.pages).toEqual([]);
   });
+
+  it('should return undefined for getPageUrl on the server', () => {
+    const { result } = renderHookServerSideWithCioPlp(() => usePagination(paginationProps), {
+      apiKey: DEMO_API_KEY,
+    });
+    expect(result.getPageUrl(1)).toBeUndefined();
+  });
 });

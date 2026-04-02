@@ -16,7 +16,7 @@ import { RequestStatus } from './reducer';
 import { IncludeRenderProps } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import { UsePaginationProps } from '../../hooks/usePagination';
+import { PaginationProps } from '../Pagination/Pagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
 import useCioPlp from '../../hooks/useCioPlp';
@@ -28,8 +28,10 @@ export type CioPlpGridProps = {
   spinner?: React.ReactNode;
   /**
    * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+   * Set `useAnchors: true` to render pagination as `<a href>` links for SEO crawlability.
+   * Note: `useAnchors` will be removed in v2 and anchor-based rendering will become the default.
    */
-  paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+  paginationConfigs?: Omit<PaginationProps, 'totalNumResults'>;
   /**
    * No configurations available yet.
    */

@@ -110,4 +110,28 @@ describe('usePagination', () => {
       expect(result.current.pages).toEqual([1, -1, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]),
     );
   });
+
+  describe('getPageUrl', () => {
+    it('should return a URL with the correct page parameter', () => {
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      const url = result.current.getPageUrl(3);
+      expect(url).toBeDefined();
+      expect(url).toContain('page=3');
+    });
+
+    it('should return undefined for page 0', () => {
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      expect(result.current.getPageUrl(0)).toBeUndefined();
+    });
+
+    it('should return undefined for negative pages', () => {
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      expect(result.current.getPageUrl(-1)).toBeUndefined();
+    });
+
+    it('should return undefined for pages beyond totalPages', () => {
+      const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
+      expect(result.current.getPageUrl(9999)).toBeUndefined();
+    });
+  });
 });

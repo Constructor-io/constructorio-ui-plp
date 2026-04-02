@@ -4,6 +4,7 @@ import { RequestConfigs } from '../types';
 interface UseRequestConfigsReturn {
   getRequestConfigs: () => RequestConfigs;
   setRequestConfigs: (configsToUpdate: Partial<RequestConfigs>) => void;
+  getUrlForPage: (page: number) => string | undefined;
 }
 
 export default function useRequestConfigs(): UseRequestConfigsReturn {
@@ -43,5 +44,12 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     setUrl(newUrl);
   };
 
-  return { getRequestConfigs, setRequestConfigs };
+  const getUrlForPage = (page: number): string | undefined => {
+    const currentUrl = getUrl();
+    if (!currentUrl) return undefined;
+    const currentState = getStateFromUrl(currentUrl);
+    return getUrlFromState({ ...currentState, page }, currentUrl);
+  };
+
+  return { getRequestConfigs, setRequestConfigs, getUrlForPage };
 }
