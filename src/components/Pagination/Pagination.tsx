@@ -22,11 +22,12 @@ export default function Pagination(props: PaginationWithRenderProps) {
   const [pageWindowSize, setPageWindowSize] = useState(windowSize);
   const pagesRef = useRef<HTMLDivElement>(null);
 
-  const { currentPage, goToPage, nextPage, prevPage, pages, totalPages, getPageUrl } = usePagination({
-    totalNumResults,
-    resultsPerPage,
-    windowSize: pageWindowSize,
-  });
+  const { currentPage, goToPage, nextPage, prevPage, pages, totalPages, getPageUrl } =
+    usePagination({
+      totalNumResults,
+      resultsPerPage,
+      windowSize: pageWindowSize,
+    });
 
   useEffect(() => {
     setPageWindowSize(windowSize);
@@ -66,11 +67,16 @@ export default function Pagination(props: PaginationWithRenderProps) {
           {useAnchors
             ? pages.map((page, i) =>
                 page === -1 ? (
-                  <span key={`${page},${i}`} className='cio-pagination-ellipsis'>...</span>
+                  <span key={`${page},${i}`} className='cio-pagination-ellipsis'>
+                    ...
+                  </span>
                 ) : (
                   <a
                     href={getPageUrl(page)}
-                    onClick={(e) => { e.preventDefault(); goToPage(page); }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      goToPage(page);
+                    }}
                     key={`${page},${i}`}
                     className={currentPage === page ? 'selected' : ''}
                     aria-current={currentPage === page ? 'page' : undefined}>
