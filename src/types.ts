@@ -299,7 +299,7 @@ export interface CioPlpProviderProps {
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
   useShopifyDefaults?: boolean;
-  componentOverrides?: Partial<PlpComponentOverrides>;
+  componentOverrides?: PlpComponentOverrides;
 }
 
 export type UseSortReturn = {
