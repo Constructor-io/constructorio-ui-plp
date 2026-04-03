@@ -83,6 +83,40 @@ export default function MyComponent() {
 }
 ```
 
+## Component Overrides
+
+Use `componentOverrides` to replace default sub-components with custom implementations. Override functions receive render props with full access to the component's state.
+
+```jsx
+import { CioPlp } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
+
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      componentOverrides={{
+        filterGroup: {
+          // Override just the header of each filter group
+          header: {
+            reactNode: ({ facet, isCollapsed, toggleIsCollapsed }) => (
+              <div onClick={toggleIsCollapsed} style={{ cursor: 'pointer', padding: '8px' }}>
+                <strong>{facet.displayName}</strong>
+                <span>{isCollapsed ? 'Show' : 'Hide'}</span>
+              </div>
+            ),
+          },
+        },
+      }}
+    />
+  );
+}
+```
+
+For interactive examples of all available override slots, see the [Filters component documentation](./?path=/docs/components-filters--code-examples#component-overrides).
+
 ## Render Props pattern
 
 Take control of the rendering logic by using Render Props through `children`.
