@@ -15,6 +15,7 @@ interface UseFilterOptionsListPropsBase {
   isVisual?: boolean;
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  checkboxPosition?: 'left' | 'right' | 'none';
 }
 interface UseFilterOptionsListPropsLegacy extends UseFilterOptionsListPropsBase {
   /** @deprecated Use `facet` instead */
@@ -38,6 +39,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     isVisual,
     getVisualImageUrl,
     getVisualColorHex,
+    checkboxPosition,
   } = props;
   const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
@@ -89,6 +91,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     isVisual,
     getVisualImageUrl,
     getVisualColorHex,
+    checkboxPosition,
 
     // useFilterOptionsList
     isShowAll,

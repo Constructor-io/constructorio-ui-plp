@@ -15,6 +15,7 @@ export function shouldRenderVisualFacet(
     return isVisualFilterFn(facet);
   }
 
+  // cio_render_visual can hold any value; only boolean `true` enables visual rendering
   return facet.data?.cio_render_visual === true;
 }
 

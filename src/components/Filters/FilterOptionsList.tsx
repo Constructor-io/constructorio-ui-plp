@@ -17,6 +17,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
     isVisual,
     getVisualImageUrl,
     getVisualColorHex,
+    checkboxPosition,
   } = useFilterOptionsList(props);
 
   if (optionsToRender.length === 0) return null;
@@ -37,6 +38,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
             displayCountValue: option.count.toString(),
             isChecked: selectedOptionMap[option.value] || false,
             onChange: onOptionSelect,
+            ...(checkboxPosition !== undefined && { checkboxPosition }),
           };
 
           if (isVisual) {

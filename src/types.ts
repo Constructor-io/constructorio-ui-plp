@@ -417,6 +417,7 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
 
 export interface FacetConfig {
   renderVisual?: boolean;
+  checkboxPosition?: 'left' | 'right' | 'none';
 }
 
 /**
