@@ -73,7 +73,7 @@ Configuration options for filters functionality.
 | isVisualFilterFn       | `(facet: PlpFacet) => boolean`                    | Callback to determine if a facet renders with visual swatches         |
 | getVisualColorHex      | `(option: PlpFacetOption) => string \| undefined` | Callback to resolve hex color for visual filter options               |
 | getVisualImageUrl      | `(option: PlpFacetOption) => string \| undefined` | Callback to resolve image URL for visual filter options               |
-| perFacetConfigs        | `Record<string, FacetConfig>`                     | Per-facet config overrides (e.g. `{ color: { renderVisual: true } }`) |
+| perFacetConfigs        | `Record<string, FacetConfig>`                     | Per-facet config overrides (e.g. `{ color: { renderVisual: true, checkboxPosition: 'none' } }`) |
 | isHiddenFilterFn       | `(facet: PlpFacet) => boolean`                    | Function that returns true if a facet should be hidden                |
 | isHiddenFilterOptionFn | `(option: PlpFacetOption) => boolean`             | Function that returns true if an option should be hidden              |
 | sliderStep             | `number`                                          | Global slider step for all range facets                               |
