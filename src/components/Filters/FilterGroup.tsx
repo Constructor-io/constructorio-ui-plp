@@ -44,6 +44,7 @@ export default function FilterGroup(props: FilterGroupProps) {
   } = props;
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
+  const checkboxPosition = perFacetConfigs?.[facet.name]?.checkboxPosition;
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: any) => {
@@ -67,6 +68,7 @@ export default function FilterGroup(props: FilterGroupProps) {
           isVisual={isVisual}
           getVisualImageUrl={getVisualImageUrl}
           getVisualColorHex={getVisualColorHex}
+          checkboxPosition={checkboxPosition}
         />
       )}
 

@@ -419,6 +419,7 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
 export interface FacetConfig {
   isVisualFacet?: boolean;
   isCollapsed?: boolean;
+  checkboxPosition?: 'left' | 'right' | 'none';
 }
 
 /**

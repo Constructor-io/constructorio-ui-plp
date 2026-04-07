@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import Filters from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
-import { PlpFacet, PlpFacetOption } from '../../../types';
+import { PlpFacet, PlpFacetOption, PlpMultipleFacet, PlpSingleFacet } from '../../../types';
 import { DEMO_API_KEY } from '../../../constants';
 import { colorHexMap, COLOR_FACET_NAMES } from '../../utils/colorConstants';
 import '../../../styles.css';
@@ -20,7 +20,7 @@ const mockFacetsWithVisualColor = (mockTransformedFacets as Array<PlpFacet>).map
   return {
     ...facet,
     data: { ...facet.data, cio_render_visual: true },
-    options: (facet as any).options.map((option: PlpFacetOption) => ({
+    options: (facet as PlpMultipleFacet | PlpSingleFacet).options.map((option: PlpFacetOption) => ({
       ...option,
       data: { ...option.data, hex_color: colorHexMap[option.value] },
     })),
@@ -157,7 +157,7 @@ export const VisualFilterViaPerFacetConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockFacetsWithVisualColor,
-    perFacetConfigs: { color: { isVisualFacet: true }, 'Base Color': { isVisualFacet: true } },
+    perFacetConfigs: { color: { isVisualFacet: true } },
     initialNumOptions: 20,
   },
 };
