@@ -173,4 +173,48 @@ describe('CioPlp React Client-Side Rendering', () => {
       expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
     });
   });
+
+  const expectAllFilterGroupsCollapsed = (container) => {
+    const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
+    expect(arrows.length).toBeGreaterThan(0);
+    arrows.forEach((arrow) => {
+      expect(arrow).toHaveClass('cio-arrow-up');
+    });
+  };
+
+  const expectAllFilterGroupsExpanded = (container) => {
+    const arrows = container.querySelectorAll('.cio-filter-group .cio-arrow');
+    expect(arrows.length).toBeGreaterThan(0);
+    arrows.forEach((arrow) => {
+      expect(arrow).toHaveClass('cio-arrow-down');
+    });
+  };
+
+  it('renders CioPlp with filterConfigs defaultCollapsed set to true on the client', async () => {
+    const { container } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        filterConfigs={{ defaultCollapsed: true }}
+        initialSearchResponse={mockSearchResponse}
+      />,
+    );
+
+    await waitFor(() => {
+      expectAllFilterGroupsCollapsed(container);
+    });
+  });
+
+  it('renders CioPlp with filterConfigs defaultCollapsed set to false on the client', async () => {
+    const { container } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        filterConfigs={{ defaultCollapsed: false }}
+        initialSearchResponse={mockSearchResponse}
+      />,
+    );
+
+    await waitFor(() => {
+      expectAllFilterGroupsExpanded(container);
+    });
+  });
 });

@@ -33,25 +33,25 @@ describe('visualFilterHelpers', () => {
     it('perFacetConfigs overrides callback', () => {
       const facet = { ...baseFacet, data: { cio_render_visual: true } };
       const isVisualFilterFn = () => true;
-      const perFacetConfigs = { color: { renderVisual: false } };
+      const perFacetConfigs = { color: { isVisualFacet: false } };
       expect(shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn)).toBe(false);
     });
 
-    it('perFacetConfigs renderVisual: true overrides everything', () => {
+    it('perFacetConfigs isVisualFacet: true overrides everything', () => {
       const facet = { ...baseFacet, data: { cio_render_visual: false } };
       const isVisualFilterFn = () => false;
-      const perFacetConfigs = { color: { renderVisual: true } };
+      const perFacetConfigs = { color: { isVisualFacet: true } };
       expect(shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn)).toBe(true);
     });
 
     it('falls through to callback when perFacetConfigs has no entry for the facet', () => {
       const isVisualFilterFn = jest.fn().mockReturnValue(true);
-      const perFacetConfigs = { brand: { renderVisual: false } };
+      const perFacetConfigs = { brand: { isVisualFacet: false } };
       expect(shouldRenderVisualFacet(baseFacet, perFacetConfigs, isVisualFilterFn)).toBe(true);
       expect(isVisualFilterFn).toHaveBeenCalledWith(baseFacet);
     });
 
-    it('falls through to data attribute when perFacetConfigs entry has no renderVisual', () => {
+    it('falls through to data attribute when perFacetConfigs entry has no isVisualFacet', () => {
       const facet = { ...baseFacet, data: { cio_render_visual: true } };
       const perFacetConfigs = { color: {} };
       expect(shouldRenderVisualFacet(facet, perFacetConfigs)).toBe(true);

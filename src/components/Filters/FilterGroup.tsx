@@ -21,6 +21,7 @@ export interface FilterGroupProps {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  defaultCollapsed?: boolean;
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
@@ -35,14 +36,15 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
+    defaultCollapsed = false,
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
   } = props;
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
   const checkboxPosition = perFacetConfigs?.[facet.name]?.checkboxPosition;
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: any) => {
