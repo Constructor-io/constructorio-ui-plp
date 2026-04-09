@@ -73,7 +73,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   };
 
   useEffect(() => {
-    const newSelectedOptionsMap = {};
+    const newSelectedOptionsMap: Record<string, boolean> = {};
     facet.options.forEach((option) => {
       newSelectedOptionsMap[option.value] = option.status === 'selected';
     });
