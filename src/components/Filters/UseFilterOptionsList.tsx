@@ -61,7 +61,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     nestedOptionsKey: 'options', // Enable recursive filtering for hierarchical facet options
   });
 
-  const [selectedOptionMap, setSelectedOptionMap] = useState({});
+  const [selectedOptionMap, setSelectedOptionMap] = useState<Record<string, boolean>>({});
 
   const onOptionSelect = (optionValue: string) => {
     const newMap = facet.type === 'multiple' ? { ...selectedOptionMap } : {};
