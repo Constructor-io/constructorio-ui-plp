@@ -76,7 +76,6 @@ Configuration options for filters functionality.
 | getVisualImageUrl      | `(option: PlpFacetOption) => string \| undefined` | Callback to resolve image URL for visual filter options               |
 | perFacetConfigs        | `Record<string, FacetConfig>`                     | Per-facet config overrides (e.g. `{ color: { isVisualFacet: true, isCollapsed: true, checkboxPosition: 'none' } }`) |
 | isHiddenFilterFn       | `(facet: PlpFacet) => boolean`                    | Function that returns true if a facet should be hidden                |
-| isHiddenFilterOptionFn | `(option: PlpFacetOption) => boolean`             | Function that returns true if an option should be hidden              |
 | sliderStep             | `number`                                          | Global slider step for all range facets                               |
 | facetSliderSteps       | `Record<string, number>`                          | Per-facet slider step configuration                                   |
 | defaultCollapsed       | `boolean`                                         | Global default collapse behavior for filter groups when no facet metadata (`cio_render_collapsed`) or `perFacetConfigs` override is provided. When `true`, unmatched filter groups render collapsed by default; when `false`, they render expanded by default. Facet metadata and per-facet overrides via `perFacetConfigs` take precedence. |
