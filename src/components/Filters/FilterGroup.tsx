@@ -47,7 +47,7 @@ export default function FilterGroup(props: FilterGroupProps) {
   const checkboxPosition = perFacetConfigs?.[facet.name]?.checkboxPosition;
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
-  const onFilterSelect = (facetName: string) => (value: any) => {
+  const onFilterSelect = (facetName: string) => (value: PlpFilterValue) => {
     setFilter(facetName, value);
   };
 
