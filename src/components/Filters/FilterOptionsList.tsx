@@ -38,7 +38,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
             displayCountValue: option.count.toString(),
             isChecked: selectedOptionMap[option.value] || false,
             onChange: onOptionSelect,
-            ...(checkboxPosition !== undefined && { checkboxPosition }),
+            checkboxPosition,
           };
 
           if (isVisual) {
