@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PlpFacet, PlpFacetOption, FacetConfig } from '../../types';
+import type { PlpFacet, PlpFacetOption, FacetConfig, PlpFilterValue } from '../../types';
 import {
   isMultipleOrBucketedFacet,
   isRangeFacet,
