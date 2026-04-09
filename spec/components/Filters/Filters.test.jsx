@@ -90,6 +90,8 @@ const mockSingleFacet = {
   ],
 };
 
+const mockFacetsWithMetadata = require('../../local_examples/sampleFacetsWithCollapsedMetadata.json');
+
 describe('Testing Component: Filters', () => {
   const originalWindowLocation = window.location;
 
@@ -127,7 +129,7 @@ describe('Testing Component: Filters', () => {
         showAllButtons.forEach((btn) => fireEvent.click(btn));
 
         mockTransformedFacets.forEach((facetGroup) => {
-          expect(getByText(facetGroup.displayName).toBeInTheDocument);
+          expect(getByText(facetGroup.displayName)).toBeInTheDocument();
 
           if (facetGroup.type === 'multiple') {
             // eslint-disable-next-line max-nested-callbacks
@@ -221,7 +223,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -270,7 +272,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -319,7 +321,7 @@ describe('Testing Component: Filters', () => {
       );
 
       await waitFor(() => {
-        expect(getByText(mockPriceFacet.displayName).toBeInTheDocument);
+        expect(getByText(mockPriceFacet.displayName)).toBeInTheDocument();
 
         const minInputValue = container.querySelector('.cio-slider-input-min input');
         const maxInputValue = container.querySelector('.cio-slider-input-max input');
@@ -851,6 +853,153 @@ describe('Testing Component: Filters', () => {
     });
   });
 
+  describe(' - Visual Filter Tests', () => {
+    const mockVisualFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: { cio_render_visual: true },
+      hidden: false,
+      options: [
+        {
+          status: '',
+          count: 10,
+          displayName: 'Red',
+          value: 'red',
+          data: { hex_color: '#FF0000' },
+        },
+        {
+          status: '',
+          count: 8,
+          displayName: 'Blue',
+          value: 'blue',
+          data: { image_url: 'https://example.com/blue.png' },
+        },
+        {
+          status: '',
+          count: 5,
+          displayName: 'Plain',
+          value: 'plain',
+          data: {},
+        },
+      ],
+    };
+
+    it('Should render FilterOptionVisual for options with visual data in a visual facet', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(2);
+      });
+    });
+
+    it('Should fall back to standard FilterOption for options without visual data in a visual facet', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[mockVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const standardOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        // 2 visual options (Red with hex_color, Blue with image_url)
+        // 1 standard option (Plain with no visual data)
+        expect(visualOptions.length).toBe(2);
+        expect(standardOptions.length).toBe(1);
+      });
+    });
+
+    it('Should render standard FilterOption when facet is not visual', async () => {
+      const nonVisualFacet = {
+        ...mockVisualFacet,
+        data: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[nonVisualFacet]} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(0);
+
+        const filterOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        expect(filterOptions.length).toBe(3);
+      });
+    });
+
+    it('Should render visual options via getVisualImageUrl callback', async () => {
+      const facetWithoutMetadata = {
+        ...mockVisualFacet,
+        options: mockVisualFacet.options.map((o) => ({ ...o, data: {} })),
+      };
+
+      const getVisualImageUrl = (option) => {
+        if (option.value === 'red') return 'https://example.com/red.png';
+        return undefined;
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={[facetWithoutMetadata]} getVisualImageUrl={getVisualImageUrl} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(1);
+      });
+    });
+
+    it('Should respect perFacetConfigs override to disable visual rendering', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={[mockVisualFacet]}
+            perFacetConfigs={{ color: { isVisualFacet: false } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(0);
+
+        const filterOptions = container.querySelectorAll('[data-slot="filter-option"]');
+        expect(filterOptions.length).toBe(3);
+      });
+    });
+
+    it('Should respect perFacetConfigs override to enable visual rendering', async () => {
+      const facetWithoutVisualData = {
+        ...mockVisualFacet,
+        data: {},
+      };
+
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={[facetWithoutVisualData]}
+            perFacetConfigs={{ color: { isVisualFacet: true } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const visualOptions = container.querySelectorAll('[data-slot="visual-filter-option"]');
+        expect(visualOptions.length).toBe(2);
+      });
+    });
+  });
+
   describe(' - Facet Blacklisting Tests', () => {
     it('Should not render facets when isHiddenFilterFn returns true', async () => {
       const isHiddenFilterFn = (facet) => facet.name === 'color'; // lowercase 'color'
@@ -899,7 +1048,11 @@ describe('Testing Component: Filters', () => {
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
+          <Filters
+            facets={[colorFacet]}
+            isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            initialNumOptions={100}
+          />
         </CioPlp>,
       );
 
@@ -971,6 +1124,162 @@ describe('Testing Component: Filters', () => {
         const filterGroups = container.querySelectorAll('.cio-filter-group');
         expect(filterGroups.length).toBe(facetsWithHidden.length - 2);
       });
+    });
+  });
+
+  describe(' - Collapse Behavior Tests', () => {
+    const isFilterGroupExpanded = (filterGroup) => {
+      const arrow = filterGroup.querySelector('.cio-arrow');
+      return arrow?.classList.contains('cio-arrow-down');
+    };
+
+    it('Interface 1 (Metadata): Should collapse filter groups with cio_render_collapsed metadata', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Color has cio_render_collapsed: true -> should be collapsed
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        // Size has no cio_render_collapsed -> should be expanded
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
+
+        // Price has cio_render_collapsed: true -> should be collapsed
+        const priceHeader = getByText('Price').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
+      });
+    });
+
+    it('Interface 2 (Global prop): defaultCollapsed=true should collapse all filter groups', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(false);
+
+        const priceHeader = getByText('Price').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
+      });
+    });
+
+    it('Interface 2 (Global prop): defaultCollapsed=false should not override facet metadata', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed={false} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Color has cio_render_collapsed: true metadata, which takes precedence over defaultCollapsed
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        // Size has no metadata, falls through to defaultCollapsed=false
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
+
+        // Price has cio_render_collapsed: true metadata, which takes precedence over defaultCollapsed
+        const priceHeader = getByText('Price').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
+      });
+    });
+
+    it('Interface 3 (Per-facet config): perFacetConfigs isCollapsed should collapse only specified facets', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={mockFacetsWithMetadata}
+            perFacetConfigs={{ color: { isCollapsed: true }, price: { isCollapsed: true } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
+
+        const priceHeader = getByText('Price').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
+      });
+    });
+
+    it('Priority: perFacetConfigs isCollapsed=false should override defaultCollapsed=true', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={mockFacetsWithMetadata}
+            defaultCollapsed
+            perFacetConfigs={{ size: { isCollapsed: false } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // color has cio_render_collapsed metadata -> collapsed
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        // size explicitly set to isCollapsed: false via perFacetConfigs
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
+
+        // price has cio_render_collapsed metadata -> collapsed
+        const priceHeader = getByText('Price').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(priceHeader)).toBe(false);
+      });
+    });
+
+    it('Collapsed filter groups can still be toggled open by clicking the header', async () => {
+      const { getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+
+        // Click the header to expand
+        fireEvent.click(getByText('Color'));
+        expect(isFilterGroupExpanded(colorHeader)).toBe(true);
+
+        // Click again to collapse
+        fireEvent.click(getByText('Color'));
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+      });
+    });
+
+    it('Render props: getIsCollapsed should be available in render props', async () => {
+      const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
+
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} defaultCollapsed>
+            {mockChildren}
+          </Filters>
+        </CioPlp>,
+      );
+
+      expect(mockChildren).toHaveBeenCalled();
+      const renderPropsArg = mockChildren.mock.calls[0][0];
+      expect(renderPropsArg).toHaveProperty('getIsCollapsed');
+      expect(typeof renderPropsArg.getIsCollapsed).toBe('function');
     });
   });
 });

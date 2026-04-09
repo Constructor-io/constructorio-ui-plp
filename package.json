@@ -37,7 +37,7 @@
     "dist/constructorio-ui-plp-bundled.js"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=20"
   },
   "types": "lib/types/index.d.ts",
   "scripts": {
@@ -54,7 +54,7 @@
     "storybook-docs-dev": "storybook dev --docs -p 6007",
     "serve-built-storybook": "npx http-server docs",
     "compile": "rm -rf lib && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-styles && vite build",
-    "check-license": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT;0BSD;BSD-2-Clause' --excludePackages 'picocolors@1.0.0'",
+    "check-license": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT;0BSD;BSD-2-Clause;ISC' --excludePackages 'picocolors@1.0.0;graceful-fs@4.2.11;lightningcss@1.31.1;lightningcss-android-arm64@1.31.1;lightningcss-darwin-arm64@1.31.1;lightningcss-darwin-x64@1.31.1;lightningcss-freebsd-x64@1.31.1;lightningcss-linux-arm-gnueabihf@1.31.1;lightningcss-linux-arm64-gnu@1.31.1;lightningcss-linux-arm64-musl@1.31.1;lightningcss-linux-x64-gnu@1.31.1;lightningcss-linux-x64-musl@1.31.1;lightningcss-win32-arm64-msvc@1.31.1;lightningcss-win32-x64-msvc@1.31.1'",
     "prepare": "husky install"
   },
   "peerDependencies": {
@@ -117,6 +117,7 @@
     "webpack": "^5.94.0"
   },
   "dependencies": {
+    "@constructor-io/constructorio-ui-components": "^1.3.2",
     "classnames": "^2.5.1"
   },
   "volta": {

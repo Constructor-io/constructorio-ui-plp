@@ -3,7 +3,14 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import CioPlpGrid from '../../../components/CioPlpGrid';
 import { DEMO_API_KEY } from '../../../constants';
+import { PlpFacetOption } from '../../../types';
+import { colorHexMap, COLOR_FACET_NAMES } from '../../utils/colorConstants';
 import '../../../styles.css';
+
+const defaultFilterConfigs = {
+  isVisualFilterFn: (facet: { name: string }) => COLOR_FACET_NAMES.includes(facet.name),
+  getVisualColorHex: (option: PlpFacetOption) => colorHexMap[option.value],
+};
 
 const meta = {
   title: 'Components/CioPlp',
@@ -98,7 +105,11 @@ function PrimaryStory({ args, defaultUrl }: any) {
         getUrl: () => currentUrl,
       }}
       {...args}>
-      <CioPlpGrid key={gridKey} groupsConfigs={args.groupsConfigs} />
+      <CioPlpGrid
+        key={gridKey}
+        groupsConfigs={args.groupsConfigs}
+        filterConfigs={args.filterConfigs}
+      />
     </CioPlp>
   );
 }
@@ -107,6 +118,7 @@ export const SearchPlp: Story = {
   render: (args) => <PrimaryStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
   args: {
     apiKey: DEMO_API_KEY,
+    filterConfigs: defaultFilterConfigs,
   },
 };
 
@@ -119,6 +131,7 @@ export const BrowsePlp: Story = {
   ),
   args: {
     apiKey: DEMO_API_KEY,
+    filterConfigs: defaultFilterConfigs,
   },
 };
 
