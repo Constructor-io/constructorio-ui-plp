@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import type { PlpFacet, PlpFacetOption } from '../../types';
+import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
+import type {
+  PlpFacet,
+  PlpFacetOption,
+  PlpFilterValue,
+  FilterGroupOverrides,
+  FilterGroupRenderProps,
+} from '../../types';
 import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
+import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
-export interface FilterGroupProps {
+export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupOverrides> {
   facet: PlpFacet;
   setFilter: UseFilterReturn['setFilter'];
   initialNumOptions?: number;
@@ -26,39 +35,61 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
+    componentOverrides: componentOverridesProp,
   } = props;
+  const context = useCioPlpContext();
+  const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.filterGroup;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
-  const onFilterSelect = (facetName: string) => (value: any) => {
+  const onFilterSelect = (facetName: string) => (value: PlpFilterValue) => {
     setFilter(facetName, value);
   };
 
+  const renderProps: FilterGroupRenderProps = {
+    facet,
+    isCollapsed,
+    toggleIsCollapsed,
+    onFilterSelect: onFilterSelect(facet.name),
+  };
+
   return (
-    <li className='cio-filter-group'>
-      <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
-        {facet.displayName}
-        <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
-      </button>
+    <RenderPropsWrapper props={renderProps} override={componentOverrides?.reactNode}>
+      <li className='cio-filter-group'>
+        <RenderPropsWrapper props={renderProps} override={componentOverrides?.header?.reactNode}>
+          <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
+            {facet.displayName}
+            <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
+          </button>
+        </RenderPropsWrapper>
 
-      {(isMultipleOrBucketedFacet(facet) || isSingleFacet(facet)) && (
-        <FilterOptionsList
-          isCollapsed={isCollapsed}
-          facet={facet}
-          modifyRequestMultipleFilter={onFilterSelect(facet.name)}
-          initialNumOptions={initialNumOptions}
-          isHiddenFilterOptionFn={isHiddenFilterOptionFn}
-        />
-      )}
+        {(isMultipleOrBucketedFacet(facet) || isSingleFacet(facet)) && (
+          <RenderPropsWrapper
+            props={renderProps}
+            override={componentOverrides?.optionsList?.reactNode}>
+            <FilterOptionsList
+              isCollapsed={isCollapsed}
+              facet={facet}
+              modifyRequestMultipleFilter={onFilterSelect(facet.name)}
+              initialNumOptions={initialNumOptions}
+              isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            />
+          </RenderPropsWrapper>
+        )}
 
-      {isRangeFacet(facet) && (
-        <FilterRangeSlider
-          isCollapsed={isCollapsed}
-          rangedFacet={facet}
-          modifyRequestRangeFilter={onFilterSelect(facet.name)}
-          sliderStep={facetSliderSteps?.[facet.name] || sliderStep}
-        />
-      )}
-    </li>
+        {isRangeFacet(facet) && (
+          <RenderPropsWrapper
+            props={renderProps}
+            override={componentOverrides?.rangeSlider?.reactNode}>
+            <FilterRangeSlider
+              isCollapsed={isCollapsed}
+              rangedFacet={facet}
+              modifyRequestRangeFilter={onFilterSelect(facet.name)}
+              sliderStep={facetSliderSteps?.[facet.name] || sliderStep}
+            />
+          </RenderPropsWrapper>
+        )}
+      </li>
+    </RenderPropsWrapper>
   );
 }

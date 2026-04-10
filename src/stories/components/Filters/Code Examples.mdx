@@ -84,6 +84,76 @@ export default function MyComponent() {
 
 <Markdown>{UseFilterReturn}</Markdown>
 
+## Component Overrides
+
+Use `componentOverrides` on the `CioPlp` provider to replace default sub-components within `FilterGroup`. Each override slot accepts either a static `ReactNode` or a render function that receives `FilterGroupRenderProps` with full state access (`facet`, `isCollapsed`, `toggleIsCollapsed`, `onFilterSelect`).
+
+### Override Entire FilterGroup
+
+Replace the complete `<li>` element for each filter group:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      reactNode: ({ facet, isCollapsed, toggleIsCollapsed, onFilterSelect }) => (
+        <li style={{ border: '1px solid #ccc', padding: '12px' }}>
+          <button type="button" onClick={toggleIsCollapsed}>
+            {facet.displayName} {isCollapsed ? '▶' : '▼'}
+          </button>
+          {/* custom options rendering */}
+        </li>
+      ),
+    },
+  }}
+/>
+```
+
+<Canvas of={FiltersStories.OverrideRoot} />
+
+### Override Header Only
+
+Replace the header button while keeping the default options list and range slider:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      header: {
+        reactNode: ({ facet, isCollapsed, toggleIsCollapsed }) => (
+          <div onClick={toggleIsCollapsed} style={{ cursor: 'pointer' }}>
+            <span>{facet.displayName}</span>
+            <span>{isCollapsed ? 'Show' : 'Hide'}</span>
+          </div>
+        ),
+      },
+    },
+  }}
+/>
+```
+
+<Canvas of={FiltersStories.OverrideHeader} />
+
+### Override Options List
+
+Replace the checkbox options list with a custom implementation (only affects multiple/single facets):
+
+<Canvas of={FiltersStories.OverrideOptionsList} />
+
+### Override Range Slider
+
+Replace the range slider with a custom implementation (only affects range-type facets):
+
+<Canvas of={FiltersStories.OverrideRangeSlider} />
+
+### Static ReactNode Override
+
+Use a static `ReactNode` instead of a render function to replace a sub-component with fixed content:
+
+<Canvas of={FiltersStories.OverrideHeaderStatic} />
+
 ## Hiding Facets and Options
 
 You can hide facets or individual facet options using three methods (📦 v1.9.0 required):

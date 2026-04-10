@@ -73,6 +73,15 @@ const meta = {
         },
       },
     },
+    componentOverrides: {
+      description:
+        'Component override functions to replace default sub-components. Currently supports overriding FilterGroup and its sub-components (header, optionsList, rangeSlider). See the Filters component stories for interactive examples.',
+      table: {
+        type: {
+          summary: 'Partial<PlpComponentOverrides>',
+        },
+      },
+    },
   },
 } satisfies Meta<typeof CioPlp>;
 

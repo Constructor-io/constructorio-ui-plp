@@ -850,6 +850,177 @@ describe('Testing Component: Filters', () => {
       expect(smallCheckbox).not.toBeChecked();
     });
   });
+
+  describe(' - componentOverrides.filterGroup Tests (via provider)', () => {
+    it('Should render default FilterGroup when no componentOverrides provided', async () => {
+      const { container, getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters {...filterProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Default headers should render
+        mockTransformedFacets.forEach((facet) => {
+          expect(getByText(facet.displayName)).toBeInTheDocument();
+        });
+
+        // Default filter group structure should exist
+        const filterGroups = container.querySelectorAll('.cio-filter-group');
+        expect(filterGroups.length).toBeGreaterThan(0);
+
+        // Default headers with arrow icons should exist
+        const headers = container.querySelectorAll('.cio-filter-header');
+        expect(headers.length).toBeGreaterThan(0);
+        headers.forEach((header) => {
+          expect(header.querySelector('.cio-arrow')).toBeInTheDocument();
+        });
+      });
+    });
+
+    it('Should replace entire FilterGroup via root reactNode override', async () => {
+      const { container, getAllByTestId } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            filterGroup: {
+              reactNode: ({ facet }) => (
+                <div data-testid='custom-root'>{facet.displayName} Override</div>
+              ),
+            },
+          }}>
+          <Filters {...filterProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const customRoots = getAllByTestId('custom-root');
+        expect(customRoots.length).toBe(mockTransformedFacets.length);
+
+        // Default structure should NOT render
+        const defaultGroups = container.querySelectorAll('.cio-filter-group');
+        expect(defaultGroups.length).toBe(0);
+      });
+    });
+
+    it('Should replace header in all FilterGroups via header override', async () => {
+      const { container, getAllByTestId } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            filterGroup: {
+              header: {
+                reactNode: ({ facet }) => (
+                  <div data-testid='custom-header'>{facet.displayName} Custom</div>
+                ),
+              },
+            },
+          }}>
+          <Filters {...filterProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const customHeaders = getAllByTestId('custom-header');
+        expect(customHeaders.length).toBe(mockTransformedFacets.length);
+
+        // Default header buttons should NOT render
+        const defaultHeaders = container.querySelectorAll('.cio-filter-header');
+        expect(defaultHeaders.length).toBe(0);
+      });
+    });
+
+    it('Should replace optionsList in all FilterGroups via optionsList override', async () => {
+      const { container, queryAllByTestId } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            filterGroup: {
+              optionsList: {
+                reactNode: ({ facet }) => (
+                  <div data-testid='custom-options'>Options for {facet.name}</div>
+                ),
+              },
+            },
+          }}>
+          <Filters {...filterProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const customOptions = queryAllByTestId('custom-options');
+        // Should render for multiple and single facets only (not range or hierarchical)
+        const optionsListFacets = mockTransformedFacets.filter(
+          (f) => f.type === 'multiple' || f.type === 'single',
+        );
+        expect(customOptions.length).toBe(optionsListFacets.length);
+
+        // Default options lists should NOT render
+        const defaultOptionsLists = container.querySelectorAll('.cio-filter-multiple-options-list');
+        expect(defaultOptionsLists.length).toBe(0);
+
+        // Default headers should still render (not overridden)
+        const headers = container.querySelectorAll('.cio-filter-header');
+        expect(headers.length).toBe(mockTransformedFacets.length);
+      });
+    });
+
+    it('Should replace rangeSlider in all FilterGroups via rangeSlider override', async () => {
+      const { container, getByTestId } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            filterGroup: {
+              rangeSlider: {
+                reactNode: () => <div data-testid='custom-slider'>Custom Range</div>,
+              },
+            },
+          }}>
+          <Filters facets={mockTransformedFacets} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByTestId('custom-slider')).toBeInTheDocument();
+
+        // Default range slider should NOT render
+        const defaultSliders = container.querySelectorAll('.cio-doubly-ended-slider');
+        expect(defaultSliders.length).toBe(0);
+
+        // Default headers should still render
+        const headers = container.querySelectorAll('.cio-filter-header');
+        expect(headers.length).toBe(mockTransformedFacets.length);
+      });
+    });
+
+    it('Should pass FilterGroupRenderProps to override functions', async () => {
+      const renderFn = jest.fn().mockReturnValue(<div>Override</div>);
+
+      render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            filterGroup: {
+              header: { reactNode: renderFn },
+            },
+          }}>
+          <Filters {...filterProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(renderFn).toHaveBeenCalled();
+        const renderProps = renderFn.mock.calls[0][0];
+
+        expect(renderProps.facet).toBeDefined();
+        expect(renderProps.facet.displayName).toBeDefined();
+        expect(typeof renderProps.isCollapsed).toBe('boolean');
+        expect(typeof renderProps.toggleIsCollapsed).toBe('function');
+        expect(typeof renderProps.onFilterSelect).toBe('function');
+      });
+    });
+  });
+
   describe(' - Facet Blacklisting Tests', () => {
     it('Should not render facets when isHiddenFilterFn returns true', async () => {
       const isHiddenFilterFn = (facet) => facet.name === 'color'; // lowercase 'color'
