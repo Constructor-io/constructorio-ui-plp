@@ -41,10 +41,6 @@ function getDisplayRange(facet: PlpRangeFacet, isSingleValue: boolean) {
   };
 }
 
-function getClampedValue(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, value));
-}
-
 // Default track styles when range collapses to a single value
 const COLLAPSED_TRACK_STYLE = { left: '0%', width: '100%' };
 
