@@ -17,7 +17,7 @@ describe('CioPlp React Client-Side Rendering', () => {
     spy.mockImplementation(() => {});
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
 
     jest.resetAllMocks();

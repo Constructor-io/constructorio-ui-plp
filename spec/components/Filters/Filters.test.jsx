@@ -101,7 +101,7 @@ describe('Testing Component: Filters', () => {
     window.location = 'https://example.com';
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
     jest.resetAllMocks(); // This will reset all mocks after each test
   });

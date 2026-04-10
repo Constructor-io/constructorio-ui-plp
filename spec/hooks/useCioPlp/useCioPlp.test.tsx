@@ -13,7 +13,7 @@ describe('Testing Hook: useCioPlp', () => {
     jest.clearAllMocks();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
   });
 

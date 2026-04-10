@@ -15,7 +15,7 @@ beforeEach(() => {
   window.location = 'https://example.com';
 });
 
-afterAll(() => {
+afterEach(() => {
   window.location = originalWindowLocation;
 });
 

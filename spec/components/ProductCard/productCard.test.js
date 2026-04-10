@@ -32,7 +32,7 @@ describe('Testing Component: ProductCard', () => {
     spy.mockImplementation(() => {});
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
     jest.resetAllMocks();
   });

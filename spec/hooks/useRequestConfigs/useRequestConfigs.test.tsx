@@ -15,7 +15,7 @@ describe('Testing Hook: useRequestConfigs', () => {
     window.location = 'https://example.com';
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
   });
 

@@ -16,7 +16,7 @@ describe('Testing Component: Breadcrumbs', () => {
     window.location = 'https://example.com';
   });
 
-  afterAll(() => {
+  afterEach(() => {
     window.location = originalWindowLocation;
     jest.resetAllMocks();
   });
