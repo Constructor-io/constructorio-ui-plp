@@ -6,19 +6,11 @@ describe('shopifyDefaults', () => {
   const mockUrl = 'https://example.com/a/random/path?q=3&randomQuery=[true,%20false]';
 
   beforeEach(() => {
-    const freshMockLocation = new URL(mockUrl);
-
-    Object.defineProperty(window, 'location', {
-      value: freshMockLocation,
-      writable: true,
-      configurable: true,
-    });
+    window.location = mockUrl;
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    window.location = originalWindowLocation;
   });
 
   describe('shopifyDefaults', () => {

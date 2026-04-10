@@ -12,15 +12,11 @@ const originalWindowLocation = window.location;
 
 describe('Testing Hook: useRequestConfigs', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    window.location = 'https://example.com';
   });
 
-  afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+  afterEach(() => {
+    window.location = originalWindowLocation;
   });
 
   it('Should throw error if called outside of PlpContext', () => {
