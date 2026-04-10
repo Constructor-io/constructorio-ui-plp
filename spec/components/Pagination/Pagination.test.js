@@ -76,6 +76,88 @@ describe('Pagination Component', () => {
   });
 });
 
+describe('Pagination with useAnchors', () => {
+  it('renders page numbers as anchors and prev/next as buttons', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const anchors = container.querySelectorAll('.cio-pagination a');
+    const buttons = container.querySelectorAll('.cio-pagination button');
+    expect(anchors.length).toBeGreaterThan(0);
+    // prev and next remain as buttons
+    expect(buttons.length).toBe(2);
+  });
+
+  it('prev and next remain as buttons with correct test ids', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevButton = container.querySelector('button[data-testid="cio-pagination-prev-button"]');
+    const nextButton = container.querySelector('button[data-testid="cio-pagination-next-button"]');
+    expect(prevButton).toBeInTheDocument();
+    expect(nextButton).toBeInTheDocument();
+  });
+
+  it('page anchors have href attributes containing page parameter', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const pageAnchors = container.querySelectorAll('.cio-pagination a');
+    const anchorsWithHref = Array.from(pageAnchors).filter((a) => a.getAttribute('href'));
+    expect(anchorsWithHref.length).toBeGreaterThan(0);
+    anchorsWithHref.forEach((a) => {
+      expect(a.getAttribute('href')).toContain('page=');
+    });
+  });
+
+  it('active page has aria-current="page"', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const activePage = container.querySelector('a.selected');
+    expect(activePage).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('ellipsis is rendered as span, not anchor', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={200} resultsPerPage={10} windowSize={5} useAnchors />
+      </CioPlp>,
+    );
+
+    const ellipsisSpans = container.querySelectorAll('.cio-pagination-ellipsis');
+    expect(ellipsisSpans.length).toBeGreaterThan(0);
+    ellipsisSpans.forEach((span) => {
+      expect(span.tagName).toBe('SPAN');
+    });
+  });
+
+  it('still renders all buttons when useAnchors is not set', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} />
+      </CioPlp>,
+    );
+
+    const buttons = container.querySelectorAll('.cio-pagination button');
+    const anchors = container.querySelectorAll('.cio-pagination a');
+    expect(buttons.length).toBeGreaterThan(0);
+    expect(anchors.length).toBe(0);
+  });
+});
+
 // Interaction Test
 describe('Test user interactions', () => {
   const props = {
