@@ -41,6 +41,10 @@ function getDisplayRange(facet: PlpRangeFacet, isSingleValue: boolean) {
   };
 }
 
+function getClampedValue(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
 // Default track styles when range collapses to a single value
 const COLLAPSED_TRACK_STYLE = { left: '0%', width: '100%' };
 
@@ -144,16 +148,17 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
-  // Update internal state when facet changes
+  // Update internal state when facet status changes
   useEffect(() => {
     if (facet.status?.min !== undefined) {
       const clampedMin = Math.max(displayMin, Math.min(displayMax, facet.status.min));
-      const clampedMax = Math.max(displayMin, Math.min(displayMax, facet.status.max));
-
       setMinValue(clampedMin);
-      setMaxValue(clampedMax);
-
       setInputMinValue(isSingleValue ? facet.status.min : clampedMin);
+    }
+
+    if (facet.status?.max !== undefined) {
+      const clampedMax = Math.max(displayMin, Math.min(displayMax, facet.status.max));
+      setMaxValue(clampedMax);
       setInputMaxValue(isSingleValue ? facet.status.max : clampedMax);
     }
   }, [
@@ -165,6 +170,18 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     displayMax,
     isSingleValue,
   ]);
+
+  // Update internal state when facet's min/max change (e.g. due to another filter being applied)
+  useEffect(() => {
+    if (facet.status?.min === undefined) {
+      setMinValue(displayMin);
+      setInputMinValue(displayMin);
+    }
+    if (facet.status?.max === undefined) {
+      setMaxValue(displayMax);
+      setInputMaxValue(displayMax);
+    }
+  }, [displayMax, displayMin, facet.status?.max, facet.status?.min]);
 
   // Update selected track styles
   useEffect(() => {

@@ -850,7 +850,6 @@ describe('Testing Component: Filters', () => {
       expect(smallCheckbox).not.toBeChecked();
     });
   });
-
   describe(' - Facet Blacklisting Tests', () => {
     it('Should not render facets when isHiddenFilterFn returns true', async () => {
       const isHiddenFilterFn = (facet) => facet.name === 'color'; // lowercase 'color'
@@ -899,7 +898,11 @@ describe('Testing Component: Filters', () => {
 
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[colorFacet]} isHiddenFilterOptionFn={isHiddenFilterOptionFn} initialNumOptions={100} />
+          <Filters
+            facets={[colorFacet]}
+            isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            initialNumOptions={100}
+          />
         </CioPlp>,
       );
 
