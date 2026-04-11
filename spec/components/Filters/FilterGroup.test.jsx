@@ -588,7 +588,7 @@ describe('Testing Component: FilterGroup', () => {
 
         const sliders = screen.getAllByRole('slider');
 
-        // Values (30, 60) are still within the new range, so they should stay
+        // Values should widen to match the new facet bounds
         expect(numberInputs[0]).toHaveValue(10);
         expect(numberInputs[1]).toHaveValue(90);
         expect(sliders[0]).toHaveValue('10');
