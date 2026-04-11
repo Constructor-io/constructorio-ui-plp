@@ -646,7 +646,7 @@ describe('Testing Component: FilterGroup', () => {
       expect(sliders[1]).toHaveAttribute('min', '10');
       expect(sliders[1]).toHaveAttribute('max', '90');
 
-      // Input fields should show the single facet value
+      // Input fields should also come from status (10-90), not facet (50-50)
       expect(numberInputs[0]).toHaveValue(10);
       expect(numberInputs[1]).toHaveValue(90);
     });
@@ -666,7 +666,7 @@ describe('Testing Component: FilterGroup', () => {
       const { rerender } = renderFilterGroup(initialFacet);
 
       const numberInputs = screen.getAllByRole('spinbutton');
-      const sliders = screen.getAllByRole('slider');
+      let sliders = screen.getAllByRole('slider');
 
       expect(numberInputs[0]).not.toBeDisabled();
       expect(numberInputs[1]).not.toBeDisabled();
@@ -682,13 +682,20 @@ describe('Testing Component: FilterGroup', () => {
         />,
       );
 
+      sliders = screen.getAllByRole('slider');
+
       // Should become disabled
       expect(numberInputs[0]).toBeDisabled();
       expect(numberInputs[1]).toBeDisabled();
       expect(sliders[0]).toBeDisabled();
       expect(sliders[1]).toBeDisabled();
 
-      // Input fields should show the single facet value
+      // Display range should come from status (30-70), not facet (50-50)
+      expect(sliders[0]).toHaveAttribute('min', '30');
+      expect(sliders[0]).toHaveAttribute('max', '70');
+      expect(sliders[1]).toHaveAttribute('min', '30');
+      expect(sliders[1]).toHaveAttribute('max', '70');
+      // Input fields should come from status (30-70), not facet (50-50)
       expect(numberInputs[0]).toHaveValue(30);
       expect(numberInputs[1]).toHaveValue(70);
     });
