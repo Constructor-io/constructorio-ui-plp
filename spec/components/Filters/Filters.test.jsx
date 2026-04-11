@@ -878,12 +878,13 @@ describe('Testing Component: Filters', () => {
       const { container, getAllByTestId } = render(
         <CioPlp
           apiKey={DEMO_API_KEY}
-          componentOverrides={{ filterGroup: {
-            reactNode: ({ facet }) => (
-              <div data-testid='custom-root'>{facet.displayName} Override</div>
-            ),
-          } }}
-        >
+          componentOverrides={{
+            filterGroup: {
+              reactNode: ({ facet }) => (
+                <div data-testid='custom-root'>{facet.displayName} Override</div>
+              ),
+            },
+          }}>
           <Filters {...filterProps} />
         </CioPlp>,
       );
@@ -902,14 +903,15 @@ describe('Testing Component: Filters', () => {
       const { container, getAllByTestId } = render(
         <CioPlp
           apiKey={DEMO_API_KEY}
-          componentOverrides={{ filterGroup: {
-            header: {
-              reactNode: ({ facet }) => (
-                <div data-testid='custom-header'>{facet.displayName} Custom</div>
-              ),
+          componentOverrides={{
+            filterGroup: {
+              header: {
+                reactNode: ({ facet }) => (
+                  <div data-testid='custom-header'>{facet.displayName} Custom</div>
+                ),
+              },
             },
-          } }}
-        >
+          }}>
           <Filters {...filterProps} />
         </CioPlp>,
       );
@@ -928,14 +930,15 @@ describe('Testing Component: Filters', () => {
       const { container, queryAllByTestId } = render(
         <CioPlp
           apiKey={DEMO_API_KEY}
-          componentOverrides={{ filterGroup: {
-            optionsList: {
-              reactNode: ({ facet }) => (
-                <div data-testid='custom-options'>Options for {facet.name}</div>
-              ),
+          componentOverrides={{
+            filterGroup: {
+              optionsList: {
+                reactNode: ({ facet }) => (
+                  <div data-testid='custom-options'>Options for {facet.name}</div>
+                ),
+              },
             },
-          } }}
-        >
+          }}>
           <Filters {...filterProps} />
         </CioPlp>,
       );
@@ -962,12 +965,13 @@ describe('Testing Component: Filters', () => {
       const { container, getByTestId } = render(
         <CioPlp
           apiKey={DEMO_API_KEY}
-          componentOverrides={{ filterGroup: {
-            rangeSlider: {
-              reactNode: () => <div data-testid='custom-slider'>Custom Range</div>,
+          componentOverrides={{
+            filterGroup: {
+              rangeSlider: {
+                reactNode: () => <div data-testid='custom-slider'>Custom Range</div>,
+              },
             },
-          } }}
-        >
+          }}>
           <Filters facets={mockTransformedFacets} />
         </CioPlp>,
       );
@@ -991,10 +995,11 @@ describe('Testing Component: Filters', () => {
       render(
         <CioPlp
           apiKey={DEMO_API_KEY}
-          componentOverrides={{ filterGroup: {
-            header: { reactNode: renderFn },
-          } }}
-        >
+          componentOverrides={{
+            filterGroup: {
+              header: { reactNode: renderFn },
+            },
+          }}>
           <Filters {...filterProps} />
         </CioPlp>,
       );
