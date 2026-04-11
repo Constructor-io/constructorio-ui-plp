@@ -23,3 +23,13 @@ import meta from './ProductCard.stories';
   | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the [variations_map](https://docs.constructor.com/reference/shared-variations-mapping) parameter. Null if `variations` exists.  |
   | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
 
+### `swatchConfigs`
+
+> 📦 v1.9.1 is required for this feature
+
+Configuration options for swatch display behavior on this product card.
+
+  | property           | type                                    | description |
+  | :------------------| :---------------------------------------| :---------- |
+  | maxVisibleSwatches | `number`                                | Maximum number of swatches to display before showing a "View more" button. When not set, all swatches are shown. |
+  | showMoreLabel      | `string \| ((count: number) => string)` | Custom label for the "View more" button. Can be a static string or a function that receives the hidden swatch count. Defaults to `"View more >"`. |

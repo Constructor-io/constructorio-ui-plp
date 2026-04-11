@@ -1,27 +1,49 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
+import { useOnShowMoreSwatches } from '../../hooks/callbacks';
+import { IncludeRenderProps, Item, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor, cnstrcDataAttrs } from '../../utils';
+
+export type ProductSwatchRenderProps = ProductSwatchObject & { item: Item };
 
 export type ProductSwatchProps = IncludeRenderProps<
   {
     swatchObject: ProductSwatchObject;
+    item: Item;
+    showMoreLabel?: string | ((count: number) => string);
   },
-  ProductSwatchObject
+  ProductSwatchRenderProps
 >;
 
 export default function ProductSwatch(props: ProductSwatchProps) {
   const context = useCioPlpContext();
-  const { swatchObject, children } = props;
-  const { swatchList, selectVariation, selectedVariation } = swatchObject;
+  const { swatchObject, item, children, showMoreLabel } = props;
+  const {
+    swatchList,
+    selectVariation,
+    selectedVariation,
+    visibleSwatches,
+    hiddenSwatches,
+    totalSwatchCount,
+    hasMoreSwatches,
+  } = swatchObject;
   if (!context) {
     throw new Error('This component is meant to be used within the context of the CioPlpProvider');
   }
 
   const {
-    callbacks: { onSwatchClick },
+    callbacks: { onSwatchClick, onShowMoreSwatches },
+    urlHelpers: { setUrl },
   } = context;
+
+  const showMoreClickHandler = useOnShowMoreSwatches(
+    item,
+    selectedVariation,
+    hiddenSwatches ?? [],
+    setUrl,
+    onShowMoreSwatches,
+  );
 
   const swatchClickHandler = (e: React.MouseEvent, clickedSwatch: SwatchItem) => {
     selectVariation(clickedSwatch);
@@ -35,19 +57,35 @@ export default function ProductSwatch(props: ProductSwatchProps) {
     e.preventDefault();
   };
 
+  const getShowMoreLabel = () => {
+    const hiddenCount = hiddenSwatches?.length ?? 0;
+    if (typeof showMoreLabel === 'function') {
+      return showMoreLabel(hiddenCount);
+    }
+    return showMoreLabel ?? `View more >`;
+  };
+
+  // Use visibleSwatches if available, fall back to swatchList for backwards compatibility
+  const swatchesToRender = visibleSwatches ?? swatchList;
+
   return (
     <>
       {typeof children === 'function' ? (
         children({
+          item,
           swatchList,
           selectVariation,
           selectedVariation,
+          visibleSwatches,
+          hiddenSwatches,
+          totalSwatchCount,
+          hasMoreSwatches,
         })
       ) : (
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         <div onClick={swatchContainerClickHandler}>
           <ul className='cio-swatch-container'>
-            {swatchList?.map((swatch) => {
+            {swatchesToRender?.map((swatch) => {
               const isSelected = selectedVariation?.variationId === swatch.variationId;
               const color = isHexColor(swatch?.swatchPreview)
                 ? swatch?.swatchPreview
@@ -78,6 +116,16 @@ export default function ProductSwatch(props: ProductSwatchProps) {
               );
             })}
           </ul>
+          {hasMoreSwatches && (
+            <button
+              type='button'
+              data-testid='cio-swatch-show-more'
+              className='cio-swatch-show-more'
+              onClick={showMoreClickHandler}
+              aria-label={`Show ${hiddenSwatches?.length} more`}>
+              {getShowMoreLabel()}
+            </button>
+          )}
         </div>
       )}
     </>
