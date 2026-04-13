@@ -144,19 +144,21 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
-  // Update internal state when facet status changes
+  // Sync internal state when facet range or status changes
   useEffect(() => {
-    if (facet.status?.min !== undefined) {
-      const clampedMin = Math.max(displayMin, Math.min(displayMax, facet.status.min));
-      setMinValue(clampedMin);
-      setInputMinValue(isSingleValue ? facet.status.min : clampedMin);
-    }
+    const clamp = (value: number) => Math.max(displayMin, Math.min(displayMax, value));
 
-    if (facet.status?.max !== undefined) {
-      const clampedMax = Math.max(displayMin, Math.min(displayMax, facet.status.max));
-      setMaxValue(clampedMax);
-      setInputMaxValue(isSingleValue ? facet.status.max : clampedMax);
-    }
+    const targetMin = facet.status?.min !== undefined ? clamp(facet.status.min) : displayMin;
+    const targetMax = facet.status?.max !== undefined ? clamp(facet.status.max) : displayMax;
+
+    setMinValue(targetMin);
+    setMaxValue(targetMax);
+    setInputMinValue(
+      isSingleValue && facet.status?.min !== undefined ? facet.status.min : targetMin,
+    );
+    setInputMaxValue(
+      isSingleValue && facet.status?.max !== undefined ? facet.status.max : targetMax,
+    );
   }, [
     facet.min,
     facet.max,
@@ -166,18 +168,6 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     displayMax,
     isSingleValue,
   ]);
-
-  // Update internal state when facet's min/max change (e.g. due to another filter being applied)
-  useEffect(() => {
-    if (facet.status?.min === undefined) {
-      setMinValue(displayMin);
-      setInputMinValue(displayMin);
-    }
-    if (facet.status?.max === undefined) {
-      setMaxValue(displayMax);
-      setInputMaxValue(displayMax);
-    }
-  }, [displayMax, displayMin, facet.status?.max, facet.status?.min]);
 
   // Update selected track styles
   useEffect(() => {
