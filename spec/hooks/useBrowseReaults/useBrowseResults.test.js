@@ -8,24 +8,17 @@ import '@testing-library/jest-dom';
 
 describe('Testing Hook: useBrowseResults', () => {
   const originalWindowLocation = window.location;
-  const mockUrl = 'https://example.com/group_id/All';
-  const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: mockLocation,
-    });
+    window.location = 'https://example.com/group_id/All';
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
-
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
     jest.clearAllTimers(); // Clear all timers after each test
