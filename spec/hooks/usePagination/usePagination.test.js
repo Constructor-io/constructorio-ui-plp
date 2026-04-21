@@ -131,9 +131,8 @@ describe('usePagination', () => {
     });
 
     it('should preserve existing query parameters when generating page URL', () => {
-      Object.defineProperty(window, 'location', {
-        value: new URL('https://example.com?q=shoes&sortBy=price&sortOrder=ascending&filters%5Bcolor%5D=red'),
-      });
+      window.location =
+        'https://example.com?q=shoes&sortBy=price&sortOrder=ascending&filters%5Bcolor%5D=red';
 
       const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
       const url = result.current.getPageUrl(3);
@@ -147,9 +146,7 @@ describe('usePagination', () => {
     });
 
     it('should only update page param without affecting other parameters', () => {
-      Object.defineProperty(window, 'location', {
-        value: new URL('https://example.com?q=shirt&page=1&numResults=10'),
-      });
+      window.location = 'https://example.com?q=shirt&page=1&numResults=10';
 
       const { result } = renderHookWithCioPlp(() => usePagination(paginationProps));
       const url = result.current.getPageUrl(5);

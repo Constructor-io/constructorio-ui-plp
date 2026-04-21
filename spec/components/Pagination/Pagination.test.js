@@ -111,11 +111,13 @@ describe('Pagination with useAnchors', () => {
       </CioPlp>,
     );
 
-    const pageAnchors = container.querySelectorAll('.cio-pagination a');
-    const anchorsWithHref = Array.from(pageAnchors).filter((a) => a.getAttribute('href'));
-    expect(anchorsWithHref.length).toBeGreaterThan(0);
-    anchorsWithHref.forEach((a) => {
-      expect(a.getAttribute('href')).toContain('page=');
+    const pageAnchors = Array.from(container.querySelectorAll('.cio-pagination a'));
+    // page=1 is intentionally omitted from the URL for SEO canonical reasons,
+    // so only assert page= presence for anchors representing pages > 1.
+    const nonFirstPageAnchors = pageAnchors.filter((a) => a.textContent !== '1');
+    expect(nonFirstPageAnchors.length).toBeGreaterThan(0);
+    nonFirstPageAnchors.forEach((a) => {
+      expect(a.getAttribute('href')).toContain(`page=${a.textContent}`);
     });
   });
 
