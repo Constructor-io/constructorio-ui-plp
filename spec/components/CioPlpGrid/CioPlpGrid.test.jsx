@@ -384,4 +384,41 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
     });
   });
+
+  it('Should forward paginationConfigs.useAnchors to the Pagination component', async () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          paginationConfigs={{ useAnchors: true }}
+          initialSearchResponse={mockApiSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      const pageAnchors = container.querySelectorAll('.cio-pagination a');
+      const paginationButtons = container.querySelectorAll('.cio-pagination button');
+
+      expect(pageAnchors.length).toBeGreaterThan(0);
+      expect(paginationButtons.length).toBe(2);
+    });
+  });
+
+  it('Should forward paginationConfigs.useAnchors when passed at the CioPlp level', async () => {
+    const { container } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        paginationConfigs={{ useAnchors: true }}
+        initialSearchResponse={mockApiSearchResponse}
+      />,
+    );
+
+    await waitFor(() => {
+      const pageAnchors = container.querySelectorAll('.cio-pagination a');
+      const paginationButtons = container.querySelectorAll('.cio-pagination button');
+
+      expect(pageAnchors.length).toBeGreaterThan(0);
+      expect(paginationButtons.length).toBe(2);
+    });
+  });
 });
