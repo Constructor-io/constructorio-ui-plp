@@ -8,24 +8,17 @@ import { getUrlFromState } from '../../../src/utils/urlHelpers';
 
 describe('Testing Hook: useSearchResults', () => {
   const originalWindowLocation = window.location;
-  const mockUrl = 'https://example.com/search?q=Linen';
-  const mockLocation = new URL(mockUrl);
 
   beforeEach(() => {
     // Mock console error to de-clutter the console for expected errors
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: mockLocation,
-    });
+    window.location = 'https://example.com/search?q=Linen';
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
-
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
     jest.clearAllMocks();
     jest.clearAllTimers(); // Clear all timers after each test

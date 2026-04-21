@@ -163,7 +163,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
-                        <Filters facets={filters.facets} />
+                        <Filters facets={filters.facets} {...filterConfigs} />
                       </MobileModal>
 
                       {data.response?.results?.map((item) => (

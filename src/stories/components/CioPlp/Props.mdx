@@ -68,6 +68,34 @@ Configuration options for sorting functionality. No specific configurations avai
 
 Configuration options for filters functionality. No specific configurations available yet.
 
+## ComponentOverrides
+
+Component overrides allow you to replace default sub-components with custom implementations. Each override slot accepts either a React node or a render function that receives the component's state as props.
+
+Currently supported overrides:
+
+### `filterGroup`
+
+Override slots for the `FilterGroup` component. Each slot receives `FilterGroupRenderProps`:
+
+| Property           | Type                                       | Description                                            |
+| ------------------ | ------------------------------------------ | ------------------------------------------------------ |
+| facet              | `PlpFacet`                                 | The facet data for this filter group                   |
+| isCollapsed        | `boolean`                                  | Whether this filter group is currently collapsed       |
+| toggleIsCollapsed  | `() => void`                               | Toggle the collapsed state                             |
+| onFilterSelect     | `(value: PlpFilterValue) => void`          | Callback to apply a filter value for this facet        |
+
+Available override slots:
+
+| Slot            | Description                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `reactNode`     | Replaces the entire FilterGroup `<li>` element                      |
+| `header`        | Replaces the header button (facet name + collapse arrow)            |
+| `optionsList`   | Replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)   |
+| `rangeSlider`   | Replaces the `FilterRangeSlider` (min/max inputs + slider track)    |
+
+See the [Filters component documentation](./?path=/docs/components-filters--code-examples#component-overrides) for interactive examples.
+
 ## UrlHelpers
 
 URL Helpers are used for managing the URL and request state. These functions define how this library modifies and parses the URL.

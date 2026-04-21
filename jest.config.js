@@ -3,7 +3,8 @@ module.exports = {
   projects: [
     {
       displayName: 'client',
-      testEnvironment: 'jsdom',
+      testEnvironment: './spec/jest-env-jsdom.js',
+      setupFiles: ['whatwg-fetch'],
       moduleNameMapper: {
         '\\.css$': require.resolve('./spec/mock-styles.js'),
         '\\.svg$': require.resolve('./spec/mock-icons.js'),
