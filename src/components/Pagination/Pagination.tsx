@@ -9,9 +9,11 @@ export type PaginationProps = UsePaginationProps & {
    *
    * _This prop will be removed in v2. Anchor-based rendering will become the default behavior._
    *
-   * When true, renders pagination controls as `<a href>` anchor elements instead of `<button>` elements.
+   * When true, renders the numbered page controls as `<a href>` anchor elements instead of `<button>` elements.
+   * The previous/next navigation controls remain `<button>` elements.
    * This enables search engine crawlers (e.g., Google) to discover and index paginated content.
-   * JavaScript-enabled browsers still use SPA navigation via onClick + preventDefault.
+   * JavaScript-enabled browsers still use SPA navigation via onClick + preventDefault,
+   * while modifier-clicks (Cmd/Ctrl/Shift/Alt or middle-click) fall through to native browser behavior.
    */
   useAnchors?: boolean;
 };
@@ -64,35 +66,50 @@ export default function Pagination(props: PaginationWithRenderProps) {
           <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
             &lt;
           </button>
-          {useAnchors
-            ? pages.map((page, i) =>
-                page === -1 ? (
-                  <span key={`${page},${i}`} className='cio-pagination-ellipsis'>
-                    ...
-                  </span>
-                ) : (
-                  <a
-                    href={getPageUrl(page)}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      goToPage(page);
-                    }}
-                    key={`${page},${i}`}
-                    className={currentPage === page ? 'selected' : ''}
-                    aria-current={currentPage === page ? 'page' : undefined}>
-                    {page}
-                  </a>
-                ),
-              )
-            : pages.map((page, i) => (
-                <button
-                  onClick={() => goToPage(page)}
-                  type='button'
+          {pages.map((page, i) => {
+            if (page === -1) {
+              return (
+                <span key={`${page},${i}`} className='cio-pagination-ellipsis'>
+                  ...
+                </span>
+              );
+            }
+            const isSelected = currentPage === page;
+            const className = isSelected ? 'selected' : undefined;
+            const ariaCurrent = isSelected ? 'page' : undefined;
+
+            if (useAnchors) {
+              return (
+                <a
+                  href={getPageUrl(page)}
+                  onClick={(e) => {
+                    // Let the browser handle modified clicks (Cmd/Ctrl/Shift/Alt) and
+                    // non-primary buttons so users can open pages in new tabs/windows.
+                    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+                      return;
+                    }
+                    e.preventDefault();
+                    goToPage(page);
+                  }}
                   key={`${page},${i}`}
-                  className={currentPage === page ? 'selected' : ''}>
-                  {page === -1 ? <span>...</span> : page}
-                </button>
-              ))}
+                  className={className}
+                  aria-current={ariaCurrent}>
+                  {page}
+                </a>
+              );
+            }
+
+            return (
+              <button
+                onClick={() => goToPage(page)}
+                type='button'
+                key={`${page},${i}`}
+                className={className}
+                aria-current={ariaCurrent}>
+                {page}
+              </button>
+            );
+          })}
           <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
             &gt;
           </button>
