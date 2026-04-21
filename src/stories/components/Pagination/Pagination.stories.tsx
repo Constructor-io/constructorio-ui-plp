@@ -46,6 +46,7 @@ export const Primary: Story = {
   args: {
     totalNumResults: 200,
     resultsPerPage: 10,
+    useAnchors: true,
   },
 };
 

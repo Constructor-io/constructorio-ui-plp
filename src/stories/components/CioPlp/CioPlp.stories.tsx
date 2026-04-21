@@ -116,6 +116,9 @@ export const SearchPlp: Story = {
   render: (args) => <PrimaryStory args={args} defaultUrl={`${window.location.href}&q=shirt`} />,
   args: {
     apiKey: DEMO_API_KEY,
+    paginationConfigs: {
+      useAnchors: true,
+    },
   },
 };
 
@@ -128,6 +131,9 @@ export const BrowsePlp: Story = {
   ),
   args: {
     apiKey: DEMO_API_KEY,
+    paginationConfigs: {
+      useAnchors: true,
+    },
   },
 };
 
