@@ -158,6 +158,57 @@ describe('Pagination with useAnchors', () => {
     expect(buttons.length).toBeGreaterThan(0);
     expect(anchors.length).toBe(0);
   });
+
+  it('modifier-click (Cmd/Ctrl/Shift/Alt) does not trigger SPA navigation', () => {
+    const setUrlSpy = jest.fn();
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY} urlHelpers={{ setUrl: setUrlSpy }}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const pageAnchors = Array.from(container.querySelectorAll('.cio-pagination a'));
+    const anchorForPage2 = pageAnchors.find((a) => a.textContent === '2');
+    expect(anchorForPage2).toBeDefined();
+
+    fireEvent.click(anchorForPage2, { metaKey: true });
+    fireEvent.click(anchorForPage2, { ctrlKey: true });
+    fireEvent.click(anchorForPage2, { shiftKey: true });
+    fireEvent.click(anchorForPage2, { altKey: true });
+
+    expect(setUrlSpy).not.toHaveBeenCalled();
+
+    // Sanity check: an unmodified click still triggers navigation
+    fireEvent.click(anchorForPage2);
+    expect(setUrlSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Pagination without useAnchors (button branch)', () => {
+  it('active page button has aria-current="page"', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} />
+      </CioPlp>,
+    );
+
+    const activeButton = container.querySelector('button.selected');
+    expect(activeButton).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('ellipsis is rendered as span, not button', () => {
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={200} resultsPerPage={10} windowSize={5} />
+      </CioPlp>,
+    );
+
+    const ellipsisSpans = container.querySelectorAll('.cio-pagination-ellipsis');
+    expect(ellipsisSpans.length).toBeGreaterThan(0);
+    ellipsisSpans.forEach((span) => {
+      expect(span.tagName).toBe('SPAN');
+    });
+  });
 });
 
 // Interaction Test

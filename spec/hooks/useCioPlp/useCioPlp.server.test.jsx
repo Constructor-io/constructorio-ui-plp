@@ -46,7 +46,7 @@ describe('Testing Hook on the server: useCioPlp with initial search results', ()
     expect(data?.resultId).toBeUndefined();
     expect(filters.facets).toEqual([]);
     expect(pagination.currentPage).toEqual(1);
-    expect(pagination.totalPages).toBeGreaterThanOrEqual(0);
+    expect(pagination.totalPages).toEqual(0);
     expect(sort.selectedSort).toEqual(null);
 
     expect(typeof filters.setFilter).toEqual('function');
@@ -76,7 +76,8 @@ describe('Testing Hook on the server: useCioPlp with initial search results', ()
     expect(sort.selectedSort).toEqual(null);
 
     expect(pagination.currentPage).toEqual(1);
-    expect(pagination.totalPages).toBeGreaterThanOrEqual(0);
+    // Math.ceil(357 / 20) = 18; fixture total_num_results=357 at default resultsPerPage=20
+    expect(pagination.totalPages).toEqual(18);
 
     expect(typeof filters.setFilter).toEqual('function');
     expect(typeof pagination.goToPage).toEqual('function');
@@ -107,7 +108,8 @@ describe('Testing Hook on the server: useCioPlp with initial search results', ()
     expect(sort.selectedSort).toEqual(null);
 
     expect(pagination.currentPage).toEqual(1);
-    expect(pagination.totalPages).toBeGreaterThanOrEqual(0);
+    // Math.ceil(281 / 20) = 15; fixture total_num_results=281 at default resultsPerPage=20
+    expect(pagination.totalPages).toEqual(15);
 
     expect(typeof filters.setFilter).toEqual('function');
     expect(typeof pagination.goToPage).toEqual('function');
