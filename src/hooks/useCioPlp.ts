@@ -4,7 +4,7 @@ import { useCioPlpContext } from './useCioPlpContext';
 import useSearchResults, { UseSearchResultsProps } from './useSearchResults';
 import useFilter, { UseFilterProps } from './useFilter';
 import useSort, { UseSortProps } from './useSort';
-import usePagination, { UsePaginationProps } from './usePagination';
+import usePagination from './usePagination';
 import {
   getPageType,
   checkIsBrowsePage,
@@ -17,6 +17,7 @@ import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups from './useGroups';
 import { GroupsProps } from '../components/Groups';
 import useRequestConfigs from './useRequestConfigs';
+import { PaginationProps } from '../components/Pagination';
 
 export interface UseCioPlpHook extends PlpContextValue {}
 
@@ -24,8 +25,10 @@ export type UseCioPlpProps = UseSearchResultsProps &
   UseBrowseResultsProps & {
     /**
      * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+     * Set `useAnchors: true` to render pagination as `<a href>` links for SEO crawlability.
+     * Note: `useAnchors` will be removed in v2 and anchor-based rendering will become the default.
      */
-    paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+    paginationConfigs?: Omit<PaginationProps, 'totalNumResults'>;
     /**
      * No configurations available yet.
      */
