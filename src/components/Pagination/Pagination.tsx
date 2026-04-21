@@ -68,10 +68,18 @@ export default function Pagination(props: PaginationWithRenderProps) {
           </button>
           {pages.map((page, i) => {
             if (page === -1) {
+              if (useAnchors) {
+                return (
+                  <span key={`${page},${i}`} className='cio-pagination-ellipsis'>
+                    ...
+                  </span>
+                );
+              }
+
               return (
-                <span key={`${page},${i}`} className='cio-pagination-ellipsis'>
-                  ...
-                </span>
+                <button onClick={() => goToPage(page)} type='button' key={`${page},${i}`}>
+                  <span>...</span>
+                </button>
               );
             }
             const isSelected = currentPage === page;
