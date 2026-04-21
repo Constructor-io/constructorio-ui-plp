@@ -196,18 +196,18 @@ describe('Pagination without useAnchors (button branch)', () => {
     expect(activeButton).toHaveAttribute('aria-current', 'page');
   });
 
-  it('ellipsis is rendered as span, not button', () => {
+  it('ellipsis is rendered as a button for backwards compatibility', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={200} resultsPerPage={10} windowSize={5} />
       </CioPlp>,
     );
 
-    const ellipsisSpans = container.querySelectorAll('.cio-pagination-ellipsis');
-    expect(ellipsisSpans.length).toBeGreaterThan(0);
-    ellipsisSpans.forEach((span) => {
-      expect(span.tagName).toBe('SPAN');
-    });
+    const ellipsisButtons = Array.from(container.querySelectorAll('.cio-pagination button')).filter(
+      (b) => b.textContent === '...',
+    );
+    expect(ellipsisButtons.length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('.cio-pagination-ellipsis').length).toBe(0);
   });
 });
 
