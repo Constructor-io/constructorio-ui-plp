@@ -19,6 +19,16 @@ import { getAttribute } from '../../test-utils';
 const actualUseCioPlp = jest.requireActual('../../../src/hooks/useCioPlp').default;
 const actualUseRequestConfigs = jest.requireActual('../../../src/hooks/useRequestConfigs').default;
 
+const mockPagination = jest.fn();
+
+jest.mock('../../../src/components/Pagination', () => ({
+  __esModule: true,
+  default: (props) => {
+    mockPagination(props);
+    return null;
+  },
+}));
+
 jest.mock('../../../src/hooks/useCioPlp');
 jest.mock('../../../src/hooks/useRequestConfigs');
 jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
@@ -64,6 +74,7 @@ describe('Testing Component: CioPlpGrid', () => {
 
     useCioPlp.mockImplementation(actualUseCioPlp);
     useRequestConfigs.mockImplementation(actualUseRequestConfigs);
+    mockPagination.mockClear();
   });
 
   afterEach(() => {
@@ -385,40 +396,40 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
-  it('Should forward paginationConfigs.useAnchors to the Pagination component', async () => {
-    const { container } = render(
+  it('Should forward paginationConfigs to the Pagination component when passed at CioPlpGrid level', async () => {
+    render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <CioPlpGrid
-          paginationConfigs={{ useAnchors: true }}
+          paginationConfigs={{ useAnchors: true, windowSize: 7 }}
           initialSearchResponse={mockApiSearchResponse}
         />
       </CioPlp>,
     );
 
     await waitFor(() => {
-      const pageAnchors = container.querySelectorAll('.cio-pagination a');
-      const paginationButtons = container.querySelectorAll('.cio-pagination button');
-
-      expect(pageAnchors.length).toBeGreaterThan(0);
-      expect(paginationButtons.length).toBe(2);
+      expect(mockPagination).toHaveBeenCalled();
     });
+
+    expect(mockPagination.mock.calls[0][0]).toEqual(
+      expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+    );
   });
 
-  it('Should forward paginationConfigs.useAnchors when passed at the CioPlp level', async () => {
-    const { container } = render(
+  it('Should forward paginationConfigs to the Pagination component when passed at CioPlp level', async () => {
+    render(
       <CioPlp
         apiKey={DEMO_API_KEY}
-        paginationConfigs={{ useAnchors: true }}
+        paginationConfigs={{ useAnchors: true, windowSize: 7 }}
         initialSearchResponse={mockApiSearchResponse}
       />,
     );
 
     await waitFor(() => {
-      const pageAnchors = container.querySelectorAll('.cio-pagination a');
-      const paginationButtons = container.querySelectorAll('.cio-pagination button');
-
-      expect(pageAnchors.length).toBeGreaterThan(0);
-      expect(paginationButtons.length).toBe(2);
+      expect(mockPagination).toHaveBeenCalled();
     });
+
+    expect(mockPagination.mock.calls[0][0]).toEqual(
+      expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+    );
   });
 });
