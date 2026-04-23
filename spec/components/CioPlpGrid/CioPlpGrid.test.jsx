@@ -406,10 +406,7 @@ describe('Testing Component: CioPlpGrid', () => {
       </CioPlp>,
     );
 
-    await waitFor(() => {
-      expect(mockPagination).toHaveBeenCalled();
-    });
-
+    expect(mockPagination).toHaveBeenCalled();
     expect(mockPagination.mock.calls[0][0]).toEqual(
       expect.objectContaining({ useAnchors: true, windowSize: 7 }),
     );
@@ -424,10 +421,7 @@ describe('Testing Component: CioPlpGrid', () => {
       />,
     );
 
-    await waitFor(() => {
-      expect(mockPagination).toHaveBeenCalled();
-    });
-
+    expect(mockPagination).toHaveBeenCalled();
     expect(mockPagination.mock.calls[0][0]).toEqual(
       expect.objectContaining({ useAnchors: true, windowSize: 7 }),
     );
