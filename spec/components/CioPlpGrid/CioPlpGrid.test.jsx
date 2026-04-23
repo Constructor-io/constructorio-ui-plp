@@ -408,11 +408,10 @@ describe('Testing Component: CioPlpGrid', () => {
 
     await waitFor(() => {
       expect(mockPagination).toHaveBeenCalled();
+      expect(mockPagination.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+      );
     });
-
-    expect(mockPagination.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ useAnchors: true, windowSize: 7 }),
-    );
   });
 
   it('Should forward paginationConfigs to the Pagination component when passed at CioPlp level', async () => {
@@ -426,10 +425,9 @@ describe('Testing Component: CioPlpGrid', () => {
 
     await waitFor(() => {
       expect(mockPagination).toHaveBeenCalled();
+      expect(mockPagination.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+      );
     });
-
-    expect(mockPagination.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ useAnchors: true, windowSize: 7 }),
-    );
   });
 });
