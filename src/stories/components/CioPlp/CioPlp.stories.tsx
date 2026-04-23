@@ -107,7 +107,11 @@ function PrimaryStory({ args, defaultUrl }: any) {
         getUrl: () => currentUrl,
       }}
       {...args}>
-      <CioPlpGrid key={gridKey} groupsConfigs={args.groupsConfigs} />
+      <CioPlpGrid
+        key={gridKey}
+        groupsConfigs={args.groupsConfigs}
+        paginationConfigs={args.paginationConfigs}
+      />
     </CioPlp>
   );
 }
