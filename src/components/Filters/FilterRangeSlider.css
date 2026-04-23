@@ -74,6 +74,8 @@
   font-weight: 500;
   text-wrap: nowrap;
   resize: none;
+  min-width: 0;
+  overflow: hidden;
 
   /* Stretch the selectable container */
   flex-grow: 1;
