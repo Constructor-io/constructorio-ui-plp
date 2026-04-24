@@ -3,6 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
 
+// Returns true for clicks that should fall through to native browser behavior
+// (open in new tab/window): non-primary button or any modifier key held.
+function isModifiedClick(e: React.MouseEvent): boolean {
+  return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+}
+
 // Renders a pagination nav arrow (prev/next) as an <a> when an href is available,
 // otherwise as a <button>. Anchors enable crawler discovery; the button fallback
 // covers boundary pages (no prev on page 1, no next on last page) where no valid
@@ -11,11 +17,13 @@ function NavArrow({
   href,
   onNavigate,
   testId,
+  ariaLabel,
   children,
 }: {
   href: string | undefined;
   onNavigate: () => void;
   testId: string;
+  ariaLabel: string;
   children: React.ReactNode;
 }) {
   if (href) {
@@ -23,19 +31,18 @@ function NavArrow({
       <a
         href={href}
         onClick={(e) => {
-          // Let the browser handle modified clicks (Cmd/Ctrl/Shift/Alt) and
-          // non-primary buttons so users can open pages in new tabs/windows.
-          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if (isModifiedClick(e)) return;
           e.preventDefault();
           onNavigate();
         }}
-        data-testid={testId}>
+        data-testid={testId}
+        aria-label={ariaLabel}>
         {children}
       </a>
     );
   }
   return (
-    <button onClick={onNavigate} type='button' data-testid={testId}>
+    <button onClick={onNavigate} type='button' data-testid={testId} aria-label={ariaLabel}>
       {children}
     </button>
   );
@@ -106,7 +113,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
           <NavArrow
             href={useAnchors && currentPage ? getPageUrl(currentPage - 1) : undefined}
             onNavigate={prevPage}
-            testId='cio-pagination-prev-button'>
+            testId='cio-pagination-prev-button'
+            ariaLabel='Previous page'>
             &lt;
           </NavArrow>
           {pages.map((page, i) => {
@@ -134,11 +142,7 @@ export default function Pagination(props: PaginationWithRenderProps) {
                 <a
                   href={getPageUrl(page)}
                   onClick={(e) => {
-                    // Let the browser handle modified clicks (Cmd/Ctrl/Shift/Alt) and
-                    // non-primary buttons so users can open pages in new tabs/windows.
-                    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-                      return;
-                    }
+                    if (isModifiedClick(e)) return;
                     e.preventDefault();
                     goToPage(page);
                   }}
@@ -164,7 +168,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
           <NavArrow
             href={useAnchors && currentPage ? getPageUrl(currentPage + 1) : undefined}
             onNavigate={nextPage}
-            testId='cio-pagination-next-button'>
+            testId='cio-pagination-next-button'
+            ariaLabel='Next page'>
             &gt;
           </NavArrow>
         </div>

@@ -149,6 +149,46 @@ describe('Pagination with useAnchors', () => {
     expect(nextAnchor).not.toBeInTheDocument();
   });
 
+  it('prev/next anchors expose aria-label for screen readers', () => {
+    window.location = 'https://example.com?page=2';
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
+    expect(prevAnchor).toHaveAttribute('aria-label', 'Previous page');
+    expect(nextAnchor).toHaveAttribute('aria-label', 'Next page');
+  });
+
+  it('prev/next button fallback on boundary pages carries aria-label', () => {
+    // page 1 → prev falls back to button
+    window.location = 'https://example.com';
+    const { container: firstPageContainer } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+    const prevButton = firstPageContainer.querySelector(
+      'button[data-testid="cio-pagination-prev-button"]',
+    );
+    expect(prevButton).toHaveAttribute('aria-label', 'Previous page');
+
+    // last page (100 results / 20 per page = 5 total pages) → next falls back to button
+    window.location = 'https://example.com?page=5';
+    const { container: lastPageContainer } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+    const nextButton = lastPageContainer.querySelector(
+      'button[data-testid="cio-pagination-next-button"]',
+    );
+    expect(nextButton).toHaveAttribute('aria-label', 'Next page');
+  });
+
   it('modifier-click on prev/next anchors does not trigger SPA navigation', () => {
     window.location = 'https://example.com?page=2';
     const setUrlSpy = jest.fn();
