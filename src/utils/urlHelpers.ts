@@ -131,6 +131,14 @@ export function getUrlFromState(state: RequestConfigs, url: string): string {
       return;
     }
 
+    // Don't append the library-default results-per-page (20) to the URL since it's
+    // redundant and exposes a non-canonical URL to crawlers. `key` here is the internal
+    // state name `resultsPerPage`; it maps to the URL parameter `numResults` via
+    // `defaultQueryStringMap` when appended below.
+    if (key === 'resultsPerPage' && val === 20) {
+      return;
+    }
+
     let encodedVal: string = '';
 
     if (key === 'filters' && state.filters) {
