@@ -10,6 +10,7 @@ import {
   setUrl,
 } from '../../src/utils';
 import { RequestConfigs } from '../../src/types';
+import { DEFAULT_RESULTS_PER_PAGE } from '../../src/constants';
 
 describe('Testing Default UrlHelpers: getUrlFromState', () => {
   test('Should encode all request parameters as defined in defaultQueryStringMap', () => {
@@ -117,6 +118,38 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     const state = { query: 'item', page: 2 } as RequestConfigs;
     const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
     expect(url.searchParams.get('page')).toBe('2');
+  });
+
+  test('Should not append numResults (library default) to the URL', () => {
+    // Internal state key is `resultsPerPage`; the URL query parameter is `numResults`.
+    const state = {
+      query: 'item',
+      resultsPerPage: DEFAULT_RESULTS_PER_PAGE,
+    } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.has('numResults')).toBe(false);
+    expect(url.searchParams.has('resultsPerPage')).toBe(false);
+  });
+
+  test('Should still append numResults when value differs from library default', () => {
+    const state = {
+      query: 'item',
+      resultsPerPage: DEFAULT_RESULTS_PER_PAGE + 10,
+    } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.get('numResults')).toBe(String(DEFAULT_RESULTS_PER_PAGE + 10));
+  });
+
+  test('Should strip default numResults round-trip (URL → state → URL)', () => {
+    // Simulates a URL that already has the library-default numResults on it
+    // (e.g., from an inbound link). Re-serializing should drop it.
+    const inboundUrl = `https://www.example.com/collections/skis?page=2&numResults=${DEFAULT_RESULTS_PER_PAGE}`;
+    const state = getStateFromUrl(inboundUrl);
+    expect(state.resultsPerPage).toBe(DEFAULT_RESULTS_PER_PAGE);
+
+    const rebuilt = new URL(getUrlFromState(state, inboundUrl));
+    expect(rebuilt.searchParams.has('numResults')).toBe(false);
+    expect(rebuilt.searchParams.get('page')).toBe('2');
   });
 
   test('Should retain pathname when filterName and filterValue are not provided', () => {
