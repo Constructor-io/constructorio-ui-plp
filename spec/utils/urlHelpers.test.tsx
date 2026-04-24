@@ -119,6 +119,32 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(url.searchParams.get('page')).toBe('2');
   });
 
+  test('Should not append numResults=20 (library default) to the URL', () => {
+    // Internal state key is `resultsPerPage`; the URL query parameter is `numResults`.
+    const state = { query: 'item', resultsPerPage: 20 } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.has('numResults')).toBe(false);
+    expect(url.searchParams.has('resultsPerPage')).toBe(false);
+  });
+
+  test('Should still append numResults when value differs from library default', () => {
+    const state = { query: 'item', resultsPerPage: 30 } as RequestConfigs;
+    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
+    expect(url.searchParams.get('numResults')).toBe('30');
+  });
+
+  test('Should strip numResults=20 round-trip (URL → state → URL)', () => {
+    // Simulates a URL that already has the library-default numResults on it
+    // (e.g., from an inbound link). Re-serializing should drop it.
+    const inboundUrl = 'https://www.example.com/collections/skis?page=2&numResults=20';
+    const state = getStateFromUrl(inboundUrl);
+    expect(state.resultsPerPage).toBe(20);
+
+    const rebuilt = new URL(getUrlFromState(state, inboundUrl));
+    expect(rebuilt.searchParams.has('numResults')).toBe(false);
+    expect(rebuilt.searchParams.get('page')).toBe('2');
+  });
+
   test('Should retain pathname when filterName and filterValue are not provided', () => {
     const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
     const url = new URL(
