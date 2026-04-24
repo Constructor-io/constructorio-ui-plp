@@ -6,7 +6,7 @@ import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../ho
 // Renders a pagination nav arrow (prev/next) as an <a> when an href is available,
 // otherwise as a <button>. Anchors enable crawler discovery; the button fallback
 // covers boundary pages (no prev on page 1, no next on last page) where no valid
-// URL exists, and preserves focusability + correct semantics for an inert control.
+// URL exists
 function NavArrow({
   href,
   onNavigate,
