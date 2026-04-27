@@ -240,3 +240,73 @@ export default function MyComponent() {
 `UseGroupReturn`
 
 <Markdown>{UseGroupsReturn}</Markdown>
+
+## Component Overrides
+
+Use `componentOverrides` on the `CioPlp` provider to replace default sub-components within `Groups`. Each override slot accepts either a static `ReactNode` or a render function that receives `GroupsRenderProps` with full state access (`groups`, `isCollapsed`, `toggleIsCollapsed`, `onOptionSelect`, `goToGroupFilter`).
+
+### Override Entire Groups
+
+Replace the complete groups container:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    groups: {
+      reactNode: ({ groups, isCollapsed, toggleIsCollapsed }) => (
+        <div style={{ border: '1px solid #ccc', padding: '12px' }}>
+          <button type="button" onClick={toggleIsCollapsed}>
+            Custom Groups {isCollapsed ? '▶' : '▼'}
+          </button>
+          {/* custom groups rendering */}
+        </div>
+      ),
+    },
+  }}
+/>
+```
+
+<Canvas of={GroupsStories.OverrideRoot} />
+
+### Override Header Only
+
+Replace the header button while keeping the default breadcrumbs and options list:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    groups: {
+      header: {
+        reactNode: ({ isCollapsed, toggleIsCollapsed }) => (
+          <div onClick={toggleIsCollapsed} style={{ cursor: 'pointer' }}>
+            <span>Product Categories</span>
+            <span>{isCollapsed ? 'Show' : 'Hide'}</span>
+          </div>
+        ),
+      },
+    },
+  }}
+/>
+```
+
+<Canvas of={GroupsStories.OverrideHeader} />
+
+### Override Breadcrumbs
+
+Replace the breadcrumbs navigation with a custom implementation:
+
+<Canvas of={GroupsStories.OverrideBreadcrumbs} />
+
+### Override Options List
+
+Replace the group options list with a custom implementation:
+
+<Canvas of={GroupsStories.OverrideOptionsList} />
+
+### Static ReactNode Override
+
+Use a static `ReactNode` instead of a render function to replace a sub-component with fixed content:
+
+<Canvas of={GroupsStories.OverrideHeaderStatic} />

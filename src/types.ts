@@ -458,6 +458,39 @@ export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps
   rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
 };
 
+/**
+ * Render props passed to every Groups override function.
+ * Provides the full state needed to rebuild any part of the groups component.
+ */
+export interface GroupsRenderProps {
+  /** The groups data array */
+  groups: PlpItemGroup[];
+  /** Whether the groups panel is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Callback to select a group option by groupId */
+  onOptionSelect: (groupId: string | null) => void;
+  /** Callback to navigate via breadcrumb */
+  goToGroupFilter: (breadcrumb: { path: string; groupId: string; breadcrumb: string }) => void;
+}
+
+/**
+ * Component override slots available on `Groups`.
+ *
+ * Top-level `reactNode` replaces the entire groups container.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<GroupsRenderProps>`:
+ * - **header** — replaces the header button (title + collapse arrow)
+ * - **breadcrumbs** — replaces the breadcrumbs navigation
+ * - **optionsList** — replaces the options list (group items + "Show All" toggle)
+ */
+export type GroupsOverrides = ComponentOverrideProps<GroupsRenderProps> & {
+  header?: ComponentOverrideProps<GroupsRenderProps>;
+  breadcrumbs?: ComponentOverrideProps<GroupsRenderProps>;
+  optionsList?: ComponentOverrideProps<GroupsRenderProps>;
+};
+
 export interface PlpComponentOverrides {
   filterGroup?: FilterGroupOverrides;
+  groups?: GroupsOverrides;
 }

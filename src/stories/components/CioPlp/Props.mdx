@@ -96,6 +96,29 @@ Available override slots:
 
 See the [Filters component documentation](./?path=/docs/components-filters--code-examples#component-overrides) for interactive examples.
 
+### `groups`
+
+Override slots for the `Groups` component. Each slot receives `GroupsRenderProps`:
+
+| Property           | Type                                                                        | Description                                            |
+| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------ |
+| groups             | `PlpItemGroup[]`                                                            | The groups data array                                  |
+| isCollapsed        | `boolean`                                                                   | Whether the groups panel is currently collapsed        |
+| toggleIsCollapsed  | `() => void`                                                                | Toggle the collapsed state                             |
+| onOptionSelect     | `(groupId: string \| null) => void`                                         | Callback to select a group option by groupId           |
+| goToGroupFilter    | `(breadcrumb: { path: string; groupId: string; breadcrumb: string }) => void` | Callback to navigate via breadcrumb                  |
+
+Available override slots:
+
+| Slot            | Description                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `reactNode`     | Replaces the entire Groups container                                |
+| `header`        | Replaces the header button (title + collapse arrow)                 |
+| `breadcrumbs`   | Replaces the breadcrumbs navigation                                 |
+| `optionsList`   | Replaces the options list (group items + "Show All" toggle)         |
+
+See the [Groups component documentation](./?path=/docs/components-groups--code-examples#component-overrides) for interactive examples.
+
 ## UrlHelpers
 
 URL Helpers are used for managing the URL and request state. These functions define how this library modifies and parses the URL.
