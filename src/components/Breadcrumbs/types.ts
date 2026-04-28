@@ -1,4 +1,5 @@
-import type { Breadcrumb, UseCioBreadcrumbProps } from '../../hooks/useCioBreadcrumb';
+import type { UseCioBreadcrumbProps } from '../../hooks/useCioBreadcrumb';
+import { Breadcrumb } from '../../types';
 
 export type BreadcrumbsProps = UseCioBreadcrumbProps;
 

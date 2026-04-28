@@ -458,23 +458,40 @@ export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps
   rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
 };
 
+export interface Breadcrumb {
+  path: string;
+  groupId: string;
+  breadcrumb: string;
+}
+
 /**
  * Render props passed to every Groups override function.
  * Provides the full state needed to rebuild any part of the groups component.
  */
 export interface GroupsRenderProps {
-  /** The groups data array */
+  /** The top-level groups data array */
   groups: PlpItemGroup[];
+  /** Navigable breadcrumb trail for the current group path */
+  breadcrumbs: Breadcrumb[];
+  /** Display name of the current group (last breadcrumb) */
+  currentPage: string | undefined;
   /** Whether the groups panel is currently collapsed */
   isCollapsed: boolean;
   /** Toggle the collapsed state */
   toggleIsCollapsed: () => void;
+  /** Options after hide-filter and show-all truncation — this is what the default list renders */
+  optionsToRender: PlpItemGroup[];
+  /** Whether the "Show All" toggle is currently expanded */
+  isShowAll: boolean;
+  /** Setter for the show-all toggle */
+  setIsShowAll: (val: boolean) => void;
+  /** Currently selected group id, used for checked state in the list */
+  selectedGroupId: string | null | undefined;
   /** Callback to select a group option by groupId */
   onOptionSelect: (groupId: string | null) => void;
   /** Callback to navigate via breadcrumb */
-  goToGroupFilter: (breadcrumb: { path: string; groupId: string; breadcrumb: string }) => void;
+  goToGroupFilter: (breadcrumb: Breadcrumb) => void;
 }
-
 /**
  * Component override slots available on `Groups`.
  *

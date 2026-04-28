@@ -262,7 +262,7 @@ describe('Testing Component: Groups', () => {
       });
     });
 
-    it('Should accept static ReactNode as override (not a function)', () => {
+    it('Should accept static ReactNode as override (not a function) for header', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Groups
@@ -278,6 +278,58 @@ describe('Testing Component: Groups', () => {
 
       expect(screen.getByTestId('static-header')).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /Categories/ })).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for breadcrumbs', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              breadcrumbs: {
+                reactNode: <div data-testid='static-breadcrumbs'>Static Breadcrumbs</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-breadcrumbs')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for optionsList', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              optionsList: {
+                reactNode: <div data-testid='static-options'>Static Options</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-options')).toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-groups-options-list ul')).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for root', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              reactNode: <div data-testid='static-root'>Static Root</div>,
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-root')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
     });
 
     it('Should support toggleIsCollapsed via override render props', () => {

@@ -63,8 +63,14 @@ export default function Groups(props: GroupsWithRenderProps) {
 
   const renderProps: GroupsRenderProps = {
     groups,
+    breadcrumbs,
+    currentPage: useGroupsReturn.currentPage,
     isCollapsed,
     toggleIsCollapsed,
+    optionsToRender,
+    isShowAll,
+    setIsShowAll,
+    selectedGroupId,
     onOptionSelect,
     goToGroupFilter,
   };
@@ -79,10 +85,7 @@ export default function Groups(props: GroupsWithRenderProps) {
             <RenderPropsWrapper
               props={renderProps}
               override={componentOverrides?.header?.reactNode}>
-              <button
-                className='cio-filter-header'
-                type='button'
-                onClick={() => setIsCollapsed(!isCollapsed)}>
+              <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
                 {title}
                 <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
               </button>
