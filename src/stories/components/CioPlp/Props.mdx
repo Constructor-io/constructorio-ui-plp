@@ -109,7 +109,7 @@ Override slots for the `Groups` component. Each slot receives `GroupsRenderProps
 | toggleIsCollapsed  | `() => void`                                                                  | Toggle the collapsed state                                               |
 | optionsToRender    | `PlpItemGroup[]`                                                              | Options after hide-filter and show-all truncation — what the list renders |
 | isShowAll          | `boolean`                                                                     | Whether the "Show All" toggle is currently expanded                      |
-| setIsShowAll       | `(val: boolean) => void`                                                      | Setter for the show-all toggle                                           |
+| setIsShowAll       | `React.Dispatch<React.SetStateAction<boolean>>`                               | Setter for the show-all toggle                                           |
 | selectedGroupId    | `string \| null \| undefined`                                                 | Currently selected group id, used for checked state in the list          |
 | onOptionSelect     | `(groupId: string \| null) => void`                                           | Callback to select a group option by groupId                             |
 | goToGroupFilter    | `(breadcrumb: Breadcrumb) => void`                                            | Callback to navigate via breadcrumb                                      |

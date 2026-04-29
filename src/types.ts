@@ -484,7 +484,7 @@ export interface GroupsRenderProps {
   /** Whether the "Show All" toggle is currently expanded */
   isShowAll: boolean;
   /** Setter for the show-all toggle */
-  setIsShowAll: (val: boolean) => void;
+  setIsShowAll: React.Dispatch<React.SetStateAction<boolean>>;
   /** Currently selected group id, used for checked state in the list */
   selectedGroupId: string | null | undefined;
   /** Callback to select a group option by groupId */
