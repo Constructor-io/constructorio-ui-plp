@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useFilter from './useFilter';
-import { PlpItemGroup, Breadcrumb } from '../types';
+import type { PlpItemGroup, Breadcrumb } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 import useOptionsList, { UseOptionsListProps } from './useOptionsList';
 import useCioBreadcrumb from './useCioBreadcrumb';

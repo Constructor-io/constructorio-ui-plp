@@ -1,4 +1,4 @@
-import { Breadcrumb } from '../../types';
+import type { Breadcrumb } from '../../types';
 
 // eslint-disable-next-line import/prefer-default-export
 export const splitBreadcrumbs = (breadcrumbs: Breadcrumb[] = []) => {

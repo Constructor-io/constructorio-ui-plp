@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
 import useGroups, { UseGroupProps } from '../../hooks/useGroups';
 import FilterOptionListRow from '../Filters/FilterOptionListRow';
-import { IncludeRenderProps, GroupsOverrides, GroupsRenderProps } from '../../types';
+import type { IncludeRenderProps, GroupsOverrides, GroupsRenderProps } from '../../types';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 
@@ -55,7 +55,7 @@ export default function Groups(props: GroupsWithRenderProps) {
 
   const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
 
-  const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
+  const toggleIsCollapsed = () => setIsCollapsed((prev) => !prev);
 
   if (breadcrumbs.length === 0 && optionsToRender.length === 0) return null;
 

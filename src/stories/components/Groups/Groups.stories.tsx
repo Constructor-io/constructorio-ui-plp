@@ -199,11 +199,9 @@ export const OverrideHeader: Story = {
       groups: {
         header: {
           reactNode: ({ isCollapsed, toggleIsCollapsed }: GroupsRenderProps) => (
-            <div
-              role='button'
-              tabIndex={0}
+            <button
+              type='button'
               onClick={toggleIsCollapsed}
-              onKeyDown={(e) => e.key === 'Enter' && toggleIsCollapsed()}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -217,7 +215,7 @@ export const OverrideHeader: Story = {
               <span style={{ fontSize: '12px', color: 'blue' }}>
                 {isCollapsed ? 'Show' : 'Hide'}
               </span>
-            </div>
+            </button>
           ),
         },
       },
@@ -236,17 +234,29 @@ export const OverrideBreadcrumbs: Story = {
     componentOverrides: {
       groups: {
         breadcrumbs: {
-          reactNode: ({ groups }: GroupsRenderProps) => (
-            <div
-              style={{
-                padding: '6px 10px',
-                backgroundColor: '#e8f4fd',
-                borderRadius: '4px',
-                fontSize: '13px',
-              }}>
-              📍 {groups[0]?.displayName}
-            </div>
-          ),
+          reactNode: ({ breadcrumbs, goToGroupFilter, groups }: GroupsRenderProps) => {
+            if (breadcrumbs.length === 0) return null;
+            return (
+              <div
+                style={{
+                  padding: '6px 10px',
+                  backgroundColor: '#e8f4fd',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                }}>
+                📍{' '}
+                {breadcrumbs.map((crumb) => (
+                  <span>
+                    <button type='button' key={crumb.path} onClick={() => goToGroupFilter(crumb)}>
+                      {crumb.breadcrumb}
+                    </button>
+                    {' >> '}
+                  </span>
+                ))}
+                <span className='cio-groups-crumb'>{groups[0].displayName}</span>
+              </div>
+            );
+          },
         },
       },
     },

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { PlpItemGroup, Breadcrumb } from '../types';
+import type { PlpItemGroup, Breadcrumb } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 
 const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {

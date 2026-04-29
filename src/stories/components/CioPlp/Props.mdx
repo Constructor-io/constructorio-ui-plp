@@ -100,13 +100,19 @@ See the [Filters component documentation](./?path=/docs/components-filters--code
 
 Override slots for the `Groups` component. Each slot receives `GroupsRenderProps`:
 
-| Property           | Type                                                                        | Description                                            |
-| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------ |
-| groups             | `PlpItemGroup[]`                                                            | The groups data array                                  |
-| isCollapsed        | `boolean`                                                                   | Whether the groups panel is currently collapsed        |
-| toggleIsCollapsed  | `() => void`                                                                | Toggle the collapsed state                             |
-| onOptionSelect     | `(groupId: string \| null) => void`                                         | Callback to select a group option by groupId           |
-| goToGroupFilter    | `(breadcrumb: { path: string; groupId: string; breadcrumb: string }) => void` | Callback to navigate via breadcrumb                  |
+| Property           | Type                                                                          | Description                                                              |
+| ------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| groups             | `PlpItemGroup[]`                                                              | The top-level groups data array                                          |
+| breadcrumbs        | `Breadcrumb[]`                                                                | Navigable breadcrumb trail for the current group path                    |
+| currentPage        | `string \| undefined`                                                         | Display name of the current group (last breadcrumb)                      |
+| isCollapsed        | `boolean`                                                                     | Whether the groups panel is currently collapsed                           |
+| toggleIsCollapsed  | `() => void`                                                                  | Toggle the collapsed state                                               |
+| optionsToRender    | `PlpItemGroup[]`                                                              | Options after hide-filter and show-all truncation — what the list renders |
+| isShowAll          | `boolean`                                                                     | Whether the "Show All" toggle is currently expanded                      |
+| setIsShowAll       | `(val: boolean) => void`                                                      | Setter for the show-all toggle                                           |
+| selectedGroupId    | `string \| null \| undefined`                                                 | Currently selected group id, used for checked state in the list          |
+| onOptionSelect     | `(groupId: string \| null) => void`                                           | Callback to select a group option by groupId                             |
+| goToGroupFilter    | `(breadcrumb: Breadcrumb) => void`                                            | Callback to navigate via breadcrumb                                      |
 
 Available override slots:
 
