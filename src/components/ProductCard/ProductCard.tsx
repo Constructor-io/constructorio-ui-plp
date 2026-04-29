@@ -18,9 +18,9 @@ import { EMITTED_EVENTS } from '../../constants';
 export default function ProductCard(props: ProductCardProps) {
   const [isRolloverImageShown, setIsRolloverImageShown] = useState(false);
   const cardRef = useRef<HTMLAnchorElement>(null);
-  const { item, children } = props;
+  const { item, swatchConfigs, children } = props;
   const state = useCioPlpContext();
-  const productInfo = useProductInfo({ item });
+  const productInfo = useProductInfo({ item, swatchConfigs });
   const {
     productSwatch,
     itemName,
@@ -133,7 +133,12 @@ export default function ProductCard(props: ProductCardProps) {
             )}
           </div>
           <div className='cio-item-name'>{itemName}</div>
-          {productSwatch && <ProductSwatch swatchObject={productSwatch} />}
+          {productSwatch && (
+            <ProductSwatch
+              swatchObject={productSwatch}
+              showMoreLabel={swatchConfigs?.showMoreLabel}
+            />
+          )}
         </div>
         <button
           {...addToCartBtnAttrs}

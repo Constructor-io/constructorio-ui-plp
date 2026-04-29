@@ -4,6 +4,8 @@ import Groups from '../../../components/Groups';
 
 <Meta of={CioPlpStories} />
 
+<div className="cio-props-docs">
+
 ## Props
 
 <ArgTypes />
@@ -20,12 +22,13 @@ Formatters will be used to modify how certain fields are rendered.
 
 Callbacks will be composed with the library's internal tracking calls for a given event.
 
-| Property           | Type                                                                           | Description                            |
-| ------------------ | ------------------------------------------------------------------------------ | -------------------------------------- |
-| onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void` | Product add to cart callback function  |
-| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                | Product click callback function        |
-| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                     | Product swatch click callback function |
-| onRedirect         | `(url: string) => void`                                                        | Redirect callback function             |
+| Property           | Type                                                                                                                                                 | Description                                                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void`                                                                       | Product add to cart callback function                                                                                                                                        |
+| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                                                                                      | Product click callback function                                                                                                                                              |
+| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                                                                                           | Product swatch click callback function                                                                                                                                       |
+| onShowMoreSwatches | `(event: React.MouseEvent, selectedSwatch: SwatchItem \| undefined, hiddenSwatches: SwatchItem[], setUrl: UrlHelpers['setUrl']) => void` | Callback for the "View more" button on swatches. When not provided, clicking "View more" navigates to `selectedSwatch.url` via `setUrl`. (📦 v1.16.1 required) |
+| onRedirect         | `(url: string) => void`                                                                                                                              | Redirect callback function                                                                                                                                                   |
 
 ## ItemFieldGetters
 
@@ -59,6 +62,17 @@ Configuration options for pagination functionality.
 | -------------- | -------- | --------------------------------------------------- |
 | windowSize     | `number` | Number of page buttons to show in pagination        |
 | resultsPerPage | `number` | Override the results per page set at Provider level |
+
+### `swatchConfigs`
+
+> 📦 v1.16.1 is required for this feature
+
+Configuration options for swatch display behavior on product cards.
+
+| Property           | Type                                    | Description                                                                                                                                       |
+| ------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| maxVisibleSwatches | `number`                                | Maximum number of swatches to display before showing a "View more" button. When not set, all swatches are shown.                                  |
+| showMoreLabel      | `string \| ((count: number) => string)` | Custom label for the "View more" button. Can be a static string or a function that receives the hidden swatch count. Defaults to `"View more >"`. |
 
 ### `sortConfigs`
 
@@ -256,3 +270,5 @@ const defaultQueryStringMap = Object.freeze({
   section: 'section',
 });
 ```
+
+</div>

@@ -71,6 +71,12 @@ export interface Callbacks {
   onProductCardMouseEnter?: (event: React.MouseEvent, item: Item) => void;
   onProductCardMouseLeave?: (event: React.MouseEvent, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
+  onShowMoreSwatches?: (
+    event: React.MouseEvent,
+    selectedSwatch: SwatchItem | undefined,
+    hiddenSwatches: SwatchItem[],
+    setUrl: UrlHelpers['setUrl'],
+  ) => void;
   onRedirect?: (url: string) => void;
 }
 
@@ -79,6 +85,14 @@ interface ProductCardBaseProps {
    * Constructor's Transformed API Item Object.
    */
   item: Item;
+  /**
+   * Configuration options for swatch display behavior on product cards.
+   * - `maxVisibleSwatches`: Maximum number of swatches to display before showing a "View more" button.
+   *   When not set, all swatches are shown.
+   * - `showMoreLabel`: Custom label for the "View more" button (default: "View more >").
+   *   Can be a static string or a function receiving the hidden swatch count.
+   */
+  swatchConfigs?: SwatchConfigs;
 }
 
 /**
@@ -281,6 +295,20 @@ export interface SwatchItem {
   rolloverImage?: string;
 }
 
+export interface SwatchConfigs {
+  /**
+   * Maximum number of swatches to display before showing a "View more" button.
+   * When not set, all swatches are shown.
+   */
+  maxVisibleSwatches?: number;
+  /**
+   * Custom label for the "View more" button.
+   * Can be a static string or a function that receives the hidden swatch count.
+   * @default "View more >"
+   */
+  showMoreLabel?: string | ((count: number) => string);
+}
+
 export interface PlpBrowseData {
   resultId: string;
   request: BrowseRequestType;
@@ -316,10 +344,17 @@ export interface ProductSwatchObject {
   swatchList: SwatchItem[] | undefined;
   selectedVariation: SwatchItem | undefined;
   selectVariation: (swatch: SwatchItem) => void;
+  visibleSwatches: SwatchItem[] | undefined;
+  hiddenSwatches: SwatchItem[] | undefined;
+  totalSwatchCount: number;
+  hasMoreSwatches: boolean;
 }
+
+export type UseProductSwatchConfigs = Pick<SwatchConfigs, 'maxVisibleSwatches'>;
 
 export type UseProductSwatchProps = {
   item: Item;
+  config?: UseProductSwatchConfigs;
 };
 
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
@@ -339,6 +374,7 @@ export interface ProductInfoObject {
 
 export type UseProductInfoProps = {
   item: Item;
+  swatchConfigs?: SwatchConfigs;
 };
 
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;

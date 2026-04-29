@@ -108,3 +108,9 @@
   max-height: 50vh;
   overflow-y: auto;
 }
+
+/* Allow type signatures in CioPlp Props docs tables to wrap */
+.cio-props-docs table td:nth-child(2) code {
+  white-space: normal;
+  word-break: break-word;
+}
