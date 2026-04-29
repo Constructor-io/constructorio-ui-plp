@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import React, { useEffect, useState } from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react';
+import { render, waitFor, fireEvent, screen } from '@testing-library/react';
 import { DEMO_API_KEY } from '../../../src/constants';
 import CioPlp from '../../../src/components/CioPlp';
 import Groups from '../../../src/components/Groups';
@@ -180,6 +180,429 @@ describe('Testing Component: Groups', () => {
       );
       expect(queryByText('Hidden Group')).toBeNull();
       expect(getByText('Deals')).toBeInTheDocument();
+    });
+  });
+
+  describe(' - Default rendering without componentOverrides', () => {
+    it('Should render default header, breadcrumbs, options list, and structure when no overrides provided', async () => {
+      const { getByText, container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Default header with title should render
+        expect(getByText('Categories')).toBeInTheDocument();
+
+        // Default arrow icon should be present
+        const header = getByText('Categories').closest('.cio-filter-header');
+        expect(header).toBeInTheDocument();
+        expect(header.querySelector('.cio-arrow')).toBeInTheDocument();
+
+        // Default breadcrumbs should render
+        const breadcrumbs = container.querySelectorAll('.cio-groups-crumb');
+        expect(breadcrumbs.length).toBeGreaterThan(0);
+
+        // Default options list should render
+        expect(container.querySelector('.cio-filter-groups-options-list')).toBeInTheDocument();
+      });
+    });
+
+    it('Should render currentPage as the trailing breadcrumb span', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const breadcrumbsWrapper = container.querySelector('.cio-groups-breadcrumbs');
+        expect(breadcrumbsWrapper).toBeInTheDocument();
+        // Trailing <span> (not <button>) is the current-page label and should match
+        // the current rendered group label for this state.
+        const tail = breadcrumbsWrapper.querySelector('span.cio-groups-crumb');
+        expect(tail).toBeInTheDocument();
+        expect(tail.textContent).toBe(mockTransformedGroups[0].displayName);
+      });
+    });
+
+    it('Should pass currentPage through renderProps to breadcrumbs override', () => {
+      const spy = jest.fn().mockReturnValue(<div>Override</div>);
+
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{ breadcrumbs: { reactNode: spy } }}
+          />
+        </CioPlp>,
+      );
+
+      const props = spy.mock.calls[0][0];
+      expect(props.currentPage).toBe(mockTransformedGroups[0].displayName);
+    });
+  });
+
+  describe(' - componentOverrides', () => {
+    const overrideSlots = [
+      {
+        key: 'root',
+        buildOverrides: (fn) => ({ reactNode: fn }),
+      },
+      {
+        key: 'header',
+        buildOverrides: (fn) => ({ header: { reactNode: fn } }),
+      },
+      {
+        key: 'breadcrumbs',
+        buildOverrides: (fn) => ({ breadcrumbs: { reactNode: fn } }),
+      },
+      {
+        key: 'optionsList',
+        buildOverrides: (fn) => ({ optionsList: { reactNode: fn } }),
+      },
+    ];
+
+    describe.each(overrideSlots)('override: $key', ({ key, buildOverrides }) => {
+      it(`Should replace ${key} with custom content`, () => {
+        const overrideFn = () => <div data-testid={`custom-${key}`}>Custom {key}</div>;
+
+        render(
+          <CioPlp apiKey={DEMO_API_KEY}>
+            <Groups {...groupsProps} componentOverrides={buildOverrides(overrideFn)} />
+          </CioPlp>,
+        );
+
+        expect(screen.getByTestId(`custom-${key}`)).toBeInTheDocument();
+      });
+
+      it(`Should pass correct render props to ${key} override`, () => {
+        const spy = jest.fn().mockReturnValue(<div>Override</div>);
+
+        render(
+          <CioPlp apiKey={DEMO_API_KEY}>
+            <Groups {...groupsProps} componentOverrides={buildOverrides(spy)} />
+          </CioPlp>,
+        );
+
+        expect(spy).toHaveBeenCalled();
+        const props = spy.mock.calls[0][0];
+        expect(props.groups).toEqual(mockTransformedGroups);
+        expect(props.isCollapsed).toBe(false);
+        expect(typeof props.toggleIsCollapsed).toBe('function');
+        expect(typeof props.onOptionSelect).toBe('function');
+        expect(typeof props.goToGroupFilter).toBe('function');
+      });
+    });
+
+    it('Should accept static ReactNode as override (not a function) for header', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              header: {
+                reactNode: <div data-testid='static-header'>Static Header Content</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-header')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Categories/ })).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for breadcrumbs', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              breadcrumbs: {
+                reactNode: <div data-testid='static-breadcrumbs'>Static Breadcrumbs</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-breadcrumbs')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for optionsList', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              optionsList: {
+                reactNode: <div data-testid='static-options'>Static Options</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-options')).toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-groups-options-list ul')).not.toBeInTheDocument();
+    });
+
+    it('Should accept static ReactNode as override (not a function) for root', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              reactNode: <div data-testid='static-root'>Static Root</div>,
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('static-root')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+    });
+
+    it('Should suppress all nested slot renders when a root override is supplied', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              reactNode: () => <div data-testid='root-override'>Root</div>,
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('root-override')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-header')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-groups-options-list')).not.toBeInTheDocument();
+    });
+
+    it('Should support toggleIsCollapsed via override render props', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              header: {
+                reactNode: ({ isCollapsed, toggleIsCollapsed }) => (
+                  <button data-testid='custom-toggle' type='button' onClick={toggleIsCollapsed}>
+                    {isCollapsed ? 'closed' : 'open'}
+                  </button>
+                ),
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      const toggle = screen.getByTestId('custom-toggle');
+      expect(toggle).toHaveTextContent('open');
+
+      fireEvent.click(toggle);
+      expect(toggle).toHaveTextContent('closed');
+
+      fireEvent.click(toggle);
+      expect(toggle).toHaveTextContent('open');
+    });
+
+    describe('isolation - overriding one slot should not affect others', () => {
+      const isolationCases = [
+        {
+          overrideKey: 'header',
+          expectPresent: ['.cio-groups-breadcrumbs', '.cio-filter-groups-options-list'],
+          description: 'breadcrumbs and optionsList still render when only header is overridden',
+        },
+        {
+          overrideKey: 'breadcrumbs',
+          expectPresent: ['.cio-filter-header', '.cio-filter-groups-options-list'],
+          description: 'header and optionsList still render when only breadcrumbs is overridden',
+        },
+        {
+          overrideKey: 'optionsList',
+          expectPresent: ['.cio-filter-header', '.cio-groups-breadcrumbs'],
+          description: 'header and breadcrumbs still render when only optionsList is overridden',
+        },
+      ];
+
+      it.each(isolationCases)('$description', ({ overrideKey, expectPresent }) => {
+        const overrides = { [overrideKey]: { reactNode: () => <div>Custom</div> } };
+
+        const { container } = render(
+          <CioPlp apiKey={DEMO_API_KEY}>
+            <Groups {...groupsProps} componentOverrides={overrides} />
+          </CioPlp>,
+        );
+
+        expectPresent.forEach((selector) => {
+          expect(container.querySelector(selector)).toBeInTheDocument();
+        });
+      });
+    });
+  });
+
+  describe(' - componentOverrides.groups Tests (via provider)', () => {
+    it('Should render default Groups when no componentOverrides provided', async () => {
+      const { container, getByText } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('Categories')).toBeInTheDocument();
+        const header = container.querySelector('.cio-filter-header');
+        expect(header).toBeInTheDocument();
+        expect(header.querySelector('.cio-arrow')).toBeInTheDocument();
+      });
+    });
+
+    it('Should replace entire Groups via root reactNode override from provider', async () => {
+      const { container } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              reactNode: ({ groups }) => (
+                <div data-testid='custom-root'>{groups[0].displayName} Override</div>
+              ),
+            },
+          }}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('custom-root')).toBeInTheDocument();
+        expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+      });
+    });
+
+    it('Should replace header via header override from provider', async () => {
+      const { container } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              header: {
+                reactNode: ({ toggleIsCollapsed }) => (
+                  <div data-testid='custom-header' onClick={toggleIsCollapsed}>
+                    Custom Header
+                  </div>
+                ),
+              },
+            },
+          }}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('custom-header')).toBeInTheDocument();
+        expect(container.querySelector('.cio-filter-header')).not.toBeInTheDocument();
+      });
+    });
+
+    it('Should replace breadcrumbs via breadcrumbs override from provider', async () => {
+      const { container } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              breadcrumbs: {
+                reactNode: () => <div data-testid='custom-breadcrumbs'>Custom Breadcrumbs</div>,
+              },
+            },
+          }}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('custom-breadcrumbs')).toBeInTheDocument();
+        expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+      });
+    });
+
+    it('Should replace optionsList via optionsList override from provider', async () => {
+      render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              optionsList: {
+                reactNode: () => <div data-testid='custom-options'>Custom Options</div>,
+              },
+            },
+          }}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('custom-options')).toBeInTheDocument();
+      });
+    });
+
+    it('Should pass GroupsRenderProps to override functions from provider', async () => {
+      const renderFn = jest.fn().mockReturnValue(<div>Override</div>);
+
+      render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              header: { reactNode: renderFn },
+            },
+          }}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(renderFn).toHaveBeenCalled();
+        const renderProps = renderFn.mock.calls[0][0];
+
+        expect(renderProps.groups).toBeDefined();
+        expect(Array.isArray(renderProps.groups)).toBe(true);
+        expect(typeof renderProps.isCollapsed).toBe('boolean');
+        expect(typeof renderProps.toggleIsCollapsed).toBe('function');
+        expect(typeof renderProps.onOptionSelect).toBe('function');
+        expect(typeof renderProps.goToGroupFilter).toBe('function');
+      });
+    });
+
+    it('Should prefer direct prop overrides over provider overrides', () => {
+      render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          componentOverrides={{
+            groups: {
+              header: {
+                reactNode: () => <div data-testid='provider-header'>Provider Header</div>,
+              },
+            },
+          }}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              header: {
+                reactNode: () => <div data-testid='prop-header'>Prop Header</div>,
+              },
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('prop-header')).toBeInTheDocument();
+      expect(screen.queryByTestId('provider-header')).not.toBeInTheDocument();
     });
   });
 
