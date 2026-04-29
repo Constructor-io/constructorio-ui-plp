@@ -208,6 +208,40 @@ describe('Testing Component: Groups', () => {
         expect(container.querySelector('.cio-filter-groups-options-list')).toBeInTheDocument();
       });
     });
+
+    it('Should render currentPage as the trailing breadcrumb span', async () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const breadcrumbsWrapper = container.querySelector('.cio-groups-breadcrumbs');
+        expect(breadcrumbsWrapper).toBeInTheDocument();
+        // Trailing <span> (not <button>) is the current-page label. In the root state,
+        // currentPage === 'All' (from useCioBreadcrumb), which is what should render here.
+        const tail = breadcrumbsWrapper.querySelector('span.cio-groups-crumb');
+        expect(tail).toBeInTheDocument();
+        expect(tail.textContent).toBe(mockTransformedGroups[0].displayName);
+      });
+    });
+
+    it('Should pass currentPage through renderProps to breadcrumbs override', () => {
+      const spy = jest.fn().mockReturnValue(<div>Override</div>);
+
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{ breadcrumbs: { reactNode: spy } }}
+          />
+        </CioPlp>,
+      );
+
+      const props = spy.mock.calls[0][0];
+      expect(props.currentPage).toBe(mockTransformedGroups[0].displayName);
+    });
   });
 
   describe(' - componentOverrides', () => {
@@ -330,6 +364,25 @@ describe('Testing Component: Groups', () => {
 
       expect(screen.getByTestId('static-root')).toBeInTheDocument();
       expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+    });
+
+    it('Should suppress all nested slot renders when a root override is supplied', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups
+            {...groupsProps}
+            componentOverrides={{
+              reactNode: () => <div data-testid='root-override'>Root</div>,
+            }}
+          />
+        </CioPlp>,
+      );
+
+      expect(screen.getByTestId('root-override')).toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-container')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-header')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-groups-breadcrumbs')).not.toBeInTheDocument();
+      expect(container.querySelector('.cio-filter-groups-options-list')).not.toBeInTheDocument();
     });
 
     it('Should support toggleIsCollapsed via override render props', () => {
