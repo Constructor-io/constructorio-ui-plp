@@ -116,7 +116,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
               data-testid='cio-swatch-show-more'
               className='cio-swatch-show-more'
               onClick={showMoreClickHandler}
-              aria-label={`Show ${hiddenSwatches?.length} more`}>
+              aria-label={getShowMoreLabel()}>
               {getShowMoreLabel()}
             </button>
           )}
