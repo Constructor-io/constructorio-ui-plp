@@ -131,11 +131,11 @@ export default function Groups(props: GroupsWithRenderProps) {
                       />
                     ))}
 
-                    {initialNumOptions < groups[0].children.length && (
+                    {initialNumOptions < useGroupsReturn.groupOptions.length && (
                       <button
                         type='button'
                         className='cio-see-all'
-                        onClick={() => setIsShowAll(!isShowAll)}>
+                        onClick={() => setIsShowAll((prevIsShowAll) => !prevIsShowAll)}>
                         {isShowAll ? 'Show Less' : 'Show All'}
                       </button>
                     )}
