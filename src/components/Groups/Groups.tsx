@@ -57,9 +57,9 @@ export default function Groups(props: GroupsWithRenderProps) {
 
   const toggleIsCollapsed = () => setIsCollapsed((prev) => !prev);
 
-  if (breadcrumbs.length === 0 && optionsToRender.length === 0) return null;
-
   if (hideGroups) return null;
+
+  if (breadcrumbs.length === 0 && optionsToRender.length === 0) return null;
 
   const renderProps: GroupsRenderProps = {
     groups,
