@@ -22,13 +22,13 @@ Formatters will be used to modify how certain fields are rendered.
 
 Callbacks will be composed with the library's internal tracking calls for a given event.
 
-| Property           | Type                                                                                                                                                | Description                                                                                                                                                                 |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void`                                                                      | Product add to cart callback function                                                                                                                                       |
-| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                                                                                     | Product click callback function                                                                                                                                             |
-| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                                                                                          | Product swatch click callback function                                                                                                                                      |
-| onShowMoreSwatches | `(event: React.MouseEvent, item: Item, selectedSwatch: SwatchItem \| undefined, hiddenSwatches: SwatchItem[], setUrl: UrlHelpers['setUrl']) => void` | Callback for the "View more" button on swatches. When not provided, clicking "View more" navigates to `selectedSwatch.url \|\| item.url` via `setUrl`. (📦 v1.9.1 required) |
-| onRedirect         | `(url: string) => void`                                                                                                                             | Redirect callback function                                                                                                                                                  |
+| Property           | Type                                                                                                                                                 | Description                                                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| onAddToCart        | `(event: React.MouseEvent, item: Item, selectedVariation?: Variation) => void`                                                                       | Product add to cart callback function                                                                                                                                        |
+| onProductCardClick | `(event: React.MouseEvent, item: Item) => void`                                                                                                      | Product click callback function                                                                                                                                              |
+| onSwatchClick      | `(e: React.MouseEvent, clickedSwatch: SwatchItem) => void`                                                                                           | Product swatch click callback function                                                                                                                                       |
+| onShowMoreSwatches | `(event: React.MouseEvent, item: Item, selectedSwatch: SwatchItem \| undefined, hiddenSwatches: SwatchItem[], setUrl: UrlHelpers['setUrl']) => void` | Callback for the "View more" button on swatches. When not provided, clicking "View more" navigates to `selectedSwatch.url \|\| item.url` via `setUrl`. (📦 v1.16.1 required) |
+| onRedirect         | `(url: string) => void`                                                                                                                              | Redirect callback function                                                                                                                                                   |
 
 ## ItemFieldGetters
 
@@ -65,7 +65,7 @@ Configuration options for pagination functionality.
 
 ### `swatchConfigs`
 
-> 📦 v1.9.1 is required for this feature
+> 📦 v1.16.1 is required for this feature
 
 Configuration options for swatch display behavior on product cards.
 

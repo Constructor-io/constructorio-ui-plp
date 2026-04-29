@@ -3,33 +3,35 @@ import meta from './ProductCard.stories';
 
 <Meta of={meta} />
 
-## Props 
+## Props
+
 <ArgTypes />
 
 ### Item
-  | property              | type                   | description       | 
-  | :-----------------| :----------------------| :---------------- |
-  | itemName*         | `string`               | Item name         |
-  | itemId*           | `string`               | Item ID           |
-  | isSlotted*        | `boolean`              | Whether the item has a slotting rule applied to it or not |
-  | url               | `string`               | Item product details page url |
-  | imageUrl          | `string`               | Item image url                |
-  | description       | `string`               | Item description  |
-  | groupIds          | `string[]`             | Array of strings of associated item group IDs |
-  | groups            | `ApiGroup[]`           | Array of group objects laying out the associated groups hierarchy  |
-  | facets            | `PlpFacet[]`           | Array of the item facets/filters |
-  | variationId       | `string`               | The rolled up variation ID      |
-  | variations        | `Variation[]`          | Array of variations of the item. Null if `variationsMap` exists. |
-  | variationsMap     | `VariationsMap`        | Variations grouped/aggregated by the specified fields in the [variations_map](https://docs.constructor.com/reference/shared-variations-mapping) parameter. Null if `variations` exists.  |
-  | data              | `Record<string, any>`  | Data object containing your custom metadata fields that are passed in the feed and set as displayable |
+
+| property      | type                  | description                                                                                                                                                                             |
+| :------------ | :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| itemName\*    | `string`              | Item name                                                                                                                                                                               |
+| itemId\*      | `string`              | Item ID                                                                                                                                                                                 |
+| isSlotted\*   | `boolean`             | Whether the item has a slotting rule applied to it or not                                                                                                                               |
+| url           | `string`              | Item product details page url                                                                                                                                                           |
+| imageUrl      | `string`              | Item image url                                                                                                                                                                          |
+| description   | `string`              | Item description                                                                                                                                                                        |
+| groupIds      | `string[]`            | Array of strings of associated item group IDs                                                                                                                                           |
+| groups        | `ApiGroup[]`          | Array of group objects laying out the associated groups hierarchy                                                                                                                       |
+| facets        | `PlpFacet[]`          | Array of the item facets/filters                                                                                                                                                        |
+| variationId   | `string`              | The rolled up variation ID                                                                                                                                                              |
+| variations    | `Variation[]`         | Array of variations of the item. Null if `variationsMap` exists.                                                                                                                        |
+| variationsMap | `VariationsMap`       | Variations grouped/aggregated by the specified fields in the [variations_map](https://docs.constructor.com/reference/shared-variations-mapping) parameter. Null if `variations` exists. |
+| data          | `Record<string, any>` | Data object containing your custom metadata fields that are passed in the feed and set as displayable                                                                                   |
 
 ### `swatchConfigs`
 
-> 📦 v1.9.1 is required for this feature
+> 📦 v1.16.1 is required for this feature
 
 Configuration options for swatch display behavior on this product card.
 
-  | property           | type                                    | description |
-  | :------------------| :---------------------------------------| :---------- |
-  | maxVisibleSwatches | `number`                                | Maximum number of swatches to display before showing a "View more" button. When not set, all swatches are shown. |
-  | showMoreLabel      | `string \| ((count: number) => string)` | Custom label for the "View more" button. Can be a static string or a function that receives the hidden swatch count. Defaults to `"View more >"`. |
+| property           | type                                    | description                                                                                                                                       |
+| :----------------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| maxVisibleSwatches | `number`                                | Maximum number of swatches to display before showing a "View more" button. When not set, all swatches are shown.                                  |
+| showMoreLabel      | `string \| ((count: number) => string)` | Custom label for the "View more" button. Can be a static string or a function that receives the hidden swatch count. Defaults to `"View more >"`. |

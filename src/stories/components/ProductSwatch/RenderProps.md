@@ -3,11 +3,11 @@
 | swatchList        | `Array<SwatchItem>`           | List of renderable swatches            |
 | selectedVariation | `SwatchItem`                  | Selected swatch                        |
 | selectVariation   | `(swatch: SwatchItem) => void`| Function to toggle the selected swatch |
-| item              | `Item`                        | The product item associated with the swatches (📦 v1.9.1) |
-| visibleSwatches   | `SwatchItem[] \| undefined`   | Subset of `swatchList` limited by `maxVisibleSwatches`. Equals `swatchList` when no limit is set. (📦 v1.9.1) |
-| hiddenSwatches    | `SwatchItem[] \| undefined`   | Swatches beyond the `maxVisibleSwatches` limit. `undefined` when no swatches are hidden. (📦 v1.9.1) |
-| totalSwatchCount  | `number`                      | Total number of swatches in `swatchList`. (📦 v1.9.1) |
-| hasMoreSwatches   | `boolean`                     | Whether there are hidden swatches beyond the visible limit. (📦 v1.9.1) |
+| item              | `Item`                        | The product item associated with the swatches (📦 v1.16.1) |
+| visibleSwatches   | `SwatchItem[] \| undefined`   | Subset of `swatchList` limited by `maxVisibleSwatches`. Equals `swatchList` when no limit is set. (📦 v1.16.1) |
+| hiddenSwatches    | `SwatchItem[] \| undefined`   | Swatches beyond the `maxVisibleSwatches` limit. `undefined` when no swatches are hidden. (📦 v1.16.1) |
+| totalSwatchCount  | `number`                      | Total number of swatches in `swatchList`. (📦 v1.16.1) |
+| hasMoreSwatches   | `boolean`                     | Whether there are hidden swatches beyond the visible limit. (📦 v1.16.1) |
 
 <div></div>
 

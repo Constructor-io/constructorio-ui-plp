@@ -30,14 +30,15 @@ Open in full screen here:
 This renders the PLP displayed above.
 
 To view the examples and see this component in action
-  - **Search** - append your URL with `?q=shirt`
-  - **Browse** - append your URL with `/group_id/1035`
+
+- **Search** - append your URL with `?q=shirt`
+- **Browse** - append your URL with `/group_id/1035`
 
 ```jsx
-import { CioPlp } from "@constructor-io/constructorio-ui-plp";
-import "@constructor-io/constructorio-ui-plp/styles.css";
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 export default function MyComponent() {
   return <CioPlp apiKey={DEMO_API_KEY} />;
@@ -46,7 +47,27 @@ export default function MyComponent() {
 
 For a working example, visit our Code Sandbox:
 
-- <a href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-example-fpz8sz' target='_blank' rel='noopener noreferrer'> Code Sandbox Example <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+- <a
+    href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-example-fpz8sz'
+    target='_blank'
+    rel='noopener noreferrer'>
+    {' '}
+    Code Sandbox Example{' '}
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='12'
+      height='12'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      stroke-width='2'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+      class='lucide lucide-arrow-up-right-icon lucide-arrow-up-right'>
+      <path d='M7 7h10v10' />
+      <path d='M7 17 17 7' />
+    </svg>
+  </a>
 
 ## Configuration Options
 
@@ -65,19 +86,19 @@ export default function MyComponent() {
       apiKey={DEMO_API_KEY}
       // Groups configuration
       groupsConfigs={{
-        initialNumOptions: 4,        // Number of options to show initially
-        isCollapsed: false,          // Whether groups start collapsed
-        title: 'Shop by Category',   // Custom title
-        hideGroups: false,           // Whether to hide groups entirely
+        initialNumOptions: 4, // Number of options to show initially
+        isCollapsed: false, // Whether groups start collapsed
+        title: 'Shop by Category', // Custom title
+        hideGroups: false, // Whether to hide groups entirely
         isHiddenGroupFn: (group) => false, // Function that returns true if a particular group should not be rendered
       }}
       // Pagination configuration
       paginationConfigs={{
-        windowSize: 5,              // Number of page buttons to show
+        windowSize: 5, // Number of page buttons to show
       }}
-      // Swatch configuration (📦 v1.9.1)
+      // Swatch configuration (📦 v1.16.1)
       swatchConfigs={{
-        maxVisibleSwatches: 3,        // Max swatches before showing "View more"
+        maxVisibleSwatches: 3, // Max swatches before showing "View more"
         showMoreLabel: 'View more >', // Custom label (string or function)
       }}
       // Sort and filter configs (no specific options yet)
@@ -94,10 +115,10 @@ Take control of the rendering logic by using Render Props through `children`.
 The [context](..?path=/docs/components-cioplp--code-examples#cioplp-context-value) will be passed along as props to your render function.
 
 ```jsx
-import { CioPlp } from "@constructor-io/constructorio-ui-plp";
-import "@constructor-io/constructorio-ui-plp/styles.css";
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
 
-const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
 function MyCustomPlp(props) {
   const {
@@ -126,7 +147,27 @@ export default function MyComponent() {
 
 For a working example, visit our Code Sandbox:
 
-- <a href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-customization-example-sgdgkl?file=%2Fsrc%2Fcomponents%2FCustomCioPlp.js' target='_blank' rel='noopener noreferrer'> Code Sandbox Example - Custom Render <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+- <a
+    href='https://codesandbox.io/p/sandbox/constructorio-ui-plp-customization-example-sgdgkl?file=%2Fsrc%2Fcomponents%2FCustomCioPlp.js'
+    target='_blank'
+    rel='noopener noreferrer'>
+    {' '}
+    Code Sandbox Example - Custom Render{' '}
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='12'
+      height='12'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      stroke-width='2'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+      class='lucide lucide-arrow-up-right-icon lucide-arrow-up-right'>
+      <path d='M7 7h10v10' />
+      <path d='M7 17 17 7' />
+    </svg>
+  </a>
 
 ### Arguments passed to children via Render Props
 
@@ -135,15 +176,14 @@ For a working example, visit our Code Sandbox:
 
 <Markdown>{RenderProps}</Markdown>
 
+## Overriding Product Card using Vanilla JS
 
-## Overriding Product Card using Vanilla JS 
 > **📦 v1.6.0 or higher is required for this feature**
 
-If you're importing the library via the [bundle approach](https://github.com/Constructor-io/constructorio-ui-plp?tab=readme-ov-file#using-the-javascript-bundle) 
-and are unable to pass JSX, you may pass a custom render function at the top level instead. This function will receive the same render props as 
-listed in [Product Card](./?path=/docs/components-productcard--code-examples#arguments-passed-to-children-via-render-props), 
+If you're importing the library via the [bundle approach](https://github.com/Constructor-io/constructorio-ui-plp?tab=readme-ov-file#using-the-javascript-bundle)
+and are unable to pass JSX, you may pass a custom render function at the top level instead. This function will receive the same render props as
+listed in [Product Card](./?path=/docs/components-productcard--code-examples#arguments-passed-to-children-via-render-props),
 and should return a `HTMLElement`.
-
 
 ```html
 <div id="plp"></div>
