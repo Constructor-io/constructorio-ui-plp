@@ -111,7 +111,7 @@ export default function Groups(props: GroupsWithRenderProps) {
                         {' > '}
                       </span>
                     ))}
-                    <span className='cio-groups-crumb'>{groups[0].displayName}</span>
+                    <span className='cio-groups-crumb'>{renderProps.currentPage || groups[0]?.displayName || ''}</span>
                   </div>
                 </RenderPropsWrapper>
                 <RenderPropsWrapper
