@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react';
-import { Callbacks, Item, SwatchItem, UrlHelpers } from '../../types';
+import { Callbacks, SwatchItem, UrlHelpers } from '../../types';
 
-// eslint-disable-next-line max-params
 export default function useOnShowMoreSwatches(
-  item: Item,
   selectedSwatch: SwatchItem | undefined,
   hiddenSwatches: SwatchItem[],
   setUrl: UrlHelpers['setUrl'],
@@ -14,14 +12,14 @@ export default function useOnShowMoreSwatches(
       event.stopPropagation();
 
       if (callback) {
-        callback(event, item, selectedSwatch, hiddenSwatches, setUrl);
+        callback(event, selectedSwatch, hiddenSwatches, setUrl);
       } else {
-        const url = selectedSwatch?.url || item.url;
+        const url = selectedSwatch?.url;
         if (url) {
           setUrl(url);
         }
       }
     },
-    [item, selectedSwatch, hiddenSwatches, setUrl, callback],
+    [selectedSwatch, hiddenSwatches, setUrl, callback],
   );
 }

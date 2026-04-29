@@ -38,20 +38,10 @@ describe('Product Swatch Component', () => {
     hasMoreSwatches: false,
   };
 
-  const item = {
-    itemName: 'Test Product',
-    itemId: 'test-1',
-    url: 'https://example.com/product',
-    matchedTerms: [],
-    isSlotted: false,
-    labels: {},
-    data: {},
-  };
-
   it('renders a swatch for each variation with swatchPreview', () => {
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <ProductSwatch swatchObject={swatchObject} item={item} />
+        <ProductSwatch swatchObject={swatchObject} />
       </CioPlp>,
     );
 
@@ -68,7 +58,7 @@ describe('Product Swatch Component', () => {
 
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
-        <ProductSwatch swatchObject={mockSwatchObject} item={item} />
+        <ProductSwatch swatchObject={mockSwatchObject} />
       </CioPlp>,
     );
 
@@ -84,7 +74,6 @@ describe('Product Swatch Component', () => {
 
     const productSwatchProps = {
       swatchObject,
-      item,
       children: mockChildren,
     };
 
@@ -95,20 +84,6 @@ describe('Product Swatch Component', () => {
     );
     expect(mockChildren).toHaveBeenCalled();
     expect(screen.getByText('Custom Render')).toBeInTheDocument();
-  });
-
-  it('passes item to render props children', () => {
-    const mockChildren = jest.fn().mockReturnValue(<div>Custom Render</div>);
-
-    render(
-      <CioPlp apiKey={DEMO_API_KEY}>
-        <ProductSwatch swatchObject={swatchObject} item={item}>
-          {mockChildren}
-        </ProductSwatch>
-      </CioPlp>,
-    );
-
-    expect(mockChildren).toHaveBeenCalledWith(expect.objectContaining({ item }));
   });
 
   describe('View More button', () => {
@@ -133,7 +108,7 @@ describe('Product Swatch Component', () => {
     it('does not render when hasMoreSwatches is false', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <ProductSwatch swatchObject={swatchObject} item={item} />
+          <ProductSwatch swatchObject={swatchObject} />
         </CioPlp>,
       );
 
@@ -143,7 +118,7 @@ describe('Product Swatch Component', () => {
     it('renders when hasMoreSwatches is true', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+          <ProductSwatch swatchObject={swatchObjectWithMore} />
         </CioPlp>,
       );
 
@@ -153,7 +128,7 @@ describe('Product Swatch Component', () => {
     it('renders only visible swatches, not hidden ones', () => {
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+          <ProductSwatch swatchObject={swatchObjectWithMore} />
         </CioPlp>,
       );
 
@@ -163,7 +138,7 @@ describe('Product Swatch Component', () => {
     it('displays default label', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+          <ProductSwatch swatchObject={swatchObjectWithMore} />
         </CioPlp>,
       );
 
@@ -173,23 +148,18 @@ describe('Product Swatch Component', () => {
     it('displays custom string label', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <ProductSwatch
-            swatchObject={swatchObjectWithMore}
-            item={item}
-            showMoreLabel='See all colors'
-          />
+          <ProductSwatch swatchObject={swatchObjectWithMore} showMoreLabel='See all colors' />
         </CioPlp>,
       );
 
       expect(screen.getByTestId('cio-swatch-show-more')).toHaveTextContent('See all colors');
     });
 
-    it('displays custom function label using the count of hidden swatches', () => {
+    it('displays custom function label using number of hidden swatches', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <ProductSwatch
             swatchObject={swatchObjectWithMore}
-            item={item}
             showMoreLabel={(count) => `+${count} more`}
           />
         </CioPlp>,
@@ -203,7 +173,7 @@ describe('Product Swatch Component', () => {
 
       render(
         <CioPlp apiKey={DEMO_API_KEY} callbacks={{ onShowMoreSwatches: mockOnShowMore }}>
-          <ProductSwatch swatchObject={swatchObjectWithMore} item={item} />
+          <ProductSwatch swatchObject={swatchObjectWithMore} />
         </CioPlp>,
       );
 
@@ -211,7 +181,6 @@ describe('Product Swatch Component', () => {
       expect(mockOnShowMore).toHaveBeenCalledTimes(1);
       expect(mockOnShowMore).toHaveBeenCalledWith(
         expect.any(Object),
-        item,
         swatchObjectWithMore.selectedVariation,
         hiddenSwatches,
         expect.any(Function),

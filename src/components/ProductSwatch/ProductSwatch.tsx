@@ -2,15 +2,14 @@
 import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnShowMoreSwatches } from '../../hooks/callbacks';
-import { IncludeRenderProps, Item, ProductSwatchObject, SwatchItem } from '../../types';
+import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
 import { isHexColor, cnstrcDataAttrs } from '../../utils';
 
-export type ProductSwatchRenderProps = ProductSwatchObject & { item: Item };
+export type ProductSwatchRenderProps = ProductSwatchObject;
 
 export type ProductSwatchProps = IncludeRenderProps<
   {
     swatchObject: ProductSwatchObject;
-    item: Item;
     showMoreLabel?: string | ((count: number) => string);
   },
   ProductSwatchRenderProps
@@ -18,7 +17,7 @@ export type ProductSwatchProps = IncludeRenderProps<
 
 export default function ProductSwatch(props: ProductSwatchProps) {
   const context = useCioPlpContext();
-  const { swatchObject, item, children, showMoreLabel } = props;
+  const { swatchObject, children, showMoreLabel } = props;
   const {
     swatchList,
     selectVariation,
@@ -38,7 +37,6 @@ export default function ProductSwatch(props: ProductSwatchProps) {
   } = context;
 
   const showMoreClickHandler = useOnShowMoreSwatches(
-    item,
     selectedVariation,
     hiddenSwatches ?? [],
     setUrl,
@@ -69,7 +67,6 @@ export default function ProductSwatch(props: ProductSwatchProps) {
     <>
       {typeof children === 'function' ? (
         children({
-          item,
           swatchList,
           selectVariation,
           selectedVariation,

@@ -4,7 +4,7 @@ import { DEMO_API_KEY } from '../../../constants';
 import CioPlp from '../../../components/CioPlp';
 import ProductSwatch from '../../../components/ProductSwatch';
 import KitchenSinkDecorator from '../../utils/KitchenSinkDecorator';
-import { Item, SwatchItem } from '../../../types';
+import { SwatchItem } from '../../../types';
 import '../../../styles.css';
 
 const sampleSwatches: SwatchItem[] = [
@@ -52,13 +52,6 @@ const sampleSwatches: SwatchItem[] = [
   },
 ];
 
-const sampleItem = {
-  itemName: 'Sample Product',
-  itemId: 'sample-1',
-  url: 'https://example.com/product',
-  data: {},
-} as Item;
-
 const meta = {
   title: 'Components/ProductSwatch',
   component: ProductSwatch,
@@ -77,7 +70,6 @@ export const Primary: Story = {
     </CioPlp>
   ),
   args: {
-    item: sampleItem,
     swatchObject: {
       swatchList: sampleSwatches.slice(0, 2),
       visibleSwatches: sampleSwatches.slice(0, 2),
@@ -97,7 +89,6 @@ export const WithViewMore: Story = {
     </CioPlp>
   ),
   args: {
-    item: sampleItem,
     swatchObject: {
       swatchList: sampleSwatches,
       visibleSwatches: sampleSwatches.slice(0, 3),
@@ -117,7 +108,6 @@ export const WithViewMoreCustomLabel: Story = {
     </CioPlp>
   ),
   args: {
-    item: sampleItem,
     showMoreLabel: (count: number) => `View ${count} more`,
     swatchObject: {
       swatchList: sampleSwatches,
@@ -139,7 +129,6 @@ export const KitchenSink: Story = {
     </CioPlp>
   ),
   args: {
-    item: sampleItem,
     swatchObject: {
       swatchList: sampleSwatches,
       visibleSwatches: sampleSwatches.slice(0, 3),

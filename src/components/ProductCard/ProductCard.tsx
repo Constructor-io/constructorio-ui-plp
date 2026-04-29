@@ -136,7 +136,6 @@ export default function ProductCard(props: ProductCardProps) {
           {productSwatch && (
             <ProductSwatch
               swatchObject={productSwatch}
-              item={item}
               showMoreLabel={swatchConfigs?.showMoreLabel}
             />
           )}

@@ -5,16 +5,6 @@ import { renderHookWithCioPlp } from '../../test-utils';
 describe('Testing Hook: useOnShowMoreSwatches', () => {
   const mockSetUrl = jest.fn();
 
-  const item = {
-    itemName: 'Test Product',
-    itemId: 'test-1',
-    url: 'https://example.com/product',
-    matchedTerms: [],
-    isSlotted: false,
-    labels: {},
-    data: {},
-  };
-
   const selectedSwatch = {
     url: 'https://example.com/product/red',
     itemName: 'Red',
@@ -41,7 +31,7 @@ describe('Testing Hook: useOnShowMoreSwatches', () => {
 
   it('Should return a function', () => {
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl),
     );
 
     expect(typeof result.current).toBe('function');
@@ -49,56 +39,43 @@ describe('Testing Hook: useOnShowMoreSwatches', () => {
 
   it('Should call setUrl with selectedSwatch url by default', () => {
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl),
     );
 
     result.current(mockEvent);
     expect(mockSetUrl).toHaveBeenCalledWith('https://example.com/product/red');
   });
 
-  it('Should fall back to item url when selectedSwatch has no url', () => {
+  it('Should not call setUrl when selectedSwatch has no url', () => {
     const swatchWithoutUrl = { ...selectedSwatch, url: undefined };
 
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, swatchWithoutUrl, hiddenSwatches, mockSetUrl),
-    );
-
-    result.current(mockEvent);
-    expect(mockSetUrl).toHaveBeenCalledWith('https://example.com/product');
-  });
-
-  it('Should not call setUrl when neither swatch nor item has url', () => {
-    const swatchWithoutUrl = { ...selectedSwatch, url: undefined };
-    const itemWithoutUrl = { ...item, url: undefined };
-
-    const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(itemWithoutUrl, swatchWithoutUrl, hiddenSwatches, mockSetUrl),
+      useOnShowMoreSwatches(swatchWithoutUrl, hiddenSwatches, mockSetUrl),
     );
 
     result.current(mockEvent);
     expect(mockSetUrl).not.toHaveBeenCalled();
   });
 
-  it('Should call setUrl with item url when selectedSwatch is undefined', () => {
+  it('Should not call setUrl when selectedSwatch is undefined', () => {
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, undefined, hiddenSwatches, mockSetUrl),
+      useOnShowMoreSwatches(undefined, hiddenSwatches, mockSetUrl),
     );
 
     result.current(mockEvent);
-    expect(mockSetUrl).toHaveBeenCalledWith('https://example.com/product');
+    expect(mockSetUrl).not.toHaveBeenCalled();
   });
 
   it('Should call custom callback instead of default when provided', () => {
     const mockCallback = jest.fn();
 
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
     );
 
     result.current(mockEvent);
     expect(mockCallback).toHaveBeenCalledWith(
       mockEvent,
-      item,
       selectedSwatch,
       hiddenSwatches,
       mockSetUrl,
@@ -110,7 +87,7 @@ describe('Testing Hook: useOnShowMoreSwatches', () => {
     const mockCallback = jest.fn();
 
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
     );
 
     result.current(mockEvent);
@@ -120,7 +97,7 @@ describe('Testing Hook: useOnShowMoreSwatches', () => {
 
   it('Should call stopPropagation on the event', () => {
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl),
     );
 
     result.current(mockEvent);
@@ -131,7 +108,7 @@ describe('Testing Hook: useOnShowMoreSwatches', () => {
     const mockCallback = jest.fn();
 
     const { result } = renderHookWithCioPlp(() =>
-      useOnShowMoreSwatches(item, selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
+      useOnShowMoreSwatches(selectedSwatch, hiddenSwatches, mockSetUrl, mockCallback),
     );
 
     result.current(mockEvent);

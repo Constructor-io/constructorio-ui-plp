@@ -72,7 +72,6 @@ export default function MyComponent() {
                     return (
                       <ProductSwatch
                         swatchObject={productProps.productInfo.productSwatch}
-                        item={firstItem}
                       />
                     );
                   }
@@ -163,7 +162,6 @@ export default function MyComponent() {
                     return (
                       <ProductSwatch
                         swatchObject={productProps.productInfo.productSwatch}
-                        item={firstItem}
                       >
                         {(swatchProps) => {
                           return <MyCustomSwatch {...swatchProps} />;

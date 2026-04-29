@@ -68,7 +68,6 @@ export interface Callbacks {
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
   onShowMoreSwatches?: (
     event: React.MouseEvent,
-    item: Item,
     selectedSwatch: SwatchItem | undefined,
     hiddenSwatches: SwatchItem[],
     setUrl: UrlHelpers['setUrl'],
