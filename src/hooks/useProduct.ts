@@ -11,10 +11,7 @@ import {
 
 const useProductInfo: UseProductInfo = ({ item, swatchConfigs }) => {
   const state = useCioPlpContext();
-  const productSwatchConfigs = {
-    maxVisibleSwatches: swatchConfigs?.maxVisibleSwatches,
-  };
-  const productSwatch = useProductSwatch({ item, config: productSwatchConfigs });
+  const productSwatch = useProductSwatch({ item, config: swatchConfigs });
 
   if (!item.data || !item.itemId || !item.itemName) {
     throw new Error('data, itemId, or itemName are required.');

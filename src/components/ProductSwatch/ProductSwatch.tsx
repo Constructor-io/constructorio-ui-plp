@@ -60,7 +60,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
     if (typeof showMoreLabel === 'function') {
       return showMoreLabel(hiddenCount);
     }
-    return showMoreLabel ?? `View more >`;
+    return showMoreLabel ?? 'View more >';
   };
 
   return (
