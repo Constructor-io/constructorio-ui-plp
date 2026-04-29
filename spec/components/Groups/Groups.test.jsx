@@ -219,8 +219,8 @@ describe('Testing Component: Groups', () => {
       await waitFor(() => {
         const breadcrumbsWrapper = container.querySelector('.cio-groups-breadcrumbs');
         expect(breadcrumbsWrapper).toBeInTheDocument();
-        // Trailing <span> (not <button>) is the current-page label. In the root state,
-        // currentPage === 'All' (from useCioBreadcrumb), which is what should render here.
+        // Trailing <span> (not <button>) is the current-page label and should match
+        // the current rendered group label for this state.
         const tail = breadcrumbsWrapper.querySelector('span.cio-groups-crumb');
         expect(tail).toBeInTheDocument();
         expect(tail.textContent).toBe(mockTransformedGroups[0].displayName);
