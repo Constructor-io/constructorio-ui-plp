@@ -243,7 +243,7 @@ export default function MyComponent() {
 
 ## Component Overrides
 
-Use `componentOverrides` on the `CioPlp` provider to replace default sub-components within `Groups`. Each override slot accepts either a static `ReactNode` or a render function that receives `GroupsRenderProps` with full state access (`groups`, `isCollapsed`, `toggleIsCollapsed`, `onOptionSelect`, `goToGroupFilter`).
+Use `componentOverrides` on the `CioPlp` provider to replace default sub-components within `Groups`. Each override slot accepts either a static `ReactNode` or a render function that receives `GroupsRenderProps` with full state access (`groups`, `breadcrumbs`, `currentPage`, `isCollapsed`, `toggleIsCollapsed`, `optionsToRender`, `isShowAll`, `setIsShowAll`, `selectedGroupId`, `onOptionSelect`, `goToGroupFilter`).
 
 ### Override Entire Groups
 

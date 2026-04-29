@@ -234,7 +234,7 @@ export const OverrideBreadcrumbs: Story = {
     componentOverrides: {
       groups: {
         breadcrumbs: {
-          reactNode: ({ breadcrumbs, goToGroupFilter, groups }: GroupsRenderProps) => {
+          reactNode: ({ breadcrumbs, currentPage, goToGroupFilter }: GroupsRenderProps) => {
             if (breadcrumbs.length === 0) return null;
             return (
               <div
@@ -244,16 +244,15 @@ export const OverrideBreadcrumbs: Story = {
                   borderRadius: '4px',
                   fontSize: '13px',
                 }}>
-                📍{' '}
                 {breadcrumbs.map((crumb) => (
-                  <span>
-                    <button type='button' key={crumb.path} onClick={() => goToGroupFilter(crumb)}>
+                  <span key={crumb.path}>
+                    <button type='button' onClick={() => goToGroupFilter(crumb)}>
                       {crumb.breadcrumb}
                     </button>
-                    {' >> '}
+                    {' > '}
                   </span>
                 ))}
-                <span className='cio-groups-crumb'>{groups[0].displayName}</span>
+                <span className='cio-groups-crumb'>{currentPage}</span>
               </div>
             );
           },
