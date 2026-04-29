@@ -65,9 +65,6 @@ export default function ProductSwatch(props: ProductSwatchProps) {
     return showMoreLabel ?? `View more >`;
   };
 
-  // Use visibleSwatches if available, fall back to swatchList for backwards compatibility
-  const swatchesToRender = visibleSwatches ?? swatchList;
-
   return (
     <>
       {typeof children === 'function' ? (
@@ -85,7 +82,7 @@ export default function ProductSwatch(props: ProductSwatchProps) {
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         <div onClick={swatchContainerClickHandler}>
           <ul className='cio-swatch-container'>
-            {swatchesToRender?.map((swatch) => {
+            {visibleSwatches?.map((swatch) => {
               const isSelected = selectedVariation?.variationId === swatch.variationId;
               const color = isHexColor(swatch?.swatchPreview)
                 ? swatch?.swatchPreview
