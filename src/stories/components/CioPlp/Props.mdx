@@ -96,6 +96,35 @@ Available override slots:
 
 See the [Filters component documentation](./?path=/docs/components-filters--code-examples#component-overrides) for interactive examples.
 
+### `groups`
+
+Override slots for the `Groups` component. Each slot receives `GroupsRenderProps`:
+
+| Property           | Type                                                                          | Description                                                              |
+| ------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| groups             | `PlpItemGroup[]`                                                              | The top-level groups data array                                          |
+| breadcrumbs        | `Breadcrumb[]`                                                                | Navigable breadcrumb trail for the current group path                    |
+| currentPage        | `string \| undefined`                                                         | Display name of the current group (last breadcrumb)                      |
+| isCollapsed        | `boolean`                                                                     | Whether the groups panel is currently collapsed                           |
+| toggleIsCollapsed  | `() => void`                                                                  | Toggle the collapsed state                                               |
+| optionsToRender    | `PlpItemGroup[]`                                                              | Options after hide-filter and show-all truncation — what the list renders |
+| isShowAll          | `boolean`                                                                     | Whether the "Show All" toggle is currently expanded                      |
+| setIsShowAll       | `React.Dispatch<React.SetStateAction<boolean>>`                               | Setter for the show-all toggle                                           |
+| selectedGroupId    | `string \| null \| undefined`                                                 | Currently selected group id, used for checked state in the list          |
+| onOptionSelect     | `(groupId: string \| null) => void`                                           | Callback to select a group option by groupId                             |
+| goToGroupFilter    | `(breadcrumb: Breadcrumb) => void`                                            | Callback to navigate via breadcrumb                                      |
+
+Available override slots:
+
+| Slot            | Description                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `reactNode`     | Replaces the entire Groups container                                |
+| `header`        | Replaces the header button (title + collapse arrow)                 |
+| `breadcrumbs`   | Replaces the breadcrumbs navigation                                 |
+| `optionsList`   | Replaces the options list (group items + "Show All" toggle)         |
+
+See the [Groups component documentation](./?path=/docs/components-groups--code-examples#component-overrides) for interactive examples.
+
 ## UrlHelpers
 
 URL Helpers are used for managing the URL and request state. These functions define how this library modifies and parses the URL.
