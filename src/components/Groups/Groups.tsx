@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
+import {
+  FilterOption,
+  type IncludeComponentOverrides,
+} from '@constructor-io/constructorio-ui-components';
 import useGroups, { UseGroupProps } from '../../hooks/useGroups';
-import FilterOptionListRow from '../Filters/FilterOptionListRow';
 import type { IncludeRenderProps, GroupsOverrides, GroupsRenderProps } from '../../types';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
@@ -121,8 +123,8 @@ export default function Groups(props: GroupsWithRenderProps) {
                   override={componentOverrides?.optionsList?.reactNode}>
                   <ul>
                     {optionsToRender.map((option) => (
-                      <FilterOptionListRow
-                        showCheckbox={false}
+                      <FilterOption
+                        checkboxPosition='none'
                         key={option.groupId}
                         id={option.groupId}
                         optionValue={option.groupId}

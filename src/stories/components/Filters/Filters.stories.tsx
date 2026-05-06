@@ -1,11 +1,39 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
 import CioPlp from '../../../components/CioPlp';
-import Filters from '../../../components/Filters';
+import Filters, { FiltersWithRenderProps } from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
-import { PlpFacet, PlpMultipleFacet, FilterGroupRenderProps } from '../../../types';
+import type {
+  PlpFacet,
+  PlpMultipleFacet,
+  PlpSingleFacet,
+  PlpFacetOption,
+  FilterGroupRenderProps,
+  PlpComponentOverrides,
+} from '../../../types';
 import { DEMO_API_KEY } from '../../../constants';
+import { colorHexMap, COLOR_FACET_NAMES } from '../../utils/colorConstants';
 import '../../../styles.css';
+
+const mockFacetsWithCollapsedMetadata = (mockTransformedFacets as Array<PlpFacet>).map((facet) => {
+  if (facet.name === 'color' || facet.name === 'price') {
+    return { ...facet, data: { ...facet.data, cio_render_collapsed: true } };
+  }
+  return facet;
+});
+
+const mockFacetsWithVisualColor = (mockTransformedFacets as Array<PlpFacet>).map((facet) => {
+  if (!COLOR_FACET_NAMES.includes(facet.name) || !('options' in facet)) return facet;
+  return {
+    ...facet,
+    data: { ...facet.data, cio_render_visual: true },
+    options: (facet as PlpMultipleFacet | PlpSingleFacet).options.map((option: PlpFacetOption) => ({
+      ...option,
+      data: { ...option.data, hex_color: colorHexMap[option.value] },
+    })),
+  };
+});
 
 const meta = {
   title: 'Components/Filters',
@@ -13,17 +41,29 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  render: (_: FiltersWithRenderProps & IncludeComponentOverrides<PlpComponentOverrides>) => <p />,
   argTypes: {
     initialNumOptions: {
       table: {
         defaultValue: { summary: '10' },
       },
     },
+    defaultCollapsed: {
+      table: {
+        defaultValue: { summary: 'undefined' },
+      },
+    },
+    perFacetConfigs: {
+      table: {
+        defaultValue: { summary: 'undefined' },
+      },
+    },
   },
 } satisfies Meta<typeof Filters>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta & IncludeComponentOverrides<PlpComponentOverrides>>;
 
 function PrimaryStory({ args }: any) {
   const [currentUrl, setCurrentUrl] = useState(window.location.href);
@@ -47,7 +87,7 @@ function PrimaryStory({ args }: any) {
 export const Primary: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    facets: mockTransformedFacets as Array<PlpFacet>,
+    facets: mockFacetsWithVisualColor,
   },
 };
 
@@ -58,7 +98,7 @@ export const Primary: Story = {
 export const HiddenFilters: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    facets: mockTransformedFacets as Array<PlpFacet>,
+    facets: mockFacetsWithVisualColor,
     isHiddenFilterFn: (facet: PlpFacet) => facet.name === 'price',
   },
 };
@@ -70,7 +110,7 @@ export const HiddenFilters: Story = {
 export const HiddenFilterOptions: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    facets: mockTransformedFacets as Array<PlpFacet>,
+    facets: mockFacetsWithVisualColor,
     isHiddenFilterOptionFn: (option) => option.value === 'Black' || option.value === 'Blue',
     initialNumOptions: 20,
   },
@@ -84,13 +124,76 @@ export const HiddenFilterOptions: Story = {
 export const HiddenViaMetadata: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
-    facets: (mockTransformedFacets as Array<PlpFacet>).map((facet) => ({
+    facets: mockFacetsWithVisualColor.map((facet) => ({
       ...facet,
       data: {
         ...facet.data,
         cio_plp_hidden: facet.name === 'price', // Hide the Price facet
       },
     })),
+  },
+};
+
+/**
+ * Visual filters render color swatches next to each option.
+ * Set `data.cio_render_visual = true` on the facet and `data.hex_color` on each option.
+ */
+export const VisualColorFilters: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockFacetsWithVisualColor,
+    initialNumOptions: 20,
+  },
+};
+
+/**
+ * Use the `getVisualColorHex` callback to resolve color values dynamically
+ * instead of relying on option metadata.
+ * Combined with `isVisualFilterFn` to designate which facets are visual.
+ */
+export const VisualFilterViaCallback: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    isVisualFilterFn: (facet: PlpFacet) => COLOR_FACET_NAMES.includes(facet.name),
+    getVisualColorHex: (option: PlpFacetOption) => colorHexMap[option.value],
+    initialNumOptions: 20,
+  },
+};
+
+/**
+ * Use `perFacetConfigs` to enable visual rendering per facet.
+ * This overrides both the `isVisualFilterFn` callback and `data.cio_render_visual`.
+ */
+export const VisualFilterViaPerFacetConfigs: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockFacetsWithVisualColor,
+    perFacetConfigs: { color: { isVisualFacet: true } },
+    initialNumOptions: 20,
+  },
+};
+
+export const AllCollapsed: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    defaultCollapsed: true,
+  },
+};
+
+export const SpecificFacetsCollapsed: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockTransformedFacets as Array<PlpFacet>,
+    perFacetConfigs: { color: { isCollapsed: true }, price: { isCollapsed: true } },
+  },
+};
+
+export const CollapsedViaMetadata: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockFacetsWithCollapsedMetadata,
   },
 };
 

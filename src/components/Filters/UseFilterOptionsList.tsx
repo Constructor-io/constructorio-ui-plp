@@ -12,6 +12,10 @@ interface UseFilterOptionsListPropsBase {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  isVisual?: boolean;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  checkboxPosition?: 'left' | 'right' | 'none';
 }
 interface UseFilterOptionsListPropsLegacy extends UseFilterOptionsListPropsBase {
   /** @deprecated Use `facet` instead */
@@ -27,8 +31,16 @@ export type UseFilterOptionsListProps =
   | UseFilterOptionsListPropsNew;
 
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
-  const { initialNumOptions, modifyRequestMultipleFilter, isCollapsed, isHiddenFilterOptionFn } =
-    props;
+  const {
+    initialNumOptions,
+    modifyRequestMultipleFilter,
+    isCollapsed,
+    isHiddenFilterOptionFn,
+    isVisual,
+    getVisualImageUrl,
+    getVisualColorHex,
+    checkboxPosition,
+  } = props;
   const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
@@ -49,7 +61,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     nestedOptionsKey: 'options', // Enable recursive filtering for hierarchical facet options
   });
 
-  const [selectedOptionMap, setSelectedOptionMap] = useState({});
+  const [selectedOptionMap, setSelectedOptionMap] = useState<Record<string, boolean>>({});
 
   const onOptionSelect = (optionValue: string) => {
     const newMap = facet.type === 'multiple' ? { ...selectedOptionMap } : {};
@@ -61,7 +73,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   };
 
   useEffect(() => {
-    const newSelectedOptionsMap = {};
+    const newSelectedOptionsMap: Record<string, boolean> = {};
     facet.options.forEach((option) => {
       newSelectedOptionsMap[option.value] = option.status === 'selected';
     });
@@ -76,6 +88,10 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     initialNumOptions,
     modifyRequestMultipleFilter,
     isCollapsed,
+    isVisual,
+    getVisualImageUrl,
+    getVisualColorHex,
+    checkboxPosition,
 
     // useFilterOptionsList
     isShowAll,

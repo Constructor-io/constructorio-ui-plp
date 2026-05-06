@@ -3,11 +3,17 @@ import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui
 import type {
   PlpFacet,
   PlpFacetOption,
+  FacetConfig,
   PlpFilterValue,
   FilterGroupOverrides,
   FilterGroupRenderProps,
 } from '../../types';
-import { isMultipleOrBucketedFacet, isRangeFacet, isSingleFacet } from '../../utils';
+import {
+  isMultipleOrBucketedFacet,
+  isRangeFacet,
+  isSingleFacet,
+  shouldRenderVisualFacet,
+} from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
@@ -25,6 +31,11 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  defaultCollapsed?: boolean;
+  getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
+  getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
+  isVisualFilterFn?: (facet: PlpFacet) => boolean;
+  perFacetConfigs?: Record<string, FacetConfig>;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -35,11 +46,18 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
+    defaultCollapsed = false,
+    getVisualImageUrl,
+    getVisualColorHex,
+    isVisualFilterFn,
+    perFacetConfigs,
     componentOverrides: componentOverridesProp,
   } = props;
   const context = useCioPlpContext();
   const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.filterGroup;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
+  const checkboxPosition = perFacetConfigs?.[facet.name]?.checkboxPosition;
 
   const toggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
   const onFilterSelect = (facetName: string) => (value: PlpFilterValue) => {
@@ -73,6 +91,10 @@ export default function FilterGroup(props: FilterGroupProps) {
               modifyRequestMultipleFilter={onFilterSelect(facet.name)}
               initialNumOptions={initialNumOptions}
               isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+              isVisual={isVisual}
+              getVisualImageUrl={getVisualImageUrl}
+              getVisualColorHex={getVisualColorHex}
+              checkboxPosition={checkboxPosition}
             />
           </RenderPropsWrapper>
         )}
