@@ -4,6 +4,7 @@ import { RequestConfigs } from '../types';
 interface UseRequestConfigsReturn {
   getRequestConfigs: () => RequestConfigs;
   setRequestConfigs: (configsToUpdate: Partial<RequestConfigs>) => void;
+  getUrlForPage: (page: number) => string | undefined;
 }
 
 export default function useRequestConfigs(): UseRequestConfigsReturn {
@@ -43,5 +44,16 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     setUrl(newUrl);
   };
 
-  return { getRequestConfigs, setRequestConfigs };
+  // Read-only counterpart to setRequestConfigs: parses the current URL state,
+  // swaps in the given page number, and rebuilds the URL — without navigating.
+  // Used to generate href values for pagination anchors at render time.
+  // Respects any custom urlHelpers provided via the CioPlp context.
+  const getUrlForPage = (page: number): string | undefined => {
+    const currentUrl = getUrl();
+    if (!currentUrl) return undefined;
+    const currentState = getStateFromUrl(currentUrl);
+    return getUrlFromState({ ...currentState, page }, currentUrl);
+  };
+
+  return { getRequestConfigs, setRequestConfigs, getUrlForPage };
 }

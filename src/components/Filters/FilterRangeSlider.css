@@ -25,6 +25,7 @@
 }
 
 .cio-slider-input {
+  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -73,6 +74,8 @@
   font-weight: 500;
   text-wrap: nowrap;
   resize: none;
+  min-width: 0;
+  overflow: hidden;
 
   /* Stretch the selectable container */
   flex-grow: 1;

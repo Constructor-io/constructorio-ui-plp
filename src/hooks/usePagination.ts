@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import useRequestConfigs from './useRequestConfigs';
 
 export interface UsePaginationProps {
@@ -49,6 +49,10 @@ export interface UsePaginationReturn {
    *  -1 indicates a break (e.g., to show "...")
    *  [1, 2, 3, 4, ..., 10] */
   pages: number[];
+
+  // Returns the URL for a given page number, for use in anchor href attributes.
+  // Returns undefined for out-of-bound pages or in SSR environments.
+  getPageUrl: (page: number) => string | undefined;
 }
 
 export type UsePagination = (props: UsePaginationProps) => UsePaginationReturn;
@@ -58,21 +62,17 @@ const usePagination: UsePagination = ({
   resultsPerPage: resultsPerPageFromProps,
   windowSize = 5,
 }) => {
-  const [totalPages, setTotalPages] = useState(0);
-
-  const { getRequestConfigs, setRequestConfigs } = useRequestConfigs();
+  const { getRequestConfigs, setRequestConfigs, getUrlForPage } = useRequestConfigs();
   const { page: currentPage, resultsPerPage: resultsPerPageFromConfigs } = getRequestConfigs();
 
   const resultsPerPage = resultsPerPageFromProps || resultsPerPageFromConfigs || 20;
 
   const setCurrentPage = (page: number) => setRequestConfigs({ page, resultsPerPage });
 
-  // Calculate total number of pages
-  useEffect(() => {
-    if (totalNumResults && resultsPerPage) {
-      setTotalPages(Math.ceil(totalNumResults / resultsPerPage));
-    }
-  }, [totalNumResults, resultsPerPage]);
+  const totalPages = useMemo(
+    () => (totalNumResults && resultsPerPage ? Math.ceil(totalNumResults / resultsPerPage) : 0),
+    [totalNumResults, resultsPerPage],
+  );
 
   const goToPage = (page: number) => {
     if (currentPage && page >= 1 && page <= totalPages) {
@@ -147,6 +147,11 @@ const usePagination: UsePagination = ({
     return pagesArray;
   }, [currentPage, totalPages, windowSize]);
 
+  const getPageUrl = (page: number): string | undefined => {
+    if (page < 1 || page > totalPages) return undefined;
+    return getUrlForPage(page);
+  };
+
   return {
     currentPage,
     goToPage,
@@ -154,6 +159,7 @@ const usePagination: UsePagination = ({
     prevPage,
     totalPages,
     pages,
+    getPageUrl,
   };
 };
 

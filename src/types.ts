@@ -9,6 +9,7 @@ import {
   SearchResponse,
   GetBrowseResultsResponse,
   VariationsMap,
+  VariationsMapResponse,
   FilterExpression,
   FmtOptions,
   Nullable,
@@ -18,7 +19,10 @@ import {
   SearchParameters,
   BrowseRequestType,
   FacetOption as ApiFacetOption,
+  RangeMax,
+  RangeMin,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
 
 export {
   Nullable,
@@ -29,6 +33,7 @@ export {
   ApiFacet,
   ApiFacetOption,
   ApiGroup,
+  VariationsMapResponse,
 };
 
 export interface ApiHierarchicalFacetOption extends ApiFacetOption {
@@ -216,6 +221,7 @@ export interface PlpContextValue {
   callbacks: Callbacks;
   urlHelpers: UrlHelpers;
   renderOverrides: RenderOverrides;
+  componentOverrides: PlpComponentOverrides;
 }
 
 export interface PrimaryColorStyles {
@@ -240,7 +246,7 @@ export interface Item {
   labels: Record<string, unknown>;
   itemName: string;
   variations?: Variation[];
-  variationsMap?: VariationsMap;
+  variationsMap?: VariationsMapResponse;
 
   // Flattened Data Object
   itemId: string;
@@ -298,6 +304,7 @@ export interface CioPlpProviderProps {
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
   useShopifyDefaults?: boolean;
+  componentOverrides?: PlpComponentOverrides;
 }
 
 export type UseSortReturn = {
@@ -374,7 +381,7 @@ export interface PlpFacetOption {
   displayName: string;
   value: string;
   data: Record<string, any>;
-  range?: ['-inf' | number, 'inf' | number];
+  range?: [RangeMin, RangeMax];
   options?: Array<PlpHierarchicalFacetOption>;
 }
 
@@ -427,3 +434,87 @@ export interface FacetConfig {
  */
 export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
   Partial<Pick<Type, Keys>>;
+
+/**
+ * Render props passed to every FilterGroup override function.
+ * Provides the full state needed to rebuild any part of a filter group.
+ */
+export interface FilterGroupRenderProps {
+  /** The facet data for this filter group */
+  facet: PlpFacet;
+  /** Whether this filter group is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Callback to apply a filter value for this facet */
+  onFilterSelect: (value: PlpFilterValue) => void;
+}
+
+/**
+ * Component override slots available on `FilterGroup`.
+ *
+ * Top-level `reactNode` replaces the entire `<li>` filter group element.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
+ * - **header** — replaces the header button (facet name + collapse arrow)
+ * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
+ * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
+ */
+export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
+  header?: ComponentOverrideProps<FilterGroupRenderProps>;
+  optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
+  rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
+};
+
+export interface Breadcrumb {
+  path: string;
+  groupId: string;
+  breadcrumb: string;
+}
+
+/**
+ * Render props passed to every Groups override function.
+ * Provides the full state needed to rebuild any part of the groups component.
+ */
+export interface GroupsRenderProps {
+  /** The top-level groups data array */
+  groups: PlpItemGroup[];
+  /** Navigable breadcrumb trail for the current group path */
+  breadcrumbs: Breadcrumb[];
+  /** Display name of the current group (last breadcrumb) */
+  currentPage: string | undefined;
+  /** Whether the groups panel is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Options after hide-filter and show-all truncation — this is what the default list renders */
+  optionsToRender: PlpItemGroup[];
+  /** Whether the "Show All" toggle is currently expanded */
+  isShowAll: boolean;
+  /** Setter for the show-all toggle */
+  setIsShowAll: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Currently selected group id, used for checked state in the list */
+  selectedGroupId: string | null | undefined;
+  /** Callback to select a group option by groupId */
+  onOptionSelect: (groupId: string | null) => void;
+  /** Callback to navigate via breadcrumb */
+  goToGroupFilter: (breadcrumb: Breadcrumb) => void;
+}
+/**
+ * Component override slots available on `Groups`.
+ *
+ * Top-level `reactNode` replaces the entire groups container.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<GroupsRenderProps>`:
+ * - **header** — replaces the header button (title + collapse arrow)
+ * - **breadcrumbs** — replaces the breadcrumbs navigation
+ * - **optionsList** — replaces the options list (group items + "Show All" toggle)
+ */
+export type GroupsOverrides = ComponentOverrideProps<GroupsRenderProps> & {
+  header?: ComponentOverrideProps<GroupsRenderProps>;
+  breadcrumbs?: ComponentOverrideProps<GroupsRenderProps>;
+  optionsList?: ComponentOverrideProps<GroupsRenderProps>;
+};
+
+export interface PlpComponentOverrides {
+  filterGroup?: FilterGroupOverrides;
+  groups?: GroupsOverrides;
+}

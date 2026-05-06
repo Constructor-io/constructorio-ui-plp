@@ -144,18 +144,21 @@ export default function FilterRangeSlider(props: FilterRangeSliderProps) {
     }
   };
 
-  // Update internal state when facet changes
+  // Sync internal state when facet range or status changes
   useEffect(() => {
-    if (facet.status?.min !== undefined) {
-      const clampedMin = Math.max(displayMin, Math.min(displayMax, facet.status.min));
-      const clampedMax = Math.max(displayMin, Math.min(displayMax, facet.status.max));
+    const clamp = (value: number) => Math.max(displayMin, Math.min(displayMax, value));
 
-      setMinValue(clampedMin);
-      setMaxValue(clampedMax);
+    const targetMin = facet.status?.min !== undefined ? clamp(facet.status.min) : displayMin;
+    const targetMax = facet.status?.max !== undefined ? clamp(facet.status.max) : displayMax;
 
-      setInputMinValue(isSingleValue ? facet.status.min : clampedMin);
-      setInputMaxValue(isSingleValue ? facet.status.max : clampedMax);
-    }
+    setMinValue(targetMin);
+    setMaxValue(targetMax);
+    setInputMinValue(
+      isSingleValue && facet.status?.min !== undefined ? facet.status.min : targetMin,
+    );
+    setInputMaxValue(
+      isSingleValue && facet.status?.max !== undefined ? facet.status.max : targetMax,
+    );
   }, [
     facet.min,
     facet.max,

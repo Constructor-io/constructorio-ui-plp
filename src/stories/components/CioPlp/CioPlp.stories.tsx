@@ -80,6 +80,15 @@ const meta = {
         },
       },
     },
+    componentOverrides: {
+      description:
+        'Component override functions to replace default sub-components. Supports overriding FilterGroup (header, optionsList, rangeSlider) and Groups (header, breadcrumbs, optionsList). See the Filters and Groups component stories for interactive examples.',
+      table: {
+        type: {
+          summary: 'Partial<PlpComponentOverrides>',
+        },
+      },
+    },
   },
 } satisfies Meta<typeof CioPlp>;
 
@@ -119,6 +128,9 @@ export const SearchPlp: Story = {
   args: {
     apiKey: DEMO_API_KEY,
     filterConfigs: defaultFilterConfigs,
+    paginationConfigs: {
+      useAnchors: true,
+    },
   },
 };
 
@@ -132,6 +144,9 @@ export const BrowsePlp: Story = {
   args: {
     apiKey: DEMO_API_KEY,
     filterConfigs: defaultFilterConfigs,
+    paginationConfigs: {
+      useAnchors: true,
+    },
   },
 };
 
