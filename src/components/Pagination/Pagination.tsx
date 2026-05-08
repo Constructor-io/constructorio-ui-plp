@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
 import { NavButton } from './NavButton';
@@ -52,15 +52,8 @@ export default function Pagination(props: PaginationWithRenderProps) {
     };
   }, [windowSize]);
 
-  const isFirstPage: boolean = useMemo(
-    () => !(currentPage && getPageUrl(currentPage - 1)),
-    [currentPage, getPageUrl],
-  );
-
-  const isLastPage: boolean = useMemo(
-    () => !(currentPage && getPageUrl(currentPage + 1)),
-    [currentPage, getPageUrl],
-  );
+  const isFirstPage = !(currentPage && getPageUrl(currentPage - 1));
+  const isLastPage = !(currentPage && getPageUrl(currentPage + 1));
 
   return (
     <>
