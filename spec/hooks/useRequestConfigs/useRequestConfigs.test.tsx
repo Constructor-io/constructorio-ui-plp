@@ -4,7 +4,7 @@ import useRequestConfigs from '../../../src/hooks/useRequestConfigs';
 import { CioPlpProvider } from '../../../src/components/CioPlp';
 import testRequestState from '../../local_examples/sampleRequestState.json';
 import testUrl from '../../local_examples/testJsonEncodedUrl.json';
-import { DEMO_API_KEY } from '../../../src/constants';
+import { DEMO_API_KEY, DEFAULT_RESULTS_PER_PAGE } from '../../../src/constants';
 import { getStateFromUrl as defaultGetStateFromUrl } from '../../../src/utils/urlHelpers';
 import { RequestConfigs } from '../../../src/types';
 
@@ -188,6 +188,27 @@ describe('Testing Hook: useRequestConfigs', () => {
     );
   });
 
+  test('setRequestConfigs strips numResults round-trip when URL already matches staticRequestConfigs.resultsPerPage', () => {
+    function TestReactComponent() {
+      window.location.href = 'https://www.example.com/search?q=item&numResults=24';
+      const { setRequestConfigs } = useRequestConfigs();
+
+      setRequestConfigs({ page: 2 });
+      const newUrlObj = new URL(window.location.href);
+
+      expect(newUrlObj.searchParams.has('numResults')).toBe(false);
+      expect(newUrlObj.searchParams.get('page')).toBe('2');
+
+      return <div>test</div>;
+    }
+
+    render(
+      <CioPlpProvider apiKey={DEMO_API_KEY} staticRequestConfigs={{ resultsPerPage: 24 }}>
+        <TestReactComponent />
+      </CioPlpProvider>,
+    );
+  });
+
   test('setRequestConfigs retains numResults when differing from staticRequestConfigs.resultsPerPage', () => {
     function TestReactComponent() {
       window.location.href = 'https://www.example.com/search?q=item';
@@ -213,10 +234,31 @@ describe('Testing Hook: useRequestConfigs', () => {
       window.location.href = 'https://www.example.com/search?q=item';
       const { setRequestConfigs } = useRequestConfigs();
 
-      setRequestConfigs({ page: 2, resultsPerPage: 20 });
+      setRequestConfigs({ page: 2, resultsPerPage: DEFAULT_RESULTS_PER_PAGE });
       const newUrlObj = new URL(window.location.href);
 
       expect(newUrlObj.searchParams.has('numResults')).toBe(false);
+
+      return <div>test</div>;
+    }
+
+    render(
+      <CioPlpProvider apiKey={DEMO_API_KEY}>
+        <TestReactComponent />
+      </CioPlpProvider>,
+    );
+  });
+
+  test('getUrlForPage strips numResults equal to library default when no staticRequestConfigs', () => {
+    function TestReactComponent() {
+      window.location.href = `https://www.example.com/search?q=item&numResults=${DEFAULT_RESULTS_PER_PAGE}`;
+      const { getUrlForPage } = useRequestConfigs();
+
+      const pageUrl = getUrlForPage(2);
+      const parsed = new URL(pageUrl as string);
+
+      expect(parsed.searchParams.has('numResults')).toBe(false);
+      expect(parsed.searchParams.get('page')).toBe('2');
 
       return <div>test</div>;
     }

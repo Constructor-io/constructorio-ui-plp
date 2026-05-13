@@ -131,13 +131,14 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(url.searchParams.has('resultsPerPage')).toBe(false);
   });
 
-  test('Should still append numResults when value differs from library default', () => {
-    const state = {
-      query: 'item',
-      resultsPerPage: DEFAULT_RESULTS_PER_PAGE + 10,
-    } as RequestConfigs;
-    const url = new URL(getUrlFromState(state, 'https://www.example.com/a/random/path'));
-    expect(url.searchParams.get('numResults')).toBe(String(DEFAULT_RESULTS_PER_PAGE + 10));
+  test('Should retain numResults round-trip when value differs from library default', () => {
+    const nonDefault = DEFAULT_RESULTS_PER_PAGE + 10;
+    const inboundUrl = `https://www.example.com/collections/skis?q=item&numResults=${nonDefault}`;
+    const state = getStateFromUrl(inboundUrl);
+    expect(state.resultsPerPage).toBe(nonDefault);
+
+    const rebuilt = new URL(getUrlFromState(state, inboundUrl));
+    expect(rebuilt.searchParams.get('numResults')).toBe(String(nonDefault));
   });
 
   test('Should strip default numResults round-trip (URL → state → URL)', () => {
