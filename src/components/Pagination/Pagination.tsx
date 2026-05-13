@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
+import { DEFAULT_RESULTS_PER_PAGE } from '../../constants';
 import { NavButton } from './NavButton';
 
 export type PaginationProps = UsePaginationProps & {
@@ -126,6 +127,6 @@ export default function Pagination(props: PaginationWithRenderProps) {
 }
 
 Pagination.defaultProps = {
-  resultsPerPage: 20,
+  resultsPerPage: DEFAULT_RESULTS_PER_PAGE,
   windowSize: 5,
 };
