@@ -2,11 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
-<<<<<<< cdx-449-plp-ui-strip-default-numresults20-from-serialized-urls
 import { DEFAULT_RESULTS_PER_PAGE } from '../../constants';
-=======
 import { NavButton } from './NavButton';
->>>>>>> main
 
 export type PaginationProps = UsePaginationProps & {
   /**
