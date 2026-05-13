@@ -77,7 +77,9 @@ describe('Pagination Component', () => {
 });
 
 describe('Pagination with useAnchors', () => {
-  it('renders page numbers as anchors and prev/next as buttons', () => {
+  it('renders page numbers and prev/next as anchors', () => {
+    // Start on page 2 so both prev and next have valid URLs.
+    window.location = 'https://example.com?page=2';
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={100} useAnchors />
@@ -87,11 +89,40 @@ describe('Pagination with useAnchors', () => {
     const anchors = container.querySelectorAll('.cio-pagination a');
     const buttons = container.querySelectorAll('.cio-pagination button');
     expect(anchors.length).toBeGreaterThan(0);
-    // prev and next remain as buttons
-    expect(buttons.length).toBe(2);
+    // All controls (pages + prev + next) render as anchors when both prev and next are valid.
+    expect(buttons.length).toBe(0);
   });
 
-  it('prev and next remain as buttons with correct test ids', () => {
+  it('prev and next render as anchors with correct test ids', () => {
+    window.location = 'https://example.com?page=2';
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
+    expect(prevAnchor).toBeInTheDocument();
+    expect(nextAnchor).toBeInTheDocument();
+  });
+
+  it('prev/next anchor hrefs point to currentPage - 1 and currentPage + 1', () => {
+    window.location = 'https://example.com?page=3';
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
+    expect(prevAnchor.getAttribute('href')).toContain('page=2');
+    expect(nextAnchor.getAttribute('href')).toContain('page=4');
+  });
+
+  it('prev falls back to a button on the first page (no valid prev URL)', () => {
+    window.location = 'https://example.com';
     const { container } = render(
       <CioPlp apiKey={DEMO_API_KEY}>
         <Pagination totalNumResults={100} useAnchors />
@@ -99,9 +130,84 @@ describe('Pagination with useAnchors', () => {
     );
 
     const prevButton = container.querySelector('button[data-testid="cio-pagination-prev-button"]');
-    const nextButton = container.querySelector('button[data-testid="cio-pagination-next-button"]');
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
     expect(prevButton).toBeInTheDocument();
+    expect(prevAnchor).not.toBeInTheDocument();
+  });
+
+  it('next falls back to a button on the last page (no valid next URL)', () => {
+    window.location = 'https://example.com?page=5';
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const nextButton = container.querySelector('button[data-testid="cio-pagination-next-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
     expect(nextButton).toBeInTheDocument();
+    expect(nextAnchor).not.toBeInTheDocument();
+  });
+
+  it('prev/next anchors expose aria-label for screen readers', () => {
+    window.location = 'https://example.com?page=2';
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
+    expect(prevAnchor).toHaveAttribute('aria-label', 'Previous page');
+    expect(nextAnchor).toHaveAttribute('aria-label', 'Next page');
+  });
+
+  it('prev/next button fallback on boundary pages carries aria-label', () => {
+    // page 1 → prev falls back to button
+    window.location = 'https://example.com';
+    const { container: firstPageContainer } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+    const prevButton = firstPageContainer.querySelector(
+      'button[data-testid="cio-pagination-prev-button"]',
+    );
+    expect(prevButton).toHaveAttribute('aria-label', 'Previous page');
+
+    // last page (100 results / 20 per page = 5 total pages) → next falls back to button
+    window.location = 'https://example.com?page=5';
+    const { container: lastPageContainer } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+    const nextButton = lastPageContainer.querySelector(
+      'button[data-testid="cio-pagination-next-button"]',
+    );
+    expect(nextButton).toHaveAttribute('aria-label', 'Next page');
+  });
+
+  it('modifier-click on prev/next anchors does not trigger SPA navigation', () => {
+    window.location = 'https://example.com?page=2';
+    const setUrlSpy = jest.fn();
+    const { container } = render(
+      <CioPlp apiKey={DEMO_API_KEY} urlHelpers={{ setUrl: setUrlSpy }}>
+        <Pagination totalNumResults={100} useAnchors />
+      </CioPlp>,
+    );
+
+    const prevAnchor = container.querySelector('a[data-testid="cio-pagination-prev-button"]');
+    const nextAnchor = container.querySelector('a[data-testid="cio-pagination-next-button"]');
+
+    fireEvent.click(prevAnchor, { metaKey: true });
+    fireEvent.click(nextAnchor, { ctrlKey: true });
+    expect(setUrlSpy).not.toHaveBeenCalled();
+
+    // Sanity check: an unmodified click still triggers navigation
+    fireEvent.click(nextAnchor);
+    expect(setUrlSpy).toHaveBeenCalledTimes(1);
   });
 
   it('page anchors have href attributes containing page parameter', () => {
@@ -111,7 +217,9 @@ describe('Pagination with useAnchors', () => {
       </CioPlp>,
     );
 
-    const pageAnchors = Array.from(container.querySelectorAll('.cio-pagination a'));
+    const pageAnchors = Array.from(container.querySelectorAll('.cio-pagination a')).filter(
+      (a) => !a.hasAttribute('data-testid'),
+    );
     // page=1 is intentionally omitted from the URL for SEO canonical reasons,
     // so only assert page= presence for anchors representing pages > 1.
     const nonFirstPageAnchors = pageAnchors.filter((a) => a.textContent !== '1');

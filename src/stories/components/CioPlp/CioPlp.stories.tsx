@@ -75,7 +75,7 @@ const meta = {
     },
     componentOverrides: {
       description:
-        'Component override functions to replace default sub-components. Currently supports overriding FilterGroup and its sub-components (header, optionsList, rangeSlider). See the Filters component stories for interactive examples.',
+        'Component override functions to replace default sub-components. Supports overriding FilterGroup (header, optionsList, rangeSlider) and Groups (header, breadcrumbs, optionsList). See the Filters and Groups component stories for interactive examples.',
       table: {
         type: {
           summary: 'Partial<PlpComponentOverrides>',
@@ -107,7 +107,11 @@ function PrimaryStory({ args, defaultUrl }: any) {
         getUrl: () => currentUrl,
       }}
       {...args}>
-      <CioPlpGrid key={gridKey} groupsConfigs={args.groupsConfigs} />
+      <CioPlpGrid
+        key={gridKey}
+        groupsConfigs={args.groupsConfigs}
+        paginationConfigs={args.paginationConfigs}
+      />
     </CioPlp>
   );
 }
