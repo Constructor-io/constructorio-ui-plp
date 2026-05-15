@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import CioPlp from '../../../components/CioPlp';
 import CioPlpGrid from '../../../components/CioPlpGrid';
-import { DEMO_API_KEY } from '../../../constants';
+import { DEMO_API_KEY, translationsDescription } from '../../../constants';
 import { Translations } from '../../../types';
 import '../../../styles.css';
 
@@ -22,7 +22,7 @@ const meta = {
       },
     },
     translations: {
-      description: 'Object containing UI string translations for internationalization',
+      description: translationsDescription,
       table: {
         type: {
           summary: 'Translations',

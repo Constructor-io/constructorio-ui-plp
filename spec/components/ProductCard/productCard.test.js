@@ -492,6 +492,18 @@ describe('Testing Component: ProductCard', () => {
     expect(productCard.getAttribute(cnstrcDataAttrs.common.itemName)).toBe(item.itemName);
   });
 
+  test('Should render translated Add to Cart label when translations are provided via CioPlp', () => {
+    const item = transformResultItem(testItem);
+    render(
+      <CioPlp apiKey={DEMO_API_KEY} translations={{ 'Add to Cart': 'Añadir al carrito' }}>
+        <ProductCard item={item} />
+      </CioPlp>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Añadir al carrito' })).not.toBeNull();
+    expect(screen.queryByRole('button', { name: 'Add to Cart' })).toBeNull();
+  });
+
   test('Should render conversion button attribute on Add to Cart button', () => {
     const item = transformResultItem(testItem);
     render(

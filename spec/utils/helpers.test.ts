@@ -23,15 +23,29 @@ describe('translate', () => {
   });
 
   it('should return default English translation when user translation not provided', () => {
-    expect(translate('results')).toBe('results');
-    expect(translate('for')).toBe('for');
-    expect(translate('Filters')).toBe('Filters');
-    expect(translate('Sort by:')).toBe('Sort by:');
-    expect(translate('By')).toBe('By');
-    expect(translate('Sort')).toBe('Sort');
-    expect(translate('Categories')).toBe('Categories');
-    expect(translate('Show All')).toBe('Show All');
-    expect(translate('Show Less')).toBe('Show Less');
+    const allKeys: Array<keyof Translations> = [
+      'results',
+      'for',
+      'Filters',
+      'Sort by:',
+      'By',
+      'Sort',
+      'Categories',
+      'Show All',
+      'Show Less',
+      'from',
+      'to',
+      'Add to Cart',
+      "Sorry, we didn't find:",
+      'Sorry, we were unable to find what you were looking for.',
+      'Check for typos',
+      'Use fewer keywords',
+      'Broaden your search terms',
+    ];
+
+    allKeys.forEach((key) => {
+      expect(translate(key)).toBe(key);
+    });
   });
 
   it('should return default English when partial translations provided', () => {
@@ -46,7 +60,13 @@ describe('translate', () => {
   });
 
   it('should return original word if no translation exists', () => {
-    expect(translate('non-existent-key')).toBe('non-existent-key');
+    expect(translate('non-existent-key' as keyof Translations)).toBe('non-existent-key');
+  });
+
+  it('should preserve an explicit empty-string user translation', () => {
+    const userTranslations: Translations = { results: '' };
+
+    expect(translate('results', userTranslations)).toBe('');
   });
 
   it('should handle zero results translations', () => {
