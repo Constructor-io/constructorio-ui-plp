@@ -495,12 +495,12 @@ describe('Testing Component: ProductCard', () => {
   test('Should render translated Add to Cart label when translations are provided via CioPlp', () => {
     const item = transformResultItem(testItem);
     render(
-      <CioPlp apiKey={DEMO_API_KEY} translations={{ 'Add to Cart': 'Añadir al carrito' }}>
+      <CioPlp apiKey={DEMO_API_KEY} translations={{ 'Add to Cart': 'Agregar al carrito' }}>
         <ProductCard item={item} />
       </CioPlp>,
     );
 
-    expect(screen.getByRole('button', { name: 'Añadir al carrito' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Agregar al carrito' })).not.toBeNull();
     expect(screen.queryByRole('button', { name: 'Add to Cart' })).toBeNull();
   });
 
