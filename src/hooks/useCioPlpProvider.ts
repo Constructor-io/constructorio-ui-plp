@@ -20,6 +20,7 @@ export default function useCioPlpProvider(
     cioClient: customCioClient,
     cioClientOptions: customCioClientOptions = {},
     useShopifyDefaults = false,
+    translations,
     componentOverrides = {},
   } = props;
 
@@ -41,6 +42,7 @@ export default function useCioPlpProvider(
         ...urlHelpers,
       },
       renderOverrides: { ...renderOverrides },
+      translations,
       componentOverrides: { ...componentOverrides },
     }),
     [
@@ -53,6 +55,7 @@ export default function useCioPlpProvider(
       renderOverrides,
       staticRequestConfigs,
       useShopifyDefaults,
+      translations,
       componentOverrides,
     ],
   );

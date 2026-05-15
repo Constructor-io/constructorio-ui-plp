@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import useFilterOptionsList, { UseFilterOptionsListProps } from './UseFilterOptionsList';
 import FilterOptionListRow from './FilterOptionListRow';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { translate } from '../../utils/helpers';
 
 export default function FilterOptionsList(props: UseFilterOptionsListProps) {
   const {
@@ -14,6 +16,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
     selectedOptionMap,
     onOptionSelect,
   } = useFilterOptionsList(props);
+  const { translations } = useCioPlpContext();
 
   if (optionsToRender.length === 0) return null;
   return (
@@ -37,7 +40,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
 
         {initialNumOptions < facet.options.length && (
           <button type='button' className='cio-see-all' onClick={() => setIsShowAll(!isShowAll)}>
-            {isShowAll ? 'Show Less' : 'Show All'}
+            {isShowAll ? translate('Show Less', translations) : translate('Show All', translations)}
           </button>
         )}
       </ul>

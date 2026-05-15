@@ -56,7 +56,7 @@ describe('Testing Component: FilterGroup', () => {
       status: { min: 5, max: 30 }, // User's previous selection out of range
     };
 
-    render(
+    renderWithProvider(
       <FilterGroup
         facet={singlePriceRangeFacet}
         setFilter={mockSetFilter}
@@ -100,7 +100,7 @@ describe('Testing Component: FilterGroup', () => {
       status: { min: 1, max: 100 },
     };
 
-    render(
+    renderWithProvider(
       <FilterGroup facet={normalRangeFacet} setFilter={mockSetFilter} initialNumOptions={10} />,
     );
 
@@ -148,7 +148,7 @@ describe('Testing Component: FilterGroup', () => {
     });
 
     it('Should render default range slider when no overrides provided', () => {
-      render(
+      renderWithProvider(
         <FilterGroup facet={mockRangeFacet} setFilter={mockSetFilter} initialNumOptions={10} />,
       );
 
@@ -182,7 +182,7 @@ describe('Testing Component: FilterGroup', () => {
         key: 'rangeSlider',
         facet: mockRangeFacet,
         buildOverrides: (fn) => ({ rangeSlider: { reactNode: fn } }),
-        needsProvider: false,
+        needsProvider: true,
       },
     ];
 
@@ -311,7 +311,7 @@ describe('Testing Component: FilterGroup', () => {
         {
           overrideKey: 'header',
           facet: mockRangeFacet,
-          needsProvider: false,
+          needsProvider: true,
           expectPresent: ['.cio-doubly-ended-slider'],
           description: 'rangeSlider still renders when only header is overridden',
         },
@@ -348,8 +348,15 @@ describe('Testing Component: FilterGroup', () => {
   });
 
   describe('Range Slider Clamping', () => {
-    const renderFilterGroup = (facet) =>
-      render(<FilterGroup facet={facet} setFilter={mockSetFilter} initialNumOptions={10} />);
+    const renderFilterGroup = (facet) => {
+      const utils = renderWithProvider(
+        <FilterGroup facet={facet} setFilter={mockSetFilter} initialNumOptions={10} />,
+      );
+      return {
+        ...utils,
+        rerender: (ui) => utils.rerender(<CioPlp apiKey={DEMO_API_KEY}>{ui}</CioPlp>),
+      };
+    };
 
     describe('when facet has status', () => {
       it('Should clamp status values to facet min/max on initial render', () => {
@@ -598,8 +605,15 @@ describe('Testing Component: FilterGroup', () => {
   });
 
   describe('Single Value Facets (min === max)', () => {
-    const renderFilterGroup = (facet) =>
-      render(<FilterGroup facet={facet} setFilter={mockSetFilter} initialNumOptions={10} />);
+    const renderFilterGroup = (facet) => {
+      const utils = renderWithProvider(
+        <FilterGroup facet={facet} setFilter={mockSetFilter} initialNumOptions={10} />,
+      );
+      return {
+        ...utils,
+        rerender: (ui) => utils.rerender(<CioPlp apiKey={DEMO_API_KEY}>{ui}</CioPlp>),
+      };
+    };
 
     it('Should disable sliders and inputs when facet has a single value', () => {
       renderFilterGroup({

@@ -172,6 +172,23 @@ describe('Testing Component: Groups', () => {
       expect(getByText('Deals')).toBeInTheDocument();
     });
 
+    it('Should render translated title and Show All label when translations are provided via CioPlp', async () => {
+      const { getByText, queryByText } = render(
+        <CioPlp
+          apiKey={DEMO_API_KEY}
+          translations={{ Categories: 'Categorías', 'Show All': 'Mostrar todo' }}>
+          <Groups {...groupsProps} initialNumOptions={2} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        expect(getByText('Categorías')).toBeInTheDocument();
+        expect(getByText('Mostrar todo')).toBeInTheDocument();
+        expect(queryByText('Categories')).not.toBeInTheDocument();
+        expect(queryByText('Show All')).not.toBeInTheDocument();
+      });
+    });
+
     it('Should exclude groups excluded by group.data.cio_plp_hidden', () => {
       const { getByText, queryByText } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
