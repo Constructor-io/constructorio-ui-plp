@@ -35,13 +35,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function TranslationsStory({ defaultUrl }: any) {
+function TranslationsStory({ defaultUrl }: { defaultUrl: string }) {
   const [currentUrl, setCurrentUrl] = useState(defaultUrl);
   const [gridKey, setGridKey] = useState(1);
 
   useEffect(() => {
-    setGridKey(gridKey + 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setGridKey((prev) => prev + 1);
   }, [currentUrl]);
 
   const spanishTranslations: Translations = {
