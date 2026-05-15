@@ -54,11 +54,12 @@
     "storybook-docs-dev": "storybook dev --docs -p 6007",
     "serve-built-storybook": "npx http-server docs",
     "compile": "rm -rf lib && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-styles && vite build",
-    "check-license": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT;0BSD;BSD-2-Clause' --excludePackages 'picocolors@1.0.0'",
+    "check-license": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT;0BSD;BSD-2-Clause;ISC' --excludePackages 'picocolors@1.0.0;graceful-fs@4.2.11;lightningcss@1.31.1;lightningcss-android-arm64@1.31.1;lightningcss-darwin-arm64@1.31.1;lightningcss-darwin-x64@1.31.1;lightningcss-freebsd-x64@1.31.1;lightningcss-linux-arm-gnueabihf@1.31.1;lightningcss-linux-arm64-gnu@1.31.1;lightningcss-linux-arm64-musl@1.31.1;lightningcss-linux-x64-gnu@1.31.1;lightningcss-linux-x64-musl@1.31.1;lightningcss-win32-arm64-msvc@1.31.1;lightningcss-win32-x64-msvc@1.31.1'",
     "prepare": "husky install"
   },
   "peerDependencies": {
-    "@constructor-io/constructorio-client-javascript": "^2.35.14",
+    "@constructor-io/constructorio-client-javascript": "^2.77.0",
+    "@constructor-io/constructorio-ui-components": "^1.3.2",
     "react": ">=16.12.0",
     "react-dom": ">=16.12.0",
     "tslib": "^2.4.0"
@@ -104,7 +105,7 @@
     "eslint-plugin-storybook": "^0.12.0",
     "husky": "^8.0.0",
     "jest": "^28.1.3",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.3.0",
     "license-checker": "^25.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -114,10 +115,14 @@
     "typescript": "^4.9.4",
     "vite": "^6.3.5",
     "vite-plugin-css-injected-by-js": "^3.1.0",
-    "webpack": "^5.94.0"
+    "webpack": "^5.94.0",
+    "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
     "classnames": "^2.5.1"
+  },
+  "overrides": {
+    "lightningcss": "1.31.1"
   },
   "volta": {
     "node": "22.18.0",

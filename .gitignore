@@ -1,6 +1,7 @@
 # Pertaining to Development
 node_modules
 .vscode
+.idea
 
 # Pertaining to Building/Deployment
 dist

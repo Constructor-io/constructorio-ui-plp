@@ -1,12 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { PlpItemGroup } from '../types';
+import type { PlpItemGroup, Breadcrumb } from '../types';
 import useRequestConfigs from './useRequestConfigs';
-
-export interface Breadcrumb {
-  path: string;
-  groupId: string;
-  breadcrumb: string;
-}
 
 const generateBreadcrumbs = (currentGroup?: PlpItemGroup) => {
   let pathAccumulator = '';

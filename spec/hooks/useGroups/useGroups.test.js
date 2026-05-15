@@ -16,15 +16,11 @@ describe('Testing Hook: useGroups', () => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    window.location = 'https://example.com';
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    window.location = originalWindowLocation;
     jest.restoreAllMocks(); // This will reset all mocks after each test
   });
 
@@ -303,6 +299,135 @@ describe('Testing Hook: useGroups', () => {
         optionsToRender.find((option) => option.groupId !== group.groupId),
       );
       expect(excludedGroups.find((group) => group.groupId === 'cio_plp_hidden_group')).toBeTruthy();
+    });
+  });
+
+  describe('Recursive filtering of nested children', () => {
+    it('Should recursively filter out nested children matching isHiddenGroupFn', async () => {
+      // Create nested groups structure
+      const nestedGroups = [
+        {
+          groupId: 'root',
+          displayName: 'Root',
+          count: 100,
+          data: null,
+          parents: [],
+          children: [
+            {
+              groupId: 'child1',
+              displayName: 'Child 1',
+              count: 50,
+              data: null,
+              parents: [],
+              children: [
+                {
+                  groupId: 'grandchild1',
+                  displayName: 'Grandchild 1',
+                  count: 25,
+                  data: null,
+                  parents: [],
+                  children: [],
+                },
+                {
+                  groupId: 'grandchild2-hidden',
+                  displayName: 'Grandchild 2 Hidden',
+                  count: 25,
+                  data: null,
+                  parents: [],
+                  children: [],
+                },
+              ],
+            },
+            {
+              groupId: 'child2',
+              displayName: 'Child 2',
+              count: 50,
+              data: null,
+              parents: [],
+              children: [],
+            },
+          ],
+        },
+      ];
+
+      const isHiddenGroupFn = (group) => group.groupId.includes('hidden');
+
+      const { result } = renderHookWithCioPlp(() =>
+        useGroups({ groups: nestedGroups, isHiddenGroupFn }),
+      );
+
+      await waitFor(() => {
+        const {
+          current: { optionsToRender },
+        } = result;
+
+        // Should have 2 top-level children (root is the container)
+        expect(optionsToRender.length).toBe(2);
+
+        // Find child1 and check its nested children
+        const child1 = optionsToRender.find((g) => g.groupId === 'child1');
+        expect(child1).toBeDefined();
+
+        // grandchild2-hidden should be filtered out recursively
+        expect(child1.children.length).toBe(1);
+        expect(child1.children[0].groupId).toBe('grandchild1');
+        expect(child1.children.find((g) => g.groupId === 'grandchild2-hidden')).toBeUndefined();
+      });
+    });
+
+    it('Should recursively filter out nested children with data.cio_plp_hidden = true', async () => {
+      const nestedGroups = [
+        {
+          groupId: 'root',
+          displayName: 'Root',
+          count: 100,
+          data: null,
+          parents: [],
+          children: [
+            {
+              groupId: 'child1',
+              displayName: 'Child 1',
+              count: 50,
+              data: null,
+              parents: [],
+              children: [
+                {
+                  groupId: 'grandchild1',
+                  displayName: 'Grandchild 1',
+                  count: 25,
+                  data: null,
+                  parents: [],
+                  children: [],
+                },
+                {
+                  groupId: 'grandchild2',
+                  displayName: 'Grandchild 2',
+                  count: 25,
+                  data: { cio_plp_hidden: true },
+                  parents: [],
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      const { result } = renderHookWithCioPlp(() => useGroups({ groups: nestedGroups }));
+
+      await waitFor(() => {
+        const {
+          current: { optionsToRender },
+        } = result;
+
+        // Find child1 and check its nested children
+        const child1 = optionsToRender.find((g) => g.groupId === 'child1');
+        expect(child1).toBeDefined();
+
+        // grandchild2 should be filtered out due to cio_plp_hidden flag
+        expect(child1.children.length).toBe(1);
+        expect(child1.children[0].groupId).toBe('grandchild1');
+      });
     });
   });
 });

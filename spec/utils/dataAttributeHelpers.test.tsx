@@ -106,6 +106,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
       mockSearchData.response.totalNumResults,
     );
     expect(dataAttributes[cnstrcDataAttrs.search.searchTerm]).toBe('shoes');
+    expect(dataAttributes[cnstrcDataAttrs.common.resultPage]).toBe(mockSearchData.request.page);
   });
 
   test('Should return browse data attributes', () => {
@@ -132,6 +133,7 @@ describe('Testing Utils, getPlpContainerCnstrcDataAttributes', () => {
     );
     expect(dataAttributes[cnstrcDataAttrs.browse.filterName]).toBe('group_id');
     expect(dataAttributes[cnstrcDataAttrs.browse.filterValue]).toBe('All');
+    expect(dataAttributes[cnstrcDataAttrs.common.resultPage]).toBe(mockBrowseData.request.page);
   });
 
   test('Should include zero-result attribute when no results and not loading', () => {

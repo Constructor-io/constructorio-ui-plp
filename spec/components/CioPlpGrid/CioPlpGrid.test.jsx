@@ -19,6 +19,16 @@ import { getAttribute } from '../../test-utils';
 const actualUseCioPlp = jest.requireActual('../../../src/hooks/useCioPlp').default;
 const actualUseRequestConfigs = jest.requireActual('../../../src/hooks/useRequestConfigs').default;
 
+const mockPagination = jest.fn();
+
+jest.mock('../../../src/components/Pagination', () => ({
+  __esModule: true,
+  default: (props) => {
+    mockPagination(props);
+    return null;
+  },
+}));
+
 jest.mock('../../../src/hooks/useCioPlp');
 jest.mock('../../../src/hooks/useRequestConfigs');
 jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/search.js', () => {
@@ -53,25 +63,22 @@ jest.mock('@constructor-io/constructorio-client-javascript/lib/modules/browse.js
   return Browse;
 });
 
-const originalWindowLocation = window.location;
-
 describe('Testing Component: CioPlpGrid', () => {
+  const originalWindowLocation = window.location;
+
   beforeEach(() => {
     const spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
-    Object.defineProperty(window, 'location', {
-      value: new URL('https://example.com'),
-    });
+    window.location = 'https://example.com';
 
     useCioPlp.mockImplementation(actualUseCioPlp);
     useRequestConfigs.mockImplementation(actualUseRequestConfigs);
+    mockPagination.mockClear();
   });
 
   afterEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: originalWindowLocation,
-    });
+    window.location = originalWindowLocation;
     jest.restoreAllMocks();
   });
 
@@ -255,6 +262,7 @@ describe('Testing Component: CioPlpGrid', () => {
       const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
       const filterName = getAttributeFromContainer(cnstrcDataAttrs.browse.filterName);
       const filterValue = getAttributeFromContainer(cnstrcDataAttrs.browse.filterValue);
+      const resultPage = getAttributeFromContainer(cnstrcDataAttrs.common.resultPage);
 
       expect(
         container.querySelector(`[${cnstrcDataAttrs.browse.browseContainer}]`),
@@ -263,6 +271,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(resultId).toEqual(String(mockBrowseData.resultId));
       expect(filterName).toEqual(String(mockBrowseData.request.browse_filter_name));
       expect(filterValue).toEqual(String(mockBrowseData.request.browse_filter_value));
+      expect(resultPage).toEqual(String(mockBrowseData.request.page));
     });
   });
 
@@ -313,6 +322,7 @@ describe('Testing Component: CioPlpGrid', () => {
       const totalNumResults = getAttributeFromContainer(cnstrcDataAttrs.common.numResults);
       const resultId = getAttributeFromContainer(cnstrcDataAttrs.common.resultId);
       const searchTerm = getAttributeFromContainer(cnstrcDataAttrs.search.searchTerm);
+      const resultPage = getAttributeFromContainer(cnstrcDataAttrs.common.resultPage);
 
       expect(
         container.querySelector(`[${cnstrcDataAttrs.search.searchContainer}]`),
@@ -320,6 +330,7 @@ describe('Testing Component: CioPlpGrid', () => {
       expect(totalNumResults).toEqual(String(mockSearchData.response.totalNumResults));
       expect(resultId).toEqual(mockSearchData.resultId);
       expect(searchTerm).toEqual(mockSearchData.request.term);
+      expect(resultPage).toEqual(String(mockSearchData.request.page));
     });
   });
 
@@ -382,6 +393,41 @@ describe('Testing Component: CioPlpGrid', () => {
     await waitFor(() => {
       expect(container.querySelector('.cio-groups-container')).toBeInTheDocument();
       expect(container.querySelector('.cio-groups-breadcrumbs')).toBeInTheDocument();
+    });
+  });
+
+  it('Should forward paginationConfigs to the Pagination component when passed at CioPlpGrid level', async () => {
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid
+          paginationConfigs={{ useAnchors: true, windowSize: 7 }}
+          initialSearchResponse={mockApiSearchResponse}
+        />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(mockPagination).toHaveBeenCalled();
+      expect(mockPagination.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+      );
+    });
+  });
+
+  it('Should forward paginationConfigs to the Pagination component when passed at CioPlp level', async () => {
+    render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        paginationConfigs={{ useAnchors: true, windowSize: 7 }}
+        initialSearchResponse={mockApiSearchResponse}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(mockPagination).toHaveBeenCalled();
+      expect(mockPagination.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ useAnchors: true, windowSize: 7 }),
+      );
     });
   });
 });

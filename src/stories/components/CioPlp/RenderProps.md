@@ -7,3 +7,4 @@
 | itemFieldGetters    | [ItemFieldGetters](./?path=/docs/components-cioplp--props#itemfieldgetters) | Data getter functions for things like price, description, etc                                                            |
 | urlHelpers          | [UrlHelpers](./?path=/docs/components-cioplp--props#urlhelpers)             | Url Helpers are used for managing the url and request state                                                              |
 | callbacks           | [Callbacks](./?path=/docs/components-cioplp--props#callbacks)               | Callback functions to be composed with the library's internal tracking calls                                             |
+| componentOverrides  | [PlpComponentOverrides](./?path=/docs/components-cioplp--props#componentoverrides) | Component override functions to replace default sub-components                                                  |

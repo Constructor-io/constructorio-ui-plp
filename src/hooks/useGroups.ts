@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useCioPlpContext } from './useCioPlpContext';
 import useFilter from './useFilter';
-import { PlpItemGroup } from '../types';
+import type { PlpItemGroup, Breadcrumb } from '../types';
 import useRequestConfigs from './useRequestConfigs';
 import useOptionsList, { UseOptionsListProps } from './useOptionsList';
-import useCioBreadcrumb, { Breadcrumb } from './useCioBreadcrumb';
+import useCioBreadcrumb from './useCioBreadcrumb';
 
 export interface UseGroupProps
   extends Omit<UseOptionsListProps<PlpItemGroup>, 'options' | 'isHiddenOptionFn'> {
@@ -59,6 +59,7 @@ export default function useGroups(props: UseGroupProps) {
       options: groupOptions,
       initialNumOptions: numOptionsProps,
       isHiddenOptionFn,
+      nestedOptionsKey: 'children', // Enable recursive filtering for group children
     });
 
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();

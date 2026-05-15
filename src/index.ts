@@ -33,6 +33,7 @@ export type { BreadcrumbsProps } from './components/Breadcrumbs';
 export type { CioPlpProps } from './components/CioPlp';
 export type { CioPlpGridProps, CioPlpGridWithRenderProps } from './components/CioPlpGrid';
 export type { FiltersProps, FiltersWithRenderProps } from './components/Filters';
+export type { FilterGroupProps } from './components/Filters/FilterGroup';
 export type { GroupsProps, GroupsWithRenderProps } from './components/Groups';
 export type { MobileModalProps } from './components/MobileModal';
 export type { PaginationProps, PaginationWithRenderProps } from './components/Pagination';

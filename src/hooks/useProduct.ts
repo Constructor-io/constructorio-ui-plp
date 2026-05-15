@@ -9,9 +9,9 @@ import {
   getItemUrl as defaultGetItemUrl,
 } from '../utils/itemFieldGetters';
 
-const useProductInfo: UseProductInfo = ({ item }) => {
+const useProductInfo: UseProductInfo = ({ item, swatchConfigs }) => {
   const state = useCioPlpContext();
-  const productSwatch = useProductSwatch({ item });
+  const productSwatch = useProductSwatch({ item, config: swatchConfigs });
 
   if (!item.data || !item.itemId || !item.itemName) {
     throw new Error('data, itemId, or itemName are required.');
@@ -33,7 +33,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
     : item;
   const itemUrl = getItemUrl(itemWithVariationUrl) || productSwatch?.selectedVariation?.url;
 
-  const variationId = productSwatch?.selectedVariation?.variationId;
+  const variationId = productSwatch?.selectedVariation?.variationId || item.variationId;
   let rolloverImage = productSwatch?.selectedVariation?.rolloverImage;
 
   // Fallback to item's rollover image if all variations don't have a rollover image
@@ -43,7 +43,7 @@ const useProductInfo: UseProductInfo = ({ item }) => {
 
   const { itemId } = item;
 
-  let salePrice = productSwatch?.selectedVariation?.salePrice || getSalePrice(item);
+  let salePrice = productSwatch?.selectedVariation?.salePrice ?? getSalePrice(item);
   let hasSalePrice = true;
 
   if (!isValidSalePrice(salePrice, itemPrice)) {

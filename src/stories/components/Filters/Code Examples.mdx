@@ -83,3 +83,184 @@ export default function MyComponent() {
 `UseFilterReturn`
 
 <Markdown>{UseFilterReturn}</Markdown>
+
+## Component Overrides
+
+Use `componentOverrides` on the `CioPlp` provider to replace default sub-components within `FilterGroup`. Each override slot accepts either a static `ReactNode` or a render function that receives `FilterGroupRenderProps` with full state access (`facet`, `isCollapsed`, `toggleIsCollapsed`, `onFilterSelect`).
+
+### Override Entire FilterGroup
+
+Replace the complete `<li>` element for each filter group:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      reactNode: ({ facet, isCollapsed, toggleIsCollapsed, onFilterSelect }) => (
+        <li style={{ border: '1px solid #ccc', padding: '12px' }}>
+          <button type="button" onClick={toggleIsCollapsed}>
+            {facet.displayName} {isCollapsed ? '▶' : '▼'}
+          </button>
+          {/* custom options rendering */}
+        </li>
+      ),
+    },
+  }}
+/>
+```
+
+<Canvas of={FiltersStories.OverrideRoot} />
+
+### Override Header Only
+
+Replace the header button while keeping the default options list and range slider:
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      header: {
+        reactNode: ({ facet, isCollapsed, toggleIsCollapsed }) => (
+          <div onClick={toggleIsCollapsed} style={{ cursor: 'pointer' }}>
+            <span>{facet.displayName}</span>
+            <span>{isCollapsed ? 'Show' : 'Hide'}</span>
+          </div>
+        ),
+      },
+    },
+  }}
+/>
+```
+
+<Canvas of={FiltersStories.OverrideHeader} />
+
+### Override Options List
+
+Replace the checkbox options list with a custom implementation (only affects multiple/single facets):
+
+<Canvas of={FiltersStories.OverrideOptionsList} />
+
+### Override Range Slider
+
+Replace the range slider with a custom implementation (only affects range-type facets):
+
+<Canvas of={FiltersStories.OverrideRangeSlider} />
+
+### Static ReactNode Override
+
+Use a static `ReactNode` instead of a render function to replace a sub-component with fixed content:
+
+<Canvas of={FiltersStories.OverrideHeaderStatic} />
+
+## Hiding Facets and Options
+
+You can hide facets or individual facet options using three methods (📦 v1.9.0 required):
+
+> **Note:** This functionality is intended for **conditional rendering per page**. For example, showing a facet on search results but hiding it on category pages. If a facet or option should be hidden across your entire site, use the hidden facets feature in the Constructor.io dashboard or [API](https://docs.constructor.com/reference/configuration-facets) instead. Hidden facets configured through the dashboard are excluded from API responses entirely, which is more efficient than client-side filtering.
+
+### Method 1: Metadata Field
+
+Add `cio_plp_hidden: true` to the `data` field of facets or facet options in your Constructor.io dashboard.
+These items will be automatically hidden without requiring custom functions.
+
+```json
+{
+  "name": "price",
+  "displayName": "Price",
+  "type": "range",
+  "data": {
+    "cio_plp_hidden": true
+  }
+}
+```
+
+<Canvas of={FiltersStories.HiddenViaMetadata} />
+
+### Method 2: Custom Field Getter
+
+You can also customize the metadata field used for hiding by providing a custom `itemFieldGetters` to `CioPlpProvider`.
+Each getter must return a boolean: `true` to hide the item, `false` to render it.
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  itemFieldGetters={{
+    getIsHiddenFilterField: (facet) => facet.data?.myCustomField,
+    getIsHiddenFilterOptionField: (option) => option.data?.myCustomField,
+  }}>
+  {/* ... */}
+</CioPlp>
+```
+
+### Method 3: Custom Function
+
+Each function must return a boolean: `true` to hide the facet or option, `false` to render it.
+
+#### Hiding Entire Facets
+
+Use `isHiddenFilterFn` to hide entire facet groups. In this example, the "Price" facet is hidden:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide the "price" facet entirely
+  const isHiddenFilterFn = (facet) => facet.name === 'price';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFilterFn={isHiddenFilterFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.HiddenFilters} />
+
+#### Hiding Specific Options
+
+Use `isHiddenFilterOptionFn` to hide specific options within facets. In this example, the "Black" and "Blue" color options are hidden:
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  // Hide specific color options
+  const isHiddenFilterOptionFn = (option) =>
+    option.value === 'Black' || option.value === 'Blue';
+
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => {
+          return (
+            <Filters
+              facets={props.filters.facets}
+              isHiddenFilterOptionFn={isHiddenFilterOptionFn}
+            />
+          );
+        }}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+<Canvas of={FiltersStories.HiddenFilterOptions} />

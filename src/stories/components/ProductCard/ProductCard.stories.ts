@@ -34,3 +34,22 @@ export const WithSalePrice: Story = {
     item: transformResultItem(SampleItemWithSalePrice, false),
   },
 };
+
+export const WithSwatchLimit: Story = {
+  args: {
+    item: transformResultItem(SampleItem, false),
+    swatchConfigs: {
+      maxVisibleSwatches: 2,
+    },
+  },
+};
+
+export const WithSwatchLimitCustomLabel: Story = {
+  args: {
+    item: transformResultItem(SampleItem, false),
+    swatchConfigs: {
+      maxVisibleSwatches: 2,
+      showMoreLabel: (count: number) => `View ${count} more`,
+    },
+  },
+};

@@ -43,7 +43,7 @@ describe('Testing Hook: useCioClient', () => {
       userId: 'ui-1',
       segments: ['segment-1', 'segment-2'],
       testCells: { test: 'cell' },
-      fetch: 'mock-fetch-fn',
+      fetch: jest.fn(),
       trackingSendDelay: 400,
       sendReferrerWithTrackingEvents: true,
       beaconMode: false,
@@ -56,11 +56,30 @@ describe('Testing Hook: useCioClient', () => {
     });
 
     const client = result.current;
-    expect(client.options).toEqual({
-      apiKey: key,
-      sendTrackingEvents: true,
-      version: `cio-ui-plp-${version}`,
-      ...clientOptions,
+    expect(client.options).toEqual(
+      expect.objectContaining({
+        apiKey: key,
+        sendTrackingEvents: true,
+        version: `cio-ui-plp-${version}`,
+        ...clientOptions,
+      }),
+    );
+  });
+
+  test('Should use custom version when provided in options', () => {
+    const key = 'xx';
+    const customVersion = 'cio-ui-plp-bundled-1.0.0';
+    const clientOptions = {
+      version: customVersion,
+      serviceUrl: 'https://special.cnstrc.com',
+    };
+
+    const { result } = renderHook(({ apiKey, options }) => useCioClient({ apiKey, options }), {
+      initialProps: { apiKey: key, options: clientOptions },
     });
+
+    const client = result.current;
+    expect(client.options.version).toBe(customVersion);
+    expect(client.options.serviceUrl).toBe('https://special.cnstrc.com');
   });
 });

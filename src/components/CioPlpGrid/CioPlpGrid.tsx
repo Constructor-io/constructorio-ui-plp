@@ -13,10 +13,10 @@ import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
-import { IncludeRenderProps } from '../../types';
+import { IncludeRenderProps, SwatchConfigs } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
-import { UsePaginationProps } from '../../hooks/usePagination';
+import { PaginationProps } from '../Pagination/Pagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
 import useCioPlp from '../../hooks/useCioPlp';
@@ -29,8 +29,10 @@ export type CioPlpGridProps = {
   spinner?: React.ReactNode;
   /**
    * Used to set `windowSize` of `pages` array. Can also override `resultsPerPage` set at the Provider-level.
+   * Set `useAnchors: true` to render pagination as `<a href>` links for SEO crawlability.
+   * Note: `useAnchors` will be removed in v2 and anchor-based rendering will become the default.
    */
-  paginationConfigs?: Omit<UsePaginationProps, 'totalNumResults'>;
+  paginationConfigs?: Omit<PaginationProps, 'totalNumResults'>;
   /**
    * No configurations available yet.
    */
@@ -48,6 +50,14 @@ export type CioPlpGridProps = {
    * - `hideGroups`: Whether to hide the groups component entirely (default: false).
    */
   groupsConfigs?: Omit<GroupsProps, 'groups'>;
+  /**
+   * Configuration options for swatch display behavior on product cards.
+   * - `maxVisibleSwatches`: Maximum number of swatches to display before showing a "View more" button.
+   *   When not set, all swatches are shown.
+   * - `showMoreLabel`: Custom label for the "View more" button (default: "View more >").
+   *   Can be a static string or a function receiving the hidden swatch count.
+   */
+  swatchConfigs?: SwatchConfigs;
 };
 
 export type CioPlpGridWithRenderProps = IncludeRenderProps<
@@ -64,6 +74,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     sortConfigs,
     paginationConfigs,
     groupsConfigs,
+    swatchConfigs,
     children,
   } = props;
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -163,12 +174,16 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
-                        <Filters facets={filters.facets} />
+                        <Filters facets={filters.facets} {...filterConfigs} />
                       </MobileModal>
 
                       {data.response?.results?.map((item) => (
                         <div className='cio-product-tile' key={item.itemId}>
-                          <ProductCard key={item.itemId} item={item} />
+                          <ProductCard
+                            key={item.itemId}
+                            item={item}
+                            swatchConfigs={swatchConfigs}
+                          />
                         </div>
                       ))}
                     </div>

@@ -6,3 +6,4 @@
 | prevPage    | `() => void`             | Navigate to the previous page. Used to implement "Previous" button in a pagination control                                                                               |
 | totalPages  | `number`                 | The total number of pages available in the pagination object                                                                                                             |
 | pages       | `number[]`               | Returns an array of numbers [1,2,3,4,-1,10] <br/> `1,10` are first and last page <br/> `-1` indicates a break (e.g., to show "...") <br/> [1, 2, 3, 4, ..., 10]          |
+| getPageUrl  | `(page: number) => string \| undefined` | Returns the URL for a given page number for use in `href` attributes. Returns `undefined` for out-of-bound pages or in SSR environments. |

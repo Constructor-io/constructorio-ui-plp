@@ -9,6 +9,7 @@ import {
   SearchResponse,
   GetBrowseResultsResponse,
   VariationsMap,
+  VariationsMapResponse,
   FilterExpression,
   FmtOptions,
   Nullable,
@@ -18,7 +19,10 @@ import {
   SearchParameters,
   BrowseRequestType,
   FacetOption as ApiFacetOption,
+  RangeMax,
+  RangeMin,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
 
 export {
   Nullable,
@@ -29,6 +33,7 @@ export {
   ApiFacet,
   ApiFacetOption,
   ApiGroup,
+  VariationsMapResponse,
 };
 
 export interface ApiHierarchicalFacetOption extends ApiFacetOption {
@@ -51,6 +56,8 @@ export interface ItemFieldGetters {
     retrieveRolloverImage: ItemFieldGetters['getRolloverImage'],
   ) => SwatchItem[] | undefined;
   getIsHiddenGroupField: (group: PlpItemGroup) => boolean | undefined;
+  getIsHiddenFilterField: (facet: PlpFacet) => boolean | undefined;
+  getIsHiddenFilterOptionField: (option: PlpFacetOption) => boolean | undefined;
   getItemUrl: (item: Item) => string | undefined;
 }
 
@@ -101,6 +108,12 @@ export interface Callbacks {
   onProductCardMouseEnter?: (event: React.MouseEvent, item: Item) => void;
   onProductCardMouseLeave?: (event: React.MouseEvent, item: Item) => void;
   onSwatchClick?: (event: React.MouseEvent, swatch: SwatchItem) => void;
+  onShowMoreSwatches?: (
+    event: React.MouseEvent,
+    selectedSwatch: SwatchItem | undefined,
+    hiddenSwatches: SwatchItem[],
+    setUrl: UrlHelpers['setUrl'],
+  ) => void;
   onRedirect?: (url: string) => void;
 }
 
@@ -109,6 +122,14 @@ interface ProductCardBaseProps {
    * Constructor's Transformed API Item Object.
    */
   item: Item;
+  /**
+   * Configuration options for swatch display behavior on product cards.
+   * - `maxVisibleSwatches`: Maximum number of swatches to display before showing a "View more" button.
+   *   When not set, all swatches are shown.
+   * - `showMoreLabel`: Custom label for the "View more" button (default: "View more >").
+   *   Can be a static string or a function receiving the hidden swatch count.
+   */
+  swatchConfigs?: SwatchConfigs;
 }
 
 /**
@@ -251,6 +272,7 @@ export interface PlpContextValue {
   urlHelpers: UrlHelpers;
   renderOverrides: RenderOverrides;
   translations?: Translations;
+  componentOverrides: PlpComponentOverrides;
 }
 
 export interface PrimaryColorStyles {
@@ -275,7 +297,7 @@ export interface Item {
   labels: Record<string, unknown>;
   itemName: string;
   variations?: Variation[];
-  variationsMap?: VariationsMap;
+  variationsMap?: VariationsMapResponse;
 
   // Flattened Data Object
   itemId: string;
@@ -311,6 +333,20 @@ export interface SwatchItem {
   rolloverImage?: string;
 }
 
+export interface SwatchConfigs {
+  /**
+   * Maximum number of swatches to display before showing a "View more" button.
+   * When not set, all swatches are shown.
+   */
+  maxVisibleSwatches?: number;
+  /**
+   * Custom label for the "View more" button.
+   * Can be a static string or a function that receives the hidden swatch count.
+   * @default "View more >"
+   */
+  showMoreLabel?: string | ((count: number) => string);
+}
+
 export interface PlpBrowseData {
   resultId: string;
   request: BrowseRequestType;
@@ -334,6 +370,7 @@ export interface CioPlpProviderProps {
   staticRequestConfigs?: Partial<RequestConfigs>;
   useShopifyDefaults?: boolean;
   translations?: Translations;
+  componentOverrides?: PlpComponentOverrides;
 }
 
 export type UseSortReturn = {
@@ -346,10 +383,17 @@ export interface ProductSwatchObject {
   swatchList: SwatchItem[] | undefined;
   selectedVariation: SwatchItem | undefined;
   selectVariation: (swatch: SwatchItem) => void;
+  visibleSwatches: SwatchItem[] | undefined;
+  hiddenSwatches: SwatchItem[] | undefined;
+  totalSwatchCount: number;
+  hasMoreSwatches: boolean;
 }
+
+export type UseProductSwatchConfigs = Pick<SwatchConfigs, 'maxVisibleSwatches'>;
 
 export type UseProductSwatchProps = {
   item: Item;
+  config?: UseProductSwatchConfigs;
 };
 
 export type UseProductSwatch = (props: UseProductSwatchProps) => ProductSwatchObject;
@@ -369,6 +413,7 @@ export interface ProductInfoObject {
 
 export type UseProductInfoProps = {
   item: Item;
+  swatchConfigs?: SwatchConfigs;
 };
 
 export type UseProductInfo = (props: UseProductInfoProps) => ProductInfoObject;
@@ -409,14 +454,14 @@ export interface PlpFacetOption {
   count: number;
   displayName: string;
   value: string;
-  data: object;
-  range?: ['-inf' | number, 'inf' | number];
+  data: Record<string, any>;
+  range?: [RangeMin, RangeMax];
   options?: Array<PlpHierarchicalFacetOption>;
 }
 
 export interface PlpHierarchicalFacetOption extends PlpFacetOption {
   options: Array<PlpHierarchicalFacetOption>;
-  data: object & { parentValue: string | null };
+  data: Record<string, any> & { parentValue: string | null };
 }
 
 export interface PlpItemGroup {
@@ -457,3 +502,87 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
  */
 export type MakeOptional<Type, Keys extends string & keyof Partial<Type>> = Omit<Type, Keys> &
   Partial<Pick<Type, Keys>>;
+
+/**
+ * Render props passed to every FilterGroup override function.
+ * Provides the full state needed to rebuild any part of a filter group.
+ */
+export interface FilterGroupRenderProps {
+  /** The facet data for this filter group */
+  facet: PlpFacet;
+  /** Whether this filter group is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Callback to apply a filter value for this facet */
+  onFilterSelect: (value: PlpFilterValue) => void;
+}
+
+/**
+ * Component override slots available on `FilterGroup`.
+ *
+ * Top-level `reactNode` replaces the entire `<li>` filter group element.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<FilterGroupRenderProps>`:
+ * - **header** — replaces the header button (facet name + collapse arrow)
+ * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
+ * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
+ */
+export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
+  header?: ComponentOverrideProps<FilterGroupRenderProps>;
+  optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
+  rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
+};
+
+export interface Breadcrumb {
+  path: string;
+  groupId: string;
+  breadcrumb: string;
+}
+
+/**
+ * Render props passed to every Groups override function.
+ * Provides the full state needed to rebuild any part of the groups component.
+ */
+export interface GroupsRenderProps {
+  /** The top-level groups data array */
+  groups: PlpItemGroup[];
+  /** Navigable breadcrumb trail for the current group path */
+  breadcrumbs: Breadcrumb[];
+  /** Display name of the current group (last breadcrumb) */
+  currentPage: string | undefined;
+  /** Whether the groups panel is currently collapsed */
+  isCollapsed: boolean;
+  /** Toggle the collapsed state */
+  toggleIsCollapsed: () => void;
+  /** Options after hide-filter and show-all truncation — this is what the default list renders */
+  optionsToRender: PlpItemGroup[];
+  /** Whether the "Show All" toggle is currently expanded */
+  isShowAll: boolean;
+  /** Setter for the show-all toggle */
+  setIsShowAll: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Currently selected group id, used for checked state in the list */
+  selectedGroupId: string | null | undefined;
+  /** Callback to select a group option by groupId */
+  onOptionSelect: (groupId: string | null) => void;
+  /** Callback to navigate via breadcrumb */
+  goToGroupFilter: (breadcrumb: Breadcrumb) => void;
+}
+/**
+ * Component override slots available on `Groups`.
+ *
+ * Top-level `reactNode` replaces the entire groups container.
+ * Each nested key maps to a sub-component that can be replaced via `ComponentOverrideProps<GroupsRenderProps>`:
+ * - **header** — replaces the header button (title + collapse arrow)
+ * - **breadcrumbs** — replaces the breadcrumbs navigation
+ * - **optionsList** — replaces the options list (group items + "Show All" toggle)
+ */
+export type GroupsOverrides = ComponentOverrideProps<GroupsRenderProps> & {
+  header?: ComponentOverrideProps<GroupsRenderProps>;
+  breadcrumbs?: ComponentOverrideProps<GroupsRenderProps>;
+  optionsList?: ComponentOverrideProps<GroupsRenderProps>;
+};
+
+export interface PlpComponentOverrides {
+  filterGroup?: FilterGroupOverrides;
+  groups?: GroupsOverrides;
+}

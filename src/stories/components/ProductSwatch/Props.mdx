@@ -1,5 +1,6 @@
-import { Meta, ArgTypes } from '@storybook/blocks';
+import { Meta, ArgTypes, Markdown } from '@storybook/blocks';
 import * as ProductSwatchStories from './ProductSwatch.stories';
+import RenderProps from './RenderProps.md?raw';
 
 <Meta of={ProductSwatchStories} />
 
@@ -7,9 +8,28 @@ import * as ProductSwatchStories from './ProductSwatch.stories';
 
 <ArgTypes />
 
+### showMoreLabel
+
+> 📦 v1.16.1 is required for this feature
+
+Custom label for the "View more" button. Can be a static string or a function that receives the hidden swatch count. Defaults to `"View more >"`.
+
+**Type:** `string | ((count: number) => string)`
+
 ### ProductSwatchObject
-  | property          | type                          | description|
-  | :-----------------| ------------------------------| :--------- |
-  | swatchList        | [SwatchItem[]](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props)                | Represents the List of Swatch items to be rendered. Each SwatchItem object in the array will contain the following properties. <br/> |
-  | selectedVariation | [SwatchItem](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props)                  | Currently Selected SwatchItem object |
-  | selectVariation   | `(swatch: SwatchItem) => void`| Function to change the currently selected SwatchItem object |
+
+| property          | type                                                                                                                | description                                                                                                                       |
+| :---------------- | ------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| swatchList        | [SwatchItem[]](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props) | Represents the List of Swatch items to be rendered.                                                                               |
+| selectedVariation | [SwatchItem](./?path=/docs/components-productswatch--code-examples#arguments-passed-to-children-via-render-props)   | Currently Selected SwatchItem object                                                                                              |
+| selectVariation   | `(swatch: SwatchItem) => void`                                                                                      | Function to change the currently selected SwatchItem object                                                                       |
+| visibleSwatches   | `SwatchItem[] \| undefined`                                                                                         | Subset of `swatchList` limited by `maxVisibleSwatches`. Equals `swatchList` when no limit is set. (📦 v1.16.1 required)           |
+| hiddenSwatches    | `SwatchItem[] \| undefined`                                                                                         | Swatches beyond the `maxVisibleSwatches` limit. `undefined` when no limit is set or no swatches are hidden. (📦 v1.16.1 required) |
+| totalSwatchCount  | `number`                                                                                                            | Total number of swatches in `swatchList`. (📦 v1.16.1 required)                                                                   |
+| hasMoreSwatches   | `boolean`                                                                                                           | Whether there are hidden swatches beyond the visible limit. (📦 v1.16.1 required)                                                 |
+
+### Render Props
+
+> Accessible to children of the ProductSwatch component via render props.
+
+<Markdown>{RenderProps}</Markdown>

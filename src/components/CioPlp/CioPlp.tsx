@@ -2,9 +2,11 @@ import React from 'react';
 import { IncludeRenderProps, PlpContextValue, CioPlpProviderProps } from '../../types';
 import CioPlpProvider from './CioPlpProvider';
 import { UseCioPlpProps } from '../../hooks/useCioPlp';
-import CioPlpGrid from '../CioPlpGrid';
+import CioPlpGrid, { CioPlpGridProps } from '../CioPlpGrid';
 
-export type CioPlpProps = CioPlpProviderProps & UseCioPlpProps;
+export type CioPlpProps = CioPlpProviderProps &
+  UseCioPlpProps &
+  Pick<CioPlpGridProps, 'swatchConfigs'>;
 
 // Wrapper component for CioPlpProvider with default Markup
 export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContextValue>) {
@@ -16,6 +18,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
     paginationConfigs,
     filterConfigs,
     groupsConfigs,
+    swatchConfigs,
     ...rest
   } = props;
 
@@ -27,6 +30,7 @@ export default function CioPlp(props: IncludeRenderProps<CioPlpProps, PlpContext
       paginationConfigs={paginationConfigs}
       filterConfigs={filterConfigs}
       groupsConfigs={groupsConfigs}
+      swatchConfigs={swatchConfigs}
     />
   );
 

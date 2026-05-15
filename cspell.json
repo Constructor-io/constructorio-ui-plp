@@ -2,15 +2,8 @@
   "version": "0.2",
   "language": "en",
   "allowCompoundWords": false,
-  "dictionaries": [
-    "en_US",
-    "html",
-    "css"
-  ],
-  "ignorePaths": [
-    "lib",
-    "docs"
-  ],
+  "dictionaries": ["en_US", "html", "css"],
+  "ignorePaths": ["lib", "docs"],
   "flagWords": [],
   "words": [
     "noninteractive",
@@ -60,6 +53,8 @@
     "hasta",
     "Agregar",
     "carrito",
-    "para"
+    "para",
+    "crawlability",
+    "hrefs"
   ]
 }
