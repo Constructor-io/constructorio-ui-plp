@@ -119,7 +119,6 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
-    "@constructor-io/constructorio-ui-components": "^1.3.2",
     "classnames": "^2.5.1"
   },
   "overrides": {
