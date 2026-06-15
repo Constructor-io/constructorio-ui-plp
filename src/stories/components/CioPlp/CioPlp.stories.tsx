@@ -118,6 +118,7 @@ function PrimaryStory({ args, defaultUrl }: any) {
         key={gridKey}
         groupsConfigs={args.groupsConfigs}
         filterConfigs={args.filterConfigs}
+        paginationConfigs={args.paginationConfigs}
       />
     </CioPlp>
   );

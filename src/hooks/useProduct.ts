@@ -9,9 +9,9 @@ import {
   getItemUrl as defaultGetItemUrl,
 } from '../utils/itemFieldGetters';
 
-const useProductInfo: UseProductInfo = ({ item }) => {
+const useProductInfo: UseProductInfo = ({ item, swatchConfigs }) => {
   const state = useCioPlpContext();
-  const productSwatch = useProductSwatch({ item });
+  const productSwatch = useProductSwatch({ item, config: swatchConfigs });
 
   if (!item.data || !item.itemId || !item.itemName) {
     throw new Error('data, itemId, or itemName are required.');

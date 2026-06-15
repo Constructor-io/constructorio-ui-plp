@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import useRequestConfigs from './useRequestConfigs';
+import { DEFAULT_RESULTS_PER_PAGE } from '../constants';
 
 export interface UsePaginationProps {
   /**
@@ -65,7 +66,8 @@ const usePagination: UsePagination = ({
   const { getRequestConfigs, setRequestConfigs, getUrlForPage } = useRequestConfigs();
   const { page: currentPage, resultsPerPage: resultsPerPageFromConfigs } = getRequestConfigs();
 
-  const resultsPerPage = resultsPerPageFromProps || resultsPerPageFromConfigs || 20;
+  const resultsPerPage =
+    resultsPerPageFromProps || resultsPerPageFromConfigs || DEFAULT_RESULTS_PER_PAGE;
 
   const setCurrentPage = (page: number) => setRequestConfigs({ page, resultsPerPage });
 

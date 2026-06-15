@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IncludeRenderProps } from '../../types';
 import usePagination, { UsePaginationProps, UsePaginationReturn } from '../../hooks/usePagination';
+import { DEFAULT_RESULTS_PER_PAGE } from '../../constants';
+import { NavButton } from './NavButton';
 
 export type PaginationProps = UsePaginationProps & {
   /**
@@ -9,8 +11,10 @@ export type PaginationProps = UsePaginationProps & {
    *
    * _This prop will be removed in v2. Anchor-based rendering will become the default behavior._
    *
-   * When true, renders the numbered page controls as `<a href>` anchor elements instead of `<button>` elements.
-   * The previous/next navigation controls remain `<button>` elements.
+   * When true, renders the numbered page controls and the previous/next navigation controls
+   * as `<a href>` anchor elements instead of `<button>` elements.
+   * On boundary pages (no previous page on page 1, no next page on the last page) the
+   * corresponding prev/next control falls back to a `<button>` since no valid href exists.
    * This enables search engine crawlers (e.g., Google) to discover and index paginated content.
    * JavaScript-enabled browsers still use SPA navigation via onClick + preventDefault,
    * while modifier-clicks (Cmd/Ctrl/Shift/Alt or middle-click) fall through to native browser behavior.
@@ -20,7 +24,7 @@ export type PaginationProps = UsePaginationProps & {
 export type PaginationWithRenderProps = IncludeRenderProps<PaginationProps, UsePaginationReturn>;
 
 export default function Pagination(props: PaginationWithRenderProps) {
-  const { totalNumResults, resultsPerPage, windowSize = 5, useAnchors, children } = props;
+  const { totalNumResults, resultsPerPage, windowSize = 5, useAnchors = false, children } = props;
   const [pageWindowSize, setPageWindowSize] = useState(windowSize);
   const pagesRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +53,9 @@ export default function Pagination(props: PaginationWithRenderProps) {
     };
   }, [windowSize]);
 
+  const isFirstPage = !(currentPage && getPageUrl(currentPage - 1));
+  const isLastPage = !(currentPage && getPageUrl(currentPage + 1));
+
   return (
     <>
       {typeof children === 'function' ? (
@@ -63,9 +70,15 @@ export default function Pagination(props: PaginationWithRenderProps) {
         })
       ) : (
         <div ref={pagesRef} className='cio-pagination'>
-          <button onClick={() => prevPage()} type='button' data-testid='cio-pagination-prev-button'>
+          <NavButton
+            useAnchors={useAnchors && !isFirstPage}
+            href={currentPage ? getPageUrl(currentPage - 1) : undefined}
+            onNavigate={prevPage}
+            testId='cio-pagination-prev-button'
+            aria-label='Previous page'>
             &lt;
-          </button>
+          </NavButton>
+
           {pages.map((page, i) => {
             if (page === -1) {
               if (useAnchors) {
@@ -86,41 +99,27 @@ export default function Pagination(props: PaginationWithRenderProps) {
             const className = isSelected ? 'selected' : undefined;
             const ariaCurrent = isSelected ? 'page' : undefined;
 
-            if (useAnchors) {
-              return (
-                <a
-                  href={getPageUrl(page)}
-                  onClick={(e) => {
-                    // Let the browser handle modified clicks (Cmd/Ctrl/Shift/Alt) and
-                    // non-primary buttons so users can open pages in new tabs/windows.
-                    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-                      return;
-                    }
-                    e.preventDefault();
-                    goToPage(page);
-                  }}
-                  key={`${page},${i}`}
-                  className={className}
-                  aria-current={ariaCurrent}>
-                  {page}
-                </a>
-              );
-            }
-
             return (
-              <button
-                onClick={() => goToPage(page)}
-                type='button'
+              <NavButton
+                useAnchors={useAnchors}
+                href={getPageUrl(page)}
+                onNavigate={() => goToPage(page)}
                 key={`${page},${i}`}
                 className={className}
                 aria-current={ariaCurrent}>
                 {page}
-              </button>
+              </NavButton>
             );
           })}
-          <button onClick={() => nextPage()} type='button' data-testid='cio-pagination-next-button'>
+
+          <NavButton
+            useAnchors={useAnchors && !isLastPage}
+            href={currentPage ? getPageUrl(currentPage + 1) : undefined}
+            onNavigate={nextPage}
+            testId='cio-pagination-next-button'
+            aria-label='Next page'>
             &gt;
-          </button>
+          </NavButton>
         </div>
       )}
     </>
@@ -128,6 +127,6 @@ export default function Pagination(props: PaginationWithRenderProps) {
 }
 
 Pagination.defaultProps = {
-  resultsPerPage: 20,
+  resultsPerPage: DEFAULT_RESULTS_PER_PAGE,
   windowSize: 5,
 };

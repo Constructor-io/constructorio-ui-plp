@@ -1,5 +1,6 @@
 import { useCioPlpContext } from './useCioPlpContext';
 import { RequestConfigs } from '../types';
+import { DEFAULT_RESULTS_PER_PAGE } from '../constants';
 
 interface UseRequestConfigsReturn {
   getRequestConfigs: () => RequestConfigs;
@@ -31,6 +32,23 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     return requestConfigs;
   };
 
+  // The customer's effective default for results-per-page: their explicit
+  // staticRequestConfigs value if set, otherwise the library default.
+  // We strip resultsPerPage from the URL when it matches this. Keeps the URL
+  // canonical for the most common case (matching the API's first-page response).
+  const stripDefaultResultsPerPage = (configs: RequestConfigs): RequestConfigs => {
+    const effectiveResultsPerPage =
+      staticRequestConfigs?.resultsPerPage ?? DEFAULT_RESULTS_PER_PAGE;
+
+    if (configs.resultsPerPage === effectiveResultsPerPage) {
+      const { resultsPerPage, ...rest } = configs;
+
+      return rest;
+    }
+
+    return configs;
+  };
+
   const setRequestConfigs = (configsToUpdate: Partial<RequestConfigs>) => {
     const oldUrl = getUrl();
     if (!oldUrl) {
@@ -38,7 +56,10 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     }
 
     const oldRequestConfigs = oldUrl ? getStateFromUrl(oldUrl) : {};
-    const newRequestConfigs = { ...oldRequestConfigs, ...configsToUpdate };
+    const newRequestConfigs = stripDefaultResultsPerPage({
+      ...oldRequestConfigs,
+      ...configsToUpdate,
+    });
     const newUrl = getUrlFromState(newRequestConfigs, oldUrl);
 
     setUrl(newUrl);
@@ -52,7 +73,7 @@ export default function useRequestConfigs(): UseRequestConfigsReturn {
     const currentUrl = getUrl();
     if (!currentUrl) return undefined;
     const currentState = getStateFromUrl(currentUrl);
-    return getUrlFromState({ ...currentState, page }, currentUrl);
+    return getUrlFromState(stripDefaultResultsPerPage({ ...currentState, page }), currentUrl);
   };
 
   return { getRequestConfigs, setRequestConfigs, getUrlForPage };

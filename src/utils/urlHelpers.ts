@@ -1,4 +1,5 @@
 import type { RequestConfigs, DefaultQueryStringMap } from '../types';
+import { DEFAULT_RESULTS_PER_PAGE } from '../constants';
 
 export const defaultQueryStringMap: Readonly<DefaultQueryStringMap> = Object.freeze({
   query: 'q',
@@ -128,6 +129,14 @@ export function getUrlFromState(state: RequestConfigs, url: string): string {
 
     // Don't append page=1 to URL since it's the default and affects SEO
     if (key === 'page' && val === 1) {
+      return;
+    }
+
+    // Don't append the library-default results-per-page to the URL since it's
+    // redundant and exposes a non-canonical URL to crawlers. `key` here is the internal
+    // state name `resultsPerPage`; it maps to the URL parameter `numResults` via
+    // `defaultQueryStringMap` when appended below.
+    if (key === 'resultsPerPage' && val === DEFAULT_RESULTS_PER_PAGE) {
       return;
     }
 
