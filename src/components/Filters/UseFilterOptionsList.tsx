@@ -54,12 +54,13 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     [isHiddenFilterOptionFn, getIsHiddenFilterOptionField],
   );
 
-  const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender } = useOptionsList({
-    options: facet.options,
-    initialNumOptions,
-    isHiddenOptionFn,
-    nestedOptionsKey: 'options', // Enable recursive filtering for hierarchical facet options
-  });
+  const { isShowAll, setIsShowAll, optionsToRender, setOptionsToRender, totalFilteredOptions } =
+    useOptionsList({
+      options: facet.options,
+      initialNumOptions,
+      isHiddenOptionFn,
+      nestedOptionsKey: 'options', // Enable recursive filtering for hierarchical facet options
+    });
 
   const [selectedOptionMap, setSelectedOptionMap] = useState<Record<string, boolean>>({});
 
@@ -98,6 +99,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     setIsShowAll,
     optionsToRender,
     setOptionsToRender,
+    totalFilteredOptions,
     selectedOptionMap,
     setSelectedOptionMap,
     onOptionSelect,

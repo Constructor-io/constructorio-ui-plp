@@ -12,6 +12,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
     isShowAll,
     setIsShowAll,
     optionsToRender,
+    totalFilteredOptions,
     selectedOptionMap,
     onOptionSelect,
     isVisual,
@@ -57,7 +58,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
           return <FilterOption {...commonProps} />;
         })}
 
-        {initialNumOptions < facet.options.length && (
+        {initialNumOptions < totalFilteredOptions && (
           <button type='button' className='cio-see-all' onClick={() => setIsShowAll(!isShowAll)}>
             {isShowAll ? 'Show Less' : 'Show All'}
           </button>
