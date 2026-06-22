@@ -6,6 +6,7 @@ import FilterOptionListRow from '../Filters/FilterOptionListRow';
 import type { IncludeRenderProps, GroupsOverrides, GroupsRenderProps } from '../../types';
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { translate } from '../../utils/helpers';
 
 /**
  * Props for the Groups component
@@ -33,7 +34,7 @@ export type GroupsWithRenderProps = IncludeRenderProps<GroupsProps, ReturnType<t
 export default function Groups(props: GroupsWithRenderProps) {
   const {
     isCollapsed: isCollapsedDefault = false,
-    title = 'Categories',
+    title,
     children,
     groups,
     hideGroups,
@@ -41,6 +42,8 @@ export default function Groups(props: GroupsWithRenderProps) {
   } = props;
   const context = useCioPlpContext();
   const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.groups;
+  const translations = context?.translations;
+  const translatedTitle = title || translate('Categories', translations);
   const useGroupsReturn = useGroups(props);
   const {
     optionsToRender,
@@ -86,7 +89,7 @@ export default function Groups(props: GroupsWithRenderProps) {
               props={renderProps}
               override={componentOverrides?.header?.reactNode}>
               <button className='cio-filter-header' type='button' onClick={toggleIsCollapsed}>
-                {title}
+                {translatedTitle}
                 <i className={`cio-arrow ${isCollapsed ? 'cio-arrow-up' : 'cio-arrow-down'}`} />
               </button>
             </RenderPropsWrapper>
@@ -138,7 +141,9 @@ export default function Groups(props: GroupsWithRenderProps) {
                         type='button'
                         className='cio-see-all'
                         onClick={() => setIsShowAll((prevIsShowAll) => !prevIsShowAll)}>
-                        {isShowAll ? 'Show Less' : 'Show All'}
+                        {isShowAll
+                          ? translate('Show Less', translations)
+                          : translate('Show All', translations)}
                       </button>
                     )}
                   </ul>

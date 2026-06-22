@@ -21,6 +21,7 @@ import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
 import useCioPlp from '../../hooks/useCioPlp';
 import Breadcrumbs from '../Breadcrumbs';
+import { translate } from '../../utils/helpers';
 
 export type CioPlpGridProps = {
   initialSearchResponse?: SearchResponse;
@@ -97,6 +98,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
 
   const {
     callbacks: { onRedirect = (redirectUrl) => window.location.replace(redirectUrl) },
+    translations,
   } = useCioPlpContext();
 
   if (isPlpSearchDataRedirect(data)) {
@@ -120,10 +122,10 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   if (isSearchPage) {
     renderHeader = (
       <span className='cio-products-header-title'>
-        <b>{data?.response?.totalNumResults}</b> results
+        <b>{data?.response?.totalNumResults}</b> {translate('results', translations)}
         {searchQuery && (
           <>
-            &nbsp;for <b>&quot;{searchQuery}&quot;</b>
+            &nbsp;{translate('for', translations)} <b>&quot;{searchQuery}&quot;</b>
           </>
         )}
       </span>
@@ -160,7 +162,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                           className='cio-filters-modal-button cio-mobile-only'
                           onClick={() => setIsFilterOpen(!isFilterOpen)}>
                           {FiltersIcon}
-                          Filters
+                          {translate('Filters', translations)}
                         </button>
                         <span className='cio-large-screen-only'>{renderHeader}</span>
                         <Sort sortOptions={sort.sortOptions} isOpen={false} {...sortConfigs} />

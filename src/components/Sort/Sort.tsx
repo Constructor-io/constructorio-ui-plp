@@ -2,6 +2,8 @@ import React, { useCallback, useState } from 'react';
 import useSort, { UseSortProps } from '../../hooks/useSort';
 import { IncludeRenderProps, PlpSortOption, UseSortReturn } from '../../types';
 import MobileModal from '../MobileModal';
+import { useCioPlpContext } from '../../hooks/useCioPlpContext';
+import { translate } from '../../utils/helpers';
 
 export type SortProps = UseSortProps & {
   /**
@@ -20,6 +22,7 @@ export default function Sort({
   const { sortOptions, selectedSort, changeSelectedSort } = useSort({
     sortOptions: sortOptionsFromProps,
   });
+  const { translations } = useCioPlpContext();
 
   const toggleCollapsible = () => {
     setIsOpen(!isOpen);
@@ -72,11 +75,12 @@ export default function Sort({
           <button type='button' className='collapsible' onClick={toggleCollapsible}>
             {selectedSort?.displayName ? (
               <span className='cio-plp-sort-button-label'>
-                <span className='cio-large-screen-only'>Sort by:</span>
-                <span className='cio-mobile-only'>By</span> {selectedSort.displayName}
+                <span className='cio-large-screen-only'>{translate('Sort by:', translations)}</span>
+                <span className='cio-mobile-only'>{translate('By', translations)}</span>{' '}
+                {selectedSort.displayName}
               </span>
             ) : (
-              'Sort'
+              translate('Sort', translations)
             )}
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>

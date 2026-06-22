@@ -1,0 +1,98 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as TranslationsStories from './Translations.stories';
+
+<Meta of={TranslationsStories} />
+
+# Translations (i18n)
+
+The translations feature allows you to customize all UI text strings in the PLP to support internationalization (i18n).
+All translation keys are optional - any non-provided translation will fallback to English defaults.
+
+> **Important Note:** Translations only apply to hardcoded UI strings within the library (e.g., "results", "Filters", "Sort by:", etc.).
+> They do **not** translate dynamic content from the API response, such as:
+> - Sort option labels (e.g., "Relevance", "Price: Low to High")
+> - Facet names and values (e.g., "Color", "Size", "Brand")
+> - Product names, descriptions, and other catalog data
+>
+> API response content should be translated on your backend or through Constructor.io's dashboard configuration.
+
+## Available Translation Keys
+
+All keys are optional. Here are the translatable strings:
+
+```typescript
+{
+  // Result display
+  "results": "results",
+  "for": "for",
+
+  // Filters
+  "Filters": "Filters",
+
+  // Sort
+  "Sort by:": "Sort by:",
+  "By": "By",
+  "Sort": "Sort",
+
+  // Range Filter
+  "from": "from",
+  "to": "to",
+
+  // Groups/Categories
+  "Categories": "Categories",
+  "Show All": "Show All",
+  "Show Less": "Show Less",
+
+  // Product Card
+  "Add to Cart": "Add to Cart",
+
+  // Zero Results
+  "Sorry, we didn't find:": "Sorry, we didn't find:",
+  "Sorry, we were unable to find what you were looking for.": "Sorry, we were unable to find what you were looking for.",
+  "Check for typos": "Check for typos",
+  "Use fewer keywords": "Use fewer keywords",
+  "Broaden your search terms": "Broaden your search terms"
+}
+```
+
+## Spanish Translation Example
+
+<Canvas of={TranslationsStories.Spanish} />
+
+## Basic Usage
+
+```jsx
+import { CioPlp } from "@constructor-io/constructorio-ui-plp";
+import "@constructor-io/constructorio-ui-plp/styles.css";
+
+const DEMO_API_KEY = "key_M57QS8SMPdLdLx4x";
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      translations={{
+        results: 'resultados',
+        for: 'para',
+        Filters: 'Filtros',
+        'Sort by:': 'Ordenar por:',
+        By: 'Por',
+        Sort: 'Ordenar',
+        from: 'desde',
+        to: 'hasta',
+        Categories: 'Categorias',
+        'Show All': 'Mostrar todo',
+        'Show Less': 'Mostrar menos',
+        'Add to Cart': 'Agregar al carrito',
+        "Sorry, we didn't find:": 'Lo sentimos, no encontramos:',
+        'Sorry, we were unable to find what you were looking for.':
+          'Lo sentimos, no pudimos encontrar lo que buscabas.',
+        'Check for typos': 'Revisa errores tipograficos',
+        'Use fewer keywords': 'Usa menos palabras clave',
+        'Broaden your search terms': 'Amplia tus terminos de busqueda',
+      }}
+    />
+  );
+}
+```
+
