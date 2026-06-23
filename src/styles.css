@@ -1,3 +1,4 @@
+@import '@constructor-io/constructorio-ui-components/styles.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 @import './components/ProductSwatch/ProductSwatch.css';
 @import './components/CioPlpGrid/ZeroResults/ZeroResults.css';

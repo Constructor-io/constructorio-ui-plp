@@ -92,6 +92,17 @@ export default function MyComponent() {
         hideGroups: false, // Whether to hide groups entirely
         isHiddenGroupFn: (group) => false, // Function that returns true if a particular group should not be rendered
       }}
+      // Filters configuration
+      filterConfigs={{
+        defaultCollapsed: false,                // When true, all filter groups start collapsed
+        sliderStep: 0.1,                       // Global slider step for range facets
+        facetSliderSteps: { price: 1 },        // Per-facet slider step overrides
+        perFacetConfigs: {                     // Per-facet configuration overrides
+          color: { isCollapsed: true },          // Collapse specific facets
+        },
+        isVisualFilterFn: (facet) => ['color', 'Base Color'].includes(facet.name),
+        getVisualColorHex: (option) => colorHexMap[option.value],
+      }}
       // Pagination configuration
       paginationConfigs={{
         windowSize: 5, // Number of page buttons to show
@@ -101,9 +112,8 @@ export default function MyComponent() {
         maxVisibleSwatches: 3, // Max swatches before showing "View more"
         showMoreLabel: 'View more >', // Custom label (string or function)
       }}
-      // Sort and filter configs (no specific options yet)
+      // Sort config (no specific options yet)
       sortConfigs={{}}
-      filterConfigs={{}}
     />
   );
 }

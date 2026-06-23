@@ -80,5 +80,6 @@ export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
     setIsShowAll,
     optionsToRender,
     setOptionsToRender,
+    totalFilteredOptions: filteredOptions.length,
   };
 }

@@ -51,4 +51,39 @@ describe('Testing Component on the server: Filters', () => {
     expect(mockChildren).toHaveBeenCalled();
     expect(html).toContain('Custom Filters');
   });
+
+  it('Should render all filter groups expanded by default (backwards compatibility)', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} />
+      </CioPlp>,
+    );
+
+    // Default behavior: all filter groups should be expanded
+    expect(html).toContain('cio-arrow-down');
+    expect(html).not.toContain('cio-arrow-up');
+  });
+
+  it('Should render all filter groups collapsed when defaultCollapsed is true', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} defaultCollapsed />
+      </CioPlp>,
+    );
+
+    // Collapsed state uses cio-arrow-up, expanded uses cio-arrow-down
+    expect(html).toContain('cio-arrow-up');
+    expect(html).not.toContain('cio-arrow-down');
+  });
+
+  it('Should render all filter groups expanded when defaultCollapsed is false', () => {
+    const html = renderToString(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <Filters {...filterProps} defaultCollapsed={false} />
+      </CioPlp>,
+    );
+
+    expect(html).toContain('cio-arrow-down');
+    expect(html).not.toContain('cio-arrow-up');
+  });
 });

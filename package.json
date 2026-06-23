@@ -37,7 +37,7 @@
     "dist/constructorio-ui-plp-bundled.js"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=20"
   },
   "types": "lib/types/index.d.ts",
   "scripts": {
@@ -59,7 +59,7 @@
   },
   "peerDependencies": {
     "@constructor-io/constructorio-client-javascript": "^2.77.0",
-    "@constructor-io/constructorio-ui-components": "^1.3.2",
+    "@constructor-io/constructorio-ui-components": "^1.6.0",
     "react": ">=16.12.0",
     "react-dom": ">=16.12.0",
     "tslib": "^2.4.0"
