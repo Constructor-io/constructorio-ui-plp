@@ -158,7 +158,7 @@ URL Helpers are used for managing the URL and request state. These functions def
 | Property              | Type                                                                    | Description                                                     |
 | --------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- |
 | getUrl                | `() => string \| undefined`                                             | Get the current URL for a page (Default: getting current href)  |
-| setUrl                | `(newEncodedUrlState: string) => void`                                  | Set the window href using the provided URL                      |
+| setUrl                | `(newEncodedUrlState: string) => void`                                  | Update the URL with the provided value (Default: SPA navigation via `history.pushState`, no full page reload) |
 | getStateFromUrl       | `(urlString: string) => RequestConfigs`                                 | Parses the given URL string to a request configuration state    |
 | getUrlFromState       | `(state: RequestConfigs, options: QueryParamEncodingOptions) => string` | Convert the request configuration state to a URL string         |
 | defaultQueryStringMap | `DefaultQueryStringMap`                                                 | Provides a mapping for the query parameters that is used in URL |
@@ -180,12 +180,20 @@ function getUrl() {
 
 Default Implementation:
 
+By default the library performs **SPA navigation**: it updates the URL via
+`history.pushState` (no full page reload) and dispatches a `popstate` event so the PLP
+re-renders and refetches. To opt into a full page reload instead, see
+[SPA Navigation](./?path=/docs/usage-examples-spa-navigation--documentation#opting-out-hard-refresh-on-every-url-change).
+
 **Type:** `(newEncodedUrlState: string) => void`
 
 ```javascript
 function setUrl(newUrlWithEncodedState) {
   if (typeof window === 'undefined') return;
-  window.location.href = newUrlWithEncodedState;
+  // SPA navigation: update the URL without a full page reload.
+  window.history.pushState({}, '', newUrlWithEncodedState);
+  // Dispatch popstate so subscribers re-render/refetch.
+  window.dispatchEvent(new PopStateEvent('popstate'));
 }
 ```
 

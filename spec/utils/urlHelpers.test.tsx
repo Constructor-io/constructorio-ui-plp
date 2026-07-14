@@ -234,14 +234,20 @@ describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
     render(<TestReactComponent />);
   });
 
-  test('setUrl should set the request configs to the url by default', () => {
-    function TestReactComponent() {
-      setUrl(testUrl);
-      expect(window.location.href).toBe(testUrl);
+  test('setUrl should push the url to history and dispatch popstate by default', () => {
+    const nextUrl = 'https://example.com/a/random/path?q=item&page=2';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
 
-      return <div>Test</div>;
-    }
+    setUrl(nextUrl);
 
-    render(<TestReactComponent />);
+    expect(pushStateSpy).toHaveBeenCalledWith({}, '', nextUrl);
+    expect(window.location.href).toBe(nextUrl);
+
+    const dispatchedEvent = dispatchEventSpy.mock.calls[0][0];
+    expect(dispatchedEvent.type).toBe('popstate');
+
+    pushStateSpy.mockRestore();
+    dispatchEventSpy.mockRestore();
   });
 });

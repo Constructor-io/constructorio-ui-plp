@@ -19,7 +19,10 @@ export function getUrl(): string | undefined {
 
 export function setUrl(newUrlWithEncodedState: string) {
   if (typeof window === 'undefined') return;
-  window.location.href = newUrlWithEncodedState;
+  // Default SPA navigation: update the URL without a full page reload.
+  window.history.pushState({}, '', newUrlWithEncodedState);
+  // Dispatch popstate so subscribers re-render/refetch.
+  window.dispatchEvent(new PopStateEvent('popstate'));
 }
 
 export function extractFiltersFromUrl(urlParams: URLSearchParams) {

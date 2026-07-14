@@ -1,8 +1,36 @@
 import { Meta } from '@storybook/blocks';
 
-<Meta title='Usage Examples/SPA Navigation' />
+<Meta title='Usage Examples/SPA Navigation (Deprecated)' />
 
-# SPA Navigation Guide: Prevent Full Page Reloads for Facets / Sort / Pagination
+# SPA Navigation: Facets / Sort / Pagination Without Full Page Reloads
+
+<div
+  style={{
+    borderLeft: '4px solid #dc3545',
+    background: '#fdeeee',
+    borderRadius: '4px',
+    padding: '16px 16px',
+    margin: '12px 0',
+    lineHeight: 1.7,
+  }}>
+ #### ❗ Deprecation Notice
+  <p style={{ margin: '0 0 16px' }}>
+    The previous default <code>setUrl</code> did a hard navigation
+    (<code>window.location.href = newUrl</code>). Overriding <code>urlHelpers</code>{' '}
+    <strong>solely to enable SPA navigation</strong> is <strong>deprecated</strong> and{' '}
+    <strong>no longer required</strong>.
+  </p>
+  <p style={{ margin: '0 0 16px' }}>
+    <strong>SPA navigation is now the default.</strong> As of (VERSION NUMBER) — which
+    introduced a <code>history.pushState</code> based <code>setUrl</code>. Interactions with{' '}
+    <code>CioPlp</code> like facet selection, sort changes, pagination, and Back/Forward
+    buttons update the URL <strong>without a full page reload</strong>.
+  </p>
+  <p style={{ margin: 0 }}>
+    If you added <code>urlHelpers</code> overrides only to get SPA navigation, you may now
+    remove them.
+  </p>
+</div>
 
 ## Why this happens
 In this PLP UI library, **facet selection**, **sort changes**, and **pagination** ultimately call `setRequestConfigs(...)`, which computes a new URL and then calls `urlHelpers.setUrl(newUrl)`.

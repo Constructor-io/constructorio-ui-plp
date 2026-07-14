@@ -17,6 +17,8 @@ import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups from './useGroups';
 import { GroupsProps } from '../components/Groups';
 import useRequestConfigs from './useRequestConfigs';
+import useHistoryLocation from './useHistoryLocation';
+import useFirstRender from './useFirstRender';
 import { PaginationProps } from '../components/Pagination';
 
 export interface UseCioPlpHook extends PlpContextValue {}
@@ -125,6 +127,17 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
       setGroups(browse.data.response.groups);
     }
   }, [search.data, isSearchPage, browse.data, isBrowsePage]);
+
+  // Refetch when the URL changes (via the default pushState-based setUrl, or the browser Back/Forward interactions).
+  // The search/browse hooks fetch on mount, so skip the first render to avoid a duplicate initial fetch.
+  const { isFirstRender } = useFirstRender();
+  const href = useHistoryLocation();
+  useEffect(() => {
+    if (!isFirstRender) {
+      refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [href]);
 
   const filters = useFilter({ facets, ...filterConfigs });
   const sort = useSort({ sortOptions, ...sortConfigs });
