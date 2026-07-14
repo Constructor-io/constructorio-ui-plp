@@ -128,8 +128,7 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     }
   }, [search.data, isSearchPage, browse.data, isBrowsePage]);
 
-  // Refetch when the URL changes (via the default pushState-based setUrl, or the browser Back/Forward interactions).
-  // The search/browse hooks fetch on mount, so skip the first render to avoid a duplicate initial fetch.
+  // Refetch when the URL changes, but not on initial mount.
   const { isFirstRender } = useFirstRender();
   const href = useHistoryLocation();
   useEffect(() => {

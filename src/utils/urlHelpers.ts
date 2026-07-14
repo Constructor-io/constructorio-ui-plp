@@ -17,12 +17,35 @@ export function getUrl(): string | undefined {
   return window.location.href;
 }
 
+// Default SPA navigation: update the URL without a full page reload.
+// pushState throws a SecurityError for cross-origin URLs
+// Fallback to a full page navigation when the target origin differs or parsing fails.
 export function setUrl(newUrlWithEncodedState: string) {
   if (typeof window === 'undefined') return;
-  // Default SPA navigation: update the URL without a full page reload.
-  window.history.pushState({}, '', newUrlWithEncodedState);
+
+  let sameOrigin = false;
+  try {
+    const target = new URL(newUrlWithEncodedState, window.location.href);
+    sameOrigin = target.origin === window.location.origin;
+  } catch {
+    sameOrigin = false;
+  }
+
+  if (!sameOrigin) {
+    window.location.href = newUrlWithEncodedState;
+    return;
+  }
+
+  const state = { url: newUrlWithEncodedState };
+  try {
+    window.history.pushState(state, '', newUrlWithEncodedState);
+  } catch {
+    window.location.href = newUrlWithEncodedState;
+    return;
+  }
+
   // Dispatch popstate so subscribers re-render/refetch.
-  window.dispatchEvent(new PopStateEvent('popstate'));
+  window.dispatchEvent(new PopStateEvent('popstate', { state }));
 }
 
 export function extractFiltersFromUrl(urlParams: URLSearchParams) {
