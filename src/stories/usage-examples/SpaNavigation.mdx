@@ -2,38 +2,9 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title='Usage Examples/SPA Navigation' />
 
-# SPA Navigation: Facets / Sort / Pagination Without Full Page Reloads
-
-<div
-  style={{
-    borderLeft: '4px solid #dc3545',
-    background: '#fdeeee',
-    borderRadius: '4px',
-    padding: '16px 16px',
-    margin: '12px 0',
-    lineHeight: 1.7,
-  }}>
-  #### ❗ Deprecation Notice
-  <p style={{ margin: '0 0 16px' }}>
-    The previous default <code>setUrl</code> did a hard navigation (
-    <code>window.location.href = newUrl</code>). Overriding <code>urlHelpers</code>{' '}
-    <strong>solely to enable SPA navigation</strong> is <strong>deprecated</strong> and{' '}
-    <strong>no longer required</strong>.
-  </p>
-  <p style={{ margin: '0 0 16px' }}>
-    <strong>SPA navigation is now the default.</strong> The default `setUrl` is now based on a{' '}
-    <code>history.pushState</code>. Interactions with <code>CioPlp</code> like facet selection, sort
-    changes, pagination, and Back/Forward buttons update the URL{' '}
-    <strong>without a full page reload</strong>.
-  </p>
-  <p style={{ margin: 0 }}>
-    If you added <code>urlHelpers</code> overrides only to get SPA navigation, you may now remove
-    them.
-  </p>
-</div>
+# SPA Navigation Guide: Prevent Full Page Reloads for Facets / Sort / Pagination
 
 ## Why this happens
-
 In this PLP UI library, **facet selection**, **sort changes**, and **pagination** ultimately call `setRequestConfigs(...)`, which computes a new URL and then calls `urlHelpers.setUrl(newUrl)`.
 
 By default, `urlHelpers.setUrl` does this:
@@ -49,7 +20,6 @@ The immediate workaround is to **override `urlHelpers`** when you render the PLP
 ---
 
 ## Checklist
-
 - **Override `urlHelpers.setUrl`** to call your router (`navigate`, `history.pushState`, etc.) instead of doing a hard navigation.
 - **Ensure the PLP refetches** after URL changes (the library reads state from the URL, but data fetching happens on mount).
 - **Remount `<CioPlp />` on URL changes** (required) by keying it off the current URL (example below).
@@ -58,7 +28,6 @@ The immediate workaround is to **override `urlHelpers`** when you render the PLP
 ---
 
 ## Step 1: Provide custom `urlHelpers` to the Provider
-
 You can pass `urlHelpers` into `<CioPlpProvider />` / `<CioPlp />`. The provider merges your helpers with defaults, so you only need to override what you care about (typically `getUrl` and `setUrl`).
 
 ### Option A: React Router (v6) example
@@ -117,7 +86,7 @@ export function PlpPage() {
   return (
     <CioPlp
       key={currentUrl}
-      apiKey='YOUR_KEY'
+      apiKey="YOUR_KEY"
       urlHelpers={{
         getUrl,
         setUrl,
@@ -128,14 +97,12 @@ export function PlpPage() {
 ```
 
 #### Notes
-
 - Facets/sort/pagination will now update the URL via `navigate(...)` without reloading.
 - The PLP reads request state from the URL, but fetch hooks currently run on mount. In SPA routing, URL updates do not necessarily remount components, so passing the current URL as the `<CioPlp />` `key` is a simple way to ensure it refetches.
 
 ---
 
 ### Option B: “Generic SPA Router” (uses `history.pushState`) example
-
 If the app has a custom router:
 
 ```tsx
@@ -180,12 +147,17 @@ export function PlpPage() {
   //
   // return <CioPlp key={plpKey} {...} />
 
-  return <CioPlp key={href} apiKey='YOUR_KEY' urlHelpers={urlHelpers} />;
+  return (
+    <CioPlp
+      key={href}
+      apiKey="YOUR_KEY"
+      urlHelpers={urlHelpers}
+    />
+  );
 }
 ```
 
 #### Notes
-
 - This works even without React Router.
 - If the app already has a router, it’s cleaner to call that router instead of manually pushing history.
 
@@ -194,9 +166,7 @@ export function PlpPage() {
 ## Step 2: How this fixes each interaction
 
 ### Facet selection (filtering)
-
 Facet clicks call the library’s `setFilter(...)`, which calls:
-
 - `setRequestConfigs({ filters: newFilters, page: 1 })`
 - which builds a new URL
 - which calls your overridden `urlHelpers.setUrl(...)`
@@ -204,17 +174,13 @@ Facet clicks call the library’s `setFilter(...)`, which calls:
 Result: URL changes (SPA), then results refresh (no reload).
 
 ### Sort options
-
 Sort changes call:
-
 - `setRequestConfigs({ sortBy, sortOrder, page: 1 })`
 
 Same flow. Your router owns navigation.
 
 ### Pagination
-
 Pagination calls:
-
 - `setRequestConfigs({ page, resultsPerPage })`
 
 Same flow.
@@ -222,9 +188,7 @@ Same flow.
 ---
 
 ## Step 3: Add `key` to iterable components
-
 The library already has keys in most default markup, but if you are:
-
 - providing `children` render-props for `Filters`, `Sort`, or `Pagination`, or
 - rendering lists inside your custom overrides
 
@@ -236,21 +200,22 @@ The library already has keys in most default markup, but if you are:
 <Pagination totalNumResults={totalNumResults} resultsPerPage={numResultsPerPage}>
   {({ pages, currentPage, goToPage, nextPage, prevPage }) => (
     <nav>
-      <button type='button' onClick={() => prevPage()}>
+      <button type="button" onClick={() => prevPage()}>
         Prev
       </button>
 
       {pages.map((page) => (
         <button
-          type='button'
+          type="button"
           key={page === -1 ? `ellipsis-${currentPage}` : `page-${page}`}
           onClick={() => goToPage(page)}
-          aria-current={page === currentPage ? 'page' : undefined}>
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
           {page === -1 ? '…' : page}
         </button>
       ))}
 
-      <button type='button' onClick={() => nextPage()}>
+      <button type="button" onClick={() => nextPage()}>
         Next
       </button>
     </nav>
@@ -266,12 +231,13 @@ The library already has keys in most default markup, but if you are:
     <div>
       {sortOptions.map((opt) => (
         <button
-          type='button'
+          type="button"
           key={`${opt.sortBy}-${opt.sortOrder}`}
           onClick={() => changeSelectedSort(opt)}
           aria-pressed={
             selectedSort?.sortBy === opt.sortBy && selectedSort?.sortOrder === opt.sortOrder
-          }>
+          }
+        >
           {opt.displayName}
         </button>
       ))}
@@ -286,7 +252,7 @@ The library already has keys in most default markup, but if you are:
 <Filters facets={facets}>
   {({ facets, setFilter, clearFilters }) => (
     <aside>
-      <button type='button' onClick={clearFilters}>
+      <button type="button" onClick={clearFilters}>
         Clear
       </button>
 
@@ -297,7 +263,7 @@ The library already has keys in most default markup, but if you are:
           {(facet.options ?? []).map((opt) => (
             <label key={`${facet.name}:${opt.value}`}>
               <input
-                type='checkbox'
+                type="checkbox"
                 onChange={(e) => {
                   // Generic pattern; use the filter value type your facet expects.
                   setFilter(facet.name, e.target.checked ? opt.value : null);
@@ -316,7 +282,6 @@ The library already has keys in most default markup, but if you are:
 ---
 
 ## Practical Guidance / Gotchas
-
 - **Absolute URLs are required** for `getStateFromUrl(url)` because it does `new URL(url)`. So your `getUrl()` should return `window.location.href`-style absolute URLs.
 - Prefer router navigation (`navigate`, `router.push`) over `pushState` if the app already has routing—your router will handle re-rendering and scroll restoration.
 - If you also see full reloads on redirects, override the library callback:
@@ -324,7 +289,7 @@ The library already has keys in most default markup, but if you are:
 
 ```tsx
 <CioPlp
-  apiKey='YOUR_KEY'
+  apiKey="YOUR_KEY"
   urlHelpers={{ getUrl, setUrl }}
   callbacks={{
     onRedirect: (url) => navigate(url), // SPA redirect instead of window.location.replace
