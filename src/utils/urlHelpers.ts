@@ -17,9 +17,9 @@ export function getUrl(): string | undefined {
   return window.location.href;
 }
 
-// Default SPA navigation: update the URL without a full page reload.
+// Default SPA navigation: update the URL without a full page reload
 // pushState throws a SecurityError for cross-origin URLs
-// Fallback to a full page navigation when the target origin differs or parsing fails.
+// Fallback to a full page navigation when the target origin differs or parsing fails
 export function setUrl(newUrlWithEncodedState: string) {
   if (typeof window === 'undefined') return;
 
@@ -44,7 +44,6 @@ export function setUrl(newUrlWithEncodedState: string) {
     return;
   }
 
-  // Dispatch popstate so subscribers re-render/refetch.
   window.dispatchEvent(new PopStateEvent('popstate', { state }));
 }
 

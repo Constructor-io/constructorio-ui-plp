@@ -177,8 +177,7 @@ describe('Testing Hook: useCioPlp', () => {
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
     });
 
-    // Simulate a facet/sort/pagination interaction: the default setUrl pushes a new
-    // URL and dispatches popstate, which useHistoryLocation observes to trigger refetch.
+    // Simulate a PLP interaction that changes the URL
     act(() => {
       result.current.filters.setFilter('color', 'red');
     });

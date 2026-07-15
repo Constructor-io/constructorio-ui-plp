@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Subscribes to browser history changes (popstate) and returns the current href.
- * Re-renders the consumer when the URL changes via our default `setUrl`
- * (which dispatches popstate) or the browser Back/Forward interactions.
+ * Subscribes to browser history changes via popstate and returns the current href.
  */
 export default function useHistoryLocation(): string | undefined {
   const [href, setHref] = useState<string | undefined>(() =>
