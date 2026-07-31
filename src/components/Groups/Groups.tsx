@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import {
   FilterOption,
@@ -59,6 +59,10 @@ export default function Groups(props: GroupsWithRenderProps) {
   } = useGroupsReturn;
 
   const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
+
+  useEffect(() => {
+    setIsCollapsed(isCollapsedDefault);
+  }, [isCollapsedDefault]);
 
   const toggleIsCollapsed = () => setIsCollapsed((prev) => !prev);
 

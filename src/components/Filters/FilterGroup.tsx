@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui-components';
 import type {
   PlpFacet,
@@ -31,7 +31,12 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
-  defaultCollapsed?: boolean;
+  /**
+   * Whether the filter group should be collapsed. Used both as the initial value
+   * and to keep the collapsed state in sync when the value changes after mount,
+   * allowing it to be driven externally (e.g. by search matches).
+   */
+  isCollapsedOverride?: boolean;
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
@@ -46,7 +51,7 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
-    defaultCollapsed = false,
+    isCollapsedOverride = false,
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
@@ -55,7 +60,12 @@ export default function FilterGroup(props: FilterGroupProps) {
   } = props;
   const context = useCioPlpContext();
   const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.filterGroup;
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const [isCollapsed, setIsCollapsed] = useState(isCollapsedOverride);
+
+  useEffect(() => {
+    setIsCollapsed(isCollapsedOverride);
+  }, [isCollapsedOverride]);
+
   const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
   const checkboxPosition = perFacetConfigs?.[facet.name]?.checkboxPosition;
 

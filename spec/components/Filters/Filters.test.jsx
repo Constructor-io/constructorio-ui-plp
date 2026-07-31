@@ -1431,6 +1431,68 @@ describe('Testing Component: Filters', () => {
       });
     });
 
+    it('Should re-collapse/expand a filter group when its metadata-driven collapse state changes after mount (e.g. search match)', async () => {
+      const { getByText, rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={mockFacetsWithMetadata} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        // Color has cio_render_collapsed: true -> should be collapsed
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(false);
+      });
+
+      // Simulate Color becoming a search match: cio_render_collapsed flips to false
+      const updatedFacets = mockFacetsWithMetadata.map((facet) =>
+        facet.name === 'color'
+          ? { ...facet, data: { ...facet.data, cio_render_collapsed: false } }
+          : facet,
+      );
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={updatedFacets} />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const colorHeader = getByText('Color').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(colorHeader)).toBe(true);
+      });
+    });
+
+    it('Should re-collapse a filter group when perFacetConfigs isCollapsed changes after mount', async () => {
+      const { getByText, rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={mockFacetsWithMetadata}
+            perFacetConfigs={{ size: { isCollapsed: false } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(true);
+      });
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={mockFacetsWithMetadata}
+            perFacetConfigs={{ size: { isCollapsed: true } }}
+          />
+        </CioPlp>,
+      );
+
+      await waitFor(() => {
+        const sizeHeader = getByText('Size').closest('.cio-filter-group');
+        expect(isFilterGroupExpanded(sizeHeader)).toBe(false);
+      });
+    });
+
     it('Render props: getIsCollapsed should be available in render props', async () => {
       const mockChildren = jest.fn().mockReturnValue(<div>Custom Filters</div>);
 
