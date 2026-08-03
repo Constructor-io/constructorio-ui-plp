@@ -32,9 +32,13 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
   /**
+   * @deprecated Use `isCollapsedOverride` instead.
+   */
+  defaultCollapsed?: boolean;
+  /**
    * Whether the filter group should be collapsed. Used both as the initial value
    * and to keep the collapsed state in sync when the value changes after mount,
-   * allowing it to be driven externally (e.g. by search matches).
+   * allowing it to be driven externally.
    */
   isCollapsedOverride?: boolean;
   getVisualImageUrl?: (option: PlpFacetOption) => string | undefined;
@@ -51,7 +55,8 @@ export default function FilterGroup(props: FilterGroupProps) {
     sliderStep,
     facetSliderSteps,
     isHiddenFilterOptionFn,
-    isCollapsedOverride = false,
+    defaultCollapsed,
+    isCollapsedOverride,
     getVisualImageUrl,
     getVisualColorHex,
     isVisualFilterFn,
@@ -60,10 +65,12 @@ export default function FilterGroup(props: FilterGroupProps) {
   } = props;
   const context = useCioPlpContext();
   const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.filterGroup;
-  const [isCollapsed, setIsCollapsed] = useState(isCollapsedOverride);
+  const [isCollapsed, setIsCollapsed] = useState(isCollapsedOverride ?? defaultCollapsed ?? false);
 
   useEffect(() => {
-    setIsCollapsed(isCollapsedOverride);
+    if (isCollapsedOverride !== undefined) {
+      setIsCollapsed(isCollapsedOverride);
+    }
   }, [isCollapsedOverride]);
 
   const isVisual = shouldRenderVisualFacet(facet, perFacetConfigs, isVisualFilterFn);
