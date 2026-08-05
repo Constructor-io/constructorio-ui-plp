@@ -187,14 +187,15 @@ describe('Testing Hook: useCioPlp', () => {
     });
   });
 
-  it('Should refetch when the browser Back/Forward buttons emit popstate', async () => {
+  it('Should refetch on user-initiated Back / Forward navigation ', async () => {
     renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
     });
 
-    // Back/Forward change the URL then emit a native popstate (no setUrl involved).
+    // Imitates a Back / Forward navigation on the client, where the browser changes the
+    // URL and fires a native popstate on its own, without setUrl / pushState ever being called.
     act(() => {
       window.location.href = 'https://example.com?q=boots';
       window.dispatchEvent(new PopStateEvent('popstate'));

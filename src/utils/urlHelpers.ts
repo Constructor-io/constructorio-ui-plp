@@ -44,6 +44,7 @@ export function setUrl(newUrlWithEncodedState: string) {
     return;
   }
 
+  // Note: dispatchEvent must be called after pushState to ensure that the URL change is reflected in the event state.
   window.dispatchEvent(new PopStateEvent('popstate', { state }));
 }
 
