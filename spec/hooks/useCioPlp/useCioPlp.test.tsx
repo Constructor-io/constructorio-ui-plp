@@ -187,7 +187,7 @@ describe('Testing Hook: useCioPlp', () => {
     });
   });
 
-  it('Should refetch on user-initiated Back / Forward navigation ', async () => {
+  it('Should refetch on user-initiated Back / Forward navigation', async () => {
     renderHookWithCioPlp(() => useCioPlp());
 
     await waitFor(() => {
