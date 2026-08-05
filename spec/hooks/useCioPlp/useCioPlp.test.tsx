@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import useCioPlp from '../../../src/hooks/useCioPlp';
 import { mockConstructorIOClient, renderHookWithCioPlp } from '../../test-utils';
 import { PlpSearchDataResults, PlpSortOption } from '../../../src/types';
@@ -158,6 +158,51 @@ describe('Testing Hook: useCioPlp', () => {
 
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
       expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('Should fetch exactly once on mount (no duplicate initial fetch)', async () => {
+    renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('Should refetch when the URL changes via the default pushState setUrl', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      expect(result.current.data?.request.term).toEqual('shoes');
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+
+    // Simulate a PLP interaction that changes the URL
+    act(() => {
+      result.current.filters.setFilter('color', 'red');
+    });
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  it('Should refetch on user-initiated Back / Forward navigation', async () => {
+    renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+
+    // Imitates a Back / Forward navigation on the client, where the browser changes the
+    // URL and fires a native popstate on its own, without setUrl / pushState ever being called.
+    act(() => {
+      window.location.href = 'https://example.com?q=boots';
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(2);
     });
   });
 

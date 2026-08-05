@@ -234,14 +234,64 @@ describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
     render(<TestReactComponent />);
   });
 
-  test('setUrl should set the request configs to the url by default', () => {
-    function TestReactComponent() {
-      setUrl(testUrl);
-      expect(window.location.href).toBe(testUrl);
+  test('setUrl should push the url to history and dispatch popstate by default', () => {
+    const nextUrl = 'https://example.com/a/random/path?q=item&page=2';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
 
-      return <div>Test</div>;
-    }
+    setUrl(nextUrl);
 
-    render(<TestReactComponent />);
+    expect(pushStateSpy).toHaveBeenCalledWith({ url: nextUrl }, '', nextUrl);
+    expect(window.location.href).toBe(nextUrl);
+
+    const dispatchedEvent = dispatchEventSpy.mock.calls[0][0] as PopStateEvent;
+    expect(dispatchedEvent.type).toBe('popstate');
+    expect(dispatchedEvent.state).toEqual({ url: nextUrl });
+
+    pushStateSpy.mockRestore();
+    dispatchEventSpy.mockRestore();
+  });
+
+  test('setUrl should treat relative URLs as same-origin and use pushState', () => {
+    const relativeUrl = '/a/random/path?q=item&page=2';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+
+    setUrl(relativeUrl);
+
+    expect(pushStateSpy).toHaveBeenCalledWith({ url: relativeUrl }, '', relativeUrl);
+
+    pushStateSpy.mockRestore();
+  });
+
+  test('setUrl should fall back to a full navigation for cross-origin URLs', () => {
+    const crossOriginUrl = 'https://cross-origin.example.com/a/random/path?q=item';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
+
+    setUrl(crossOriginUrl);
+
+    expect(pushStateSpy).not.toHaveBeenCalled();
+    expect(dispatchEventSpy).not.toHaveBeenCalled();
+    expect(window.location.href).toBe(crossOriginUrl);
+
+    pushStateSpy.mockRestore();
+    dispatchEventSpy.mockRestore();
+  });
+
+  test('setUrl should fall back to a full navigation when pushState throws', () => {
+    const nextUrl = 'https://example.com/a/random/path?q=item&page=2';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState').mockImplementation(() => {
+      throw new DOMException('pushState failed', 'SecurityError');
+    });
+    const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
+
+    setUrl(nextUrl);
+
+    expect(pushStateSpy).toHaveBeenCalled();
+    expect(dispatchEventSpy).not.toHaveBeenCalled();
+    expect(window.location.href).toBe(nextUrl);
+
+    pushStateSpy.mockRestore();
+    dispatchEventSpy.mockRestore();
   });
 });
