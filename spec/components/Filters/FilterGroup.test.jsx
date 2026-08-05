@@ -88,6 +88,37 @@ describe('Testing Component: FilterGroup', () => {
     expect(mockSetFilter).not.toHaveBeenCalled();
   });
 
+  it('Should render filter group collapsed when defaultCollapsed is true', () => {
+    const multipleFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: {},
+      hidden: false,
+      options: [
+        { status: '', count: 10, displayName: 'Red', value: 'Red', data: {} },
+        { status: '', count: 5, displayName: 'Blue', value: 'Blue', data: {} },
+      ],
+    };
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          defaultCollapsed
+        />
+      </CioPlp>,
+    );
+
+    const arrow = screen
+      .getByText('Color')
+      .closest('.cio-filter-header')
+      .querySelector('.cio-arrow');
+    expect(arrow).toHaveClass('cio-arrow-up');
+  });
+
   it('Should render filter group collapsed when isCollapsedOverride is true', () => {
     const multipleFacet = {
       displayName: 'Color',
