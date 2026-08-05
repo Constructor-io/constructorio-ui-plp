@@ -62,7 +62,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               getVisualColorHex={getVisualColorHex}
               isVisualFilterFn={isVisualFilterFn}
               perFacetConfigs={perFacetConfigs}
-              defaultCollapsed={getIsCollapsed(facet)}
+              isCollapsedOverride={getIsCollapsed(facet)}
               key={facet.name}
             />
           ))}

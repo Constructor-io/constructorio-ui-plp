@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import {
   FilterOption,
@@ -15,7 +15,7 @@ import { translate } from '../../utils/helpers';
  */
 export interface GroupsProps extends UseGroupProps, IncludeComponentOverrides<GroupsOverrides> {
   /**
-   * Initial collapsed state of the groups filter panel
+   * Controls the collapsed state of the groups filter panel
    * @default false
    */
   isCollapsed?: boolean;
@@ -59,6 +59,10 @@ export default function Groups(props: GroupsWithRenderProps) {
   } = useGroupsReturn;
 
   const [isCollapsed, setIsCollapsed] = useState(isCollapsedDefault);
+
+  useEffect(() => {
+    setIsCollapsed(isCollapsedDefault);
+  }, [isCollapsedDefault]);
 
   const toggleIsCollapsed = () => setIsCollapsed((prev) => !prev);
 
