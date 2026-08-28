@@ -22,7 +22,19 @@ import {
   RangeMax,
   RangeMin,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
+import type {
+  ComponentOverrideProps,
+  FilterOptionData,
+  FilterOptionOverride,
+} from '@constructor-io/constructorio-ui-components';
+
+/**
+ * Re-exported from `@constructor-io/constructorio-ui-components` so consumers can type a
+ * single-option override without depending on the components library directly.
+ * - `FilterOptionData` is the shape each facet option is mapped to before it is rendered
+ * - `FilterOptionOverride` is what the `filterOption` override slot accepts
+ */
+export type { FilterOptionData, FilterOptionOverride };
 
 export {
   Nullable,
@@ -500,8 +512,24 @@ export type IncludeRawResponse<TransformedType, OriginalType> = TransformedType 
 
 export interface FacetConfig {
   isVisualFacet?: boolean;
+  /** Whether the whole filter group renders collapsed. */
   isCollapsed?: boolean;
   checkboxPosition?: 'left' | 'right' | 'none';
+  /**
+   * Whether options that have nested options get a toggle that collapses their nested list.
+   * Collapses branches *within* this facet's option list — unrelated to `isCollapsed`, which
+   * collapses the filter group as a whole. Takes precedence over the global
+   * `hierarchyCollapsible`. Defaults to `true`.
+   */
+  hierarchyCollapsible?: boolean;
+  /**
+   * Whether this facet's nested option lists start collapsed rather than expanded. Initial state
+   * only — the option list owns expansion from then on. Takes precedence over the global
+   * `defaultHierarchyCollapsed`. Defaults to `false`.
+   *
+   * A branch holding a selected option still auto-expands, so an applied filter is never hidden.
+   */
+  defaultHierarchyCollapsed?: boolean;
 }
 
 /**
@@ -533,10 +561,30 @@ export interface FilterGroupRenderProps {
  * - **header** — replaces the header button (facet name + collapse arrow)
  * - **optionsList** — replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)
  * - **rangeSlider** — replaces the `FilterRangeSlider` (min/max inputs + slider track)
+ *
+ * `optionsList` additionally carries a `filterOption` slot, which replaces individual options
+ * instead of the list around them.
  */
 export type FilterGroupOverrides = ComponentOverrideProps<FilterGroupRenderProps> & {
   header?: ComponentOverrideProps<FilterGroupRenderProps>;
-  optionsList?: ComponentOverrideProps<FilterGroupRenderProps>;
+  optionsList?: ComponentOverrideProps<FilterGroupRenderProps> & {
+    /**
+     * Overrides individual options rather than the list. Either an object applied to every option
+     * at every depth, or — to target one option — a function called per option that returns the
+     * override for that option only, and `undefined` to leave it at its default:
+     *
+     * ```tsx
+     * filterOption: (option) =>
+     *   option.optionValue === 'Blue' ? { reactNode: () => <li>Blue!</li> } : undefined
+     * ```
+     *
+     * The function receives the option as a `FilterOptionData` (`id`, `optionValue`,
+     * `displayValue`, `displayCountValue`, `isChecked`, nested `options`), not as a
+     * `PlpFacetOption`. A `reactNode` render function receives `props.children` — the option's
+     * nested list — so re-emit `{props.children}` when overriding an option that has children.
+     */
+    filterOption?: FilterOptionOverride;
+  };
   rangeSlider?: ComponentOverrideProps<FilterGroupRenderProps>;
 };
 

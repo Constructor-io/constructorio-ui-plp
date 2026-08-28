@@ -8,12 +8,7 @@ import type {
   FilterGroupOverrides,
   FilterGroupRenderProps,
 } from '../../types';
-import {
-  isMultipleOrBucketedFacet,
-  isRangeFacet,
-  isSingleFacet,
-  shouldRenderVisualFacet,
-} from '../../utils';
+import { isOptionFacet, isRangeFacet, shouldRenderVisualFacet } from '../../utils';
 import FilterOptionsList from './FilterOptionsList';
 import FilterRangeSlider from './FilterRangeSlider';
 import { UseFilterReturn } from '../../hooks/useFilter';
@@ -36,6 +31,19 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
   getVisualColorHex?: (option: PlpFacetOption) => string | undefined;
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
   perFacetConfigs?: Record<string, FacetConfig>;
+  /**
+   * Whether options that have nested options get a toggle collapsing their nested list. Collapses
+   * branches *within* this group, unrelated to `defaultCollapsed` above, which collapses the group
+   * itself. Already resolved against `perFacetConfigs` by `useFilter`. Defaults to `true`.
+   */
+  hierarchyCollapsible?: boolean;
+  /**
+   * Whether this group's nested option lists start collapsed. Initial state only. Already resolved
+   * against `perFacetConfigs` by `useFilter`. Defaults to `false`.
+   */
+  defaultHierarchyCollapsed?: boolean;
+  /** Namespace for option DOM ids, so the same facet can render more than once per page. */
+  idPrefix?: string;
 }
 
 export default function FilterGroup(props: FilterGroupProps) {
@@ -51,6 +59,9 @@ export default function FilterGroup(props: FilterGroupProps) {
     getVisualColorHex,
     isVisualFilterFn,
     perFacetConfigs,
+    hierarchyCollapsible,
+    defaultHierarchyCollapsed,
+    idPrefix,
     componentOverrides: componentOverridesProp,
   } = props;
   const context = useCioPlpContext();
@@ -81,7 +92,7 @@ export default function FilterGroup(props: FilterGroupProps) {
           </button>
         </RenderPropsWrapper>
 
-        {(isMultipleOrBucketedFacet(facet) || isSingleFacet(facet)) && (
+        {isOptionFacet(facet) && (
           <RenderPropsWrapper
             props={renderProps}
             override={componentOverrides?.optionsList?.reactNode}>
@@ -95,6 +106,10 @@ export default function FilterGroup(props: FilterGroupProps) {
               getVisualImageUrl={getVisualImageUrl}
               getVisualColorHex={getVisualColorHex}
               checkboxPosition={checkboxPosition}
+              hierarchyCollapsible={hierarchyCollapsible}
+              defaultHierarchyCollapsed={defaultHierarchyCollapsed}
+              idPrefix={idPrefix}
+              filterOptionOverride={componentOverrides?.optionsList?.filterOption}
             />
           </RenderPropsWrapper>
         )}

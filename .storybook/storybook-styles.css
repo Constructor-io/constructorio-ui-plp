@@ -109,8 +109,42 @@
   overflow-y: auto;
 }
 
-/* Allow type signatures in CioPlp Props docs tables to wrap */
-.cio-props-docs table td:nth-child(2) code {
+/*
+ * Allow type signatures and inline code samples in the CioPlp Props docs tables
+ * to wrap. Storybook's docs typography makes inline code `nowrap`, so a long
+ * sample (e.g. the `perFacetConfigs` object) spills out of its cell and over the
+ * table-of-contents column instead of breaking.
+ */
+.cio-props-docs table td code {
   white-space: normal;
   word-break: break-word;
+}
+
+/*
+ * Keep the Type column readable in the 3-column prop tables
+ * (Property | Type | Description). Left to the auto table layout, the long
+ * descriptions win the width and squeeze the wrappable type signatures down to
+ * a few characters. Percentage widths under `table-layout: fixed` split the
+ * container instead of growing past it, so the table never overflows into the
+ * docs table-of-contents column on the right.
+ *
+ * `:has()` scopes this to tables with a third column — the 2-column
+ * Slot | Description tables keep the auto layout.
+ */
+.cio-props-docs table:not(.docblock-argstable):has(tr > *:nth-child(3)) {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.cio-props-docs table:not(.docblock-argstable):has(tr > *:nth-child(3)) tr > *:nth-child(1) {
+  width: 18%;
+}
+
+.cio-props-docs table:not(.docblock-argstable):has(tr > *:nth-child(3)) tr > *:nth-child(2) {
+  width: 30%;
+}
+
+/* Fixed layout clips instead of growing, so long tokens must be breakable */
+.cio-props-docs table:not(.docblock-argstable):has(tr > *:nth-child(3)) td {
+  overflow-wrap: break-word;
 }

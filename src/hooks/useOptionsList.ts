@@ -80,6 +80,12 @@ export default function useOptionsList<T>(props: UseOptionsListProps<T>) {
     setIsShowAll,
     optionsToRender,
     setOptionsToRender,
+    /**
+     * Every option that survived `isHiddenOptionFn`, before the "Show All" slice — nested options
+     * included. Callers that reason about the whole set (rather than the rendered subset) need
+     * this: a parent's state derived from only the visible slice would ignore its other children.
+     */
+    filteredOptions,
     totalFilteredOptions: filteredOptions.length,
   };
 }

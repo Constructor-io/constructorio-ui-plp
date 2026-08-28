@@ -88,11 +88,25 @@ Configuration options for filters functionality.
 | isVisualFilterFn       | `(facet: PlpFacet) => boolean`                    | Callback to determine if a facet renders with visual swatches         |
 | getVisualColorHex      | `(option: PlpFacetOption) => string \| undefined` | Callback to resolve hex color for visual filter options               |
 | getVisualImageUrl      | `(option: PlpFacetOption) => string \| undefined` | Callback to resolve image URL for visual filter options               |
-| perFacetConfigs        | `Record<string, FacetConfig>`                     | Per-facet config overrides (e.g. `{ color: { isVisualFacet: true, isCollapsed: true, checkboxPosition: 'none' } }`) |
+| perFacetConfigs        | `Record<string, FacetConfig>`                     | Per-facet config overrides (e.g. `{ color: { isVisualFacet: true, isCollapsed: true, checkboxPosition: 'none' } }`). See [FacetConfig](#facetconfig) |
 | isHiddenFilterFn       | `(facet: PlpFacet) => boolean`                    | Function that returns true if a facet should be hidden                |
 | sliderStep             | `number`                                          | Global slider step for all range facets                               |
 | facetSliderSteps       | `Record<string, number>`                          | Per-facet slider step configuration                                   |
 | defaultCollapsed       | `boolean`                                         | Global default collapse behavior for filter groups when no facet metadata (`cio_render_collapsed`) or `perFacetConfigs` override is provided. When `true`, unmatched filter groups render collapsed by default; when `false`, they render expanded by default. Facet metadata and per-facet overrides via `perFacetConfigs` take precedence. |
+| hierarchyCollapsible   | `boolean`                                         | Global default for whether options that have nested options get a toggle collapsing their nested list. Collapses branches *within* a filter group - unrelated to `defaultCollapsed`, which collapses filter groups as a whole. Defaults to `true`. Per-facet overrides via `perFacetConfigs` take precedence. |
+| defaultHierarchyCollapsed | `boolean`                                      | Global default for whether nested option lists start collapsed rather than expanded. Initial state only - each option list owns expansion from then on. A branch holding a selected option still auto-expands. Defaults to `false`. Per-facet overrides via `perFacetConfigs` take precedence. |
+
+### `FacetConfig`
+
+The shape of each entry in `perFacetConfigs`, keyed by facet name.
+
+| Property                  | Type                              | Description                                                                                   |
+| ------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------- |
+| isVisualFacet             | `boolean`                         | Whether this facet renders with visual swatches                                               |
+| isCollapsed               | `boolean`                         | Whether the whole filter group renders collapsed                                              |
+| checkboxPosition          | `'left' \| 'right' \| 'none'`     | Where each option's checkbox sits, or `'none'` to hide it                                     |
+| hierarchyCollapsible      | `boolean`                         | Whether this facet's options that have nested options get a collapse toggle. Defaults to `true` |
+| defaultHierarchyCollapsed | `boolean`                         | Whether this facet's nested option lists start collapsed. Defaults to `false`                 |
 
 ## ComponentOverrides
 
@@ -118,6 +132,7 @@ Available override slots:
 | `reactNode`     | Replaces the entire FilterGroup `<li>` element                      |
 | `header`        | Replaces the header button (facet name + collapse arrow)            |
 | `optionsList`   | Replaces the `FilterOptionsList` (checkboxes + "Show All" toggle)   |
+| `optionsList.filterOption` | Replaces individual options instead of the list around them. Accepts an object applied to every option, or a function called per option - returning `undefined` leaves that option at its default. Receives each option as `FilterOptionData`, not `PlpFacetOption` |
 | `rangeSlider`   | Replaces the `FilterRangeSlider` (min/max inputs + slider track)    |
 
 See the [Filters component documentation](./?path=/docs/components-filters--code-examples#component-overrides) for interactive examples.

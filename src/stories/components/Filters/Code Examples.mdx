@@ -151,6 +151,98 @@ export function SpecificCollapsed() {
 }
 ```
 
+## Hierarchical Filter Options
+
+Facet options can carry their own nested `options`. Those render as a hierarchy: each level is indented, and options that have children get a toggle that collapses their branch.
+
+This covers both shapes the API returns: a facet of type `hierarchical`, and a `multiple` or `single` facet whose options happen to carry children. All three render through the same option list, and a `hierarchical` facet accumulates selections the way a `multiple` one does - only `single` facets are one-at-a-time.
+
+<Canvas of={FiltersStories.HierarchicalFilters} />
+
+Branch collapsing is separate from filter-group collapsing, and so are its props:
+
+| Prop                        | Default | Description                                                                          |
+| --------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `hierarchyCollapsible`      | `true`  | Whether options that have children get a toggle collapsing their nested list          |
+| `defaultHierarchyCollapsed` | `false` | Whether branches start collapsed rather than expanded                                 |
+| `isCollapsed` / `defaultCollapsed` | - | Collapse the **filter group** as a whole (see [above](#collapse-all-filter-groups-v1100-required)) |
+
+### Collapsed by Default
+
+<Canvas of={FiltersStories.HierarchyCollapsedByDefault} />
+
+This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track. A branch holding a selected option auto-expands even when collapsed by default, so an applied filter is never hidden.
+
+### Without Collapse Toggles
+
+<Canvas of={FiltersStories.HierarchyNotCollapsible} />
+
+### Per-Facet Configuration
+
+Both props can be set per facet through `perFacetConfigs`, which takes precedence over the global props:
+
+<Canvas of={FiltersStories.HierarchyPerFacetConfigs} />
+
+```jsx
+import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export function HierarchicalFilters() {
+  return (
+    <CioPlp apiKey={DEMO_API_KEY}>
+      <CioPlpGrid>
+        {(props) => (
+          <Filters
+            facets={props.filters.facets}
+            // Global defaults for every facet
+            defaultHierarchyCollapsed
+            // Per-facet overrides win over the props above
+            perFacetConfigs={{
+              category: { defaultHierarchyCollapsed: false },
+              collection: { hierarchyCollapsible: false },
+            }}
+          />
+        )}
+      </CioPlpGrid>
+    </CioPlp>
+  );
+}
+```
+
+### Priority Order
+
+1. **`perFacetConfigs[name].hierarchyCollapsible` / `.defaultHierarchyCollapsed`** (per-facet config) - highest priority
+2. **`hierarchyCollapsible` / `defaultHierarchyCollapsed`** (global props)
+3. **Defaults** - collapsible branches that start expanded
+
+### Selecting Nested Options
+
+A parent option stands for "all of the below":
+
+- Selecting a parent selects every option nested under it, at any depth.
+- Deselecting a parent deselects every option nested under it.
+- A parent becomes selected on its own once all of its children are selected, and that carries upwards - completing a branch can complete its parent too.
+- A parent stops being selected as soon as one of its children is deselected. Its other children stay selected.
+
+The rule also applies to the state the API reports: a parent whose children all come back selected renders selected, with nothing clicked.
+
+Because a parent is derived from its children, the request carries the parent *and* its subtree. Selecting a top-level option in a deep facet therefore applies many values at once, which is worth keeping in mind for URL length.
+
+Facets of type `single` hold one value at a time, so nothing cascades there - selecting an option replaces whatever was applied.
+
+### Rendering Filters More Than Once Per Page
+
+Filter option ids have to be unique across the document: they connect each `<label>` to its checkbox and each collapse toggle to the list it controls. A page that renders `Filters` twice - a desktop sidebar plus a mobile modal, for instance - must give each instance its own namespace via `idPrefix`:
+
+```jsx
+<Filters facets={props.filters.facets} idPrefix='desktop' />
+<Filters facets={props.filters.facets} idPrefix='mobile' />
+```
+
+`CioPlpGrid` already does this for the desktop and mobile filter sets it renders.
+
 ## Render Props pattern
 
 To override the default rendering of the Filters component, you may pass a Render Props function to the component.
@@ -250,6 +342,39 @@ Replace the header button while keeping the default options list and range slide
 Replace the checkbox options list with a custom implementation (only affects multiple/single facets):
 
 <Canvas of={FiltersStories.OverrideOptionsList} />
+
+### Override a Specific Option
+
+`optionsList.filterOption` overrides individual options rather than the list around them. Pass an object to restyle every option, or a function to target one: it is called per option and returning `undefined` leaves that option at its default.
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      optionsList: {
+        filterOption: (option) =>
+          option.optionValue === 'Sneakers'
+            ? {
+                reactNode: (props) => (
+                  <li>
+                    👟 {option.displayValue} - {option.displayCountValue} items
+                    {/* Re-emit children to keep an option's nested list */}
+                    {props?.children}
+                  </li>
+                ),
+              }
+            : undefined,
+      },
+    },
+  }}>
+  <Filters facets={facets} />
+</CioPlp>
+```
+
+<Canvas of={FiltersStories.OverrideSpecificOption} />
+
+The function receives the option as `FilterOptionData` - `id`, `optionValue`, `displayValue`, `displayCountValue`, `isChecked` and any nested `options` - not as a `PlpFacetOption`. Overriding an option that has children drops its nested list unless the `reactNode` render function re-emits `props.children`.
 
 ### Override Range Slider
 

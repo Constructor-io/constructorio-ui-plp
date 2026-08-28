@@ -1,0 +1,161 @@
+[
+  {
+    "displayName": "Category",
+    "name": "category",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 120,
+        "displayName": "Apparel",
+        "value": "Apparel",
+        "data": {
+          "parentValue": null
+        },
+        "options": [
+          {
+            "status": "",
+            "count": 60,
+            "displayName": "Tops",
+            "value": "Tops",
+            "data": {
+              "parentValue": "Apparel"
+            },
+            "options": [
+              {
+                "status": "",
+                "count": 25,
+                "displayName": "T-Shirts",
+                "value": "T-Shirts",
+                "data": {
+                  "parentValue": "Tops"
+                },
+                "options": []
+              },
+              {
+                "status": "",
+                "count": 35,
+                "displayName": "Shirts & Blouses",
+                "value": "Shirts & Blouses",
+                "data": {
+                  "parentValue": "Tops"
+                },
+                "options": []
+              }
+            ]
+          },
+          {
+            "status": "",
+            "count": 60,
+            "displayName": "Bottoms",
+            "value": "Bottoms",
+            "data": {
+              "parentValue": "Apparel"
+            },
+            "options": []
+          }
+        ]
+      },
+      {
+        "status": "",
+        "count": 45,
+        "displayName": "Footwear",
+        "value": "Footwear",
+        "data": {
+          "parentValue": null
+        },
+        "options": [
+          {
+            "status": "",
+            "count": 45,
+            "displayName": "Sneakers",
+            "value": "Sneakers",
+            "data": {
+              "parentValue": "Footwear"
+            },
+            "options": []
+          }
+        ]
+      },
+      {
+        "status": "",
+        "count": 30,
+        "displayName": "Kids & Baby",
+        "value": "Kids & Baby",
+        "data": {
+          "parentValue": null
+        },
+        "options": []
+      }
+    ]
+  },
+  {
+    "displayName": "Color",
+    "name": "color",
+    "type": "multiple",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 40,
+        "displayName": "Black",
+        "value": "Black",
+        "data": {
+          "hex_color": "#000000"
+        }
+      },
+      {
+        "status": "",
+        "count": 25,
+        "displayName": "Navy",
+        "value": "Navy",
+        "data": {
+          "hex_color": "#001f3f"
+        }
+      }
+    ]
+  },
+  {
+    "displayName": "Collection",
+    "name": "collection",
+    "type": "single",
+    "data": {},
+    "hidden": false,
+    "options": [
+      {
+        "status": "",
+        "count": 18,
+        "displayName": "Everyday",
+        "value": "Everyday",
+        "data": {
+          "parentValue": null
+        },
+        "options": [
+          {
+            "status": "",
+            "count": 10,
+            "displayName": "Weekday",
+            "value": "Weekday",
+            "data": {
+              "parentValue": "Everyday"
+            },
+            "options": []
+          }
+        ]
+      },
+      {
+        "status": "",
+        "count": 12,
+        "displayName": "Seasonal",
+        "value": "Seasonal",
+        "data": {
+          "parentValue": null
+        },
+        "options": []
+      }
+    ]
+  }
+]
