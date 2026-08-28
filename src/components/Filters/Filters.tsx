@@ -77,6 +77,7 @@ export default function Filters(props: FiltersWithRenderProps) {
               hierarchyCollapsible={getHierarchyCollapsible(facet)}
               defaultHierarchyCollapsed={getDefaultHierarchyCollapsed(facet)}
               idPrefix={idPrefix}
+              isCollapsedOverride={getIsCollapsed(facet)}
               key={facet.name}
             />
           ))}

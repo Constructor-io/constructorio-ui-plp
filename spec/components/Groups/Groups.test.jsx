@@ -261,6 +261,59 @@ describe('Testing Component: Groups', () => {
     });
   });
 
+  describe(' - Externally controlled collapse state', () => {
+    it('Should update isCollapsed when the isCollapsed prop changes after mount', () => {
+      const { rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} isCollapsed={false} />
+        </CioPlp>,
+      );
+
+      const getArrow = () =>
+        screen.getByText('Categories').closest('.cio-filter-header').querySelector('.cio-arrow');
+
+      expect(getArrow()).toHaveClass('cio-arrow-down');
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} isCollapsed />
+        </CioPlp>,
+      );
+
+      expect(getArrow()).toHaveClass('cio-arrow-up');
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} isCollapsed={false} />
+        </CioPlp>,
+      );
+
+      expect(getArrow()).toHaveClass('cio-arrow-down');
+    });
+
+    it('Should not override a manual toggle when the isCollapsed prop has not changed', () => {
+      const { rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} isCollapsed={false} />
+        </CioPlp>,
+      );
+
+      const header = screen.getByText('Categories').closest('.cio-filter-header');
+      fireEvent.click(header);
+
+      const getArrow = () => header.querySelector('.cio-arrow');
+      expect(getArrow()).toHaveClass('cio-arrow-up');
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Groups {...groupsProps} isCollapsed={false} />
+        </CioPlp>,
+      );
+
+      expect(getArrow()).toHaveClass('cio-arrow-up');
+    });
+  });
+
   describe(' - componentOverrides', () => {
     const overrideSlots = [
       {
