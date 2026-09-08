@@ -36,7 +36,10 @@ const withSelected = (facet, selectedValues) => {
 };
 
 const getToggle = (displayValue) =>
-  screen.queryByRole('button', { name: new RegExp(`(Expand|Collapse) ${displayValue}`) });
+  screen.queryByRole('button', {
+    name: (accessibleName) =>
+      accessibleName === `Expand ${displayValue}` || accessibleName === `Collapse ${displayValue}`,
+  });
 
 /**
  * The values sent by the most recent call, sorted so assertions do not depend on map key order,
@@ -49,9 +52,9 @@ const lastAppliedValues = () => {
   return values === null ? null : [...values].sort();
 };
 
-/** Checked state of an option's checkbox, found through its label. */
+/** Checked state of an option's checkbox, found through its label, which reads `<name> <count>`. */
 const isChecked = (displayValue) =>
-  screen.getByLabelText(new RegExp(`^${displayValue.replace(/[&]/g, '\\&')}`), {
+  screen.getByLabelText((labelText) => labelText.startsWith(displayValue), {
     selector: 'input',
   }).checked;
 

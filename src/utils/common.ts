@@ -50,8 +50,14 @@ export function isValidSalePrice(salePrice?: number, usualPrice?: number) {
  * the caller to fall back to a positional token.
  */
 export function slugify(value: string) {
-  return String(value)
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
+  return (
+    String(value)
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, '-')
+      // Every run of separators above collapsed to a single `-`, so at most one can sit at either
+      // end. Trimming a single character rather than a `-+` run keeps this linear: `-+$` has to
+      // retry from every position in a long run of dashes, which is quadratic on values like
+      // `a----…----a`.
+      .replace(/^-|-$/g, '')
+  );
 }
