@@ -6,7 +6,7 @@ import CioPlp from '../../../src/components/CioPlp';
 import Filters from '../../../src/components/Filters';
 import mockTransformedFacets from '../../local_examples/sampleFacets.json';
 import testJsonEncodedUrl from '../../local_examples/testJsonEncodedUrl.json';
-import { getStateFromUrl } from '../../../src/utils';
+import { getStateFromUrl, slugify } from '../../../src/utils';
 
 const filterProps = { facets: mockTransformedFacets };
 
@@ -169,18 +169,16 @@ describe('Testing Component: Filters', () => {
         (facetGroup) => facetGroup.displayName === 'Color',
       );
 
+      const optionId = (option) => `${slugify(colorFacetData.name)}-${slugify(option.value)}`;
+
       const selectedOption = colorFacetData.options.find((option) => option.status === 'selected');
-      expect(
-        container.querySelector(`input[id=${colorFacetData.name}-${selectedOption.value}]`),
-      ).toBeChecked();
+      expect(container.querySelector(`input[id=${optionId(selectedOption)}]`)).toBeChecked();
 
       const newSelectedOption = colorFacetData.options.find(
         (option) => option.status !== 'selected',
       );
       fireEvent.click(getByText(newSelectedOption.value));
-      expect(
-        container.querySelector(`input[id=${colorFacetData.name}-${newSelectedOption.value}]`),
-      ).toBeChecked();
+      expect(container.querySelector(`input[id=${optionId(newSelectedOption)}]`)).toBeChecked();
     });
 
     it('Should render correctly with render props', () => {
@@ -947,9 +945,9 @@ describe('Testing Component: Filters', () => {
 
       await waitFor(() => {
         const customOptions = queryAllByTestId('custom-options');
-        // Should render for multiple and single facets only (not range or hierarchical)
-        const optionsListFacets = mockTransformedFacets.filter(
-          (f) => f.type === 'multiple' || f.type === 'single',
+        // Should render for every option facet — multiple, single and hierarchical — but not range
+        const optionsListFacets = mockTransformedFacets.filter((f) =>
+          ['multiple', 'single', 'hierarchical'].includes(f.type),
         );
         expect(customOptions.length).toBe(optionsListFacets.length);
 

@@ -15,11 +15,18 @@ export type FiltersProps = UseFilterProps & {
    * @returns boolean
    */
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
+  /**
+   * Namespace prepended to every filter option's DOM `id`. Option ids have to be unique across the
+   * document, so a page that renders `Filters` more than once — e.g. a desktop sidebar alongside a
+   * mobile modal, as `CioPlpGrid` does — must give each instance its own prefix.
+   */
+  idPrefix?: string;
 };
 export type FiltersWithRenderProps = IncludeRenderProps<FiltersProps, UseFilterReturn>;
 
 export default function Filters(props: FiltersWithRenderProps) {
-  const { children, initialNumOptions, isHiddenFilterOptionFn, ...useFiltersProps } = props;
+  const { children, initialNumOptions, isHiddenFilterOptionFn, idPrefix, ...useFiltersProps } =
+    props;
   const {
     facets,
     setFilter,
@@ -31,6 +38,8 @@ export default function Filters(props: FiltersWithRenderProps) {
     isVisualFilterFn,
     perFacetConfigs,
     getIsCollapsed,
+    getHierarchyCollapsible,
+    getDefaultHierarchyCollapsed,
   } = useFilter(useFiltersProps);
 
   return (
@@ -47,6 +56,8 @@ export default function Filters(props: FiltersWithRenderProps) {
           isVisualFilterFn,
           perFacetConfigs,
           getIsCollapsed,
+          getHierarchyCollapsible,
+          getDefaultHierarchyCollapsed,
         })
       ) : (
         <div className='cio-filters'>
@@ -62,6 +73,10 @@ export default function Filters(props: FiltersWithRenderProps) {
               getVisualColorHex={getVisualColorHex}
               isVisualFilterFn={isVisualFilterFn}
               perFacetConfigs={perFacetConfigs}
+              defaultCollapsed={getIsCollapsed(facet)}
+              hierarchyCollapsible={getHierarchyCollapsible(facet)}
+              defaultHierarchyCollapsed={getDefaultHierarchyCollapsed(facet)}
+              idPrefix={idPrefix}
               isCollapsedOverride={getIsCollapsed(facet)}
               key={facet.name}
             />

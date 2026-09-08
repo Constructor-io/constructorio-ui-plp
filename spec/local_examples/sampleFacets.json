@@ -171,7 +171,10 @@
         "displayName": "4 stars & up",
         "value": "\"4\"-\"inf\"",
         "data": {},
-        "range": [4, "inf"]
+        "range": [
+          4,
+          "inf"
+        ]
       },
       {
         "status": "",
@@ -179,7 +182,10 @@
         "displayName": "3 stars & up",
         "value": "\"3\"-\"inf\"",
         "data": {},
-        "range": [3, "inf"]
+        "range": [
+          3,
+          "inf"
+        ]
       },
       {
         "status": "",
@@ -187,7 +193,10 @@
         "displayName": "2 stars & up",
         "value": "\"2\"-\"inf\"",
         "data": {},
-        "range": [2, "inf"]
+        "range": [
+          2,
+          "inf"
+        ]
       },
       {
         "status": "",
@@ -195,7 +204,10 @@
         "displayName": "1 star & up",
         "value": "\"1\"-\"inf\"",
         "data": {},
-        "range": [1, "inf"]
+        "range": [
+          1,
+          "inf"
+        ]
       }
     ]
   },
@@ -247,86 +259,86 @@
         "displayName": "Adventures and Adventurers",
         "value": "adventures-and-adventurers",
         "data": {
-          "parent_value": null
+          "parentValue": null
         },
         "options": [
           {
             "status": "",
             "count": 126,
-            "display_name": "Battles and Wars",
             "value": "adventures-and-adventurers/battles-and-wars",
+            "displayName": "Battles and Wars",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 144,
-            "display_name": "Detectives",
             "value": "adventures-and-adventurers/detectives",
+            "displayName": "Detectives",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 9,
-            "display_name": "Outer Space",
             "value": "adventures-and-adventurers/outer-space",
+            "displayName": "Outer Space",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 33,
-            "display_name": "Pirates and Swashbucklers",
             "value": "adventures-and-adventurers/pirates-and-swashbucklers",
+            "displayName": "Pirates and Swashbucklers",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 51,
-            "display_name": "Spies",
             "value": "adventures-and-adventurers/spies",
+            "displayName": "Spies",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 186,
-            "display_name": "Superheroes and Action Figures",
             "value": "adventures-and-adventurers/superheroes-and-action-figures",
+            "displayName": "Superheroes and Action Figures",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 11,
-            "display_name": "Thrill seekers",
             "value": "adventures-and-adventurers/thrill-seekers",
+            "displayName": "Thrill seekers",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           },
           {
             "status": "",
             "count": 88,
-            "display_name": "Time Travel",
             "value": "adventures-and-adventurers/time-travel",
+            "displayName": "Time Travel",
             "data": {
-              "parent_value": "adventures-and-adventurers"
+              "parentValue": "adventures-and-adventurers"
             },
             "options": []
           }
@@ -338,94 +350,94 @@
         "displayName": "Animals",
         "value": "animals",
         "data": {
-          "parent_value": null
+          "parentValue": null
         },
         "options": [
           {
             "status": "",
             "count": 9,
-            "display_name": "African Animals",
             "value": "animals/african-animals",
+            "displayName": "African Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 4,
-            "display_name": "Alligators and Crocodiles",
             "value": "animals/alligators-and-crocodiles",
+            "displayName": "Alligators and Crocodiles",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 30,
-            "display_name": "Animal Babies and Parents",
             "value": "animals/animal-babies-and-parents",
+            "displayName": "Animal Babies and Parents",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 264,
-            "display_name": "Animal Behavior and Structure",
             "value": "animals/animal-behavior-and-structure",
+            "displayName": "Animal Behavior and Structure",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": [
               {
                 "status": "",
                 "count": 9,
-                "display_name": "Animal Hibernation and Migration",
                 "value": "animals/animal-behavior-and-structure/animal-hibernation-and-migration",
+                "displayName": "Animal Hibernation and Migration",
                 "data": {
-                  "parent_value": "animals/animal-behavior-and-structure"
+                  "parentValue": "animals/animal-behavior-and-structure"
                 },
                 "options": []
               },
               {
                 "status": "",
                 "count": 21,
-                "display_name": "Animal Structure and Movement",
                 "value": "animals/animal-behavior-and-structure/animal-structure-and-movement",
+                "displayName": "Animal Structure and Movement",
                 "data": {
-                  "parent_value": "animals/animal-behavior-and-structure"
+                  "parentValue": "animals/animal-behavior-and-structure"
                 },
                 "options": []
               },
               {
                 "status": "",
                 "count": 72,
-                "display_name": "Animal Survival and Adaptation",
                 "value": "animals/animal-behavior-and-structure/animal-survival-and-adaptation",
+                "displayName": "Animal Survival and Adaptation",
                 "data": {
-                  "parent_value": "animals/animal-behavior-and-structure"
+                  "parentValue": "animals/animal-behavior-and-structure"
                 },
                 "options": [
                   {
                     "status": "",
                     "count": 8,
-                    "display_name": "Animal Camouflage",
                     "value": "animals/animal-behavior-and-structure/animal-survival-and-adaptation/animal-camouflage",
+                    "displayName": "Animal Camouflage",
                     "data": {
-                      "parent_value": "animals/animal-behavior-and-structure/animal-survival-and-adaptation"
+                      "parentValue": "animals/animal-behavior-and-structure/animal-survival-and-adaptation"
                     },
                     "options": []
                   },
                   {
                     "status": "",
                     "count": 29,
-                    "display_name": "Predators and Prey",
                     "value": "animals/animal-behavior-and-structure/animal-survival-and-adaptation/predators-and-prey",
+                    "displayName": "Predators and Prey",
                     "data": {
-                      "parent_value": "animals/animal-behavior-and-structure/animal-survival-and-adaptation"
+                      "parentValue": "animals/animal-behavior-and-structure/animal-survival-and-adaptation"
                     },
                     "options": []
                   }
@@ -436,320 +448,320 @@
           {
             "status": "",
             "count": 3,
-            "display_name": "Animal Classification",
             "value": "animals/animal-classification",
+            "displayName": "Animal Classification",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 18,
-            "display_name": "Animal Habitats",
             "value": "animals/animal-habitats",
+            "displayName": "Animal Habitats",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 132,
-            "display_name": "Animal Rescue and Adoption",
             "value": "animals/animal-rescue-and-adoption",
+            "displayName": "Animal Rescue and Adoption",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 7,
-            "display_name": "Australian Animals",
             "value": "animals/australian-animals",
+            "displayName": "Australian Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 21,
-            "display_name": "Bears",
             "value": "animals/bears",
+            "displayName": "Bears",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 8,
-            "display_name": "Big Cats",
             "value": "animals/big-cats",
+            "displayName": "Big Cats",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 12,
-            "display_name": "Butterflies",
             "value": "animals/butterflies",
+            "displayName": "Butterflies",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 15,
-            "display_name": "Cats",
             "value": "animals/cats",
+            "displayName": "Cats",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 7,
-            "display_name": "Chickens and Roosters",
             "value": "animals/chickens-and-roosters",
+            "displayName": "Chickens and Roosters",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 4,
-            "display_name": "Desert Animals",
             "value": "animals/desert-animals",
+            "displayName": "Desert Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 79,
-            "display_name": "Dinosaurs and Prehistoric Animals",
             "value": "animals/dinosaurs-and-prehistoric-animals",
+            "displayName": "Dinosaurs and Prehistoric Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 189,
-            "display_name": "Dogs",
             "value": "animals/dogs",
+            "displayName": "Dogs",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 25,
-            "display_name": "Endangered Animals",
             "value": "animals/endangered-animals",
+            "displayName": "Endangered Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 45,
-            "display_name": "Farm and Ranch Animals",
             "value": "animals/farm-and-ranch-animals",
+            "displayName": "Farm and Ranch Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 82,
-            "display_name": "Fish and Marine Life",
             "value": "animals/fish-and-marine-life",
+            "displayName": "Fish and Marine Life",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 23,
-            "display_name": "Forest Animals",
             "value": "animals/forest-animals",
+            "displayName": "Forest Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 13,
-            "display_name": "Foxes and Wolves",
             "value": "animals/foxes-and-wolves",
+            "displayName": "Foxes and Wolves",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 13,
-            "display_name": "Frogs",
             "value": "animals/frogs",
+            "displayName": "Frogs",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 15,
-            "display_name": "Horses",
             "value": "animals/horses",
+            "displayName": "Horses",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 45,
-            "display_name": "Insects",
             "value": "animals/insects",
+            "displayName": "Insects",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 18,
-            "display_name": "Jungle and Rain Forest Animals",
             "value": "animals/jungle-and-rain-forest-animals",
+            "displayName": "Jungle and Rain Forest Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 29,
-            "display_name": "Mammals",
             "value": "animals/mammals",
+            "displayName": "Mammals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 54,
-            "display_name": "Mice, Hamsters, Guinea Pigs",
             "value": "animals/mice-hamsters-guinea-pigs",
+            "displayName": "Mice, Hamsters, Guinea Pigs",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 9,
-            "display_name": "Monkeys and Apes",
             "value": "animals/monkeys-and-apes",
+            "displayName": "Monkeys and Apes",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 11,
-            "display_name": "Penguins",
             "value": "animals/penguins",
+            "displayName": "Penguins",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 341,
-            "display_name": "Pets",
             "value": "animals/pets",
+            "displayName": "Pets",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 12,
-            "display_name": "Pigs",
             "value": "animals/pigs",
+            "displayName": "Pigs",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 16,
-            "display_name": "Rabbits",
             "value": "animals/rabbits",
+            "displayName": "Rabbits",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 29,
-            "display_name": "Reptiles and Amphibians",
             "value": "animals/reptiles-and-amphibians",
+            "displayName": "Reptiles and Amphibians",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 51,
-            "display_name": "Sharks, Whales, Dolphins",
             "value": "animals/sharks-whales-dolphins",
+            "displayName": "Sharks, Whales, Dolphins",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 60,
-            "display_name": "Wild Animals",
             "value": "animals/wild-animals",
+            "displayName": "Wild Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           },
           {
             "status": "",
             "count": 20,
-            "display_name": "Zoo Animals",
             "value": "animals/zoo-animals",
+            "displayName": "Zoo Animals",
             "data": {
-              "parent_value": "animals"
+              "parentValue": "animals"
             },
             "options": []
           }
@@ -761,54 +773,54 @@
         "displayName": "Arts and Creativity",
         "value": "arts-and-creativity",
         "data": {
-          "parent_value": null
+          "parentValue": null
         },
         "options": [
           {
             "status": "",
             "count": 147,
-            "display_name": "Performing Arts",
             "value": "arts-and-creativity/performing-arts",
+            "displayName": "Performing Arts",
             "data": {
-              "parent_value": "arts-and-creativity"
+              "parentValue": "arts-and-creativity"
             },
             "options": [
               {
                 "status": "",
                 "count": 36,
-                "display_name": "Dance",
                 "value": "arts-and-creativity/performing-arts/dance",
+                "displayName": "Dance",
                 "data": {
-                  "parent_value": "arts-and-creativity/performing-arts"
+                  "parentValue": "arts-and-creativity/performing-arts"
                 },
                 "options": []
               },
               {
                 "status": "",
                 "count": 81,
-                "display_name": "Music",
                 "value": "arts-and-creativity/performing-arts/music",
+                "displayName": "Music",
                 "data": {
-                  "parent_value": "arts-and-creativity/performing-arts"
+                  "parentValue": "arts-and-creativity/performing-arts"
                 },
                 "options": [
                   {
                     "status": "",
                     "count": 33,
-                    "display_name": "Composers and Musicians",
                     "value": "arts-and-creativity/performing-arts/music/composers-and-musicians",
+                    "displayName": "Composers and Musicians",
                     "data": {
-                      "parent_value": "arts-and-creativity/performing-arts/music"
+                      "parentValue": "arts-and-creativity/performing-arts/music"
                     },
                     "options": []
                   },
                   {
                     "status": "",
                     "count": 35,
-                    "display_name": "Songs and Singing",
                     "value": "arts-and-creativity/performing-arts/music/songs-and-singing",
+                    "displayName": "Songs and Singing",
                     "data": {
-                      "parent_value": "arts-and-creativity/performing-arts/music"
+                      "parentValue": "arts-and-creativity/performing-arts/music"
                     },
                     "options": []
                   }
@@ -819,58 +831,58 @@
           {
             "status": "",
             "count": 163,
-            "display_name": "Visual Arts",
             "value": "arts-and-creativity/visual-arts",
+            "displayName": "Visual Arts",
             "data": {
-              "parent_value": "arts-and-creativity"
+              "parentValue": "arts-and-creativity"
             },
             "options": [
               {
                 "status": "",
                 "count": 105,
-                "display_name": "Art Forms and Techniques",
                 "value": "arts-and-creativity/visual-arts/art-forms-and-techniques",
+                "displayName": "Art Forms and Techniques",
                 "data": {
-                  "parent_value": "arts-and-creativity/visual-arts"
+                  "parentValue": "arts-and-creativity/visual-arts"
                 },
                 "options": [
                   {
                     "status": "",
                     "count": 12,
-                    "display_name": "Colored Pencil",
                     "value": "arts-and-creativity/visual-arts/art-forms-and-techniques/colored-pencil",
+                    "displayName": "Colored Pencil",
                     "data": {
-                      "parent_value": "arts-and-creativity/visual-arts/art-forms-and-techniques"
+                      "parentValue": "arts-and-creativity/visual-arts/art-forms-and-techniques"
                     },
                     "options": []
                   },
                   {
                     "status": "",
                     "count": 21,
-                    "display_name": "Drawing",
                     "value": "arts-and-creativity/visual-arts/art-forms-and-techniques/drawing",
+                    "displayName": "Drawing",
                     "data": {
-                      "parent_value": "arts-and-creativity/visual-arts/art-forms-and-techniques"
+                      "parentValue": "arts-and-creativity/visual-arts/art-forms-and-techniques"
                     },
                     "options": []
                   },
                   {
                     "status": "",
                     "count": 20,
-                    "display_name": "Painting",
                     "value": "arts-and-creativity/visual-arts/art-forms-and-techniques/painting",
+                    "displayName": "Painting",
                     "data": {
-                      "parent_value": "arts-and-creativity/visual-arts/art-forms-and-techniques"
+                      "parentValue": "arts-and-creativity/visual-arts/art-forms-and-techniques"
                     },
                     "options": []
                   },
                   {
                     "status": "",
                     "count": 3,
-                    "display_name": "Video Game Design",
                     "value": "arts-and-creativity/visual-arts/art-forms-and-techniques/video-game-design",
+                    "displayName": "Video Game Design",
                     "data": {
-                      "parent_value": "arts-and-creativity/visual-arts/art-forms-and-techniques"
+                      "parentValue": "arts-and-creativity/visual-arts/art-forms-and-techniques"
                     },
                     "options": []
                   }
@@ -879,20 +891,20 @@
               {
                 "status": "",
                 "count": 58,
-                "display_name": "Arts and Crafts",
                 "value": "arts-and-creativity/visual-arts/arts-and-crafts",
+                "displayName": "Arts and Crafts",
                 "data": {
-                  "parent_value": "arts-and-creativity/visual-arts"
+                  "parentValue": "arts-and-creativity/visual-arts"
                 },
                 "options": []
               },
               {
                 "status": "",
                 "count": 11,
-                "display_name": "Visual Artists",
                 "value": "arts-and-creativity/visual-arts/visual-artists",
+                "displayName": "Visual Artists",
                 "data": {
-                  "parent_value": "arts-and-creativity/visual-arts"
+                  "parentValue": "arts-and-creativity/visual-arts"
                 },
                 "options": []
               }

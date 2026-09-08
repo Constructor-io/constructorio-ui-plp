@@ -14,6 +14,10 @@ export interface UseFilterReturn {
   isVisualFilterFn?: (facet: PlpFacet) => boolean;
   perFacetConfigs?: Record<string, FacetConfig>;
   getIsCollapsed: (facet: PlpFacet) => boolean;
+  /** Resolves whether a facet's nested option lists get a collapse toggle. */
+  getHierarchyCollapsible: (facet: PlpFacet) => boolean;
+  /** Resolves whether a facet's nested option lists start collapsed. */
+  getDefaultHierarchyCollapsed: (facet: PlpFacet) => boolean;
 }
 
 export interface UseFilterProps {
@@ -58,6 +62,21 @@ export interface UseFilterProps {
    * Facet metadata and per-facet overrides via `perFacetConfigs` take precedence.
    */
   defaultCollapsed?: boolean;
+  /**
+   * Global default for whether options that have nested options get a toggle collapsing their
+   * nested list. This collapses branches *within* a filter group — unrelated to `defaultCollapsed`,
+   * which collapses filter groups as a whole. Defaults to `true`.
+   * Per-facet overrides via `perFacetConfigs[name].hierarchyCollapsible` take precedence.
+   */
+  hierarchyCollapsible?: boolean;
+  /**
+   * Global default for whether nested option lists start collapsed rather than expanded. Initial
+   * state only — each option list owns expansion from then on. Defaults to `false`.
+   * Per-facet overrides via `perFacetConfigs[name].defaultHierarchyCollapsed` take precedence.
+   *
+   * A branch holding a selected option still auto-expands, so an applied filter is never hidden.
+   */
+  defaultHierarchyCollapsed?: boolean;
 }
 
 export default function useFilter(props: UseFilterProps): UseFilterReturn {
@@ -71,6 +90,8 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     isVisualFilterFn,
     perFacetConfigs,
     defaultCollapsed,
+    hierarchyCollapsible,
+    defaultHierarchyCollapsed,
   } = props;
   const contextValue = useCioPlpContext();
 
@@ -137,6 +158,22 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     [perFacetConfigs, defaultCollapsed, getIsCollapsedFacetField],
   );
 
+  // Both hierarchy resolvers follow the same precedence as `getIsCollapsed`, minus the facet
+  // metadata layer: per-facet config, then the global prop, then the component default
+  const getHierarchyCollapsible = useCallback(
+    (facet: PlpFacet): boolean =>
+      perFacetConfigs?.[facet.name]?.hierarchyCollapsible ?? hierarchyCollapsible ?? true,
+    [perFacetConfigs, hierarchyCollapsible],
+  );
+
+  const getDefaultHierarchyCollapsed = useCallback(
+    (facet: PlpFacet): boolean =>
+      perFacetConfigs?.[facet.name]?.defaultHierarchyCollapsed ??
+      defaultHierarchyCollapsed ??
+      false,
+    [perFacetConfigs, defaultHierarchyCollapsed],
+  );
+
   return {
     facets: filteredFacets,
     setFilter,
@@ -148,5 +185,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
     isVisualFilterFn,
     perFacetConfigs,
     getIsCollapsed,
+    getHierarchyCollapsible,
+    getDefaultHierarchyCollapsed,
   };
 }

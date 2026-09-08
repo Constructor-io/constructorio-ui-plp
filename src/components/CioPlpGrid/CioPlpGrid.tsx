@@ -153,7 +153,17 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                 <div className='cio-plp-grid'>
                   <div className='cio-filters-container cio-large-screen-only'>
                     {isSearchPage && <Groups groups={data.response.groups} {...groupsConfigs} />}
-                    <Filters facets={filters.facets} {...filterConfigs} />
+                    {/*
+                      Both filter instances are mounted at once and hidden by CSS per breakpoint, so
+                      each needs its own option-id namespace: ids drive `<label htmlFor>` and the
+                      `aria-controls` of nested option lists, and duplicates would point the mobile
+                      controls at the desktop inputs.
+                    */}
+                    <Filters
+                      facets={filters.facets}
+                      {...filterConfigs}
+                      idPrefix='cio-filters-desktop'
+                    />
                   </div>
                   <div className='cio-products-container' {...plpContainerCnstrcDataAttributes}>
                     <div className='cio-products-header-container'>
@@ -178,7 +188,11 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
-                        <Filters facets={filters.facets} {...filterConfigs} />
+                        <Filters
+                          facets={filters.facets}
+                          {...filterConfigs}
+                          idPrefix='cio-filters-mobile'
+                        />
                       </MobileModal>
 
                       {data.response?.results?.map((item) => (
