@@ -170,6 +170,55 @@ describe('Testing Component: CioPlpGrid', () => {
     });
   });
 
+  it('Should render spinner inside the cio-plp-loading wrapper', async () => {
+    useCioPlp.mockReturnValue({ status: RequestStatus.FETCHING, isSearchPage: true });
+
+    const { getByTestId } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      const spinner = getByTestId('cio-spinner');
+      expect(spinner.parentElement).toHaveClass('cio-plp-loading');
+    });
+  });
+
+  it('Should render componentOverrides.spinner from context while fetching data', async () => {
+    useCioPlp.mockReturnValue({ status: RequestStatus.FETCHING, isSearchPage: true });
+
+    const { getByText, queryByTestId } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        componentOverrides={{ spinner: { reactNode: <div>overridden spinner</div> } }}>
+        <CioPlpGrid />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(getByText('overridden spinner')).toBeInTheDocument();
+      expect(queryByTestId('cio-spinner')).toBeFalsy();
+    });
+  });
+
+  it('Should let the legacy spinner prop win over componentOverrides.spinner', async () => {
+    useCioPlp.mockReturnValue({ status: RequestStatus.FETCHING, isSearchPage: true });
+
+    const { getByText, queryByText } = render(
+      <CioPlp
+        apiKey={DEMO_API_KEY}
+        componentOverrides={{ spinner: { reactNode: <div>overridden spinner</div> } }}>
+        <CioPlpGrid spinner={<div>legacy spinner</div>} />
+      </CioPlp>,
+    );
+
+    await waitFor(() => {
+      expect(getByText('legacy spinner')).toBeInTheDocument();
+      expect(queryByText('overridden spinner')).toBeFalsy();
+    });
+  });
+
   it('Should render results when data is fetched for Search', async () => {
     useRequestConfigs.mockImplementation(() => ({
       getRequestConfigs: () => ({ query: 'shoes' }),

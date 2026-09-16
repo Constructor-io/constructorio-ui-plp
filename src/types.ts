@@ -22,7 +22,10 @@ import {
   RangeMax,
   RangeMin,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
-import type { ComponentOverrideProps } from '@constructor-io/constructorio-ui-components';
+import type {
+  ComponentOverrideProps,
+  SpinnerOverrides,
+} from '@constructor-io/constructorio-ui-components';
 
 export {
   Nullable,
@@ -592,4 +595,9 @@ export type GroupsOverrides = ComponentOverrideProps<GroupsRenderProps> & {
 export interface PlpComponentOverrides {
   filterGroup?: FilterGroupOverrides;
   groups?: GroupsOverrides;
+  /**
+   * Overrides for the loading `Spinner` rendered by `CioPlpGrid` while a request is in
+   * flight. The legacy `CioPlpGrid` `spinner` prop takes precedence when passed.
+   */
+  spinner?: SpinnerOverrides;
 }
