@@ -24,7 +24,7 @@ export { default as Pagination } from './components/Pagination';
 export { default as ProductCard } from './components/ProductCard';
 export { default as ProductSwatch } from './components/ProductSwatch';
 export { default as Sort } from './components/Sort';
-export { default as Spinner } from './components/Spinner';
+export { Spinner } from '@constructor-io/constructorio-ui-components';
 
 // Utils
 export * as utils from './utils';
@@ -40,6 +40,7 @@ export type { MobileModalProps } from './components/MobileModal';
 export type { PaginationProps, PaginationWithRenderProps } from './components/Pagination';
 export type { ProductSwatchProps } from './components/ProductSwatch';
 export type { SortProps, SortWithRenderProps } from './components/Sort';
+export type { SpinnerProps, SpinnerOverrides } from '@constructor-io/constructorio-ui-components';
 export type { UseOptionsListProps } from './hooks/useOptionsList';
 export * from './types';
 export default CioPlp;

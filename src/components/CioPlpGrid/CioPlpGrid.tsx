@@ -3,6 +3,7 @@ import {
   GetBrowseResultsResponse,
   SearchResponse,
 } from '@constructor-io/constructorio-client-javascript/lib/types';
+import { Spinner } from '@constructor-io/constructorio-ui-components';
 import ProductCard from '../ProductCard';
 import Filters from '../Filters';
 import Groups, { GroupsProps } from '../Groups';
@@ -11,7 +12,6 @@ import MobileModal from '../MobileModal';
 import Sort from '../Sort';
 import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
-import Spinner from '../Spinner';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps, SwatchConfigs } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
@@ -103,6 +103,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   const {
     callbacks: { onRedirect = (redirectUrl) => window.location.replace(redirectUrl) },
     translations,
+    componentOverrides,
   } = useCioPlpContext();
 
   if (isPlpSearchDataRedirect(data)) {
@@ -146,7 +147,16 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
         children(plpData)
       ) : (
         <>
-          {status === RequestStatus.FETCHING && (spinner || <Spinner />)}
+          {status === RequestStatus.FETCHING &&
+            (spinner || (
+              <div className='cio-plp-loading'>
+                <Spinner
+                  size='lg'
+                  data-testid='cio-spinner'
+                  componentOverrides={componentOverrides?.spinner}
+                />
+              </div>
+            ))}
           {status !== RequestStatus.FETCHING && data && (
             <>
               {data.response?.results?.length ? (
