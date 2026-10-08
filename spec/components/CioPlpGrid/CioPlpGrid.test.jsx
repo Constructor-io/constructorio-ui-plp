@@ -430,4 +430,147 @@ describe('Testing Component: CioPlpGrid', () => {
       );
     });
   });
+
+  describe('Live region (screen reader announcements)', () => {
+    const searchData = transformSearchResponse(mockApiSearchResponse);
+
+    // Minimum shape CioPlpGrid reads off useCioPlp when rendering the results branch.
+    const basePlpData = {
+      isSearchPage: true,
+      isBrowsePage: false,
+      searchQuery: 'shirt',
+      filters: { facets: [] },
+      sort: { sortOptions: [] },
+      groups: {},
+      pagination: {},
+      plpContainerCnstrcDataAttributes: {},
+    };
+
+    const withResults = (totalNumResults, results = searchData.response.results) => ({
+      ...basePlpData,
+      status: RequestStatus.SUCCESS,
+      data: {
+        ...searchData,
+        response: { ...searchData.response, totalNumResults, results },
+      },
+    });
+
+    const renderWithStatus = (plpOverrides, plpProps = {}) => {
+      useCioPlp.mockReturnValue({ ...basePlpData, ...plpOverrides });
+
+      return render(
+        <CioPlp apiKey={DEMO_API_KEY} {...plpProps}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+    };
+
+    it('Should render the live region from first paint, before any results arrive', async () => {
+      // The region must exist in the DOM at load: assistive tech only announces
+      // *changes* to an already-present region, so one injected later never announces.
+      const { getByRole } = renderWithStatus({ status: RequestStatus.STALE, data: null });
+
+      const liveRegion = getByRole('status');
+      expect(liveRegion).toBeInTheDocument();
+      expect(liveRegion).toHaveAttribute('aria-live', 'polite');
+      expect(liveRegion).toBeEmptyDOMElement();
+    });
+
+    it('Should keep the live region mounted while fetching', async () => {
+      const { getByRole } = renderWithStatus({ status: RequestStatus.FETCHING });
+
+      await waitFor(() => expect(getByRole('status')).toBeInTheDocument());
+    });
+
+    it('Should keep the live region mounted on the zero results page', async () => {
+      const { getByRole } = renderWithStatus({
+        status: RequestStatus.SUCCESS,
+        isSearchPage: false,
+        isBrowsePage: false,
+        data: null,
+      });
+
+      await waitFor(() => expect(getByRole('status')).toBeInTheDocument());
+    });
+
+    it('Should stay silent on the initial results load', async () => {
+      // Announcing here would talk over the screen reader's own document announcement.
+      const { getByRole } = renderWithStatus(withResults(searchData.response.totalNumResults));
+
+      await waitFor(() => expect(getByRole('status')).toBeEmptyDOMElement());
+    });
+
+    it('Should announce the new result count after results change', async () => {
+      useCioPlp.mockReturnValue(withResults(searchData.response.totalNumResults));
+
+      const { getByRole, rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() => expect(getByRole('status')).toBeEmptyDOMElement());
+
+      // Simulate a filter change: new response, different total
+      useCioPlp.mockReturnValue(withResults(7));
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() => expect(getByRole('status')).toHaveTextContent('7 results found'));
+    });
+
+    it('Should announce zero results distinctly', async () => {
+      useCioPlp.mockReturnValue(withResults(searchData.response.totalNumResults));
+
+      const { getByRole, rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() => expect(getByRole('status')).toBeEmptyDOMElement());
+
+      useCioPlp.mockReturnValue(withResults(0, []));
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() => expect(getByRole('status')).toHaveTextContent('No results found'));
+    });
+
+    it('Should use the translations prop for announcements', async () => {
+      const translations = {
+        'results found': 'resultados encontrados',
+      };
+
+      useCioPlp.mockReturnValue(withResults(searchData.response.totalNumResults));
+
+      const { getByRole, rerender } = render(
+        <CioPlp apiKey={DEMO_API_KEY} translations={translations}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() => expect(getByRole('status')).toBeEmptyDOMElement());
+
+      useCioPlp.mockReturnValue(withResults(7));
+
+      rerender(
+        <CioPlp apiKey={DEMO_API_KEY} translations={translations}>
+          <CioPlpGrid />
+        </CioPlp>,
+      );
+
+      await waitFor(() =>
+        expect(getByRole('status')).toHaveTextContent('7 resultados encontrados'),
+      );
+    });
+  });
 });

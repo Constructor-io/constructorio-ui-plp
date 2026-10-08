@@ -55,6 +55,10 @@
     "carrito",
     "para",
     "crawlability",
-    "hrefs"
+    "hrefs",
+    "WCAG",
+    "radiogroup",
+    "aria",
+    "encontrados"
   ]
 }

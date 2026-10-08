@@ -46,6 +46,11 @@ All keys are optional. Here are the translatable strings:
   // Product Card
   "Add to Cart": "Add to Cart",
 
+  // Screen reader announcements (live region)
+  "Loading results": "Loading results",
+  "results found": "results found",
+  "No results found": "No results found",
+
   // Zero Results
   "Sorry, we didn't find:": "Sorry, we didn't find:",
   "Sorry, we were unable to find what you were looking for.": "Sorry, we were unable to find what you were looking for.",
@@ -96,3 +101,17 @@ export default function MyComponent() {
 }
 ```
 
+
+## Screen Reader Announcements
+
+The `Loading results`, `results found` and `No results found` keys are not rendered
+visually. They populate a live region (`role="status"`) that announces result updates to
+screen reader users when filters, sort or pagination change, since those updates do not
+move focus.
+
+The announcement is composed as `<count> <translated text>` — for example
+`42 results found`. Translate the invariant portion only; the count is interpolated at
+the call site and should not appear in the translation value.
+
+The initial page load is intentionally silent, so the announcement does not talk over the
+screen reader's own page-load announcement.

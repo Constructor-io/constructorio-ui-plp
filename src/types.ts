@@ -95,6 +95,11 @@ export type Translations = {
   // Product Card
   'Add to Cart'?: string;
 
+  // Screen reader announcements (live region)
+  'Loading results'?: string;
+  'results found'?: string;
+  'No results found'?: string;
+
   // Zero Results
   "Sorry, we didn't find:"?: string;
   'Sorry, we were unable to find what you were looking for.'?: string;

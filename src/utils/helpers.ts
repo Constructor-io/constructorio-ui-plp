@@ -25,6 +25,11 @@ const DEFAULT_TRANSLATIONS: Translations = {
   // Product Card
   'Add to Cart': 'Add to Cart',
 
+  // Screen reader announcements (live region)
+  'Loading results': 'Loading results',
+  'results found': 'results found',
+  'No results found': 'No results found',
+
   // Zero Results
   "Sorry, we didn't find:": "Sorry, we didn't find:",
   'Sorry, we were unable to find what you were looking for.':

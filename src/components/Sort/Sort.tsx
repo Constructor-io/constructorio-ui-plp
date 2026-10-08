@@ -10,12 +10,19 @@ export type SortProps = UseSortProps & {
    * Default open state of dropdown
    */
   isOpen?: boolean;
+  /**
+   * `id` of the sort options panel, referenced by the trigger's `aria-controls`.
+   * Only needs overriding when rendering more than one `Sort` on a page.
+   * @default 'cio-plp-sort-panel'
+   */
+  panelId?: string;
 };
 export type SortWithRenderProps = IncludeRenderProps<SortProps, UseSortReturn>;
 
 export default function Sort({
   isOpen: defaultOpen = true,
   sortOptions: sortOptionsFromProps,
+  panelId = 'cio-plp-sort-panel',
   children,
 }: SortWithRenderProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -37,29 +44,39 @@ export default function Sort({
   const getOptionId = (option: PlpSortOption, idSuffix: string = '') =>
     `${option.sortBy}-${option.sortOrder}${idSuffix}`;
 
+  // Each rendered option set (desktop + mobile) is its own radio group, so the two
+  // instances don't compete over the same selection. Sharing one `name` within a group
+  // is what makes the options arrow-navigable and mutually exclusive. (WCAG 4.1.2)
+  const getGroupName = (idSuffix: string = '') => `cio-plp-sort${idSuffix}`;
+
   const genDefaultMarkup = useCallback(
     (idSuffix: string = '') => {
       const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         changeSelectedSort(JSON.parse(event.target.value));
       };
 
-      return sortOptions.map((option) => (
-        <label
-          htmlFor={getOptionId(option, idSuffix)}
-          key={`${getOptionId(option, idSuffix)}${isChecked(option) ? '-checked' : ''}`}>
-          <input
-            id={getOptionId(option, idSuffix)}
-            type='radio'
-            name={getOptionId(option, idSuffix)}
-            value={JSON.stringify(option)}
-            checked={isChecked(option)}
-            onChange={handleOptionChange}
-          />
-          <span>{option.displayName}</span>
-        </label>
-      ));
+      return (
+        <div role='radiogroup' aria-label={translate('Sort by:', translations)}>
+          {sortOptions.map((option) => (
+            // The key is deliberately independent of the checked state: a key that
+            // changes on selection remounts the label and drops keyboard focus
+            // mid-navigation. The inputs are controlled via `checked`.
+            <label htmlFor={getOptionId(option, idSuffix)} key={getOptionId(option, idSuffix)}>
+              <input
+                id={getOptionId(option, idSuffix)}
+                type='radio'
+                name={getGroupName(idSuffix)}
+                value={JSON.stringify(option)}
+                checked={isChecked(option)}
+                onChange={handleOptionChange}
+              />
+              <span>{option.displayName}</span>
+            </label>
+          ))}
+        </div>
+      );
     },
-    [changeSelectedSort, isChecked, sortOptions],
+    [changeSelectedSort, isChecked, sortOptions, translations],
   );
 
   return (
@@ -72,7 +89,12 @@ export default function Sort({
         })
       ) : (
         <div className='cio-plp-sort'>
-          <button type='button' className='collapsible' onClick={toggleCollapsible}>
+          <button
+            type='button'
+            className='collapsible'
+            aria-expanded={isOpen}
+            aria-controls={panelId}
+            onClick={toggleCollapsible}>
             {selectedSort?.displayName ? (
               <span className='cio-plp-sort-button-label'>
                 <span className='cio-large-screen-only'>{translate('Sort by:', translations)}</span>
@@ -84,11 +106,17 @@ export default function Sort({
             )}
             <i className={`arrow ${isOpen ? 'arrow-up' : 'arrow-down'}`} />
           </button>
-          <MobileModal side='right' isOpen={isOpen} setIsOpen={setIsOpen}>
+          <MobileModal
+            side='right'
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            label={translate('Sort by:', translations)}>
             {genDefaultMarkup('-mobile')}
           </MobileModal>
           {isOpen && (
-            <div className='collapsible-content cio-large-screen-only'>{genDefaultMarkup()}</div>
+            <div id={panelId} className='collapsible-content cio-large-screen-only'>
+              {genDefaultMarkup()}
+            </div>
           )}
         </div>
       )}
@@ -98,4 +126,5 @@ export default function Sort({
 
 Sort.defaultProps = {
   isOpen: true,
+  panelId: 'cio-plp-sort-panel',
 };
