@@ -33,6 +33,10 @@
   z-index: 1;
 }
 
+.cio-plp-sort .collapsible-content[hidden] {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .cio-plp-sort .collapsible-content.cio-large-screen-only {
     display: none; 
@@ -44,6 +48,7 @@
 }
 
 .cio-plp-sort label {
+  position: relative;
   cursor: pointer;
   overflow: hidden;
   width: 100%;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import MobileModal from '../../../src/components/MobileModal';
@@ -17,6 +18,16 @@ function Wrapper({ label, children }) {
     </div>
   );
 }
+
+Wrapper.propTypes = {
+  label: PropTypes.string,
+  children: PropTypes.node,
+};
+
+Wrapper.defaultProps = {
+  label: undefined,
+  children: undefined,
+};
 
 describe('MobileModal Component', () => {
   it('renders the modal when open', () => {
@@ -106,5 +117,50 @@ describe('MobileModal Component', () => {
     first.focus();
     fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true });
     expect(document.activeElement).toBe(last);
+  });
+});
+
+describe('MobileModal Component: focus on mount', () => {
+  it('does not move focus when rendered open from the start', () => {
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+
+    render(
+      <MobileModal isOpen setIsOpen={() => {}} label='Sort'>
+        <button type='button'>Inside</button>
+      </MobileModal>,
+    );
+
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+  });
+
+  it('references the dialog by the provided id', () => {
+    const { getByRole } = render(
+      <MobileModal isOpen setIsOpen={() => {}} label='Sort' id='sort-dialog'>
+        Content
+      </MobileModal>,
+    );
+
+    expect(getByRole('dialog')).toHaveAttribute('id', 'sort-dialog');
+  });
+
+  it('closes even if the transition never ends (reduced motion, no stylesheet)', async () => {
+    jest.useFakeTimers();
+    const setIsOpen = jest.fn();
+    const { getByRole } = render(
+      <MobileModal isOpen setIsOpen={setIsOpen} label='Sort'>
+        Content
+      </MobileModal>,
+    );
+
+    fireEvent.keyDown(getByRole('dialog'), { key: 'Escape' });
+    expect(setIsOpen).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(300);
+    expect(setIsOpen).toHaveBeenCalledTimes(1);
+    expect(setIsOpen).toHaveBeenCalledWith(false);
+    jest.useRealTimers();
   });
 });

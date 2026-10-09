@@ -161,10 +161,13 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
       ) : (
         <>
           {status === RequestStatus.FETCHING && (spinner || <Spinner />)}
-          {status !== RequestStatus.FETCHING && data && (
+          {/* Previous results stay mounted while fetching so keyboard focus isn't lost */}
+          {data && (
             <>
               {data.response?.results?.length ? (
-                <div className='cio-plp-grid'>
+                <div
+                  className='cio-plp-grid'
+                  aria-busy={status === RequestStatus.FETCHING || undefined}>
                   <div className='cio-filters-container cio-large-screen-only'>
                     {isSearchPage && <Groups groups={data.response.groups} {...groupsConfigs} />}
                     <Filters facets={filters.facets} {...filterConfigs} />
@@ -188,7 +191,10 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                     </div>
 
                     <div className='cio-product-tiles-container'>
-                      <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
+                      <MobileModal
+                        isOpen={isFilterOpen}
+                        setIsOpen={setIsFilterOpen}
+                        label={translate('Filters', translations)}>
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}

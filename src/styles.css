@@ -105,3 +105,15 @@
     display: none; 
   }
 }
+
+/* Collapsed content is clipped rather than removed, so also take it out of the Tab order and
+ * accessibility tree. `visibility` is delayed until the collapse transition has finished */
+.cio-collapsible-wrapper .cio-collapsible-inner {
+  visibility: hidden;
+  transition: visibility 0s linear 0.4s;
+}
+
+.cio-collapsible-wrapper.cio-collapsible-is-open .cio-collapsible-inner {
+  visibility: visible;
+  transition-delay: 0s;
+}

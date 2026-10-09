@@ -47,9 +47,11 @@ All keys are optional. Here are the translatable strings:
   "Add to Cart": "Add to Cart",
 
   // Screen reader announcements (live region)
+  // {count} is replaced with the number of results
   "Loading results": "Loading results",
-  "results found": "results found",
   "No results found": "No results found",
+  "1 result found": "1 result found",
+  "{count} results found": "{count} results found",
 
   // Zero Results
   "Sorry, we didn't find:": "Sorry, we didn't find:",
@@ -95,6 +97,10 @@ export default function MyComponent() {
         'Check for typos': 'Revisa errores tipograficos',
         'Use fewer keywords': 'Usa menos palabras clave',
         'Broaden your search terms': 'Amplia tus terminos de busqueda',
+        'Loading results': 'Cargando resultados',
+        'No results found': 'No se encontraron resultados',
+        '1 result found': '1 resultado encontrado',
+        '{count} results found': '{count} resultados encontrados',
       }}
     />
   );
@@ -104,14 +110,15 @@ export default function MyComponent() {
 
 ## Screen Reader Announcements
 
-The `Loading results`, `results found` and `No results found` keys are not rendered
-visually. They populate a live region (`role="status"`) that announces result updates to
-screen reader users when filters, sort or pagination change, since those updates do not
-move focus.
+The `Loading results`, `No results found`, `1 result found` and `{count} results found` keys
+are not rendered visually. They populate a live region (`role="status"`) that announces result
+updates to screen reader users when filters, sort or pagination change, since those updates
+do not move focus.
 
-The announcement is composed as `<count> <translated text>` — for example
-`42 results found`. Translate the invariant portion only; the count is interpolated at
-the call site and should not appear in the translation value.
+`{count}` is replaced with the number of results, so it can be placed wherever the target
+language needs it — for example `'{count} resultados encontrados'`. A separate singular key
+is provided since `1 results found` is incorrect in most languages.
 
-The initial page load is intentionally silent, so the announcement does not talk over the
-screen reader's own page-load announcement.
+Results are also announced on page load, since the default URL helpers reload the page on
+every filter, sort or pagination change and that load is the only one that follows the user's
+action.

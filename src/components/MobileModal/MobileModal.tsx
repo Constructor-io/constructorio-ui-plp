@@ -19,12 +19,12 @@ export type MobileModalProps = {
    * @default 'Dialog'
    */
   label?: string;
+  /**
+   * `id` of the dialog element, e.g. so a trigger can reference it with `aria-controls`.
+   */
+  id?: string;
 };
 
-/**
- * Selector for elements that can receive keyboard focus, used to scope the focus trap.
- * `[tabindex="-1"]` is excluded since those are programmatically focusable only.
- */
 /**
  * Fallback for the close transition, matching `transition-duration` in MobileModal.css.
  * `transitionend` does not fire when the transition is skipped — no stylesheet loaded,
@@ -33,17 +33,24 @@ export type MobileModalProps = {
  */
 const CLOSE_TRANSITION_FALLBACK_MS = 300;
 
+/**
+ * Selector for elements that can receive keyboard focus, used to scope the focus trap.
+ * `[tabindex="-1"]` is excluded from every branch since those are programmatically
+ * focusable only.
+ */
 const FOCUSABLE_SELECTOR = [
   'a[href]',
   'button:not([disabled])',
   'input:not([disabled])',
   'select:not([disabled])',
   'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',');
+  '[tabindex]',
+]
+  .map((selector) => `${selector}:not([tabindex="-1"])`)
+  .join(',');
 
 export default function MobileModal(props: React.PropsWithChildren<MobileModalProps>) {
-  const { side = 'left', isOpen, setIsOpen, label = 'Dialog', children } = props;
+  const { side = 'left', isOpen, setIsOpen, label = 'Dialog', id, children } = props;
   const modalRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   // Element that had focus before the modal opened, so it can be restored on close.
@@ -59,10 +66,16 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
     }
   }, [isOpen]);
 
+  // Rendering open from the start (e.g. `Sort`'s default `isOpen`) isn't a user action, so
+  // focus is only moved when the modal is opened after mounting
+  const hasMountedRef = useRef(false);
+
   // Move focus into the dialog on open and restore it to the trigger on close, so
   // keyboard and screen reader users aren't left focused behind the backdrop.
   useEffect(() => {
-    if (!isOpen) return undefined;
+    const isInitialRender = !hasMountedRef.current;
+    hasMountedRef.current = true;
+    if (!isOpen || isInitialRender) return undefined;
 
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
 
@@ -79,17 +92,18 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
   const onClose = useCallback(() => {
     setIsAnimating(false);
 
+    const wrapper = modalRef.current?.querySelector('.cio-mobile-modal-wrapper');
     let hasClosed = false;
     const close = () => {
       if (hasClosed) return;
       hasClosed = true;
+      wrapper?.removeEventListener('transitionend', close);
       clearTimeout(closeTimeoutRef.current);
       setIsOpen(false);
     };
 
-    modalRef.current
-      ?.querySelector('.cio-mobile-modal-wrapper')
-      ?.addEventListener('transitionend', close);
+    wrapper?.addEventListener('transitionend', close);
+    clearTimeout(closeTimeoutRef.current);
 
     closeTimeoutRef.current = setTimeout(close, CLOSE_TRANSITION_FALLBACK_MS);
   }, [setIsOpen]);
@@ -150,6 +164,7 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
       <div className='cio-mobile-modal-wrapper'>
         <div
           ref={contentRef}
+          id={id}
           className='cio-mobile-modal-content'
           role='dialog'
           aria-modal='true'
@@ -165,4 +180,5 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
 MobileModal.defaultProps = {
   side: 'left',
   label: 'Dialog',
+  id: undefined,
 };

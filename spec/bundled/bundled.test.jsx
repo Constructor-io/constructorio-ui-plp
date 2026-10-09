@@ -1,4 +1,5 @@
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
+import mockSearchResponse from '../local_examples/apiSearchResponse.json';
 import CioPlp from '../../src/bundled';
 import useCioClient from '../../src/hooks/useCioClient';
 import version from '../../src/version';
@@ -111,5 +112,58 @@ describe('Bundled CioPlp', () => {
     expect(useCioClient).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
+  });
+
+  describe('accessibility', () => {
+    const originalWindowLocation = window.location;
+
+    beforeEach(() => {
+      window.location = 'https://example.com/search?q=shoes';
+      mockClient.search.getSearchResults.mockResolvedValue(mockSearchResponse);
+    });
+
+    afterEach(() => {
+      window.location = originalWindowLocation;
+    });
+
+    it('should render the results live region and announce results with translations', async () => {
+      await act(async () => {
+        CioPlp({
+          selector: '#cio-plp-container',
+          apiKey: 'test-key',
+          translations: { '{count} results found': '{count} products found' },
+        });
+      });
+
+      const region = container.querySelector('[role="status"][aria-live="polite"]');
+      expect(region).not.toBeNull();
+
+      await waitFor(() =>
+        expect(region.textContent).toBe(
+          `${mockSearchResponse.response.total_num_results} products found`,
+        ),
+      );
+    });
+
+    it('should render an accessible sort control', async () => {
+      await act(async () => {
+        CioPlp({ selector: '#cio-plp-container', apiKey: 'test-key' });
+      });
+
+      await waitFor(() => expect(container.querySelector('.cio-plp-sort')).not.toBeNull());
+
+      const trigger = container.querySelector('.cio-plp-sort button.collapsible');
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+      trigger
+        .getAttribute('aria-controls')
+        .split(' ')
+        .forEach((id) => {
+          expect(document.getElementById(id)).not.toBeNull();
+        });
+      expect(
+        container.querySelectorAll(`#${trigger.getAttribute('aria-controls')} input[type="radio"]`)
+          .length,
+      ).toBe(mockSearchResponse.response.sort_options.length);
+    });
   });
 });
