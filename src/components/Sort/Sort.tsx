@@ -210,7 +210,7 @@ export default function Sort({
             ref={buttonRef}
             type='button'
             className='collapsible'
-            aria-label={`sort by ${selectedSort?.displayName}`}
+            aria-label={`${translate('Sort by:', translations)} ${selectedSort?.displayName}`}
             aria-expanded={isOpen}
             // The mobile dialog is only mounted while open, so only reference it then
             aria-controls={isOpen ? `${panelId} ${mobilePanelId}` : panelId}
