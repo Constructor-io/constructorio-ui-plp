@@ -1,10 +1,8 @@
 import { createContext, useContext } from 'react';
 
 /**
- * Suffix for ids rendered inside a `MobileModal`. Filters and Groups are rendered twice —
- * in the desktop sidebar and in the mobile modal — so without it both copies share the same
- * ids, and every `<label for>` in the modal resolves to the hidden desktop input, leaving the
- * modal's checkboxes without an accessible name. (WCAG 4.1.2)
+ * Suffix for ids rendered inside a `MobileModal`. This allows for nested components that are duplicated
+ * to have unique html ids.
  */
 export const MOBILE_MODAL_ID_SUFFIX = '-mobile';
 
