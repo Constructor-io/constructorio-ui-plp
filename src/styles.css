@@ -12,6 +12,23 @@
 @import './components/Groups/index.css';
 @import './components/Breadcrumbs/Breadcrumbs.css';
 
+/** Hides content visually while keeping it available to screen readers and the
+  * keyboard focus order. Use this instead of `display: none` on form controls that
+  * are styled via a sibling element (e.g. sort radios, filter checkboxes), since
+  * `display: none` removes them from the accessibility tree entirely.
+  */
+.cio-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @keyframes cio-spinner {
   0% {
     transform: rotate(0deg);
@@ -87,4 +104,16 @@
   .cio-large-screen-only {
     display: none; 
   }
+}
+
+/* Collapsed content is clipped rather than removed, so also take it out of the Tab order and
+ * accessibility tree. `visibility` is delayed until the collapse transition has finished */
+.cio-collapsible-wrapper .cio-collapsible-inner {
+  visibility: hidden;
+  transition: visibility 0s linear 0.4s;
+}
+
+.cio-collapsible-wrapper.cio-collapsible-is-open .cio-collapsible-inner {
+  visibility: visible;
+  transition-delay: 0s;
 }

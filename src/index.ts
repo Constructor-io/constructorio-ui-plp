@@ -19,6 +19,7 @@ export { default as CioPlp, CioPlpProvider } from './components/CioPlp';
 export { default as CioPlpGrid, ZeroResults } from './components/CioPlpGrid';
 export { default as Filters } from './components/Filters';
 export { default as Groups } from './components/Groups';
+export { default as LiveRegion } from './components/LiveRegion';
 export { default as MobileModal } from './components/MobileModal';
 export { default as Pagination } from './components/Pagination';
 export { default as ProductCard } from './components/ProductCard';
@@ -36,6 +37,7 @@ export type { CioPlpGridProps, CioPlpGridWithRenderProps } from './components/Ci
 export type { FiltersProps, FiltersWithRenderProps } from './components/Filters';
 export type { FilterGroupProps } from './components/Filters/FilterGroup';
 export type { GroupsProps, GroupsWithRenderProps } from './components/Groups';
+export type { LiveRegionProps } from './components/LiveRegion';
 export type { MobileModalProps } from './components/MobileModal';
 export type { PaginationProps, PaginationWithRenderProps } from './components/Pagination';
 export type { ProductSwatchProps } from './components/ProductSwatch';

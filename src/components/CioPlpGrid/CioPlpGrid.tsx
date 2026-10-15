@@ -12,6 +12,8 @@ import Sort from '../Sort';
 import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
+import LiveRegion from '../LiveRegion';
+import AnnouncementContext from '../LiveRegion/AnnouncementContext';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps, SwatchConfigs } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
@@ -20,6 +22,7 @@ import { PaginationProps } from '../Pagination/Pagination';
 import { UseSortProps } from '../../hooks/useSort';
 import { UseFilterProps } from '../../hooks/useFilter';
 import useCioPlp from '../../hooks/useCioPlp';
+import useResultsAnnouncement from '../../hooks/useResultsAnnouncement';
 import Breadcrumbs from '../Breadcrumbs';
 import { translate } from '../../utils/helpers';
 
@@ -105,6 +108,8 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
     translations,
   } = useCioPlpContext();
 
+  const announcement = useResultsAnnouncement({ status, data, translations });
+
   if (isPlpSearchDataRedirect(data)) {
     const redirectUrl = data.redirect.data.url;
 
@@ -118,7 +123,14 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   if (!isSearchPage && !isBrowsePage) {
     // Render Zero results page in the case where no query is provided
     // TODO: Allow customers to override default page
-    return <ZeroResults />;
+    // The live region stays mounted here too, so a later navigation into results can
+    // still be announced.
+    return (
+      <>
+        <LiveRegion message={announcement} />
+        <ZeroResults />
+      </>
+    );
   }
 
   let renderHeader;
@@ -141,16 +153,22 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   }
 
   return (
-    <>
+    <AnnouncementContext.Provider value={announcement}>
+      {/* Mounted above the status branches so the region exists in the DOM from first
+          render. Assistive tech only announces changes to an already-present region. */}
+      <LiveRegion message={announcement} />
       {typeof children === 'function' ? (
         children(plpData)
       ) : (
         <>
           {status === RequestStatus.FETCHING && (spinner || <Spinner />)}
-          {status !== RequestStatus.FETCHING && data && (
+          {/* Previous results stay mounted while fetching so keyboard focus isn't lost */}
+          {data && (
             <>
               {data.response?.results?.length ? (
-                <div className='cio-plp-grid'>
+                <div
+                  className='cio-plp-grid'
+                  aria-busy={status === RequestStatus.FETCHING || undefined}>
                   <div className='cio-filters-container cio-large-screen-only'>
                     {isSearchPage && <Groups groups={data.response.groups} {...groupsConfigs} />}
                     <Filters facets={filters.facets} {...filterConfigs} />
@@ -174,7 +192,10 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
                     </div>
 
                     <div className='cio-product-tiles-container'>
-                      <MobileModal isOpen={isFilterOpen} setIsOpen={setIsFilterOpen}>
+                      <MobileModal
+                        isOpen={isFilterOpen}
+                        setIsOpen={setIsFilterOpen}
+                        label={translate('Filters', translations)}>
                         {isSearchPage && (
                           <Groups groups={data.response.groups} {...groupsConfigs} />
                         )}
@@ -210,6 +231,6 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
           )}
         </>
       )}
-    </>
+    </AnnouncementContext.Provider>
   );
 }

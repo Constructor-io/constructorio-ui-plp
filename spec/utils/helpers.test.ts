@@ -1,4 +1,4 @@
-import { translate } from '../../src/utils/helpers';
+import { translate, translateWithParams } from '../../src/utils/helpers';
 import { Translations } from '../../src/types';
 
 describe('translate', () => {
@@ -71,20 +71,20 @@ describe('translate', () => {
 
   it('should handle zero results translations', () => {
     const userTranslations: Translations = {
-      "Sorry, we didn't find:": 'Desole, nous n\'avons pas trouve:',
+      "Sorry, we didn't find:": "Desole, nous n'avons pas trouve:",
       'Sorry, we were unable to find what you were looking for.':
-        'Desole, nous n\'avons pas pu trouver ce que vous cherchiez.',
+        "Desole, nous n'avons pas pu trouver ce que vous cherchiez.",
       'Check for typos': 'Verifier les fautes de frappe',
       'Use fewer keywords': 'Utiliser moins de mots-cles',
       'Broaden your search terms': 'Elargir vos termes de recherche',
     };
 
     expect(translate("Sorry, we didn't find:", userTranslations)).toBe(
-      'Desole, nous n\'avons pas trouve:',
+      "Desole, nous n'avons pas trouve:",
     );
     expect(
       translate('Sorry, we were unable to find what you were looking for.', userTranslations),
-    ).toBe('Desole, nous n\'avons pas pu trouver ce que vous cherchiez.');
+    ).toBe("Desole, nous n'avons pas pu trouver ce que vous cherchiez.");
     expect(translate('Check for typos', userTranslations)).toBe('Verifier les fautes de frappe');
     expect(translate('Use fewer keywords', userTranslations)).toBe('Utiliser moins de mots-cles');
     expect(translate('Broaden your search terms', userTranslations)).toBe(
@@ -111,5 +111,22 @@ describe('translate', () => {
 
     // When undefined is explicitly set, it should fallback to default
     expect(translate('results', translationsWithUndefined)).toBe('results');
+  });
+});
+
+describe('translateWithParams', () => {
+  it('should interpolate params into the default translation', () => {
+    expect(translateWithParams('{count} results found', { count: 42 })).toBe('42 results found');
+  });
+
+  it('should interpolate params into a user translation, in any position, repeatedly', () => {
+    const translations: Translations = { '{count} results found': '{count} of {count} products' };
+    expect(translateWithParams('{count} results found', { count: 3 }, translations)).toBe(
+      '3 of 3 products',
+    );
+  });
+
+  it('should leave placeholders without a matching param untouched', () => {
+    expect(translateWithParams('{count} results found', {})).toBe('{count} results found');
   });
 });
