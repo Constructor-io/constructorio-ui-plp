@@ -1,5 +1,8 @@
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import LiveRegion from '../LiveRegion';
+import AnnouncementContext from '../LiveRegion/AnnouncementContext';
+import MobileModalContext from './MobileModalContext';
 
 export type MobileModalProps = {
   /**
@@ -56,6 +59,7 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
   // Element that had focus before the modal opened, so it can be restored on close.
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const announcement = useContext(AnnouncementContext);
 
   useEffect(() => {
     if (isOpen) {
@@ -170,7 +174,10 @@ export default function MobileModal(props: React.PropsWithChildren<MobileModalPr
           aria-modal='true'
           aria-label={label}
           tabIndex={-1}>
-          {children}
+          {/* `aria-modal` hides the page-level live region from assistive tech while the
+              dialog is open, so results updates are announced from within it instead */}
+          {announcement !== undefined && <LiveRegion message={announcement} />}
+          <MobileModalContext.Provider value>{children}</MobileModalContext.Provider>
         </div>
       </div>
     </aside>

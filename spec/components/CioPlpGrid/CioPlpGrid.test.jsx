@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import React from 'react';
-import { act, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CioPlpGrid, { RequestStatus } from '../../../src/components/CioPlpGrid';
 import CioPlp from '../../../src/components/CioPlp';
@@ -588,6 +588,36 @@ describe('Testing Component: CioPlpGrid', () => {
 
       fireEvent.click(getByText('Filtros', { selector: 'button' }));
       expect(getByRole('dialog', { name: 'Filtros' })).toBeInTheDocument();
+    });
+
+    it('Should announce results from within the open mobile filters dialog', async () => {
+      // `aria-modal` hides the page-level region from assistive tech while the dialog is open
+      const { getByRole, getByText } = renderWithStatus(withResults(42));
+
+      fireEvent.click(getByText('Filters', { selector: 'button' }));
+      const dialog = getByRole('dialog', { name: 'Filters' });
+
+      await waitFor(() =>
+        expect(within(dialog).getByRole('status')).toHaveTextContent('42 results found'),
+      );
+    });
+
+    it('Should give the mobile dialog filter options their own ids, so each has a name', () => {
+      // Filters render in both the sidebar and the modal; shared ids would point every
+      // modal `<label for>` at the hidden sidebar checkbox
+      const { container, getByRole, getByText } = renderWithStatus({
+        ...withResults(42),
+        filters: { facets: searchData.response.facets },
+      });
+
+      fireEvent.click(getByText('Filters', { selector: 'button' }));
+      const dialog = getByRole('dialog', { name: 'Filters' });
+      const ids = Array.from(container.querySelectorAll('[id]')).map((el) => el.id);
+
+      expect(new Set(ids).size).toBe(ids.length);
+      within(dialog)
+        .getAllByRole('checkbox')
+        .forEach((checkbox) => expect(checkbox).toHaveAccessibleName());
     });
 
     it('Should announce the new result count after results change', async () => {

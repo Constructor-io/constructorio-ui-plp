@@ -13,6 +13,7 @@ import Pagination from '../Pagination';
 import ZeroResults from './ZeroResults/ZeroResults';
 import Spinner from '../Spinner';
 import LiveRegion from '../LiveRegion';
+import AnnouncementContext from '../LiveRegion/AnnouncementContext';
 import { RequestStatus } from './reducer';
 import { IncludeRenderProps, SwatchConfigs } from '../../types';
 import { isPlpSearchDataRedirect } from '../../utils';
@@ -152,7 +153,7 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
   }
 
   return (
-    <>
+    <AnnouncementContext.Provider value={announcement}>
       {/* Mounted above the status branches so the region exists in the DOM from first
           render. Assistive tech only announces changes to an already-present region. */}
       <LiveRegion message={announcement} />
@@ -230,6 +231,6 @@ export default function CioPlpGrid(props: CioPlpGridWithRenderProps) {
           )}
         </>
       )}
-    </>
+    </AnnouncementContext.Provider>
   );
 }
