@@ -25,11 +25,7 @@ export type FilterOptionsListProps = UseFilterOptionsListProps & {
 };
 
 export default function FilterOptionsList(props: FilterOptionsListProps) {
-  const {
-    hierarchyCollapsible = true,
-    defaultHierarchyCollapsed = false,
-    filterOptionOverride,
-  } = props;
+  const { hierarchyCollapsible, defaultHierarchyCollapsed, filterOptionOverride } = props;
   const {
     initialNumOptions,
     isCollapsed,
