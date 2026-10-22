@@ -35,14 +35,14 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
     isCollapsed,
     isShowAll,
     setIsShowAll,
-    filterOptionData,
+    filterOptions,
     totalFilteredOptions,
     onOptionSelect,
     checkboxPosition,
   } = useFilterOptionsList(props);
   const { translations } = useCioPlpContext();
 
-  if (filterOptionData.length === 0) return null;
+  if (filterOptions.length === 0) return null;
 
   return (
     <div
@@ -53,7 +53,7 @@ export default function FilterOptionsList(props: FilterOptionsListProps) {
       <div className='cio-collapsible-inner'>
         <UiFilterOptionsList
           className='cio-filter-multiple-options-list'
-          options={filterOptionData}
+          options={filterOptions}
           onChange={onOptionSelect}
           checkboxPosition={checkboxPosition}
           collapsible={hierarchyCollapsible}

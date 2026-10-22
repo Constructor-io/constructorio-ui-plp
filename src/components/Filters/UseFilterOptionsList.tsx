@@ -244,7 +244,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * option to its nested list. Values that slugify to nothing fall back to their position among
    * their siblings.
    */
-  const filterOptionData: Array<FilterOptionData> = useMemo(() => {
+  const filterOptions: Array<FilterOptionData> = useMemo(() => {
     const rootId = [idPrefix, facet.name]
       .filter(Boolean)
       .map((segment) => slugify(segment as string))
@@ -306,7 +306,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     facetOptions,
     setFacetOptions,
     /** `facetOptions` mapped to the components library's `FilterOptionData` shape */
-    filterOptionData,
+    filterOptions,
     totalFilteredOptions,
     selectedOptionMap,
     setSelectedOptionMap,
