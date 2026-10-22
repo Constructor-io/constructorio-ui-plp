@@ -42,7 +42,7 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
   perFacetConfigs?: Record<string, FacetConfig>;
   /**
    * Whether options that have nested options get a toggle collapsing their nested list. Collapses
-   * branches *within* this group, unrelated to `defaultCollapsed` above, which collapses the group
+   * branches *within* this group, unrelated to `isCollapsedOverride` above, which collapses the group
    * itself. Already resolved against `perFacetConfigs` by `useFilter`. Defaults to `true`.
    */
   hierarchyCollapsible?: boolean;
