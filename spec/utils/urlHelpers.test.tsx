@@ -153,6 +153,13 @@ describe('Testing Default UrlHelpers: getUrlFromState', () => {
     expect(rebuilt.searchParams.get('page')).toBe('2');
   });
 
+  test('Should not produce a trailing "?" when there are no query parameters', () => {
+    const state = { page: 1, filterName: 'group_id', filterValue: 'summer_sale' } as RequestConfigs;
+    const result = getUrlFromState(state, 'https://www.example.com/collections/example');
+    expect(result).not.toMatch(/\?$/);
+    expect(result).toBe('https://www.example.com/group_id/summer_sale');
+  });
+
   test('Should retain pathname when filterName and filterValue are not provided', () => {
     const { filterName, filterValue, ...testRequestStateWithoutFilters } = testRequestState;
     const url = new URL(
