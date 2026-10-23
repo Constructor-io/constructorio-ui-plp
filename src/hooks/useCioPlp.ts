@@ -17,6 +17,8 @@ import useBrowseResults, { UseBrowseResultsProps } from './useBrowseResults';
 import useGroups from './useGroups';
 import { GroupsProps } from '../components/Groups';
 import useRequestConfigs from './useRequestConfigs';
+import useHistoryLocation from './useHistoryLocation';
+import useFirstRender from './useFirstRender';
 import { PaginationProps } from '../components/Pagination';
 
 export interface UseCioPlpHook extends PlpContextValue {}
@@ -125,6 +127,20 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
       setGroups(browse.data.response.groups);
     }
   }, [search.data, isSearchPage, browse.data, isBrowsePage]);
+
+  // Refetch when the URL changes, but not on initial mount.
+  // Note: The hook call order matters here. useFirstRender() must be called before useHistoryLocation()
+  // to ensure that the initial render is correctly detected.
+  const { isFirstRender } = useFirstRender();
+  const href = useHistoryLocation();
+  useEffect(() => {
+    if (!isFirstRender) {
+      refetch();
+    }
+    // refetch is intentionally omitted as it is recreated every render
+    // and we only want to trigger on URL changes, not on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [href]);
 
   const filters = useFilter({ facets, ...filterConfigs });
   const sort = useSort({ sortOptions, ...sortConfigs });
