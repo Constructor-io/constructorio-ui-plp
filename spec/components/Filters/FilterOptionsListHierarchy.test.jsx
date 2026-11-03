@@ -376,7 +376,7 @@ describe('FilterOptionsList - hierarchical options', () => {
   });
 
   describe('Option ids', () => {
-    it('Should scope each id to its full path so repeated values stay unique', () => {
+    it('Should build each id from the full option path', () => {
       const { container } = renderOptionsList();
 
       expect(container.querySelector('input[id="category-apparel"]')).toBeInTheDocument();

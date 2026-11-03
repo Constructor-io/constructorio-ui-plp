@@ -58,26 +58,22 @@ function collectSubtreeValues(option: PlpFacetOption, values: Array<string> = []
 }
 
 /**
- * The values to apply when `optionValue` is clicked: the option itself and its whole subtree.
- *
- * Every option carrying the value contributes, not just the first found. The selection map is keyed
- * by value, so a value appearing in two branches is one filter — cascading into a single branch
- * would leave the other showing a selected parent above unselected children.
+ * The option carrying `optionValue`, at any depth. Values are unique within a facet — nested
+ * values are full paths (`Apparel/Tops`) — so the first match is the only one.
  */
-function collectMatchingSubtreeValues(
+function findOption(
   options: Array<PlpFacetOption>,
   optionValue: string,
-  values: Array<string> = [],
-) {
-  options.forEach((option) => {
-    if (option.value === optionValue) {
-      collectSubtreeValues(option, values);
-    } else if (option.options?.length) {
-      collectMatchingSubtreeValues(option.options, optionValue, values);
-    }
+): PlpFacetOption | undefined {
+  let match: PlpFacetOption | undefined;
+
+  options.some((option) => {
+    match = option.value === optionValue ? option : findOption(option.options || [], optionValue);
+
+    return !!match;
   });
 
-  return values;
+  return match;
 }
 
 /** Applies `isSelected` to an option and its subtree, returning a new map. */
@@ -88,8 +84,9 @@ function withSubtreeSelected(
   selectedMap: SelectedOptionMap,
 ): SelectedOptionMap {
   const nextMap = { ...selectedMap };
+  const option = findOption(options, optionValue);
 
-  collectMatchingSubtreeValues(options, optionValue).forEach((value) => {
+  (option ? collectSubtreeValues(option) : []).forEach((value) => {
     nextMap[value] = isSelected;
   });
 
@@ -178,8 +175,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * parent is judged against all of its children rather than only the rendered ones.
    *
    * The map stays keyed by option *value* rather than by DOM id, because the value is what the
-   * request carries (`filters[facetName] = [...values]`). Two branches sharing a value are a single
-   * filter as far as the API is concerned, so showing both checked is accurate.
+   * request carries (`filters[facetName] = [...values]`).
    */
   const onOptionSelect = (optionValue: string) => {
     const isSelected = !selectedOptionMap[optionValue];
@@ -238,10 +234,9 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * the same `options` key on both sides, so only the field names per option differ.
    *
    * Each option's `id` is built from its full path — `[idPrefix, facetName, ...ancestorValues,
-   * value]`, each segment slugified — rather than from its value alone. The path keeps ids unique
-   * when the same value appears in two branches, and slugifying keeps them valid: values carry
-   * whitespace and quotes, which invalidate an `id` and break the `aria-controls` linking each
-   * option to its nested list. Values that slugify to nothing fall back to their position among
+   * value]`, each segment slugified — rather than from its value alone. Slugifying keeps ids valid:
+   * values carry whitespace and quotes, which invalidate an `id` and break the `aria-controls`
+   * linking each option to its nested list. Values that slugify to nothing fall back to their position among
    * their siblings.
    */
   const filterOptions: Array<FilterOptionData> = useMemo(() => {
