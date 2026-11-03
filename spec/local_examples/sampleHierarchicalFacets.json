@@ -2,7 +2,7 @@
   {
     "displayName": "Category",
     "name": "category",
-    "type": "multiple",
+    "type": "hierarchical",
     "data": {},
     "hidden": false,
     "options": [
@@ -19,7 +19,7 @@
             "status": "",
             "count": 60,
             "displayName": "Tops",
-            "value": "Tops",
+            "value": "Apparel/Tops",
             "data": {
               "parentValue": "Apparel"
             },
@@ -28,9 +28,9 @@
                 "status": "",
                 "count": 25,
                 "displayName": "T-Shirts",
-                "value": "T-Shirts",
+                "value": "Apparel/Tops/T-Shirts",
                 "data": {
-                  "parentValue": "Tops"
+                  "parentValue": "Apparel/Tops"
                 },
                 "options": []
               },
@@ -38,9 +38,9 @@
                 "status": "",
                 "count": 35,
                 "displayName": "Shirts & Blouses",
-                "value": "Shirts & Blouses",
+                "value": "Apparel/Tops/Shirts & Blouses",
                 "data": {
-                  "parentValue": "Tops"
+                  "parentValue": "Apparel/Tops"
                 },
                 "options": []
               }
@@ -50,7 +50,7 @@
             "status": "",
             "count": 60,
             "displayName": "Bottoms",
-            "value": "Bottoms",
+            "value": "Apparel/Bottoms",
             "data": {
               "parentValue": "Apparel"
             },
@@ -71,7 +71,7 @@
             "status": "",
             "count": 45,
             "displayName": "Sneakers",
-            "value": "Sneakers",
+            "value": "Footwear/Sneakers",
             "data": {
               "parentValue": "Footwear"
             },
@@ -92,36 +92,9 @@
     ]
   },
   {
-    "displayName": "Color",
-    "name": "color",
-    "type": "multiple",
-    "data": {},
-    "hidden": false,
-    "options": [
-      {
-        "status": "",
-        "count": 40,
-        "displayName": "Black",
-        "value": "Black",
-        "data": {
-          "hex_color": "#000000"
-        }
-      },
-      {
-        "status": "",
-        "count": 25,
-        "displayName": "Navy",
-        "value": "Navy",
-        "data": {
-          "hex_color": "#001f3f"
-        }
-      }
-    ]
-  },
-  {
     "displayName": "Collection",
     "name": "collection",
-    "type": "single",
+    "type": "hierarchical",
     "data": {},
     "hidden": false,
     "options": [
@@ -138,7 +111,7 @@
             "status": "",
             "count": 10,
             "displayName": "Weekday",
-            "value": "Weekday",
+            "value": "Everyday/Weekday",
             "data": {
               "parentValue": "Everyday"
             },

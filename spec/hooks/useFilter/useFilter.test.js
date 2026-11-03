@@ -391,7 +391,7 @@ describe('Testing Hook: useFilter', () => {
 
   describe('getHierarchyCollapsible / getDefaultHierarchyCollapsed', () => {
     const hierarchicalFacets = require('../../local_examples/sampleHierarchicalFacets.json');
-    const [categoryFacet, colorFacet] = hierarchicalFacets;
+    const [categoryFacet, collectionFacet] = hierarchicalFacets;
 
     it('Should default to collapsible branches that start expanded', async () => {
       const { result } = renderHookWithCioPlp(() => useFilter({ facets: hierarchicalFacets }));
@@ -413,9 +413,9 @@ describe('Testing Hook: useFilter', () => {
 
       await waitFor(() => {
         expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(false);
-        expect(result.current.getHierarchyCollapsible(colorFacet)).toBe(false);
+        expect(result.current.getHierarchyCollapsible(collectionFacet)).toBe(false);
         expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
-        expect(result.current.getDefaultHierarchyCollapsed(colorFacet)).toBe(true);
+        expect(result.current.getDefaultHierarchyCollapsed(collectionFacet)).toBe(true);
       });
     });
 
@@ -434,9 +434,9 @@ describe('Testing Hook: useFilter', () => {
       await waitFor(() => {
         expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
         expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(false);
-        // color is not in perFacetConfigs, so it follows the global props
-        expect(result.current.getHierarchyCollapsible(colorFacet)).toBe(false);
-        expect(result.current.getDefaultHierarchyCollapsed(colorFacet)).toBe(true);
+        // collection is not in perFacetConfigs, so it follows the global props
+        expect(result.current.getHierarchyCollapsible(collectionFacet)).toBe(false);
+        expect(result.current.getDefaultHierarchyCollapsed(collectionFacet)).toBe(true);
       });
     });
 

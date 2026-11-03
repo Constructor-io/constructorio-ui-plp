@@ -398,7 +398,7 @@ export const OverrideSpecificOption: Story = {
       filterGroup: {
         optionsList: {
           filterOption: (option) =>
-            option.optionValue === 'Sneakers'
+            option.optionValue === 'Footwear/Sneakers'
               ? {
                   reactNode: (props) => (
                     <li style={{ listStyle: 'none', padding: '4px 0 4px 28px' }}>

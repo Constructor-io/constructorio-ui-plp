@@ -8,7 +8,24 @@ import { DEMO_API_KEY } from '../../../src/constants';
 import { renderWithCioPlp } from '../../test-utils';
 import hierarchicalFacets from '../../local_examples/sampleHierarchicalFacets.json';
 
-const [categoryFacet, , collectionFacet] = hierarchicalFacets;
+const [categoryFacet] = hierarchicalFacets;
+
+/** Flat `single` facet: nested options only come on `hierarchical` facets. */
+const sizeFacet = {
+  displayName: 'Size',
+  name: 'size',
+  type: 'single',
+  data: {},
+  hidden: false,
+  options: [
+    { status: '', count: 12, displayName: 'Small', value: 'Small', data: {}, options: [] },
+    { status: '', count: 8, displayName: 'Large', value: 'Large', data: {}, options: [] },
+  ],
+};
+
+/** Number of options in `options`, at any depth. */
+const countOptions = (options) =>
+  options.reduce((total, option) => total + 1 + countOptions(option.options || []), 0);
 
 const mockModifyRequestMultipleFilter = jest.fn();
 
@@ -86,6 +103,18 @@ describe('FilterOptionsList - hierarchical options', () => {
         getToggle('Apparel').getAttribute('aria-controls'),
       );
       expect(container.querySelectorAll('.cio-filter-multiple-option').length).toBe(8);
+    });
+
+    it('Should render inside a filter group', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={hierarchicalFacets} />
+        </CioPlp>,
+      );
+
+      expect(screen.getByText('Category')).toBeInTheDocument();
+      expect(screen.getByText('T-Shirts')).toBeInTheDocument();
+      expect(getToggle('Apparel')).toBeInTheDocument();
     });
 
     it('Should render counts for nested options', () => {
@@ -169,7 +198,7 @@ describe('FilterOptionsList - hierarchical options', () => {
 
     it('Should auto-expand branches holding a selected option so an applied filter is never hidden', () => {
       renderOptionsList({
-        facet: withSelected(categoryFacet, ['T-Shirts']),
+        facet: withSelected(categoryFacet, ['Apparel/Tops/T-Shirts']),
         defaultHierarchyCollapsed: true,
       });
 
@@ -186,7 +215,7 @@ describe('FilterOptionsList - hierarchical options', () => {
 
       fireEvent.click(screen.getByText('T-Shirts'));
 
-      expect(lastAppliedValues()).toEqual(['T-Shirts']);
+      expect(lastAppliedValues()).toEqual(['Apparel/Tops/T-Shirts']);
     });
 
     it('Should leave other branches untouched', () => {
@@ -204,7 +233,13 @@ describe('FilterOptionsList - hierarchical options', () => {
       fireEvent.click(screen.getByText('Apparel'));
 
       expect(lastAppliedValues()).toEqual(
-        ['Apparel', 'Bottoms', 'Shirts & Blouses', 'T-Shirts', 'Tops'].sort(),
+        [
+          'Apparel',
+          'Apparel/Bottoms',
+          'Apparel/Tops/Shirts & Blouses',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops',
+        ].sort(),
       );
       expect(isChecked('T-Shirts')).toBe(true);
       expect(isChecked('Bottoms')).toBe(true);
@@ -215,10 +250,10 @@ describe('FilterOptionsList - hierarchical options', () => {
       renderOptionsList({
         facet: withSelected(categoryFacet, [
           'Apparel',
-          'Tops',
-          'T-Shirts',
-          'Shirts & Blouses',
-          'Bottoms',
+          'Apparel/Tops',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+          'Apparel/Bottoms',
         ]),
       });
 
@@ -233,18 +268,18 @@ describe('FilterOptionsList - hierarchical options', () => {
       renderOptionsList({
         facet: withSelected(categoryFacet, [
           'Apparel',
-          'Tops',
-          'T-Shirts',
-          'Shirts & Blouses',
-          'Bottoms',
+          'Apparel/Tops',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+          'Apparel/Bottoms',
           'Footwear',
-          'Sneakers',
+          'Footwear/Sneakers',
         ]),
       });
 
       fireEvent.click(screen.getByText('Apparel'));
 
-      expect(lastAppliedValues()).toEqual(['Footwear', 'Sneakers']);
+      expect(lastAppliedValues()).toEqual(['Footwear', 'Footwear/Sneakers']);
     });
 
     // Rule 3: the last child selected carries the parent, and its parent in turn
@@ -258,7 +293,9 @@ describe('FilterOptionsList - hierarchical options', () => {
 
       // Both of Tops' children are now selected, so Tops follows
       expect(isChecked('Tops')).toBe(true);
-      expect(lastAppliedValues()).toEqual(['Shirts & Blouses', 'T-Shirts', 'Tops'].sort());
+      expect(lastAppliedValues()).toEqual(
+        ['Apparel/Tops/Shirts & Blouses', 'Apparel/Tops/T-Shirts', 'Apparel/Tops'].sort(),
+      );
       // Apparel still has an unselected child (Bottoms)
       expect(isChecked('Apparel')).toBe(false);
     });
@@ -274,7 +311,13 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(isChecked('Tops')).toBe(true);
       expect(isChecked('Apparel')).toBe(true);
       expect(lastAppliedValues()).toEqual(
-        ['Apparel', 'Bottoms', 'Shirts & Blouses', 'T-Shirts', 'Tops'].sort(),
+        [
+          'Apparel',
+          'Apparel/Bottoms',
+          'Apparel/Tops/Shirts & Blouses',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops',
+        ].sort(),
       );
     });
 
@@ -283,10 +326,10 @@ describe('FilterOptionsList - hierarchical options', () => {
       renderOptionsList({
         facet: withSelected(categoryFacet, [
           'Apparel',
-          'Tops',
-          'T-Shirts',
-          'Shirts & Blouses',
-          'Bottoms',
+          'Apparel/Tops',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+          'Apparel/Bottoms',
         ]),
       });
 
@@ -297,12 +340,15 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(isChecked('Tops')).toBe(false);
       expect(isChecked('Apparel')).toBe(false);
       // The siblings that were not touched stay applied
-      expect(lastAppliedValues()).toEqual(['Bottoms', 'Shirts & Blouses']);
+      expect(lastAppliedValues()).toEqual(['Apparel/Bottoms', 'Apparel/Tops/Shirts & Blouses']);
     });
 
     it('Should select a parent whose children all arrive selected from the API', () => {
       renderOptionsList({
-        facet: withSelected(categoryFacet, ['T-Shirts', 'Shirts & Blouses']),
+        facet: withSelected(categoryFacet, [
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+        ]),
       });
 
       // Nothing clicked: the parent follows the state the API reported for its children
@@ -310,35 +356,22 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(isChecked('Apparel')).toBe(false);
     });
 
-    it('Should not cascade on a single-select facet, which holds one value at a time', () => {
-      renderWithCioPlp(
-        <FilterOptionsList
-          facet={collectionFacet}
-          modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
-          initialNumOptions={10}
-          isCollapsed={false}
-        />,
-      );
+    it('Should accumulate selections across branches', () => {
+      renderOptionsList({
+        facet: withSelected(categoryFacet, ['Footwear', 'Footwear/Sneakers']),
+      });
 
-      fireEvent.click(screen.getByText('Everyday'));
+      fireEvent.click(screen.getByText('Kids & Baby'));
 
-      // Everyday has a child, but a single facet cannot hold both
-      expect(lastAppliedValues()).toEqual(['Everyday']);
+      expect(lastAppliedValues()).toEqual(['Footwear', 'Footwear/Sneakers', 'Kids & Baby']);
     });
 
     it('Should replace the selection on a single-select facet', () => {
-      renderWithCioPlp(
-        <FilterOptionsList
-          facet={withSelected(collectionFacet, ['Everyday'])}
-          modifyRequestMultipleFilter={mockModifyRequestMultipleFilter}
-          initialNumOptions={10}
-          isCollapsed={false}
-        />,
-      );
+      renderOptionsList({ facet: withSelected(sizeFacet, ['Small']) });
 
-      fireEvent.click(screen.getByText('Weekday'));
+      fireEvent.click(screen.getByText('Large'));
 
-      expect(mockModifyRequestMultipleFilter).toHaveBeenCalledWith(['Weekday']);
+      expect(mockModifyRequestMultipleFilter).toHaveBeenCalledWith(['Large']);
     });
   });
 
@@ -347,9 +380,11 @@ describe('FilterOptionsList - hierarchical options', () => {
       const { container } = renderOptionsList();
 
       expect(container.querySelector('input[id="category-apparel"]')).toBeInTheDocument();
-      expect(container.querySelector('input[id="category-apparel-tops"]')).toBeInTheDocument();
       expect(
-        container.querySelector('input[id="category-apparel-tops-t-shirts"]'),
+        container.querySelector('input[id="category-apparel-apparel-tops"]'),
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector('input[id="category-apparel-apparel-tops-apparel-tops-t-shirts"]'),
       ).toBeInTheDocument();
     });
 
@@ -357,7 +392,9 @@ describe('FilterOptionsList - hierarchical options', () => {
       const { container } = renderOptionsList();
 
       expect(
-        container.querySelector('input[id="category-apparel-tops-shirts-blouses"]'),
+        container.querySelector(
+          'input[id="category-apparel-apparel-tops-apparel-tops-shirts-blouses"]',
+        ),
       ).toBeInTheDocument();
       container.querySelectorAll('[id]').forEach((element) => {
         expect(element.getAttribute('id')).not.toMatch(/\s/);
@@ -388,116 +425,12 @@ describe('FilterOptionsList - hierarchical options', () => {
       );
 
       expect(new Set(ids).size).toBe(ids.length);
-      expect(container.querySelector('input[id="desktop-category-apparel-tops"]')).toBeTruthy();
-      expect(container.querySelector('input[id="mobile-category-apparel-tops"]')).toBeTruthy();
-    });
-  });
-
-  describe('Facets of type "hierarchical"', () => {
-    // A hierarchical facet reaches the option list the same way a multiple facet with nested
-    // options does, so it is the facet `type` — not the option shape — being covered here.
-    const hierarchicalTypeFacet = {
-      ...categoryFacet,
-      name: 'department',
-      displayName: 'Department',
-      type: 'hierarchical',
-    };
-
-    it('Should render its nested options', () => {
-      renderOptionsList({ facet: hierarchicalTypeFacet });
-
-      expect(screen.getByText('Apparel')).toBeInTheDocument();
-      expect(screen.getByText('T-Shirts')).toBeInTheDocument();
-      expect(getToggle('Apparel')).toBeInTheDocument();
-    });
-
-    it('Should render inside a filter group, alongside the other facet types', () => {
-      render(
-        <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={[...hierarchicalFacets, hierarchicalTypeFacet]} />
-        </CioPlp>,
-      );
-
-      expect(screen.getByText('Department')).toBeInTheDocument();
-      // The department facet duplicates the category options, so each appears in both groups
-      expect(screen.getAllByText('Sneakers')).toHaveLength(2);
-      expect(screen.getAllByText('Apparel')).toHaveLength(2);
-    });
-
-    it('Should accumulate selections rather than replacing them like a single facet', () => {
-      renderOptionsList({
-        facet: withSelected(hierarchicalTypeFacet, ['Footwear', 'Sneakers']),
-      });
-
-      fireEvent.click(screen.getByText('Kids & Baby'));
-
-      expect(lastAppliedValues()).toEqual(['Footwear', 'Kids & Baby', 'Sneakers']);
-    });
-
-    it('Should cascade a parent selection down its subtree', () => {
-      renderOptionsList({ facet: hierarchicalTypeFacet });
-
-      fireEvent.click(screen.getByText('Apparel'));
-
-      expect(lastAppliedValues()).toEqual(
-        ['Apparel', 'Bottoms', 'Shirts & Blouses', 'T-Shirts', 'Tops'].sort(),
-      );
-    });
-
-    it('Should clear the subtree when a parent is deselected', () => {
-      renderOptionsList({
-        facet: withSelected(hierarchicalTypeFacet, [
-          'Apparel',
-          'Tops',
-          'T-Shirts',
-          'Shirts & Blouses',
-          'Bottoms',
-          'Footwear',
-          'Sneakers',
-        ]),
-      });
-
-      fireEvent.click(screen.getByText('Apparel'));
-
-      expect(lastAppliedValues()).toEqual(['Footwear', 'Sneakers']);
-    });
-
-    it('Should apply path-style option values as the API returns them', () => {
-      // Real hierarchical facets carry the full path in each nested option's value
-      const pathValuedFacet = {
-        ...hierarchicalTypeFacet,
-        options: [
-          {
-            status: '',
-            count: 987,
-            displayName: 'Adventures',
-            value: 'adventures',
-            data: { parentValue: null },
-            options: [
-              {
-                status: '',
-                count: 126,
-                displayName: 'Battles and Wars',
-                value: 'adventures/battles-and-wars',
-                data: { parentValue: 'adventures' },
-                options: [],
-              },
-            ],
-          },
-        ],
-      };
-
-      const { container } = renderOptionsList({ facet: pathValuedFacet });
-
-      fireEvent.click(screen.getByText('Battles and Wars'));
-
-      // "Adventures" comes along because it has only this one child, so selecting the child
-      // completes the parent
-      expect(lastAppliedValues()).toEqual(['adventures', 'adventures/battles-and-wars']);
-      // The slash in the value would be invalid in an id, and the path keeps it unique
       expect(
-        container.querySelector('input[id="department-adventures-adventures-battles-and-wars"]'),
-      ).toBeInTheDocument();
+        container.querySelector('input[id="desktop-category-apparel-apparel-tops"]'),
+      ).toBeTruthy();
+      expect(
+        container.querySelector('input[id="mobile-category-apparel-apparel-tops"]'),
+      ).toBeTruthy();
     });
   });
 
@@ -544,7 +477,7 @@ describe('FilterOptionsList - hierarchical options', () => {
 
     it('Should replace a single option, leaving its siblings at their default', () => {
       renderWithOverride((option) =>
-        option.optionValue === 'T-Shirts'
+        option.optionValue === 'Apparel/Tops/T-Shirts'
           ? { reactNode: () => <li data-testid='custom-option'>Custom T-Shirts</li> }
           : undefined,
       );
@@ -583,8 +516,12 @@ describe('FilterOptionsList - hierarchical options', () => {
         ),
       });
 
-      // 8 category options + 2 color options + 3 collection options
-      expect(document.querySelectorAll('.custom-every-option').length).toBe(13);
+      const totalOptions = hierarchicalFacets.reduce(
+        (total, facet) => total + countOptions(facet.options),
+        0,
+      );
+
+      expect(document.querySelectorAll('.custom-every-option').length).toBe(totalOptions);
     });
 
     it('Should receive the mapped option data, including checked state', () => {
@@ -594,8 +531,8 @@ describe('FilterOptionsList - hierarchical options', () => {
 
       expect(filterOption).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: 'category-apparel-tops',
-          optionValue: 'Tops',
+          id: 'category-apparel-apparel-tops',
+          optionValue: 'Apparel/Tops',
           displayValue: 'Tops',
           displayCountValue: '60',
           isChecked: false,
