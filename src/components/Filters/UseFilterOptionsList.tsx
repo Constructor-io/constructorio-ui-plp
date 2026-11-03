@@ -47,82 +47,6 @@ export type UseFilterOptionsListProps =
   | UseFilterOptionsListPropsLegacy
   | UseFilterOptionsListPropsNew;
 
-type SelectedOptionMap = Record<string, boolean>;
-
-/** `option`'s own value plus every value nested below it. */
-function collectSubtreeValues(option: PlpFacetOption, values: Array<string> = []) {
-  values.push(option.value);
-  option.options?.forEach((childOption) => collectSubtreeValues(childOption, values));
-
-  return values;
-}
-
-/**
- * The option carrying `optionValue`, at any depth. Values are unique within a facet — nested
- * values are full paths (`Apparel/Tops`) — so the first match is the only one.
- */
-function findOption(
-  options: Array<PlpFacetOption>,
-  optionValue: string,
-): PlpFacetOption | undefined {
-  let match: PlpFacetOption | undefined;
-
-  options.some((option) => {
-    match = option.value === optionValue ? option : findOption(option.options || [], optionValue);
-
-    return !!match;
-  });
-
-  return match;
-}
-
-/** Applies `isSelected` to an option and its subtree, returning a new map. */
-function withSubtreeSelected(
-  options: Array<PlpFacetOption>,
-  optionValue: string,
-  isSelected: boolean,
-  selectedMap: SelectedOptionMap,
-): SelectedOptionMap {
-  const nextMap = { ...selectedMap };
-  const option = findOption(options, optionValue);
-
-  (option ? collectSubtreeValues(option) : []).forEach((value) => {
-    nextMap[value] = isSelected;
-  });
-
-  return nextMap;
-}
-
-/**
- * Derives every parent from its children: a parent counts as selected exactly when all of its
- * children are, and stops counting as selected as soon as one of them is not.
- *
- * Runs depth-first so a branch settles before the level above reads it, which lets the rule carry
- * all the way up — selecting the last leaf of a branch can mark its parent, that parent's parent,
- * and so on. A parent's own stored state is always replaced by this derivation, which is what makes
- * a parent behave as "all of the below" rather than as a filter of its own.
- *
- * Only options with children are derived; leaves keep whatever the user (or the API) set.
- */
-function withParentsDerived(
-  options: Array<PlpFacetOption>,
-  selectedMap: SelectedOptionMap,
-): SelectedOptionMap {
-  const nextMap = { ...selectedMap };
-
-  const derive = (levelOptions: Array<PlpFacetOption>) => {
-    levelOptions.forEach((option) => {
-      if (option.options?.length) {
-        derive(option.options);
-        nextMap[option.value] = option.options.every((childOption) => nextMap[childOption.value]);
-      }
-    });
-  };
-  derive(options);
-
-  return nextMap;
-}
-
 export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const {
     initialNumOptions,
@@ -153,7 +77,6 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     setIsShowAll,
     optionsToRender: facetOptions,
     setOptionsToRender: setFacetOptions,
-    filteredOptions: allFacetOptions,
     totalFilteredOptions,
   } = useOptionsList({
     options: facet.options,
@@ -165,38 +88,16 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const [selectedOptionMap, setSelectedOptionMap] = useState<Record<string, boolean>>({});
 
   /**
-   * A parent option stands for "all of the below". Selecting one selects everything nested under
-   * it, deselecting one deselects everything under it, and a parent follows its children: it becomes
-   * selected once they all are, and stops being selected the moment one of them is not.
-   *
-   * The whole option tree is needed for that, not just the clicked option: rolling a parent up
-   * means reading its *siblings*, and a parent ticking can tick its own parent in turn. The tree
-   * used is `allFacetOptions` — hidden options removed, but before the "Show All" slice, so a
-   * parent is judged against all of its children rather than only the rendered ones.
+   * Each option filters independently: a click toggles exactly the clicked value, never the options
+   * nested above or below it, so the request always carries just what is ticked. `single` facets
+   * hold one value at a time, so there the click replaces whatever was applied.
    *
    * The map stays keyed by option *value* rather than by DOM id, because the value is what the
    * request carries (`filters[facetName] = [...values]`).
    */
   const onOptionSelect = (optionValue: string) => {
-    const isSelected = !selectedOptionMap[optionValue];
-
-    // `single` facets hold one value at a time, so there is no cascade to run: the clicked option
-    // replaces whatever was applied.
-    if (facet.type === 'single') {
-      const newMap = isSelected ? { [optionValue]: true } : {};
-
-      setSelectedOptionMap(newMap);
-      modifyRequestMultipleFilter(isSelected ? [optionValue] : null);
-      return;
-    }
-
-    const cascadedMap = withSubtreeSelected(
-      allFacetOptions,
-      optionValue,
-      isSelected,
-      selectedOptionMap,
-    );
-    const newMap = withParentsDerived(allFacetOptions, cascadedMap);
+    const newMap: Record<string, boolean> = facet.type === 'single' ? {} : { ...selectedOptionMap };
+    newMap[optionValue] = !selectedOptionMap[optionValue];
 
     const selectedOptions = Object.keys(newMap).filter((key) => newMap[key]);
     setSelectedOptionMap(newMap);
@@ -218,13 +119,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     // silently dropped, even on an option this page hides.
     collectStatuses(facet.options);
 
-    // The parent rule holds for state arriving from the API too: a parent whose children all come
-    // back selected shows as selected, without the user having clicked anything.
-    setSelectedOptionMap(
-      facet.type === 'single'
-        ? newSelectedOptionsMap
-        : withParentsDerived(allFacetOptions, newSelectedOptionsMap),
-    );
+    // Mirror the API as-is, so the checkboxes always match the filters the results were computed with
+    setSelectedOptionMap(newSelectedOptionsMap);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facet]);
 

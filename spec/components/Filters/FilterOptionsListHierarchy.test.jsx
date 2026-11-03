@@ -210,6 +210,7 @@ describe('FilterOptionsList - hierarchical options', () => {
   });
 
   describe('Selecting nested options', () => {
+    // Every option is an independent filter: a click toggles exactly the clicked value
     it('Should apply a leaf option by its own value', () => {
       renderOptionsList();
 
@@ -218,142 +219,92 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(lastAppliedValues()).toEqual(['Apparel/Tops/T-Shirts']);
     });
 
-    it('Should leave other branches untouched', () => {
+    it('Should apply a parent by its own value, without its subtree', () => {
       renderOptionsList();
+
+      fireEvent.click(screen.getByText('Apparel'));
+
+      expect(lastAppliedValues()).toEqual(['Apparel']);
+      expect(isChecked('Tops')).toBe(false);
+      expect(isChecked('T-Shirts')).toBe(false);
+    });
+
+    it('Should deselect a parent without touching its subtree', () => {
+      renderOptionsList({
+        facet: withSelected(categoryFacet, ['Apparel', 'Apparel/Tops', 'Apparel/Tops/T-Shirts']),
+      });
+
+      fireEvent.click(screen.getByText('Apparel'));
+
+      expect(lastAppliedValues()).toEqual(['Apparel/Tops', 'Apparel/Tops/T-Shirts']);
+    });
+
+    it('Should not select a parent when all of its children are selected', () => {
+      renderOptionsList();
+
+      fireEvent.click(screen.getByText('T-Shirts'));
+      fireEvent.click(screen.getByText('Shirts & Blouses'));
+
+      expect(isChecked('Tops')).toBe(false);
+      expect(lastAppliedValues()).toEqual([
+        'Apparel/Tops/Shirts & Blouses',
+        'Apparel/Tops/T-Shirts',
+      ]);
+    });
+
+    it('Should keep a selected parent when one of its children is deselected', () => {
+      renderOptionsList({
+        facet: withSelected(categoryFacet, [
+          'Apparel/Tops',
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+        ]),
+      });
+
+      fireEvent.click(screen.getByText('T-Shirts'));
+
+      expect(isChecked('Tops')).toBe(true);
+      expect(lastAppliedValues()).toEqual(['Apparel/Tops', 'Apparel/Tops/Shirts & Blouses']);
+    });
+
+    it('Should render the state the API reports, without deriving parents', () => {
+      renderOptionsList({
+        facet: withSelected(categoryFacet, [
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+        ]),
+      });
+
+      // Both of Tops' children arrive selected, but the API did not report Tops itself
+      expect(isChecked('T-Shirts')).toBe(true);
+      expect(isChecked('Shirts & Blouses')).toBe(true);
+      expect(isChecked('Tops')).toBe(false);
+    });
+
+    // A click in one branch must never change the state of another
+    it('Should not add a parent the user did not choose when another branch is clicked', () => {
+      renderOptionsList({
+        facet: withSelected(categoryFacet, [
+          'Apparel/Tops/T-Shirts',
+          'Apparel/Tops/Shirts & Blouses',
+        ]),
+      });
 
       fireEvent.click(screen.getByText('Kids & Baby'));
 
-      expect(lastAppliedValues()).toEqual(['Kids & Baby']);
+      expect(lastAppliedValues()).toEqual([
+        'Apparel/Tops/Shirts & Blouses',
+        'Apparel/Tops/T-Shirts',
+        'Kids & Baby',
+      ]);
     });
 
-    // Rule 1: a parent stands for everything below it
-    it('Should select the whole subtree when a parent is selected', () => {
-      renderOptionsList();
+    it('Should keep a parent the API applied when another branch is clicked', () => {
+      renderOptionsList({ facet: withSelected(categoryFacet, ['Apparel/Tops']) });
 
-      fireEvent.click(screen.getByText('Apparel'));
+      fireEvent.click(screen.getByText('Kids & Baby'));
 
-      expect(lastAppliedValues()).toEqual(
-        [
-          'Apparel',
-          'Apparel/Bottoms',
-          'Apparel/Tops/Shirts & Blouses',
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops',
-        ].sort(),
-      );
-      expect(isChecked('T-Shirts')).toBe(true);
-      expect(isChecked('Bottoms')).toBe(true);
-    });
-
-    // Rule 2
-    it('Should deselect the whole subtree when a parent is deselected', () => {
-      renderOptionsList({
-        facet: withSelected(categoryFacet, [
-          'Apparel',
-          'Apparel/Tops',
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops/Shirts & Blouses',
-          'Apparel/Bottoms',
-        ]),
-      });
-
-      fireEvent.click(screen.getByText('Apparel'));
-
-      expect(lastAppliedValues()).toBe(null);
-      expect(isChecked('T-Shirts')).toBe(false);
-      expect(isChecked('Tops')).toBe(false);
-    });
-
-    it('Should keep selections in other branches when a parent is deselected', () => {
-      renderOptionsList({
-        facet: withSelected(categoryFacet, [
-          'Apparel',
-          'Apparel/Tops',
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops/Shirts & Blouses',
-          'Apparel/Bottoms',
-          'Footwear',
-          'Footwear/Sneakers',
-        ]),
-      });
-
-      fireEvent.click(screen.getByText('Apparel'));
-
-      expect(lastAppliedValues()).toEqual(['Footwear', 'Footwear/Sneakers']);
-    });
-
-    // Rule 3: the last child selected carries the parent, and its parent in turn
-    it('Should select a parent once all of its children are selected', () => {
-      renderOptionsList();
-
-      fireEvent.click(screen.getByText('T-Shirts'));
-      expect(isChecked('Tops')).toBe(false);
-
-      fireEvent.click(screen.getByText('Shirts & Blouses'));
-
-      // Both of Tops' children are now selected, so Tops follows
-      expect(isChecked('Tops')).toBe(true);
-      expect(lastAppliedValues()).toEqual(
-        ['Apparel/Tops/Shirts & Blouses', 'Apparel/Tops/T-Shirts', 'Apparel/Tops'].sort(),
-      );
-      // Apparel still has an unselected child (Bottoms)
-      expect(isChecked('Apparel')).toBe(false);
-    });
-
-    it('Should carry the parent rule up through every level', () => {
-      renderOptionsList();
-
-      fireEvent.click(screen.getByText('T-Shirts'));
-      fireEvent.click(screen.getByText('Shirts & Blouses'));
-      fireEvent.click(screen.getByText('Bottoms'));
-
-      // Tops came from its own children, and Apparel from Tops + Bottoms
-      expect(isChecked('Tops')).toBe(true);
-      expect(isChecked('Apparel')).toBe(true);
-      expect(lastAppliedValues()).toEqual(
-        [
-          'Apparel',
-          'Apparel/Bottoms',
-          'Apparel/Tops/Shirts & Blouses',
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops',
-        ].sort(),
-      );
-    });
-
-    // Rule 4
-    it('Should deselect a parent as soon as one of its children is deselected', () => {
-      renderOptionsList({
-        facet: withSelected(categoryFacet, [
-          'Apparel',
-          'Apparel/Tops',
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops/Shirts & Blouses',
-          'Apparel/Bottoms',
-        ]),
-      });
-
-      expect(isChecked('Apparel')).toBe(true);
-
-      fireEvent.click(screen.getByText('T-Shirts'));
-
-      expect(isChecked('Tops')).toBe(false);
-      expect(isChecked('Apparel')).toBe(false);
-      // The siblings that were not touched stay applied
-      expect(lastAppliedValues()).toEqual(['Apparel/Bottoms', 'Apparel/Tops/Shirts & Blouses']);
-    });
-
-    it('Should select a parent whose children all arrive selected from the API', () => {
-      renderOptionsList({
-        facet: withSelected(categoryFacet, [
-          'Apparel/Tops/T-Shirts',
-          'Apparel/Tops/Shirts & Blouses',
-        ]),
-      });
-
-      // Nothing clicked: the parent follows the state the API reported for its children
-      expect(isChecked('Tops')).toBe(true);
-      expect(isChecked('Apparel')).toBe(false);
+      expect(lastAppliedValues()).toEqual(['Apparel/Tops', 'Kids & Baby']);
     });
 
     it('Should accumulate selections across branches', () => {

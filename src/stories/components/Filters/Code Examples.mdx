@@ -219,18 +219,7 @@ export function HierarchicalFilters() {
 
 ### Selecting Nested Options
 
-A parent option stands for "all of the below":
-
-- Selecting a parent selects every option nested under it, at any depth.
-- Deselecting a parent deselects every option nested under it.
-- A parent becomes selected on its own once all of its children are selected, and that carries upwards - completing a branch can complete its parent too.
-- A parent stops being selected as soon as one of its children is deselected. Its other children stay selected.
-
-The rule also applies to the state the API reports: a parent whose children all come back selected renders selected, with nothing clicked.
-
-Because a parent is derived from its children, the request carries the parent *and* its subtree. Selecting a top-level option in a deep facet therefore applies many values at once, which is worth keeping in mind for URL length.
-
-Facets of type `single` hold one value at a time, so nothing cascades there - selecting an option replaces whatever was applied.
+Every option is its own filter. Selecting a parent applies the parent's value only, and the options nested under it keep their own state. Selections accumulate across the tree the same way they do on a `multiple` facet, and the request carries exactly the options that are selected.
 
 ### Rendering Filters More Than Once Per Page
 
