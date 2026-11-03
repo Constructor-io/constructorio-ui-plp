@@ -181,5 +181,6 @@ export function getUrlFromState(state: RequestConfigs, url: string): string {
     }
   });
 
-  return `${urlObject.origin}${pathname}?${params.toString()}`;
+  const queryString = params.toString();
+  return `${urlObject.origin}${pathname}${queryString ? `?${queryString}` : ''}`;
 }

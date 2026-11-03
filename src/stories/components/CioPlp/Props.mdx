@@ -289,7 +289,8 @@ function getUrlFromState(state, url) {
     }
   });
 
-  return `${urlObject.origin}${pathname}?${params.toString()}`;
+  const queryString = params.toString();
+  return `${urlObject.origin}${pathname}${queryString ? `?${queryString}` : ''}`;
 }
 ```
 

@@ -119,7 +119,7 @@ describe('Testing Component: FilterGroup', () => {
     expect(arrow).toHaveClass('cio-arrow-up');
   });
 
-  it('Should render filter group expanded when defaultCollapsed is false', () => {
+  it('Should render filter group collapsed when isCollapsedOverride is true', () => {
     const multipleFacet = {
       displayName: 'Color',
       name: 'color',
@@ -138,7 +138,38 @@ describe('Testing Component: FilterGroup', () => {
           facet={multipleFacet}
           setFilter={mockSetFilter}
           initialNumOptions={10}
-          defaultCollapsed={false}
+          isCollapsedOverride
+        />
+      </CioPlp>,
+    );
+
+    const arrow = screen
+      .getByText('Color')
+      .closest('.cio-filter-header')
+      .querySelector('.cio-arrow');
+    expect(arrow).toHaveClass('cio-arrow-up');
+  });
+
+  it('Should render filter group expanded when isCollapsedOverride is false', () => {
+    const multipleFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: {},
+      hidden: false,
+      options: [
+        { status: '', count: 10, displayName: 'Red', value: 'Red', data: {} },
+        { status: '', count: 5, displayName: 'Blue', value: 'Blue', data: {} },
+      ],
+    };
+
+    render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride={false}
         />
       </CioPlp>,
     );
@@ -148,6 +179,106 @@ describe('Testing Component: FilterGroup', () => {
       .closest('.cio-filter-header')
       .querySelector('.cio-arrow');
     expect(arrow).toHaveClass('cio-arrow-down');
+  });
+
+  it('Should update isCollapsed when isCollapsedOverride prop changes after mount (externally controlled)', () => {
+    const multipleFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: {},
+      hidden: false,
+      options: [
+        { status: '', count: 10, displayName: 'Red', value: 'Red', data: {} },
+        { status: '', count: 5, displayName: 'Blue', value: 'Blue', data: {} },
+      ],
+    };
+
+    const { rerender } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride={false}
+        />
+      </CioPlp>,
+    );
+
+    const getArrow = () =>
+      screen.getByText('Color').closest('.cio-filter-header').querySelector('.cio-arrow');
+
+    expect(getArrow()).toHaveClass('cio-arrow-down');
+
+    rerender(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride
+        />
+      </CioPlp>,
+    );
+
+    expect(getArrow()).toHaveClass('cio-arrow-up');
+
+    rerender(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride={false}
+        />
+      </CioPlp>,
+    );
+
+    expect(getArrow()).toHaveClass('cio-arrow-down');
+  });
+
+  it('Should not override a manual toggle when isCollapsedOverride has not changed', () => {
+    const multipleFacet = {
+      displayName: 'Color',
+      name: 'color',
+      type: 'multiple',
+      data: {},
+      hidden: false,
+      options: [
+        { status: '', count: 10, displayName: 'Red', value: 'Red', data: {} },
+        { status: '', count: 5, displayName: 'Blue', value: 'Blue', data: {} },
+      ],
+    };
+
+    const { rerender } = render(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride={false}
+        />
+      </CioPlp>,
+    );
+
+    const header = screen.getByText('Color').closest('.cio-filter-header');
+    fireEvent.click(header);
+
+    const getArrow = () => header.querySelector('.cio-arrow');
+    expect(getArrow()).toHaveClass('cio-arrow-up');
+
+    rerender(
+      <CioPlp apiKey={DEMO_API_KEY}>
+        <FilterGroup
+          facet={multipleFacet}
+          setFilter={mockSetFilter}
+          initialNumOptions={10}
+          isCollapsedOverride={false}
+        />
+      </CioPlp>,
+    );
+
+    expect(getArrow()).toHaveClass('cio-arrow-up');
   });
 
   it('Should render range filter normally when min !== max', () => {

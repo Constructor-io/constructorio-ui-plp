@@ -190,7 +190,8 @@ Url Helpers are used for managing the url and request state. These functions def
       }
     });
 
-    return `${urlObject.origin}${pathname}?${params.toString()}`;
+    const queryString = params.toString();
+    return `${urlObject.origin}${pathname}${queryString ? `?${queryString}` : ''}`;
   }
   ```
 

@@ -5,6 +5,7 @@ import useFilterOptionsList, { UseFilterOptionsListProps } from './UseFilterOpti
 import { resolveVisualOption } from '../../utils';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { translate } from '../../utils/helpers';
+import { useMobileModalIdSuffix } from '../MobileModal/MobileModalContext';
 
 export default function FilterOptionsList(props: UseFilterOptionsListProps) {
   const {
@@ -23,6 +24,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
     checkboxPosition,
   } = useFilterOptionsList(props);
   const { translations } = useCioPlpContext();
+  const idSuffix = useMobileModalIdSuffix();
 
   if (optionsToRender.length === 0) return null;
   return (
@@ -33,7 +35,7 @@ export default function FilterOptionsList(props: UseFilterOptionsListProps) {
       })}>
       <ul className='cio-filter-multiple-options-list cio-collapsible-inner'>
         {optionsToRender.map((option) => {
-          const id = `${facet.name}-${option.value}`;
+          const id = `${facet.name}-${option.value}${idSuffix}`;
           const commonProps = {
             id,
             key: option.value,

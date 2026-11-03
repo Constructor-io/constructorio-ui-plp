@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import MobileModal from '../../../src/components/MobileModal';
 
-function Wrapper() {
+function Wrapper({ label, children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -11,12 +12,22 @@ function Wrapper() {
       <button type='button' onClick={() => setIsOpen(true)}>
         Open
       </button>
-      <MobileModal isOpen={isOpen} setIsOpen={setIsOpen}>
-        Content
+      <MobileModal isOpen={isOpen} setIsOpen={setIsOpen} label={label}>
+        {children || 'Content'}
       </MobileModal>
     </div>
   );
 }
+
+Wrapper.propTypes = {
+  label: PropTypes.string,
+  children: PropTypes.node,
+};
+
+Wrapper.defaultProps = {
+  label: undefined,
+  children: undefined,
+};
 
 describe('MobileModal Component', () => {
   it('renders the modal when open', () => {
@@ -41,5 +52,115 @@ describe('MobileModal Component', () => {
     waitFor(() => {
       expect(queryByText('Content')).not.toBeInTheDocument();
     });
+  });
+
+  it('exposes dialog semantics and an accessible name', () => {
+    const { getByText, getByRole } = render(<Wrapper label='Filters' />);
+
+    fireEvent.click(getByText('Open'));
+
+    const dialog = getByRole('dialog');
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(dialog).toHaveAttribute('aria-label', 'Filters');
+  });
+
+  it('moves focus into the dialog on open and restores it on close', async () => {
+    const { getByText, getByRole } = render(<Wrapper />);
+    const trigger = getByText('Open');
+
+    trigger.focus();
+    fireEvent.click(trigger);
+
+    // Focus lands on the first focusable element inside, or the dialog itself
+    const dialog = getByRole('dialog');
+    const firstFocusable = dialog.querySelector('button');
+    expect(document.activeElement).toBe(firstFocusable || dialog);
+
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+
+    await waitFor(() => {
+      expect(document.activeElement).toBe(trigger);
+    });
+  });
+
+  it('closes on Escape', async () => {
+    const { getByText, queryByText, getByRole } = render(<Wrapper />);
+
+    fireEvent.click(getByText('Open'));
+    expect(getByText('Content')).toBeInTheDocument();
+
+    fireEvent.keyDown(getByRole('dialog'), { key: 'Escape' });
+
+    await waitFor(() => {
+      expect(queryByText('Content')).not.toBeInTheDocument();
+    });
+  });
+
+  it('cycles Tab within the dialog instead of escaping to the page behind', () => {
+    const { getByText, getByRole } = render(
+      <Wrapper>
+        <button type='button'>First</button>
+        <button type='button'>Last</button>
+      </Wrapper>,
+    );
+
+    fireEvent.click(getByText('Open'));
+
+    const dialog = getByRole('dialog');
+    const first = getByText('First');
+    const last = getByText('Last');
+
+    last.focus();
+    fireEvent.keyDown(dialog, { key: 'Tab' });
+    expect(document.activeElement).toBe(first);
+
+    first.focus();
+    fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+  });
+});
+
+describe('MobileModal Component: focus on mount', () => {
+  it('does not move focus when rendered open from the start', () => {
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+
+    render(
+      <MobileModal isOpen setIsOpen={() => {}} label='Sort'>
+        <button type='button'>Inside</button>
+      </MobileModal>,
+    );
+
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+  });
+
+  it('references the dialog by the provided id', () => {
+    const { getByRole } = render(
+      <MobileModal isOpen setIsOpen={() => {}} label='Sort' id='sort-dialog'>
+        Content
+      </MobileModal>,
+    );
+
+    expect(getByRole('dialog')).toHaveAttribute('id', 'sort-dialog');
+  });
+
+  it('closes even if the transition never ends (reduced motion, no stylesheet)', async () => {
+    jest.useFakeTimers();
+    const setIsOpen = jest.fn();
+    const { getByRole } = render(
+      <MobileModal isOpen setIsOpen={setIsOpen} label='Sort'>
+        Content
+      </MobileModal>,
+    );
+
+    fireEvent.keyDown(getByRole('dialog'), { key: 'Escape' });
+    expect(setIsOpen).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(300);
+    expect(setIsOpen).toHaveBeenCalledTimes(1);
+    expect(setIsOpen).toHaveBeenCalledWith(false);
+    jest.useRealTimers();
   });
 });

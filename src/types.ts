@@ -95,6 +95,12 @@ export type Translations = {
   // Product Card
   'Add to Cart'?: string;
 
+  // Screen reader announcements (live region). `{count}` is replaced with the number of results
+  'Loading results'?: string;
+  'No results found'?: string;
+  '1 result found'?: string;
+  '{count} results found'?: string;
+
   // Zero Results
   "Sorry, we didn't find:"?: string;
   'Sorry, we were unable to find what you were looking for.'?: string;
