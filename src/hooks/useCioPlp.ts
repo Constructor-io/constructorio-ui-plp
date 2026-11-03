@@ -128,13 +128,13 @@ export default function useCioPlp(props: UseCioPlpProps = {}) {
     }
   }, [search.data, isSearchPage, browse.data, isBrowsePage]);
 
-  // Refetch when the URL changes, but not on initial mount.
+  // When SPA navigation is enabled, refetch when the URL changes, but not on initial mount.
   // Note: The hook call order matters here. useFirstRender() must be called before useHistoryLocation()
   // to ensure that the initial render is correctly detected.
   const { isFirstRender } = useFirstRender();
-  const href = useHistoryLocation();
+  const href = useHistoryLocation(!!contextValue.enableSpaNavigation);
   useEffect(() => {
-    if (!isFirstRender) {
+    if (contextValue.enableSpaNavigation && !isFirstRender) {
       refetch();
     }
     // refetch is intentionally omitted as it is recreated every render

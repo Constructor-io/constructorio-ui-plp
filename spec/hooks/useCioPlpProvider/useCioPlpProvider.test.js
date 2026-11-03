@@ -1,5 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import useCioPlpProvider from '../../../src/hooks/useCioPlpProvider';
+import { setUrl } from '../../../src/utils/urlHelpers';
+import { setUrlWithPushState } from '../../../src/utils/spaUrlHelpers';
+import { shopifyDefaults } from '../../../src/utils/shopifyDefaults';
 
 describe('Testing Hook: useCioPlpProvider', () => {
   it('Should return client when custom client is provided', () => {
@@ -144,6 +147,51 @@ describe('Testing Hook: useCioPlpProvider', () => {
 
       // Verify custom urlHelper is set (not Shopify default)
       expect(urlHelpers.setUrl).toBe(customSetUrl);
+    });
+  });
+
+  describe('SPA navigation flag', () => {
+    const renderProvider = (initialProps) =>
+      renderHook((props) => useCioPlpProvider({ apiKey: 'test-key', ...props }), { initialProps });
+
+    test('Should default enableSpaNavigation to false and use hard-refresh setUrl', () => {
+      const { result } = renderProvider({});
+
+      expect(result.current.enableSpaNavigation).toBe(false);
+      expect(result.current.urlHelpers.setUrl).toBe(setUrl);
+    });
+
+    test('Should use setUrlWithPushState when enableSpaNavigation is true', () => {
+      const { result } = renderProvider({ enableSpaNavigation: true });
+
+      expect(result.current.enableSpaNavigation).toBe(true);
+      expect(result.current.urlHelpers.setUrl).toBe(setUrlWithPushState);
+    });
+
+    test('Should let a custom urlHelpers.setUrl override the flag', () => {
+      const customSetUrl = jest.fn();
+      const { result } = renderProvider({
+        enableSpaNavigation: true,
+        urlHelpers: { setUrl: customSetUrl },
+      });
+
+      expect(result.current.urlHelpers.setUrl).toBe(customSetUrl);
+    });
+
+    test('Should let Shopify defaults override the flag-selected setUrl', () => {
+      const { result } = renderProvider({ enableSpaNavigation: true, useShopifyDefaults: true });
+
+      expect(result.current.urlHelpers.setUrl).toBe(shopifyDefaults.urlHelpers.setUrl);
+    });
+
+    test('Should update the context when the flag changes between renders', () => {
+      const { result, rerender } = renderProvider({ enableSpaNavigation: false });
+      expect(result.current.urlHelpers.setUrl).toBe(setUrl);
+
+      rerender({ enableSpaNavigation: true });
+
+      expect(result.current.enableSpaNavigation).toBe(true);
+      expect(result.current.urlHelpers.setUrl).toBe(setUrlWithPushState);
     });
   });
 });

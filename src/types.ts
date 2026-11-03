@@ -277,6 +277,7 @@ export interface PlpContextValue {
   formatters: Formatters;
   callbacks: Callbacks;
   urlHelpers: UrlHelpers;
+  enableSpaNavigation?: boolean;
   renderOverrides: RenderOverrides;
   translations?: Translations;
   componentOverrides: PlpComponentOverrides;
@@ -372,6 +373,7 @@ export interface CioPlpProviderProps {
   itemFieldGetters?: Partial<ItemFieldGetters>;
   renderOverrides?: Partial<RenderOverrides>;
   urlHelpers?: Partial<UrlHelpers>;
+  enableSpaNavigation?: boolean;
   initialSearchResponse?: SearchResponse;
   initialBrowseResponse?: GetBrowseResultsResponse;
   staticRequestConfigs?: Partial<RequestConfigs>;
