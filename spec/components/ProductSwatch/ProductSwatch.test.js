@@ -8,7 +8,7 @@ import { transformResultItem } from '../../../src/utils/transformers';
 import SampleItem from '../../local_examples/item.json';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
-import { cnstrcDataAttrs } from '../../../src/utils';
+import { cnstrcDataAttrs, setUrl, setUrlWithPushState } from '../../../src/utils';
 
 describe('Product Swatch Component', () => {
   const swatchList = [
@@ -36,6 +36,24 @@ describe('Product Swatch Component', () => {
     hiddenSwatches: undefined,
     totalSwatchCount: 2,
     hasMoreSwatches: false,
+  };
+
+  const hiddenSwatches = [
+    {
+      url: 'ghi.com',
+      imageUrl: 'ghi.img',
+      itemName: 'ghi',
+      variationId: 'ghi',
+      swatchPreview: '#333333',
+    },
+  ];
+
+  const swatchObjectWithMore = {
+    ...swatchObject,
+    visibleSwatches: swatchList,
+    hiddenSwatches,
+    totalSwatchCount: 3,
+    hasMoreSwatches: true,
   };
 
   it('renders a swatch for each variation with swatchPreview', () => {
@@ -87,24 +105,6 @@ describe('Product Swatch Component', () => {
   });
 
   describe('View More button', () => {
-    const hiddenSwatches = [
-      {
-        url: 'ghi.com',
-        imageUrl: 'ghi.img',
-        itemName: 'ghi',
-        variationId: 'ghi',
-        swatchPreview: '#333333',
-      },
-    ];
-
-    const swatchObjectWithMore = {
-      ...swatchObject,
-      visibleSwatches: swatchList,
-      hiddenSwatches,
-      totalSwatchCount: 3,
-      hasMoreSwatches: true,
-    };
-
     it('does not render when hasMoreSwatches is false', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
@@ -185,6 +185,105 @@ describe('Product Swatch Component', () => {
         hiddenSwatches,
         expect.any(Function),
       );
+    });
+  });
+
+  describe('View More navigation', () => {
+    const originalLocation = window.location;
+    const productUrl = 'https://example.com/product/red';
+    const productSwatchObject = {
+      ...swatchObjectWithMore,
+      selectedVariation: { ...swatchList[0], url: productUrl },
+    };
+    let pushStateSpy;
+
+    beforeEach(() => {
+      delete window.location;
+      window.location = {
+        href: 'https://example.com/shoes?q=shoes',
+        origin: 'https://example.com',
+      };
+      pushStateSpy = jest.spyOn(window.history, 'pushState');
+    });
+
+    afterEach(() => {
+      window.location = originalLocation;
+      pushStateSpy.mockRestore();
+    });
+
+    const clickShowMore = (providerProps) => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY} {...providerProps}>
+          <ProductSwatch swatchObject={productSwatchObject} />
+        </CioPlp>,
+      );
+      fireEvent.click(screen.getByTestId('cio-swatch-show-more'));
+    };
+
+    it('does a full navigation to the swatch url by default', () => {
+      clickShowMore({});
+
+      expect(window.location.href).toBe(productUrl);
+      expect(pushStateSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not pushState to the swatch url when enableSpaNavigation is true', () => {
+      window.location = originalLocation;
+      const sameOriginSwatch = { ...swatchList[0], url: `${originalLocation.origin}/product/red` };
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      render(
+        <CioPlp apiKey={DEMO_API_KEY} enableSpaNavigation>
+          <ProductSwatch
+            swatchObject={{ ...productSwatchObject, selectedVariation: sameOriginSwatch }}
+          />
+        </CioPlp>,
+      );
+      fireEvent.click(screen.getByTestId('cio-swatch-show-more'));
+
+      expect(pushStateSpy).not.toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('calls a custom urlHelpers.setUrl with the swatch url', () => {
+      const customSetUrl = jest.fn();
+
+      clickShowMore({ urlHelpers: { setUrl: customSetUrl } });
+
+      expect(customSetUrl).toHaveBeenCalledWith(productUrl);
+      expect(pushStateSpy).not.toHaveBeenCalled();
+    });
+
+    it('calls a custom urlHelpers.setUrl over the pushState setUrl when enableSpaNavigation is true', () => {
+      const customSetUrl = jest.fn();
+
+      clickShowMore({ enableSpaNavigation: true, urlHelpers: { setUrl: customSetUrl } });
+
+      expect(customSetUrl).toHaveBeenCalledWith(productUrl);
+      expect(pushStateSpy).not.toHaveBeenCalled();
+    });
+
+    it('hands a custom onShowMoreSwatches callback the full-navigation setUrl when enableSpaNavigation is true', () => {
+      const onShowMoreSwatches = jest.fn();
+
+      clickShowMore({ enableSpaNavigation: true, callbacks: { onShowMoreSwatches } });
+
+      const callbackSetUrl = onShowMoreSwatches.mock.calls[0][3];
+      expect(callbackSetUrl).toBe(setUrl);
+      expect(callbackSetUrl).not.toBe(setUrlWithPushState);
+    });
+
+    it('hands a custom onShowMoreSwatches callback the custom urlHelpers.setUrl', () => {
+      const onShowMoreSwatches = jest.fn();
+      const customSetUrl = jest.fn();
+
+      clickShowMore({
+        enableSpaNavigation: true,
+        urlHelpers: { setUrl: customSetUrl },
+        callbacks: { onShowMoreSwatches },
+      });
+
+      expect(onShowMoreSwatches.mock.calls[0][3]).toBe(customSetUrl);
     });
   });
 });
