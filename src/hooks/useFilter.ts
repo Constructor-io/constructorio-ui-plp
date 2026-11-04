@@ -71,7 +71,8 @@ export interface UseFilterProps {
   hierarchyCollapsible?: boolean;
   /**
    * Global default for whether nested option lists start collapsed rather than expanded. Initial
-   * state only — each option list owns expansion from then on. Defaults to `false`.
+   * state only — each option list owns expansion from then on. Defaults to `true`, since nested
+   * options aren't limited by `initialNumOptions` and an expanded tree can get long.
    * Per-facet overrides via `perFacetConfigs[name].defaultHierarchyCollapsed` take precedence.
    *
    * A branch holding a selected option still auto-expands, so an applied filter is never hidden.
@@ -168,9 +169,7 @@ export default function useFilter(props: UseFilterProps): UseFilterReturn {
 
   const getDefaultHierarchyCollapsed = useCallback(
     (facet: PlpFacet): boolean =>
-      perFacetConfigs?.[facet.name]?.defaultHierarchyCollapsed ??
-      defaultHierarchyCollapsed ??
-      false,
+      perFacetConfigs?.[facet.name]?.defaultHierarchyCollapsed ?? defaultHierarchyCollapsed ?? true,
     [perFacetConfigs, defaultHierarchyCollapsed],
   );
 

@@ -164,14 +164,16 @@ Branch collapsing is separate from filter-group collapsing, and so are its props
 | Prop                        | Default | Description                                                                          |
 | --------------------------- | ------- | ------------------------------------------------------------------------------------ |
 | `hierarchyCollapsible`      | `true`  | Whether options that have children get a toggle collapsing their nested list          |
-| `defaultHierarchyCollapsed` | `false` | Whether branches start collapsed rather than expanded                                 |
+| `defaultHierarchyCollapsed` | `true`  | Whether branches start collapsed rather than expanded                                 |
 | `isCollapsed` / `defaultCollapsed` | - | Collapse the **filter group** as a whole (see [above](#collapse-all-filter-groups-v1100-required)) |
 
-### Collapsed by Default
+Branches start collapsed, because nested options aren't limited by `initialNumOptions` and a fully expanded tree can get long. A branch holding a selected option auto-expands, so an applied filter is never hidden.
 
-<Canvas of={FiltersStories.HierarchyCollapsedByDefault} />
+### Expanded by Default
 
-This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track. A branch holding a selected option auto-expands even when collapsed by default, so an applied filter is never hidden.
+<Canvas of={FiltersStories.HierarchyExpandedByDefault} />
+
+Set `defaultHierarchyCollapsed={false}` to start with every branch expanded. This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track.
 
 ### Without Collapse Toggles
 
@@ -215,7 +217,7 @@ export function HierarchicalFilters() {
 
 1. **`perFacetConfigs[name].hierarchyCollapsible` / `.defaultHierarchyCollapsed`** (per-facet config) - highest priority
 2. **`hierarchyCollapsible` / `defaultHierarchyCollapsed`** (global props)
-3. **Defaults** - collapsible branches that start expanded
+3. **Defaults** - collapsible branches that start collapsed
 
 ### Selecting Nested Options
 

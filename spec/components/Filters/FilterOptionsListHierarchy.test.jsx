@@ -105,7 +105,7 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(container.querySelectorAll('.cio-filter-multiple-option').length).toBe(8);
     });
 
-    it('Should render inside a filter group', () => {
+    it('Should render inside a filter group, with branches collapsed by default', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters facets={hierarchicalFacets} />
@@ -113,8 +113,9 @@ describe('FilterOptionsList - hierarchical options', () => {
       );
 
       expect(screen.getByText('Category')).toBeInTheDocument();
-      expect(screen.getByText('T-Shirts')).toBeInTheDocument();
-      expect(getToggle('Apparel')).toBeInTheDocument();
+      expect(screen.getByText('Apparel')).toBeInTheDocument();
+      expect(getToggle('Apparel')).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.queryByText('Tops')).not.toBeInTheDocument();
     });
 
     it('Should render counts for nested options', () => {
@@ -421,8 +422,16 @@ describe('FilterOptionsList - hierarchical options', () => {
     it('Should keep ids unique when the same facets render twice on a page', () => {
       const { container } = render(
         <CioPlp apiKey={DEMO_API_KEY}>
-          <Filters facets={hierarchicalFacets} idPrefix='desktop' />
-          <Filters facets={hierarchicalFacets} idPrefix='mobile' />
+          <Filters
+            facets={hierarchicalFacets}
+            idPrefix='desktop'
+            defaultHierarchyCollapsed={false}
+          />
+          <Filters
+            facets={hierarchicalFacets}
+            idPrefix='mobile'
+            defaultHierarchyCollapsed={false}
+          />
         </CioPlp>,
       );
 
@@ -437,19 +446,19 @@ describe('FilterOptionsList - hierarchical options', () => {
   });
 
   describe('perFacetConfigs', () => {
-    it('Should collapse branches for one facet only', () => {
+    it('Should expand branches for one facet only', () => {
       render(
         <CioPlp apiKey={DEMO_API_KEY}>
           <Filters
             facets={hierarchicalFacets}
-            perFacetConfigs={{ category: { defaultHierarchyCollapsed: true } }}
+            perFacetConfigs={{ category: { defaultHierarchyCollapsed: false } }}
           />
         </CioPlp>,
       );
 
-      expect(screen.queryByText('Tops')).not.toBeInTheDocument();
-      // collection is untouched, so its branch stays expanded
-      expect(screen.getByText('Weekday')).toBeInTheDocument();
+      expect(screen.getByText('Tops')).toBeInTheDocument();
+      // collection is untouched, so its branch keeps the collapsed default
+      expect(screen.queryByText('Weekday')).not.toBeInTheDocument();
     });
 
     it('Should remove toggles for one facet only', () => {
@@ -473,7 +482,7 @@ describe('FilterOptionsList - hierarchical options', () => {
         <CioPlp
           apiKey={DEMO_API_KEY}
           componentOverrides={{ filterGroup: { optionsList: { filterOption } } }}>
-          <Filters facets={hierarchicalFacets} />
+          <Filters facets={hierarchicalFacets} defaultHierarchyCollapsed={false} />
         </CioPlp>,
       );
 

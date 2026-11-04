@@ -525,7 +525,7 @@ export interface FacetConfig {
   /**
    * Whether this facet's nested option lists start collapsed rather than expanded. Initial state
    * only — the option list owns expansion from then on. Takes precedence over the global
-   * `defaultHierarchyCollapsed`. Defaults to `false`.
+   * `defaultHierarchyCollapsed`. Defaults to `true`.
    *
    * A branch holding a selected option still auto-expands, so an applied filter is never hidden.
    */

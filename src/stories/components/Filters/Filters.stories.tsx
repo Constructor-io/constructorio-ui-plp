@@ -67,7 +67,7 @@ const meta = {
     },
     defaultHierarchyCollapsed: {
       table: {
-        defaultValue: { summary: 'false' },
+        defaultValue: { summary: 'true' },
       },
     },
     idPrefix: {
@@ -416,7 +416,7 @@ export const OverrideSpecificOption: Story = {
 
 /**
  * Facet options that carry nested `options` render as a hierarchy: each level is indented, and
- * options that have children get a toggle that collapses their branch.
+ * options that have children get a toggle that collapses their branch. Branches start collapsed.
  */
 export const HierarchicalFilters: Story = {
   render: (args) => <PrimaryStory args={args} />,
@@ -426,15 +426,14 @@ export const HierarchicalFilters: Story = {
 };
 
 /**
- * Use `defaultHierarchyCollapsed` to have every branch start collapsed. This is initial state only —
- * the option list owns expansion from then on. A branch holding a selected option still
- * auto-expands, so an applied filter is never hidden.
+ * Use `defaultHierarchyCollapsed={false}` to have every branch start expanded. This is initial state
+ * only — the option list owns expansion from then on.
  */
-export const HierarchyCollapsedByDefault: Story = {
+export const HierarchyExpandedByDefault: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockHierarchicalFacets as Array<PlpFacet>,
-    defaultHierarchyCollapsed: true,
+    defaultHierarchyCollapsed: false,
   },
 };
 
@@ -451,13 +450,13 @@ export const HierarchyNotCollapsible: Story = {
 
 /**
  * Both hierarchy props can be set per facet through `perFacetConfigs`, which takes precedence over
- * the global props. Here only the "Category" facet starts collapsed.
+ * the global props. Here only the "Category" facet starts expanded.
  */
 export const HierarchyPerFacetConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockHierarchicalFacets as Array<PlpFacet>,
-    perFacetConfigs: { category: { defaultHierarchyCollapsed: true } },
+    perFacetConfigs: { category: { defaultHierarchyCollapsed: false } },
   },
 };
 

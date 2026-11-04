@@ -48,7 +48,7 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
   hierarchyCollapsible?: boolean;
   /**
    * Whether this group's nested option lists start collapsed. Initial state only. Already resolved
-   * against `perFacetConfigs` by `useFilter`. Defaults to `false`.
+   * against `perFacetConfigs` by `useFilter`, which defaults it to `true`.
    */
   defaultHierarchyCollapsed?: boolean;
   /** Namespace for option DOM ids, so the same facet can render more than once per page. */

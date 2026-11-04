@@ -14,7 +14,7 @@ export type FilterOptionsListProps = UseFilterOptionsListProps & {
   hierarchyCollapsible?: boolean;
   /**
    * Whether nested option lists start collapsed rather than expanded. Initial state only - the
-   * list owns expansion from then on. Defaults to `false`.
+   * list owns expansion from then on. Resolved by `useFilter`, which defaults it to `true`.
    */
   defaultHierarchyCollapsed?: boolean;
   /**

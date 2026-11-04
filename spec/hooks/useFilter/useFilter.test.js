@@ -393,12 +393,12 @@ describe('Testing Hook: useFilter', () => {
     const hierarchicalFacets = require('../../local_examples/sampleHierarchicalFacets.json');
     const [categoryFacet, collectionFacet] = hierarchicalFacets;
 
-    it('Should default to collapsible branches that start expanded', async () => {
+    it('Should default to collapsible branches that start collapsed', async () => {
       const { result } = renderHookWithCioPlp(() => useFilter({ facets: hierarchicalFacets }));
 
       await waitFor(() => {
         expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
-        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(false);
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
       });
     });
 
@@ -444,14 +444,14 @@ describe('Testing Hook: useFilter', () => {
       const { result } = renderHookWithCioPlp(() =>
         useFilter({
           facets: hierarchicalFacets,
-          defaultCollapsed: true,
-          perFacetConfigs: { category: { isCollapsed: true } },
+          defaultCollapsed: false,
+          perFacetConfigs: { category: { isCollapsed: false } },
         }),
       );
 
       await waitFor(() => {
-        // `defaultCollapsed` / `isCollapsed` collapse the filter group, not its branches
-        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(false);
+        // `defaultCollapsed` / `isCollapsed` expand the filter group, not its branches
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
         expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
       });
     });
