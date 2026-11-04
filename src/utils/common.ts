@@ -46,8 +46,11 @@ export function isValidSalePrice(salePrice?: number, usualPrice?: number) {
  * token list, so an `id` containing a space resolves to nothing.
  *
  * Letters and digits of any script are kept, so ids stay readable (and stable) for non-Latin
- * catalogs. Returns an empty string when a value has nothing else left (e.g. `"+"`), leaving it to
- * the caller to fall back to a positional token.
+ * catalogs. Returns an empty string when a value has nothing else left (e.g. `"+"`), leaving the
+ * fallback to the caller.
+ *
+ * Not one-to-one: `Tailorbyrd` and `TailorByrd` share a slug, so callers that need unique ids must
+ * de-duplicate.
  */
 export function slugify(value: string) {
   return (

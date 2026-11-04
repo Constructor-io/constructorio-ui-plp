@@ -129,11 +129,15 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * `@constructor-io/constructorio-ui-components` expects. Nested facet options recurse under
    * the same `options` key on both sides, so only the field names per option differ.
    *
-   * Each option's `id` is built from its full path — `[idPrefix, facetName, ...ancestorValues,
-   * value]`, each segment slugified — rather than from its value alone. Slugifying keeps ids valid:
-   * values carry whitespace and quotes, which invalidate an `id` and break the `aria-controls`
-   * linking each option to its nested list. Values that slugify to nothing fall back to their position among
-   * their siblings.
+   * Each option's `id` is `[idPrefix, facetName, value]`, each segment slugified. Slugifying keeps
+   * ids valid: values carry whitespace and quotes, which invalidate an `id` and break the
+   * `aria-controls` linking each option to its nested list. Values are unique within a facet, so
+   * the value alone identifies an option at any depth.
+   *
+   * Slugifying is lossy, though: `Tailorbyrd` and `TailorByrd`, or `Black / Navy` and `Black-Navy`,
+   * share a slug. Ids are therefore de-duplicated per facet with a `-2`, `-3`, ... suffix, which
+   * also keeps them clear of the `<id>-hierarchy` id the list gives each nested list. Values that
+   * slugify to nothing fall back to `option`.
    */
   const filterOptions: Array<FilterOptionData> = useMemo(() => {
     const rootId = [idPrefix, facet.name]
@@ -142,15 +146,31 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
       .filter(Boolean)
       .join('-');
 
-    const toFilterOptionData = (
-      option: PlpFacetOption,
-      index: number,
-      parentId: string,
-    ): FilterOptionData => {
+    const usedIds = new Set<string>();
+    // The first free `base`, `base-2`, `base-3`, ... An option with nested options also needs
+    // `<id>-hierarchy` free, since that becomes the id of its nested list.
+    const claimId = (base: string, hasNestedOptions: boolean) => {
+      const isTaken = (candidate: string) =>
+        usedIds.has(candidate) || (hasNestedOptions && usedIds.has(`${candidate}-hierarchy`));
+      let id = base;
+      let suffix = 2;
+
+      while (isTaken(id)) {
+        id = `${base}-${suffix}`;
+        suffix += 1;
+      }
+      usedIds.add(id);
+      if (hasNestedOptions) usedIds.add(`${id}-hierarchy`);
+
+      return id;
+    };
+
+    const toFilterOptionData = (option: PlpFacetOption): FilterOptionData => {
       const visual = isVisual
         ? resolveVisualOption(option, getVisualImageUrl, getVisualColorHex)
         : null;
-      const id = `${parentId}-${slugify(option.value) || `option-${index}`}`;
+      const hasNestedOptions = !!option.options?.length;
+      const id = claimId(`${rootId}-${slugify(option.value) || 'option'}`, hasNestedOptions);
 
       return {
         id,
@@ -159,15 +179,11 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
         displayCountValue: option.count?.toString(),
         isChecked: selectedOptionMap[option.value] || false,
         ...(visual && { visual }),
-        ...(option.options?.length && {
-          options: option.options.map((childOption, childIndex) =>
-            toFilterOptionData(childOption, childIndex, id),
-          ),
-        }),
+        ...(option.options?.length && { options: option.options.map(toFilterOptionData) }),
       };
     };
 
-    return facetOptions.map((option, index) => toFilterOptionData(option, index, rootId));
+    return facetOptions.map(toFilterOptionData);
   }, [
     facetOptions,
     facet.name,

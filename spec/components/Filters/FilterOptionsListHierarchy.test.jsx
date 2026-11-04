@@ -327,15 +327,25 @@ describe('FilterOptionsList - hierarchical options', () => {
   });
 
   describe('Option ids', () => {
-    it('Should build each id from the full option path', () => {
+    /** Flat facet whose values only differ in case or punctuation, so their slugs collide. */
+    const brandFacet = {
+      displayName: 'Brand',
+      name: 'brand',
+      type: 'multiple',
+      data: {},
+      hidden: false,
+      options: ['Tailorbyrd', 'TailorByrd', 'Black / Navy', 'Black-Navy', 'Black Navy 2'].map(
+        (value) => ({ status: '', count: 1, displayName: value, value, data: {}, options: [] }),
+      ),
+    };
+
+    it('Should build each id from the facet name and the option value', () => {
       const { container } = renderOptionsList();
 
       expect(container.querySelector('input[id="category-apparel"]')).toBeInTheDocument();
+      expect(container.querySelector('input[id="category-apparel-tops"]')).toBeInTheDocument();
       expect(
-        container.querySelector('input[id="category-apparel-apparel-tops"]'),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector('input[id="category-apparel-apparel-tops-apparel-tops-t-shirts"]'),
+        container.querySelector('input[id="category-apparel-tops-t-shirts"]'),
       ).toBeInTheDocument();
     });
 
@@ -343,13 +353,58 @@ describe('FilterOptionsList - hierarchical options', () => {
       const { container } = renderOptionsList();
 
       expect(
-        container.querySelector(
-          'input[id="category-apparel-apparel-tops-apparel-tops-shirts-blouses"]',
-        ),
+        container.querySelector('input[id="category-apparel-tops-shirts-blouses"]'),
       ).toBeInTheDocument();
       container.querySelectorAll('[id]').forEach((element) => {
         expect(element.getAttribute('id')).not.toMatch(/\s/);
       });
+    });
+
+    it('Should keep ids unique when values only differ in case or punctuation', () => {
+      const { container } = renderOptionsList({ facet: brandFacet });
+
+      const ids = Array.from(container.querySelectorAll('input')).map((input) => input.id);
+
+      expect(ids).toEqual([
+        'brand-tailorbyrd',
+        'brand-tailorbyrd-2',
+        'brand-black-navy',
+        'brand-black-navy-2',
+        // Its own slug is the suffixed id taken above, so it moves on to the next free one
+        'brand-black-navy-2-2',
+      ]);
+    });
+
+    it('Should link each label to its own checkbox when slugs collide', () => {
+      renderOptionsList({ facet: brandFacet });
+
+      fireEvent.click(screen.getByText('TailorByrd'));
+
+      expect(lastAppliedValues()).toEqual(['TailorByrd']);
+      expect(isChecked('TailorByrd')).toBe(true);
+      expect(isChecked('Tailorbyrd')).toBe(false);
+    });
+
+    it('Should keep option ids clear of the ids of nested lists', () => {
+      const facet = {
+        ...categoryFacet,
+        options: [
+          {
+            status: '',
+            count: 1,
+            displayName: 'Apparel Hierarchy',
+            value: 'Apparel Hierarchy',
+            data: {},
+            options: [],
+          },
+          ...categoryFacet.options,
+        ],
+      };
+      const { container } = renderOptionsList({ facet });
+
+      const ids = Array.from(container.querySelectorAll('[id]')).map((element) => element.id);
+
+      expect(new Set(ids).size).toBe(ids.length);
     });
 
     it('Should point every label and toggle at an element that exists', () => {
@@ -376,12 +431,8 @@ describe('FilterOptionsList - hierarchical options', () => {
       );
 
       expect(new Set(ids).size).toBe(ids.length);
-      expect(
-        container.querySelector('input[id="desktop-category-apparel-apparel-tops"]'),
-      ).toBeTruthy();
-      expect(
-        container.querySelector('input[id="mobile-category-apparel-apparel-tops"]'),
-      ).toBeTruthy();
+      expect(container.querySelector('input[id="desktop-category-apparel-tops"]')).toBeTruthy();
+      expect(container.querySelector('input[id="mobile-category-apparel-tops"]')).toBeTruthy();
     });
   });
 
@@ -482,7 +533,7 @@ describe('FilterOptionsList - hierarchical options', () => {
 
       expect(filterOption).toHaveBeenCalledWith(
         expect.objectContaining({
-          id: 'category-apparel-apparel-tops',
+          id: 'category-apparel-tops',
           optionValue: 'Apparel/Tops',
           displayValue: 'Tops',
           displayCountValue: '60',
