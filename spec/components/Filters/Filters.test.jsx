@@ -945,10 +945,8 @@ describe('Testing Component: Filters', () => {
 
       await waitFor(() => {
         const customOptions = queryAllByTestId('custom-options');
-        // Should render for every option facet — multiple, single and hierarchical — but not range
-        const optionsListFacets = mockTransformedFacets.filter((f) =>
-          ['multiple', 'single', 'hierarchical'].includes(f.type),
-        );
+        // Every facet type except range, which renders a slider instead
+        const optionsListFacets = mockTransformedFacets.filter((f) => f.type !== 'range');
         expect(customOptions.length).toBe(optionsListFacets.length);
 
         // Default options lists should NOT render
