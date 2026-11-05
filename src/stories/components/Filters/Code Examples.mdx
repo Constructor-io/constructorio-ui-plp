@@ -221,29 +221,25 @@ Both props can be set per facet through `perFacetConfigs`, which takes precedenc
 <Canvas of={FiltersStories.HierarchyPerFacetConfigs} />
 
 ```jsx
-import { CioPlp, CioPlpGrid, Filters } from '@constructor-io/constructorio-ui-plp';
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
 import '@constructor-io/constructorio-ui-plp/styles.css';
 
 const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
 
-export function HierarchicalFilters() {
+export default function MyComponent() {
   return (
-    <CioPlp apiKey={DEMO_API_KEY}>
-      <CioPlpGrid>
-        {(props) => (
-          <Filters
-            facets={props.filters.facets}
-            // Global defaults for every facet
-            defaultHierarchyCollapsed
-            // Per-facet overrides win over the props above
-            perFacetConfigs={{
-              category: { defaultHierarchyCollapsed: false },
-              collection: { hierarchyCollapsible: false },
-            }}
-          />
-        )}
-      </CioPlpGrid>
-    </CioPlp>
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        // Global: every facet's branches start expanded
+        defaultHierarchyCollapsed: false,
+        // Per-facet overrides win over the global props
+        perFacetConfigs: {
+          category: { defaultHierarchyCollapsed: true }, // Category starts collapsed
+          collection: { hierarchyCollapsible: false }, // Collection has no toggles
+        },
+      }}
+    />
   );
 }
 ```

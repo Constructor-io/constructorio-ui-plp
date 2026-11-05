@@ -450,13 +450,18 @@ export const HierarchyNotCollapsible: Story = {
 
 /**
  * Both hierarchy props can be set per facet through `perFacetConfigs`, which takes precedence over
- * the global props. Here only the "Category" facet starts expanded.
+ * the global props. Here branches start expanded globally, except for "Category", which starts
+ * collapsed, and "Collection" has no collapse toggles.
  */
 export const HierarchyPerFacetConfigs: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockHierarchicalFacets as Array<PlpFacet>,
-    perFacetConfigs: { category: { defaultHierarchyCollapsed: false } },
+    defaultHierarchyCollapsed: false,
+    perFacetConfigs: {
+      category: { defaultHierarchyCollapsed: true },
+      collection: { hierarchyCollapsible: false },
+    },
   },
 };
 
