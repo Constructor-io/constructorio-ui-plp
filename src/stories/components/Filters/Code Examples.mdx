@@ -170,11 +170,47 @@ Branches start collapsed, because nested options aren't limited by `initialNumOp
 
 <Canvas of={FiltersStories.HierarchyExpandedByDefault} />
 
-Set `defaultHierarchyCollapsed={false}` to start with every branch expanded. This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track.
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        defaultHierarchyCollapsed: false, // All branches start expanded
+      }}
+    />
+  );
+}
+```
+
+Set `defaultHierarchyCollapsed` to `false` to start with every branch expanded. This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track.
 
 ### Without Collapse Toggles
 
 <Canvas of={FiltersStories.HierarchyNotCollapsible} />
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        hierarchyCollapsible: false, // No toggles; branches are always expanded
+      }}
+    />
+  );
+}
+```
 
 Without a toggle, branches are always expanded, so `defaultHierarchyCollapsed` has no effect on these facets. A branch with no toggle that started collapsed could never be opened.
 
