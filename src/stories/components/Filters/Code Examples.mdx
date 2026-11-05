@@ -157,13 +157,12 @@ Facets of type `hierarchical` render as a tree: each level is indented, and opti
 
 <Canvas of={FiltersStories.HierarchicalFilters} />
 
-Branch collapsing is separate from filter-group collapsing, and so are its props:
+These props collapse branches *inside* a facet. To collapse the whole facet, use `defaultCollapsed` or `perFacetConfigs[name].isCollapsed`, covered in **Collapse All Filter Groups** and **Collapse Specific Filter Groups** above.
 
-| Prop                        | Default | Description                                                                          |
-| --------------------------- | ------- | ------------------------------------------------------------------------------------ |
-| `hierarchyCollapsible`      | `true`  | Whether options that have children get a toggle collapsing their nested list          |
-| `defaultHierarchyCollapsed` | `true`  | Whether branches start collapsed rather than expanded                                 |
-| `isCollapsed` / `defaultCollapsed` | - | Collapse the **filter group** as a whole (see [above](#collapse-all-filter-groups-v1100-required)) |
+| Prop                        | Default | Description                                                                 |
+| --------------------------- | ------- | --------------------------------------------------------------------------- |
+| `hierarchyCollapsible`      | `true`  | Whether options that have children get a toggle collapsing their nested list |
+| `defaultHierarchyCollapsed` | `true`  | Whether branches start collapsed rather than expanded                        |
 
 Branches start collapsed, because nested options aren't limited by `initialNumOptions` and a fully expanded tree can get long. A branch holding a selected option auto-expands, so an applied filter is never hidden.
 
