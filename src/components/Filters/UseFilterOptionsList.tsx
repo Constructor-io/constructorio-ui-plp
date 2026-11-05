@@ -125,9 +125,9 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   }, [facet]);
 
   /**
-   * Facet options mapped to the shape `FilterOptionsList` from
-   * `@constructor-io/constructorio-ui-components` expects. Nested facet options recurse under
-   * the same `options` key on both sides, so only the field names per option differ.
+   * The options to render, as `FilterOptionData` for the components library's `FilterOptionsList`.
+   * Hidden options are left out and the top level is cut to the "Show All" limit. Each option gets
+   * its id and checked state, and its nested options are converted too.
    *
    * Each option's `id` is `[idPrefix, facetName, value]`, each segment slugified. Slugifying keeps
    * ids valid: values carry whitespace and quotes, which invalidate an `id` and break the
