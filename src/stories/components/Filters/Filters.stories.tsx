@@ -415,8 +415,8 @@ export const OverrideSpecificOption: Story = {
 };
 
 /**
- * Facet options that carry nested `options` render as a hierarchy: each level is indented, and
- * options that have children get a toggle that collapses their branch. Branches start collapsed.
+ * Facets of type `hierarchical` render as a tree: each level is indented, and options that have
+ * children get a toggle that collapses their branch. Branches start collapsed.
  */
 export const HierarchicalFilters: Story = {
   render: (args) => <PrimaryStory args={args} />,

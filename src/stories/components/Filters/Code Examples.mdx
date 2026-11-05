@@ -153,9 +153,7 @@ export function SpecificCollapsed() {
 
 ## Hierarchical Filter Options
 
-Facet options can carry their own nested `options`. Those render as a hierarchy: each level is indented, and options that have children get a toggle that collapses their branch.
-
-This covers both shapes the API returns: a facet of type `hierarchical`, and a `multiple` or `single` facet whose options happen to carry children. All three render through the same option list, and a `hierarchical` facet accumulates selections the way a `multiple` one does - only `single` facets are one-at-a-time.
+Facets of type `hierarchical` render as a tree: each level is indented, and options that have children get a toggle that collapses their branch. Each nested option's value is its full path from the top, like `Apparel/Tops/T-Shirts`.
 
 <Canvas of={FiltersStories.HierarchicalFilters} />
 
