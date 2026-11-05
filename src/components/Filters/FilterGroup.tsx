@@ -43,7 +43,8 @@ export interface FilterGroupProps extends IncludeComponentOverrides<FilterGroupO
   /**
    * Whether options that have nested options get a toggle collapsing their nested list. Collapses
    * branches *within* this group, unrelated to `isCollapsedOverride` above, which collapses the group
-   * itself. Already resolved against `perFacetConfigs` by `useFilter`. Defaults to `true`.
+   * itself. Already resolved against `perFacetConfigs` by `useFilter`. Defaults to `true`. When
+   * `false`, branches are always expanded and `defaultHierarchyCollapsed` has no effect.
    */
   hierarchyCollapsible?: boolean;
   /**

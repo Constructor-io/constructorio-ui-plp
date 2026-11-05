@@ -9,7 +9,8 @@ import type { FilterOptionOverride } from '../../types';
 export type FilterOptionsListProps = UseFilterOptionsListProps & {
   /**
    * Whether options that have nested options get a toggle collapsing their nested list.
-   * Defaults to `true`.
+   * Defaults to `true`. When `false`, branches are always expanded and `defaultHierarchyCollapsed`
+   * has no effect.
    */
   hierarchyCollapsible?: boolean;
   /**

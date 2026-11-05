@@ -67,6 +67,9 @@ export interface UseFilterProps {
    * nested list. This collapses branches *within* a filter group — unrelated to `defaultCollapsed`,
    * which collapses filter groups as a whole. Defaults to `true`.
    * Per-facet overrides via `perFacetConfigs[name].hierarchyCollapsible` take precedence.
+   *
+   * When `false`, branches are always expanded, so `defaultHierarchyCollapsed` has no effect: a
+   * branch with no toggle that started collapsed could never be opened.
    */
   hierarchyCollapsible?: boolean;
   /**

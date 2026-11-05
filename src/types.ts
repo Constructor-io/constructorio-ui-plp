@@ -520,6 +520,9 @@ export interface FacetConfig {
    * Collapses branches *within* this facet's option list — unrelated to `isCollapsed`, which
    * collapses the filter group as a whole. Takes precedence over the global
    * `hierarchyCollapsible`. Defaults to `true`.
+   *
+   * When `false`, this facet's branches are always expanded, so `defaultHierarchyCollapsed` has no
+   * effect: a branch with no toggle that started collapsed could never be opened.
    */
   hierarchyCollapsible?: boolean;
   /**

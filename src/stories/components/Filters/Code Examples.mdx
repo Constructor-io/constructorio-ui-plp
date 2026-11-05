@@ -179,6 +179,8 @@ Set `defaultHierarchyCollapsed={false}` to start with every branch expanded. Thi
 
 <Canvas of={FiltersStories.HierarchyNotCollapsible} />
 
+Without a toggle, branches are always expanded, so `defaultHierarchyCollapsed` has no effect on these facets. A branch with no toggle that started collapsed could never be opened.
+
 ### Per-Facet Configuration
 
 Both props can be set per facet through `perFacetConfigs`, which takes precedence over the global props:

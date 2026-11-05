@@ -474,6 +474,24 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(getToggle('Apparel')).not.toBeInTheDocument();
       expect(getToggle('Everyday')).toBeInTheDocument();
     });
+
+    it('Should keep branches without toggles expanded, even when branches start collapsed', () => {
+      render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters
+            facets={hierarchicalFacets}
+            defaultHierarchyCollapsed
+            perFacetConfigs={{ category: { hierarchyCollapsible: false } }}
+          />
+        </CioPlp>,
+      );
+
+      // A branch with no toggle that started collapsed could never be opened
+      expect(screen.getByText('Tops')).toBeInTheDocument();
+      expect(screen.getByText('T-Shirts')).toBeInTheDocument();
+      // collection keeps its toggle, so it follows defaultHierarchyCollapsed
+      expect(screen.queryByText('Weekday')).not.toBeInTheDocument();
+    });
   });
 
   describe('filterOption override', () => {
