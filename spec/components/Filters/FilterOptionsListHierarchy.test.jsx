@@ -553,6 +553,32 @@ describe('FilterOptionsList - hierarchical options', () => {
       expect(document.querySelectorAll('.custom-every-option').length).toBe(totalOptions);
     });
 
+    it('Should apply the filter when a custom option reports its click', () => {
+      renderOptionsList({
+        defaultHierarchyCollapsed: false,
+        filterOptionOverride: (option) =>
+          option.optionValue === 'Footwear/Sneakers'
+            ? {
+                reactNode: (props) => (
+                  <li>
+                    <input
+                      type='checkbox'
+                      aria-label='Custom Sneakers'
+                      checked={props.isChecked}
+                      onChange={() => props.onChange(props.optionValue)}
+                    />
+                  </li>
+                ),
+              }
+            : undefined,
+      });
+
+      fireEvent.click(screen.getByLabelText('Custom Sneakers'));
+
+      expect(lastAppliedValues()).toEqual(['Footwear/Sneakers']);
+      expect(screen.getByLabelText('Custom Sneakers')).toBeChecked();
+    });
+
     it('Should receive the mapped option data, including checked state', () => {
       const filterOption = jest.fn().mockReturnValue(undefined);
 

@@ -382,9 +382,18 @@ Replace the checkbox options list with a custom implementation (only affects mul
             ? {
                 reactNode: (props) => (
                   <li>
-                    👟 {option.displayValue} - {option.displayCountValue} items
+                    <label htmlFor={props.id}>
+                      <input
+                        type='checkbox'
+                        id={props.id}
+                        checked={props.isChecked}
+                        // Report the click back so PLP applies or removes the filter
+                        onChange={() => props.onChange(props.optionValue)}
+                      />
+                      👟 {props.displayValue} - {props.displayCountValue} items
+                    </label>
                     {/* Re-emit children to keep an option's nested list */}
-                    {props?.children}
+                    {props.children}
                   </li>
                 ),
               }
@@ -397,6 +406,8 @@ Replace the checkbox options list with a custom implementation (only affects mul
 ```
 
 The function receives the option as `FilterOptionData` - `id`, `optionValue`, `displayValue`, `displayCountValue`, `isChecked` and any nested `options` - not as a `PlpFacetOption`. Overriding an option that has children drops its nested list unless the `reactNode` render function re-emits `props.children`.
+
+A custom option replaces the default checkbox, so it has to report clicks itself: call `props.onChange(props.optionValue)` and PLP applies or removes the filter. Read the checked state from `props.isChecked`, which stays in sync with the filters applied, including ones that arrive from the URL.
 
 ### Override Range Slider
 

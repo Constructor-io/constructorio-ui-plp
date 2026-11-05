@@ -389,11 +389,16 @@ export const OverrideRangeSlider: Story = {
  * Use `componentOverrides.filterGroup.optionsList.filterOption` to replace individual options
  * instead of the list around them. Returning `undefined` leaves an option at its default, so a
  * function can target a single option — here only "Sneakers".
+ *
+ * A custom option reports clicks by calling `props.onChange(props.optionValue)`, and reads its
+ * checked state from `props.isChecked`.
  */
 export const OverrideSpecificOption: Story = {
   render: (args) => <PrimaryStory args={args} />,
   args: {
     facets: mockHierarchicalFacets as Array<PlpFacet>,
+    // Expanded so the overridden option, nested under "Footwear", is visible straight away
+    defaultHierarchyCollapsed: false,
     componentOverrides: {
       filterGroup: {
         optionsList: {
@@ -401,9 +406,25 @@ export const OverrideSpecificOption: Story = {
             option.optionValue === 'Footwear/Sneakers'
               ? {
                   reactNode: (props) => (
-                    <li style={{ listStyle: 'none', padding: '4px 0 4px 28px' }}>
-                      <strong>👟 {option.displayValue}</strong> — {option.displayCountValue} items
-                      {props?.children}
+                    <li style={{ listStyle: 'none', padding: '4px 0' }}>
+                      <label
+                        htmlFor={props.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8,
+                          cursor: 'pointer',
+                        }}>
+                        <input
+                          type='checkbox'
+                          id={props.id}
+                          checked={props.isChecked}
+                          // Report the click back so PLP applies or removes the filter
+                          onChange={() => props.onChange(props.optionValue)}
+                        />
+                        👟 <strong>{props.displayValue}</strong> — {props.displayCountValue} items
+                      </label>
+                      {props.children}
                     </li>
                   ),
                 }
