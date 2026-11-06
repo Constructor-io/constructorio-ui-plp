@@ -7,3 +7,44 @@
 .cio-filter-multiple-option .cio-filter-option-label {
   line-height: 1.2;
 }
+
+/* TODO: Remove once the shared components library stops hiding the checkbox input with
+ * `display: none`. The real fix belongs in
+ * `constructorio-ui-components/src/components/filter-option.tsx`, which renders the input
+ * with Tailwind's `hidden` class — that removes the checkbox from the accessibility tree
+ * and the keyboard focus order (WCAG 4.1.2). This rule is unlayered, so it wins over the
+ * shared sheet's `@layer utilities .hidden` regardless of specificity.
+ */
+.cio-filter-multiple-option .cio-filter-option-input {
+  /* Must be restated: the shared `hidden` class sets `display: none` explicitly, and
+   * the visually-hidden properties below do not override `display` on their own. */
+  display: inline-block;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The input itself is visually hidden, so surface its focus ring on the proxy checkbox. */
+.cio-filter-multiple-option .cio-filter-option-input:focus-visible ~ .cio-checkbox {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+/* Anchors the absolutely positioned input to its option, so focusing it doesn't scroll the
+ * page to wherever the nearest positioned ancestor is. */
+.cio-filter-multiple-option .cio-filter-option-label {
+  position: relative;
+}
+
+/* No proxy checkbox is rendered with `checkboxPosition: 'none'`, so ring the whole option. */
+.cio-filter-multiple-option
+  .cio-filter-option-label:not(:has(.cio-checkbox)):has(.cio-filter-option-input:focus-visible) {
+  outline: 2px solid #000000;
+  outline-offset: -2px;
+}

@@ -17,8 +17,9 @@ export type FiltersProps = UseFilterProps & {
   isHiddenFilterOptionFn?: (option: PlpFacetOption) => boolean;
   /**
    * Namespace prepended to every filter option's DOM `id`. Option ids have to be unique across the
-   * document, so a page that renders `Filters` more than once — e.g. a desktop sidebar alongside a
-   * mobile modal, as `CioPlpGrid` does — must give each instance its own prefix.
+   * document, so a page that renders `Filters` more than once must give each instance its own
+   * prefix. Filters inside a `MobileModal` (as in `CioPlpGrid`) already get a `-mobile` suffix, so
+   * only other duplicates need one.
    */
   idPrefix?: string;
 };

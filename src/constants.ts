@@ -42,7 +42,13 @@ All translation keys are optional - any non-provided translation will fallback t
   "Sorry, we were unable to find what you were looking for.": "...",
   "Check for typos": "...",
   "Use fewer keywords": "...",
-  "Broaden your search terms": "..."
+  "Broaden your search terms": "...",
+
+  // Screen reader announcements. {count} is replaced with the number of results
+  "Loading results": "...",
+  "No results found": "...",
+  "1 result found": "...",
+  "{count} results found": "..."
 }
 \`\`\`
 `;

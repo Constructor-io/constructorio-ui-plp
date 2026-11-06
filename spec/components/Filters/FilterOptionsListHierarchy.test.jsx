@@ -6,6 +6,7 @@ import Filters from '../../../src/components/Filters';
 import CioPlp from '../../../src/components/CioPlp';
 import { DEMO_API_KEY } from '../../../src/constants';
 import { renderWithCioPlp } from '../../test-utils';
+import MobileModalContext from '../../../src/components/MobileModal/MobileModalContext';
 import hierarchicalFacets from '../../local_examples/sampleHierarchicalFacets.json';
 
 const [categoryFacet] = hierarchicalFacets;
@@ -417,6 +418,23 @@ describe('FilterOptionsList - hierarchical options', () => {
       container.querySelectorAll('[aria-controls]').forEach((toggle) => {
         expect(container.querySelector(`#${toggle.getAttribute('aria-controls')}`)).toBeTruthy();
       });
+    });
+
+    it('Should suffix ids inside a mobile modal, keeping them unique next to the desktop filters', () => {
+      const { container } = render(
+        <CioPlp apiKey={DEMO_API_KEY}>
+          <Filters facets={hierarchicalFacets} defaultHierarchyCollapsed={false} />
+          <MobileModalContext.Provider value>
+            <Filters facets={hierarchicalFacets} defaultHierarchyCollapsed={false} />
+          </MobileModalContext.Provider>
+        </CioPlp>,
+      );
+
+      const ids = Array.from(container.querySelectorAll('[id]')).map((element) => element.id);
+
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(container.querySelector('input[id="category-apparel-tops"]')).toBeTruthy();
+      expect(container.querySelector('input[id="category-apparel-tops-mobile"]')).toBeTruthy();
     });
 
     it('Should keep ids unique when the same facets render twice on a page', () => {

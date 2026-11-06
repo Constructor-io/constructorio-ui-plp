@@ -256,14 +256,14 @@ Every option is its own filter. Selecting a parent applies the parent's value on
 
 ### Rendering Filters More Than Once Per Page
 
-Filter option ids have to be unique across the document: they connect each `<label>` to its checkbox and each collapse toggle to the list it controls. A page that renders `Filters` twice - a desktop sidebar plus a mobile modal, for instance - must give each instance its own namespace via `idPrefix`:
+Filter option ids have to be unique across the document: they connect each `<label>` to its checkbox and each collapse toggle to the list it controls.
+
+Filters rendered inside a `MobileModal`, like the mobile filters in `CioPlpGrid`, get a `-mobile` suffix on their ids automatically, so a desktop sidebar plus the mobile modal needs nothing extra. A page that renders `Filters` more than once in any other way must give each instance its own namespace via `idPrefix`:
 
 ```jsx
-<Filters facets={props.filters.facets} idPrefix='desktop' />
-<Filters facets={props.filters.facets} idPrefix='mobile' />
+<Filters facets={props.filters.facets} idPrefix='sidebar' />
+<Filters facets={props.filters.facets} idPrefix='drawer' />
 ```
-
-`CioPlpGrid` already does this for the desktop and mobile filter sets it renders.
 
 ## Render Props pattern
 

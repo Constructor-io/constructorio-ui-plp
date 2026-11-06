@@ -9,6 +9,7 @@ import {
 import useOptionsList from '../../hooks/useOptionsList';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { resolveVisualOption, slugify } from '../../utils';
+import { useMobileModalIdSuffix } from '../MobileModal/MobileModalContext';
 
 interface UseFilterOptionsListPropsBase {
   modifyRequestMultipleFilter: (selectedOptions: Array<string> | null) => void;
@@ -26,8 +27,9 @@ interface UseFilterOptionsListPropsBase {
   /**
    * Namespace prepended to every option's DOM `id`. Option ids must be unique across the whole
    * document — they drive `<input id>` / `<label htmlFor>` and the `aria-controls` of each nested
-   * list — so a page rendering the same facets more than once (`CioPlpGrid` renders one set of
-   * filters for desktop and another inside the mobile modal) has to namespace them per instance.
+   * list — so a page rendering the same facets more than once has to namespace them per instance.
+   * Filters inside a `MobileModal` already get a `-mobile` suffix, so this is only needed for
+   * other duplicates.
    */
   idPrefix?: string;
 }
@@ -62,6 +64,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
   const facet = 'facet' in props ? props.facet : props.multipleFacet;
 
   const { getIsHiddenFilterOptionField } = useCioPlpContext().itemFieldGetters;
+  const idSuffix = useMobileModalIdSuffix();
 
   const isHiddenOptionFn = useCallback(
     (option: PlpFacetOption) =>
@@ -129,7 +132,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * Hidden options are left out and the top level is cut to the "Show All" limit. Each option gets
    * its id and checked state, and its nested options are converted too.
    *
-   * Each option's `id` is `[idPrefix, facetName, value]`, each segment slugified. Slugifying keeps
+   * Each option's `id` is `[idPrefix, facetName, value]`, each segment slugified, plus `-mobile`
+   * inside a `MobileModal` (the same suffix Groups and Sort use there). Slugifying keeps
    * ids valid: values carry whitespace and quotes, which invalidate an `id` and break the
    * `aria-controls` linking each option to its nested list. Values are unique within a facet, so
    * the value alone identifies an option at any depth.
@@ -137,7 +141,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
    * Slugifying is lossy, though: `Tailorbyrd` and `TailorByrd`, or `Black / Navy` and `Black-Navy`,
    * share a slug. Ids are therefore de-duplicated per facet with a `-2`, `-3`, ... suffix, which
    * also keeps them clear of the `<id>-hierarchy` id the list gives each nested list. Values that
-   * slugify to nothing fall back to `option`.
+   * slugify to nothing fall back to `option`. The `-mobile` suffix is added after de-duplication,
+   * to every id alike, so it keeps them unique.
    */
   const filterOptions: Array<FilterOptionData> = useMemo(() => {
     const rootId = [idPrefix, facet.name]
@@ -170,7 +175,8 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
         ? resolveVisualOption(option, getVisualImageUrl, getVisualColorHex)
         : null;
       const hasNestedOptions = !!option.options?.length;
-      const id = claimId(`${rootId}-${slugify(option.value) || 'option'}`, hasNestedOptions);
+      const baseId = claimId(`${rootId}-${slugify(option.value) || 'option'}`, hasNestedOptions);
+      const id = `${baseId}${idSuffix}`;
 
       return {
         id,
@@ -188,6 +194,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
     facetOptions,
     facet.name,
     idPrefix,
+    idSuffix,
     selectedOptionMap,
     isVisual,
     getVisualImageUrl,

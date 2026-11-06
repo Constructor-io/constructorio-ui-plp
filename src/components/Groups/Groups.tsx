@@ -9,6 +9,7 @@ import type { IncludeRenderProps, GroupsOverrides, GroupsRenderProps } from '../
 import RenderPropsWrapper from '../RenderPropsWrapper/RenderPropsWrapper';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { translate } from '../../utils/helpers';
+import { useMobileModalIdSuffix } from '../MobileModal/MobileModalContext';
 
 /**
  * Props for the Groups component
@@ -43,6 +44,7 @@ export default function Groups(props: GroupsWithRenderProps) {
     componentOverrides: componentOverridesProp,
   } = props;
   const context = useCioPlpContext();
+  const idSuffix = useMobileModalIdSuffix();
   const componentOverrides = componentOverridesProp ?? context?.componentOverrides?.groups;
   const translations = context?.translations;
   const translatedTitle = title || translate('Categories', translations);
@@ -133,7 +135,7 @@ export default function Groups(props: GroupsWithRenderProps) {
                       <FilterOption
                         checkboxPosition='none'
                         key={option.groupId}
-                        id={option.groupId}
+                        id={`${option.groupId}${idSuffix}`}
                         optionValue={option.groupId}
                         displayValue={option.displayName}
                         displayCountValue={option.count.toString()}
