@@ -3,7 +3,12 @@ import React from 'react';
 import { useCioPlpContext } from '../../hooks/useCioPlpContext';
 import { useOnShowMoreSwatches } from '../../hooks/callbacks';
 import { IncludeRenderProps, ProductSwatchObject, SwatchItem } from '../../types';
-import { isHexColor, cnstrcDataAttrs } from '../../utils';
+import {
+  isHexColor,
+  cnstrcDataAttrs,
+  setUrl as hardRefreshSetUrl,
+  setUrlWithPushState,
+} from '../../utils';
 
 export type ProductSwatchRenderProps = ProductSwatchObject;
 
@@ -33,8 +38,13 @@ export default function ProductSwatch(props: ProductSwatchProps) {
 
   const {
     callbacks: { onSwatchClick, onShowMoreSwatches },
-    urlHelpers: { setUrl },
+    urlHelpers: { setUrl: contextSetUrl },
   } = context;
+
+  // "View more" is expected to navigate to a PDP
+  // so it should not be routed through the pushState setUrl if enableSpaNavigation is true.
+  // A user-provided setUrl is still respected.
+  const setUrl = contextSetUrl === setUrlWithPushState ? hardRefreshSetUrl : contextSetUrl;
 
   const showMoreClickHandler = useOnShowMoreSwatches(
     selectedVariation,

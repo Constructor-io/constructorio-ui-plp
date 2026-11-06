@@ -1,10 +1,11 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import useCioPlp from '../../../src/hooks/useCioPlp';
-import { mockConstructorIOClient, renderHookWithCioPlp } from '../../test-utils';
+import { delay, mockConstructorIOClient, renderHookWithCioPlp } from '../../test-utils';
 import { PlpSearchDataResults, PlpSortOption } from '../../../src/types';
 import apiSearchResponse from '../../local_examples/apiSearchResponse.json';
 
 const originalWindowLocation = window.location;
+const spaOptions = { initialProps: { enableSpaNavigation: true } };
 
 describe('Testing Hook: useCioPlp', () => {
   beforeEach(() => {
@@ -158,6 +159,75 @@ describe('Testing Hook: useCioPlp', () => {
 
       expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
       expect(mockConstructorIOClient?.browse.getBrowseResults).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('Should fetch exactly once on mount when enableSpaNavigation is false', async () => {
+    renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('Should not refetch on popstate when enableSpaNavigation is false', async () => {
+    renderHookWithCioPlp(() => useCioPlp());
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+
+    act(() => {
+      window.location.href = 'https://example.com?q=boots';
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    await delay(50);
+
+    expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should fetch exactly once on mount when enableSpaNavigation is true (no duplicate initial fetch)', async () => {
+    renderHookWithCioPlp(() => useCioPlp(), spaOptions);
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('Should refetch when the URL changes via setUrlWithPushState and enableSpaNavigation is true', async () => {
+    const { result } = renderHookWithCioPlp(() => useCioPlp(), spaOptions);
+
+    await waitFor(() => {
+      expect(result.current.data?.request.term).toEqual('shoes');
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+
+    // Simulate a PLP interaction that changes the URL
+    act(() => {
+      result.current.filters.setFilter('color', 'red');
+    });
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  it('Should refetch on user-initiated Back / Forward navigation when enableSpaNavigation is true', async () => {
+    renderHookWithCioPlp(() => useCioPlp(), spaOptions);
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(1);
+    });
+
+    // Imitates a Back / Forward navigation on the client, where the browser changes the
+    // URL and fires a native popstate on its own, without setUrl / pushState ever being called.
+    act(() => {
+      window.location.href = 'https://example.com?q=boots';
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+
+    await waitFor(() => {
+      expect(mockConstructorIOClient?.search.getSearchResults).toHaveBeenCalledTimes(2);
     });
   });
 

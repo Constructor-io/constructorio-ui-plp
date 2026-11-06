@@ -242,13 +242,19 @@ describe('Testing Default UrlHelpers: getUrl, setUrl', () => {
   });
 
   test('setUrl should set the request configs to the url by default', () => {
+    const sameOriginUrl = 'https://example.com/a/random/path?q=item&page=2';
+    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+
     function TestReactComponent() {
-      setUrl(testUrl);
-      expect(window.location.href).toBe(testUrl);
+      setUrl(sameOriginUrl);
+      expect(window.location.href).toBe(sameOriginUrl);
+      expect(pushStateSpy).not.toHaveBeenCalled();
 
       return <div>Test</div>;
     }
 
     render(<TestReactComponent />);
+
+    pushStateSpy.mockRestore();
   });
 });
