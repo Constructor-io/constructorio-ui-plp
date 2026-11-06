@@ -1,6 +1,8 @@
 // SPA navigation helper: update the URL without a full page reload
 // pushState throws a SecurityError for cross-origin URLs
 // Fallback to a full page navigation when the target origin differs or parsing fails
+import { EMITTED_EVENTS } from '../constants';
+
 // eslint-disable-next-line import/prefer-default-export
 export function setUrlWithPushState(newUrlWithEncodedState: string) {
   if (typeof window === 'undefined') return;
@@ -26,6 +28,10 @@ export function setUrlWithPushState(newUrlWithEncodedState: string) {
     return;
   }
 
-  // Note: dispatchEvent must be called after pushState to ensure that the URL change is reflected in the event state.
-  window.dispatchEvent(new PopStateEvent('popstate', { state }));
+  // Note: dispatchEvent must be called after pushState so listeners read the updated URL.
+  // A custom event is used so host-app routers listening to popstate events don't trigger unexpected behavior.
+  // eg. treating it as a Back / Forward navigation
+  window.dispatchEvent(
+    new CustomEvent(EMITTED_EVENTS.SPA_NAVIGATION, { detail: { url: newUrlWithEncodedState } }),
+  );
 }

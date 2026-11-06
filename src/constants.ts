@@ -4,6 +4,7 @@ export const DEFAULT_RESULTS_PER_PAGE = 20;
 
 export const EMITTED_EVENTS = {
   PRODUCT_CARD_IMAGE_ROLLOVER: 'cio.ui-plp.productCardImageRollover',
+  SPA_NAVIGATION: 'cio.ui-plp.spaNavigation',
 };
 
 export const translationsDescription = `Pass a \`translations\` object to display translatable words in your preferred language.

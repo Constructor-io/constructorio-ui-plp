@@ -1,4 +1,5 @@
 import { setUrlWithPushState } from '../../src/utils';
+import { EMITTED_EVENTS } from '../../src/constants';
 
 describe('Testing SPA UrlHelper: setUrlWithPushState', () => {
   const originalWindowLocation = window.location;
@@ -12,21 +13,26 @@ describe('Testing SPA UrlHelper: setUrlWithPushState', () => {
     window.location = originalWindowLocation;
   });
 
-  test('setUrlWithPushState should push the url to history and dispatch popstate', () => {
-    const nextUrl = 'https://example.com/a/random/path?q=item&page=2';
-    const pushStateSpy = jest.spyOn(window.history, 'pushState');
+  test('setUrlWithPushState should emit the spaNavigation event', () => {
+    const nextUrl = 'https://example.com/a/random/path?q=item&page=3';
+    const callbackFn = jest.fn();
     const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
+    window.addEventListener(EMITTED_EVENTS.SPA_NAVIGATION, callbackFn);
 
     setUrlWithPushState(nextUrl);
 
-    expect(pushStateSpy).toHaveBeenCalledWith({ url: nextUrl }, '', nextUrl);
-    expect(window.location.href).toBe(nextUrl);
+    expect(callbackFn).toHaveBeenCalledTimes(1);
+    expect(callbackFn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: EMITTED_EVENTS.SPA_NAVIGATION,
+        detail: { url: nextUrl },
+      }),
+    );
+    expect(dispatchEventSpy.mock.calls.map(([event]) => event.type)).toEqual([
+      EMITTED_EVENTS.SPA_NAVIGATION,
+    ]);
 
-    const dispatchedEvent = dispatchEventSpy.mock.calls[0][0] as PopStateEvent;
-    expect(dispatchedEvent.type).toBe('popstate');
-    expect(dispatchedEvent.state).toEqual({ url: nextUrl });
-
-    pushStateSpy.mockRestore();
+    window.removeEventListener(EMITTED_EVENTS.SPA_NAVIGATION, callbackFn);
     dispatchEventSpy.mockRestore();
   });
 
