@@ -4,6 +4,7 @@ import type { IncludeComponentOverrides } from '@constructor-io/constructorio-ui
 import CioPlp from '../../../components/CioPlp';
 import Filters, { FiltersWithRenderProps } from '../../../components/Filters';
 import mockTransformedFacets from '../../../../spec/local_examples/sampleFacets.json';
+import mockHierarchicalFacets from '../../../../spec/local_examples/sampleHierarchicalFacets.json';
 import type {
   PlpFacet,
   PlpMultipleFacet,
@@ -55,6 +56,21 @@ const meta = {
       },
     },
     perFacetConfigs: {
+      table: {
+        defaultValue: { summary: 'undefined' },
+      },
+    },
+    hierarchyCollapsible: {
+      table: {
+        defaultValue: { summary: 'true' },
+      },
+    },
+    defaultHierarchyCollapsed: {
+      table: {
+        defaultValue: { summary: 'true' },
+      },
+    },
+    idPrefix: {
       table: {
         defaultValue: { summary: 'undefined' },
       },
@@ -365,6 +381,107 @@ export const OverrideRangeSlider: Story = {
           },
         },
       },
+    },
+  },
+};
+
+/**
+ * Use `componentOverrides.filterGroup.optionsList.filterOption` to replace individual options
+ * instead of the list around them. Returning `undefined` leaves an option at its default, so a
+ * function can target a single option — here only "Sneakers".
+ *
+ * A custom option reports clicks by calling `props.onChange(props.optionValue)`, and reads its
+ * checked state from `props.isChecked`.
+ */
+export const OverrideSpecificOption: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockHierarchicalFacets as Array<PlpFacet>,
+    // Expanded so the overridden option, nested under "Footwear", is visible straight away
+    defaultHierarchyCollapsed: false,
+    componentOverrides: {
+      filterGroup: {
+        optionsList: {
+          filterOption: (option) =>
+            option.optionValue === 'Footwear/Sneakers'
+              ? {
+                  reactNode: (props) => (
+                    <li style={{ listStyle: 'none', padding: '4px 0' }}>
+                      <label
+                        htmlFor={props.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8,
+                          cursor: 'pointer',
+                        }}>
+                        <input
+                          type='checkbox'
+                          id={props.id}
+                          checked={props.isChecked}
+                          // Report the click back so PLP applies or removes the filter
+                          onChange={() => props.onChange(props.optionValue)}
+                        />
+                        👟 <strong>{props.displayValue}</strong> — {props.displayCountValue} items
+                      </label>
+                      {props.children}
+                    </li>
+                  ),
+                }
+              : undefined,
+        },
+      },
+    },
+  },
+};
+
+/**
+ * Facets of type `hierarchical` render as a tree: each level is indented, and options that have
+ * children get a toggle that collapses their branch. Branches start collapsed.
+ */
+export const HierarchicalFilters: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockHierarchicalFacets as Array<PlpFacet>,
+  },
+};
+
+/**
+ * Use `defaultHierarchyCollapsed={false}` to have every branch start expanded. This is initial state
+ * only — the option list owns expansion from then on.
+ */
+export const HierarchyExpandedByDefault: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockHierarchicalFacets as Array<PlpFacet>,
+    defaultHierarchyCollapsed: false,
+  },
+};
+
+/**
+ * Use `hierarchyCollapsible={false}` to render the full tree with no collapse toggles.
+ */
+export const HierarchyNotCollapsible: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockHierarchicalFacets as Array<PlpFacet>,
+    hierarchyCollapsible: false,
+  },
+};
+
+/**
+ * Both hierarchy props can be set per facet through `perFacetConfigs`, which takes precedence over
+ * the global props. Here branches start expanded globally, except for "Category", which starts
+ * collapsed, and "Collection" has no collapse toggles.
+ */
+export const HierarchyPerFacetConfigs: Story = {
+  render: (args) => <PrimaryStory args={args} />,
+  args: {
+    facets: mockHierarchicalFacets as Array<PlpFacet>,
+    defaultHierarchyCollapsed: false,
+    perFacetConfigs: {
+      category: { defaultHierarchyCollapsed: true },
+      collection: { hierarchyCollapsible: false },
     },
   },
 };

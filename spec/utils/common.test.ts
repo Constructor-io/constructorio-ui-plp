@@ -1,4 +1,4 @@
-import { isValidSalePrice } from '../../src/utils/common';
+import { isValidSalePrice, slugify } from '../../src/utils/common';
 
 describe('isValidSalePrice', () => {
   it.each([
@@ -16,5 +16,30 @@ describe('isValidSalePrice', () => {
   ])('returns $expected when $desc', ({ salePrice, usualPrice, expected }) => {
     // @ts-expect-error: testing runtime null behaviour
     expect(isValidSalePrice(salePrice, usualPrice)).toBe(expected);
+  });
+});
+
+describe('slugify', () => {
+  it.each([
+    { value: 'Black', expected: 'black', desc: 'lowercases a plain value' },
+    { value: 'Shirts & Blouses', expected: 'shirts-blouses', desc: 'collapses separators' },
+    { value: '"4"-"inf"', expected: '4-inf', desc: 'strips quotes from a range value' },
+    { value: '  Kids & Baby  ', expected: 'kids-baby', desc: 'trims leading/trailing separators' },
+    { value: 'Black / Navy', expected: 'black-navy', desc: 'handles slashes' },
+    { value: 'T-Shirts', expected: 't-shirts', desc: 'keeps single hyphens' },
+    { value: 'Rouge Écarlate', expected: 'rouge-écarlate', desc: 'keeps non-ASCII letters' },
+    { value: '赤 / 青', expected: '赤-青', desc: 'keeps non-Latin scripts' },
+    { value: '+', expected: '', desc: 'returns empty when nothing usable is left' },
+  ])('$desc', ({ value, expected }) => {
+    expect(slugify(value)).toBe(expected);
+  });
+
+  it('Should never produce a value that breaks an id or aria-controls', () => {
+    ['Shirts & Blouses', '"4"-"inf"', 'Black / Navy', '  spaced  out  '].forEach((value) => {
+      const slug = slugify(value);
+
+      expect(slug).not.toMatch(/\s/);
+      expect(slug).not.toMatch(/["'/]/);
+    });
   });
 });

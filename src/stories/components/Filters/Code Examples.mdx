@@ -151,6 +151,120 @@ export function SpecificCollapsed() {
 }
 ```
 
+## Hierarchical Filter Options
+
+Facets of type `hierarchical` render as a tree: each level is indented, and options that have children get a toggle that collapses their branch. Each nested option's value is its full path from the top, like `Apparel/Tops/T-Shirts`.
+
+<Canvas of={FiltersStories.HierarchicalFilters} />
+
+These props collapse branches *inside* a facet. To collapse the whole facet, use `defaultCollapsed` or `perFacetConfigs[name].isCollapsed`, covered in **Collapse All Filter Groups** and **Collapse Specific Filter Groups** above.
+
+| Prop                        | Default | Description                                                                 |
+| --------------------------- | ------- | --------------------------------------------------------------------------- |
+| `hierarchyCollapsible`      | `true`  | Whether options that have children get a toggle collapsing their nested list |
+| `defaultHierarchyCollapsed` | `true`  | Whether branches start collapsed rather than expanded                        |
+
+Branches start collapsed, because nested options aren't limited by `initialNumOptions` and a fully expanded tree can get long. A branch holding a selected option auto-expands, so an applied filter is never hidden.
+
+### Expanded by Default
+
+<Canvas of={FiltersStories.HierarchyExpandedByDefault} />
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        defaultHierarchyCollapsed: false, // All branches start expanded
+      }}
+    />
+  );
+}
+```
+
+Set `defaultHierarchyCollapsed` to `false` to start with every branch expanded. This is initial state only - the option list owns expansion from then on, so toggling a branch is not something the parent needs to track.
+
+### Without Collapse Toggles
+
+<Canvas of={FiltersStories.HierarchyNotCollapsible} />
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        hierarchyCollapsible: false, // No toggles; branches are always expanded
+      }}
+    />
+  );
+}
+```
+
+Without a toggle, branches are always expanded, so `defaultHierarchyCollapsed` has no effect on these facets. A branch with no toggle that started collapsed could never be opened.
+
+### Per-Facet Configuration
+
+Both props can be set per facet through `perFacetConfigs`, which takes precedence over the global props:
+
+<Canvas of={FiltersStories.HierarchyPerFacetConfigs} />
+
+```jsx
+import { CioPlp } from '@constructor-io/constructorio-ui-plp';
+import '@constructor-io/constructorio-ui-plp/styles.css';
+
+const DEMO_API_KEY = 'key_M57QS8SMPdLdLx4x';
+
+export default function MyComponent() {
+  return (
+    <CioPlp
+      apiKey={DEMO_API_KEY}
+      filterConfigs={{
+        // Global: every facet's branches start expanded
+        defaultHierarchyCollapsed: false,
+        // Per-facet overrides win over the global props
+        perFacetConfigs: {
+          category: { defaultHierarchyCollapsed: true }, // Category starts collapsed
+          collection: { hierarchyCollapsible: false }, // Collection has no toggles
+        },
+      }}
+    />
+  );
+}
+```
+
+### Priority Order
+
+1. **`perFacetConfigs[name].hierarchyCollapsible` / `.defaultHierarchyCollapsed`** (per-facet config) - highest priority
+2. **`hierarchyCollapsible` / `defaultHierarchyCollapsed`** (global props)
+3. **Defaults** - collapsible branches that start collapsed
+
+### Selecting Nested Options
+
+Every option is its own filter. Selecting a parent applies the parent's value only, and the options nested under it keep their own state. Selections accumulate across the tree the same way they do on a `multiple` facet, and the request carries exactly the options that are selected.
+
+### Rendering Filters More Than Once Per Page
+
+Filter option ids have to be unique across the document: they connect each `<label>` to its checkbox and each collapse toggle to the list it controls.
+
+Filters rendered inside a `MobileModal`, like the mobile filters in `CioPlpGrid`, get a `-mobile` suffix on their ids automatically, so a desktop sidebar plus the mobile modal needs nothing extra. A page that renders `Filters` more than once in any other way must give each instance its own namespace via `idPrefix`:
+
+```jsx
+<Filters facets={props.filters.facets} idPrefix='sidebar' />
+<Filters facets={props.filters.facets} idPrefix='drawer' />
+```
+
 ## Render Props pattern
 
 To override the default rendering of the Filters component, you may pass a Render Props function to the component.
@@ -201,6 +315,8 @@ Use `componentOverrides` on the `CioPlp` provider to replace default sub-compone
 
 Replace the complete `<li>` element for each filter group:
 
+<Canvas of={FiltersStories.OverrideRoot} />
+
 ```jsx
 <CioPlp
   apiKey={DEMO_API_KEY}
@@ -219,11 +335,11 @@ Replace the complete `<li>` element for each filter group:
 />
 ```
 
-<Canvas of={FiltersStories.OverrideRoot} />
-
 ### Override Header Only
 
 Replace the header button while keeping the default options list and range slider:
+
+<Canvas of={FiltersStories.OverrideHeader} />
 
 ```jsx
 <CioPlp
@@ -243,13 +359,55 @@ Replace the header button while keeping the default options list and range slide
 />
 ```
 
-<Canvas of={FiltersStories.OverrideHeader} />
-
 ### Override Options List
 
 Replace the checkbox options list with a custom implementation (only affects multiple/single facets):
 
 <Canvas of={FiltersStories.OverrideOptionsList} />
+
+### Override a Specific Option
+
+`optionsList.filterOption` overrides individual options rather than the list around them. Pass an object to restyle every option, or a function to target one: it is called per option and returning `undefined` leaves that option at its default.
+
+<Canvas of={FiltersStories.OverrideSpecificOption} />
+
+```jsx
+<CioPlp
+  apiKey={DEMO_API_KEY}
+  componentOverrides={{
+    filterGroup: {
+      optionsList: {
+        filterOption: (option) =>
+          option.optionValue === 'Footwear/Sneakers'
+            ? {
+                reactNode: (props) => (
+                  <li>
+                    <label htmlFor={props.id}>
+                      <input
+                        type='checkbox'
+                        id={props.id}
+                        checked={props.isChecked}
+                        // Report the click back so PLP applies or removes the filter
+                        onChange={() => props.onChange(props.optionValue)}
+                      />
+                      👟 {props.displayValue} - {props.displayCountValue} items
+                    </label>
+                    {/* Re-emit children to keep an option's nested list */}
+                    {props.children}
+                  </li>
+                ),
+              }
+            : undefined,
+      },
+    },
+  }}>
+  <Filters facets={facets} />
+</CioPlp>
+```
+
+The function receives the option as `FilterOptionData` - `id`, `optionValue`, `displayValue`, `displayCountValue`, `isChecked` and any nested `options` - not as a `PlpFacetOption`. Overriding an option that has children drops its nested list unless the `reactNode` render function re-emits `props.children`.
+
+A custom option replaces the default checkbox, so it has to report clicks itself: call `props.onChange(props.optionValue)` and PLP applies or removes the filter. Read the checked state from `props.isChecked`, which stays in sync with the filters applied, including ones that arrive from the URL.
 
 ### Override Range Slider
 

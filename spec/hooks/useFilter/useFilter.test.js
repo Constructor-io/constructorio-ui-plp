@@ -389,6 +389,74 @@ describe('Testing Hook: useFilter', () => {
     });
   });
 
+  describe('getHierarchyCollapsible / getDefaultHierarchyCollapsed', () => {
+    const hierarchicalFacets = require('../../local_examples/sampleHierarchicalFacets.json');
+    const [categoryFacet, collectionFacet] = hierarchicalFacets;
+
+    it('Should default to collapsible branches that start collapsed', async () => {
+      const { result } = renderHookWithCioPlp(() => useFilter({ facets: hierarchicalFacets }));
+
+      await waitFor(() => {
+        expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
+      });
+    });
+
+    it('Should apply the global props to every facet', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: hierarchicalFacets,
+          hierarchyCollapsible: false,
+          defaultHierarchyCollapsed: true,
+        }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(false);
+        expect(result.current.getHierarchyCollapsible(collectionFacet)).toBe(false);
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
+        expect(result.current.getDefaultHierarchyCollapsed(collectionFacet)).toBe(true);
+      });
+    });
+
+    it('perFacetConfigs should take precedence over the global props', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: hierarchicalFacets,
+          hierarchyCollapsible: false,
+          defaultHierarchyCollapsed: true,
+          perFacetConfigs: {
+            category: { hierarchyCollapsible: true, defaultHierarchyCollapsed: false },
+          },
+        }),
+      );
+
+      await waitFor(() => {
+        expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(false);
+        // collection is not in perFacetConfigs, so it follows the global props
+        expect(result.current.getHierarchyCollapsible(collectionFacet)).toBe(false);
+        expect(result.current.getDefaultHierarchyCollapsed(collectionFacet)).toBe(true);
+      });
+    });
+
+    it('Should be unaffected by the group-level collapse props', async () => {
+      const { result } = renderHookWithCioPlp(() =>
+        useFilter({
+          facets: hierarchicalFacets,
+          defaultCollapsed: false,
+          perFacetConfigs: { category: { isCollapsed: false } },
+        }),
+      );
+
+      await waitFor(() => {
+        // `defaultCollapsed` / `isCollapsed` expand the filter group, not its branches
+        expect(result.current.getDefaultHierarchyCollapsed(categoryFacet)).toBe(true);
+        expect(result.current.getHierarchyCollapsible(categoryFacet)).toBe(true);
+      });
+    });
+  });
+
   describe('isHiddenFilterFn', () => {
     it('Should filter out facets when isHiddenFilterFn returns true', async () => {
       const isHiddenFilterFn = (facet) => facet.name === 'brand'; // lowercase
