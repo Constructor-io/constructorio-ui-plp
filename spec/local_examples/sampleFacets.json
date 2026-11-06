@@ -171,10 +171,7 @@
         "displayName": "4 stars & up",
         "value": "\"4\"-\"inf\"",
         "data": {},
-        "range": [
-          4,
-          "inf"
-        ]
+        "range": [4, "inf"]
       },
       {
         "status": "",
@@ -182,10 +179,7 @@
         "displayName": "3 stars & up",
         "value": "\"3\"-\"inf\"",
         "data": {},
-        "range": [
-          3,
-          "inf"
-        ]
+        "range": [3, "inf"]
       },
       {
         "status": "",
@@ -193,10 +187,7 @@
         "displayName": "2 stars & up",
         "value": "\"2\"-\"inf\"",
         "data": {},
-        "range": [
-          2,
-          "inf"
-        ]
+        "range": [2, "inf"]
       },
       {
         "status": "",
@@ -204,10 +195,7 @@
         "displayName": "1 star & up",
         "value": "\"1\"-\"inf\"",
         "data": {},
-        "range": [
-          1,
-          "inf"
-        ]
+        "range": [1, "inf"]
       }
     ]
   },

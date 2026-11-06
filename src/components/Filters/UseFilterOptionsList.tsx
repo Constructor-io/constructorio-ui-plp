@@ -124,7 +124,6 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
 
     // Mirror the API as-is, so the checkboxes always match the filters the results were computed with
     setSelectedOptionMap(newSelectedOptionsMap);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facet]);
 
   /**
@@ -151,6 +150,7 @@ export default function useFilterOptionsList(props: UseFilterOptionsListProps) {
       .filter(Boolean)
       .join('-');
 
+    // One set for the whole facet, shared by the recursive pass below, so ids are unique at every depth
     const usedIds = new Set<string>();
     // The first free `base`, `base-2`, `base-3`, ... An option with nested options also needs
     // `<id>-hierarchy` free, since that becomes the id of its nested list.
